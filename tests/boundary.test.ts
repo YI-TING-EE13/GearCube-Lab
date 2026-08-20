@@ -1,0 +1,148 @@
+import { describe, it, expect } from 'vitest';
+import fs from 'node:fs';
+import path from 'node:path';
+import * as coreBootstrap from '@gearcube/core';
+import { extractModuleSpecifiers, checkCorePurity, PROHIBITED_MODULE_PATTERNS } from '../scripts/check-core-deps.mjs';
+
+void coreBootstrap;
+
+describe('Phase 1A Infrastructure & Package Boundary Gate', () => {
+  it('resolves @gearcube/core via package-name import without alias', async () => {
+    const core = await import('@gearcube/core');
+    expect(core).toBeDefined();
+  });
+
+  it('verifies @gearcube/core manifest identity and zero dependency invariant', () => {
+    const corePkgPath = path.resolve(process.cwd(), 'packages/core/package.json');
+    expect(fs.existsSync(corePkgPath)).toBe(true);
+
+    const pkg = JSON.parse(fs.readFileSync(corePkgPath, 'utf8'));
+    expect(pkg.name).toBe('@gearcube/core');
+    expect(pkg.version).toBe('0.0.0');
+    expect(pkg.private).toBe(true);
+    expect(pkg.type).toBe('module');
+    expect(pkg.exports).toEqual({ '.': './src/index.ts' });
+
+    expect(pkg.dependencies).toBeUndefined();
+    expect(pkg.optionalDependencies).toBeUndefined();
+    expect(pkg.peerDependencies).toBeUndefined();
+    expect(pkg.devDependencies).toBeUndefined();
+  });
+
+  it('verifies @gearcube/web manifest dependency on exact @gearcube/core version', () => {
+    const webPkgPath = path.resolve(process.cwd(), 'apps/web/package.json');
+    expect(fs.existsSync(webPkgPath)).toBe(true);
+
+    const pkg = JSON.parse(fs.readFileSync(webPkgPath, 'utf8'));
+    expect(pkg.name).toBe('@gearcube/web');
+    expect(pkg.version).toBe('0.0.0');
+    expect(pkg.private).toBe(true);
+    expect(pkg.dependencies['@gearcube/core']).toBe('0.0.0');
+  });
+
+  it('verifies core tsconfig strictly excludes DOM and ambient Node types', () => {
+    const coreTsconfigPath = path.resolve(process.cwd(), 'packages/core/tsconfig.json');
+    expect(fs.existsSync(coreTsconfigPath)).toBe(true);
+
+    const tsconfig = JSON.parse(fs.readFileSync(coreTsconfigPath, 'utf8'));
+    const lib = tsconfig.compilerOptions?.lib || [];
+    expect(lib).toEqual(['ES2022']);
+    expect(lib.some((l: string) => l.toUpperCase().includes('DOM'))).toBe(false);
+    expect(tsconfig.compilerOptions?.types).toEqual([]);
+  });
+
+  it('verifies apps/web/vite.config.ts contains NO resolve.alias for @gearcube/core', () => {
+    const viteConfigPath = path.resolve(process.cwd(), 'apps/web/vite.config.ts');
+    expect(fs.existsSync(viteConfigPath)).toBe(true);
+
+    const content = fs.readFileSync(viteConfigPath, 'utf8');
+    expect(content.includes('resolve.alias')).toBe(false);
+    expect(content.includes('alias:')).toBe(false);
+  });
+
+  it('verifies checkCorePurity passes on clean workspace', () => {
+    const errors = checkCorePurity(process.cwd());
+    expect(errors).toEqual([]);
+  });
+
+  describe('Core Purity Scanner Lexical Safety & Specifier Extraction Coverage', () => {
+    it('detects static value imports (default and named)', () => {
+      expect(extractModuleSpecifiers("import React from 'react';")).toEqual(['react']);
+      expect(extractModuleSpecifiers("import { useState, useEffect } from 'react';")).toEqual(['react']);
+      expect(extractModuleSpecifiers("import * as THREE from 'three';")).toEqual(['three']);
+    });
+
+    it('detects static type imports', () => {
+      expect(extractModuleSpecifiers("import type { ReactNode } from 'react';")).toEqual(['react']);
+      expect(extractModuleSpecifiers("import type React from 'react';")).toEqual(['react']);
+    });
+
+    it('detects side-effect imports', () => {
+      expect(extractModuleSpecifiers("import 'react';")).toEqual(['react']);
+      expect(extractModuleSpecifiers("import 'zustand';")).toEqual(['zustand']);
+    });
+
+    it('detects re-exports (wildcard, named, type, and namespace)', () => {
+      expect(extractModuleSpecifiers("export * from 'react';")).toEqual(['react']);
+      expect(extractModuleSpecifiers("export { useState } from 'react';")).toEqual(['react']);
+      expect(extractModuleSpecifiers("export type { ReactNode } from 'react';")).toEqual(['react']);
+      expect(extractModuleSpecifiers("export * as ThreeNamespace from 'three';")).toEqual(['three']);
+    });
+
+    it('detects dynamic imports', () => {
+      expect(extractModuleSpecifiers("const r = await import('react');")).toEqual(['react']);
+      expect(extractModuleSpecifiers("import('zustand')")).toEqual(['zustand']);
+    });
+
+    it('ignores import/export-like text inside ordinary single-quoted strings', () => {
+      expect(extractModuleSpecifiers("const text = 'import React from \"react\"';")).toEqual([]);
+      expect(extractModuleSpecifiers("const text = 'https://example.com';")).toEqual([]);
+      expect(extractModuleSpecifiers("const text = '/* import \"react\" */';")).toEqual([]);
+    });
+
+    it('ignores import/export-like text inside ordinary double-quoted strings', () => {
+      expect(extractModuleSpecifiers('const text = "import React from \'react\'";')).toEqual([]);
+      expect(extractModuleSpecifiers('const text = " export * from \'three\'";')).toEqual([]);
+    });
+
+    it('ignores import/export-like text inside template literals', () => {
+      expect(extractModuleSpecifiers('const text = `import React from "react"`;')).toEqual([]);
+      expect(extractModuleSpecifiers('const text = `export * from "three"`;')).toEqual([]);
+    });
+
+    it('ignores line comments and block comments', () => {
+      expect(extractModuleSpecifiers("// import 'react';")).toEqual([]);
+      expect(extractModuleSpecifiers("/* export * from 'react'; */")).toEqual([]);
+      expect(extractModuleSpecifiers("// https://example.com/import/react")).toEqual([]);
+    });
+
+    it('correctly detects real imports following URL strings', () => {
+      const code = "const url = 'https://example.com';\nimport React from 'react';";
+      expect(extractModuleSpecifiers(code)).toEqual(['react']);
+    });
+
+    it('correctly detects real exports following comment-like strings', () => {
+      const code = "const text = '/* not comment */';\nexport * from 'three';";
+      expect(extractModuleSpecifiers(code)).toEqual(['three']);
+    });
+
+    it('correctly detects real imports following import-like ordinary strings', () => {
+      const code = 'const example = "import \'react\'";\nimport \'zustand\';';
+      expect(extractModuleSpecifiers(code)).toEqual(['zustand']);
+    });
+
+    it('matches prohibited module patterns against extracted specifiers', () => {
+      const isProhibited = (spec: string) => PROHIBITED_MODULE_PATTERNS.some((p) => p.test(spec));
+      expect(isProhibited('react')).toBe(true);
+      expect(isProhibited('react/jsx-runtime')).toBe(true);
+      expect(isProhibited('react-dom')).toBe(true);
+      expect(isProhibited('three')).toBe(true);
+      expect(isProhibited('@react-three/fiber')).toBe(true);
+      expect(isProhibited('zustand')).toBe(true);
+      expect(isProhibited('../../apps/web')).toBe(true);
+      expect(isProhibited('../../packages/renderer')).toBe(true);
+      expect(isProhibited('../../packages/ui')).toBe(true);
+      expect(isProhibited('./internal-helper.js')).toBe(false);
+    });
+  });
+});

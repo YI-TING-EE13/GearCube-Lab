@@ -1,0 +1,26 @@
+{
+  "name": "gearcube-lab",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.12.0 <23"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspace=@gearcube/web",
+    "build": "npm run build --workspace=@gearcube/web",
+    "test": "vitest run",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "check:core-deps": "node scripts/check-core-deps.mjs",
+    "verify": "npm run typecheck && npm run check:core-deps && npm test && npm run build"
+  },
+  "devDependencies": {
+    "@types/node": "22.17.2",
+    "typescript": "5.8.3",
+    "vitest": "4.1.11"
+  }
+}

@@ -54,5 +54,6 @@ env/
 
 # Local cache & temp
 .cache/
+.vite/
 tmp/
 temp/
