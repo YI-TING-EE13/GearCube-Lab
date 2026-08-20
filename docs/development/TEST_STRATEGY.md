@@ -78,7 +78,7 @@
   - Corner permutations strictly within $S_4$ ($|S_4| = 24$) with $96 \leftrightarrow 24 \times 4$ `SpatialFrame` bijection.
   - Edge slice permutations strictly within Klein four-group $V_4$ ($|V_4| = 4$).
   - Edge gear phase indices strictly within $\mathbb{Z}_3 = \{0, 1, 2\}$.
-  - Materializer determinism: $\text{normalize}(\text{materialize}(C, f)) = (C, f)$ produces idempotent, pure round-trips for all 96 states without mutating domain state.
+  - Full-state materializer determinism: $\text{normalizePhysicalState}(\text{materializeState}(S, f)) = (S, f)$ produces idempotent, pure round-trips for all $165,888$ expanded fixed-spatial states ($41,472 \times 4$) without mutating canonical domain state.
 
 ### Level 4: Kinematic Trajectory Math Tests
 - **Scope:** `packages/kinematics`

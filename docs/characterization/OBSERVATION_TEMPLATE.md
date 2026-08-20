@@ -22,7 +22,7 @@
 
 #### 2. Physical Operation Executed
 - **Target Face / Observational Axis:** [e.g., OBS-F / OBS-R / OBS-U]
-- **Physical Direction:** [Clockwise (+180°) / Counter-Clockwise (-180°) / Other]
+- **Physical Direction:** [Clockwise (CW) / Counter-Clockwise (CCW) / Other]
 - **Nominal Endpoint Angle:** [e.g., ~90° / ~180° / ~360°]
 - **Number of Turn Repetitions (if periodic test):** [1, 2, 3...]
 
@@ -72,7 +72,7 @@
 
 #### 2. Physical Operation Executed
 - **Target Face / Observational Axis:** OBS-F
-- **Physical Direction:** Clockwise (~180°)
+- **Physical Direction:** Clockwise (CW)
 - **Nominal Endpoint Angle:** Explored ~90° intermediate pose, then continued to ~180°
 - **Number of Turn Repetitions:** 1
 

@@ -41,7 +41,7 @@ Coupling 3D rendering meshes directly with puzzle state logic leads to severe te
 ## 4. Key Architectural Decisions
 
 ### 4.1. Domain Core as Sole Source of Truth
-The discrete puzzle state (`PuzzleState`) is the sole authoritative representation. 3D meshes in Three.js are purely visual representations that synchronize with Core state via kinematic trajectories.
+The discrete puzzle state (`GearCubeState`) is the sole authoritative representation. 3D meshes in Three.js are purely visual representations that synchronize with Core state via kinematic trajectories.
 
 ### 4.2. Decoupling: Puzzle Definition vs. Kinematics vs. Visual Skin
 - **Puzzle Definition:** Discrete group rules and legal moves ($180^\circ$ turns).

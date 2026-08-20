@@ -18,7 +18,7 @@ This document formalizes the canonical discrete state representation, full-state
 3. **Full-State Frame Normalization (Jaap Source Model):**
    - In fixed 3D space, the 6 face generators produce **96 reachable corner pairs** $(\text{Tetrad A}, \text{Tetrad B})$ and **165,888 expanded fixed-spatial puzzle states**.
    - Normalizing the entire physical puzzle (corners, all 3 middle slices, and phases) to the canonical reference frame where piece `DBL` (piece 3 in $T_{\text{ref}}$) resides in slot `DBL` yields exactly **41,472 canonical states** and a 4-state `SpatialFrame` factor ($165,888 = 41,472 \times 4$).
-   - *(Important Distinciton: This derived 165,888 expanded physical representation must not be conflated with Jaap's separately documented 165,888 edge-base-marked comparison variant).*
+   - *(Important Distinction: This derived 165,888 expanded physical representation must not be conflated with Jaap's separately documented 165,888 edge-base-marked comparison variant).*
 4. **Spatial Frame & Materialization Decoupling:**
    $$\text{Camera Viewpoint} \neq \text{Cube Spatial Frame} \neq \text{Canonical Puzzle State}$$
    `SpatialFrame` represents the discrete 4-state rigid orientation of the physical cube body relative to the display world coordinate system ($96 = 24 \times 4$). `materializeState(canonicalState, spatialFrame) -> PiecePlacementView` maps canonical state to physical 3D space without visual piece teleportation.

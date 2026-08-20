@@ -1,6 +1,6 @@
 # ROADMAP.md — Project Lifecycle & Dependency-Ordered Milestones
 
-> **Current Project Phase:** `Phase 0B.3 — Discrete & Kinematic Contract Synthesis`
+> **Current Project Phase:** `Phase 0B.4 — Final Cross-Contract Audit`
 > **Status:** Active Execution
 
 ---
@@ -13,9 +13,9 @@
       ▼
 [ Phase 0B: Reference Model Adoption & Contract Synthesis ] (Active)
       ├─ 0B.1: Physical Characterization Protocol (Accepted; Optional Tooling)
-      ├─ 0B.2: Standard Gear Cube Reference Specification (Current)
-      ├─ 0B.3: Discrete & Kinematic Contract Synthesis
-      └─ 0B.4: Contract Review and Acceptance
+      ├─ 0B.2: Standard Gear Cube Reference Specification (Accepted)
+      ├─ 0B.3: Discrete & Kinematic Contract Synthesis (Accepted)
+      └─ 0B.4: Final Cross-Contract Audit (Current)
       │
       ▼
 [ Phase 1: Discrete Domain Core Engine ]
@@ -84,8 +84,9 @@ Phase 0B is partitioned into four dependency-ordered subphases:
   - `docs/reference/STANDARD_GEAR_CUBE_SPEC.md`
   - `docs/decisions/ADR-0002-STANDARD-GEAR-CUBE-REFERENCE.md`
 
-#### Phase 0B.3: Discrete & Kinematic Contract Synthesis (Active Subphase)
+#### Phase 0B.3: Discrete & Kinematic Contract Synthesis (Accepted)
 - **Objective:** Translate the adopted standard reference specification into implementation-ready conceptual contracts, state schemas, move algebra rules, derived piece placement views, and continuous kinematic trajectories.
+- **Status:** `ACCEPTED` (Commit `553c556`).
 - **Prerequisites:** Completion and acceptance of Phase 0B.2.
 - **In-Scope:** `docs/architecture/GEAR_CUBE_STATE_MODEL.md`, `docs/architecture/KINEMATIC_CONTRACT.md`, `docs/decisions/ADR-0003-CORE-STATE-REPRESENTATION.md`, candidate updates to `docs/architecture/PUZZLE_CONTRACTS.md`, `SYSTEM_ARCHITECTURE.md`, `TEST_STRATEGY.md`.
 - **Out-of-Scope:** Production software coding.
@@ -101,12 +102,12 @@ Phase 0B is partitioned into four dependency-ordered subphases:
   - [x] Derived non-authoritative `PiecePlacementView` and `StateCodec` boundaries specified.
   - [x] Continuous kinematic trajectories parameterized by mechanical progress $p \in [0, 1]$ specified for all 12 moves.
 
-#### Phase 0B.4: Contract Review and Acceptance
-- **Objective:** Independent architectural review of the synthesized puzzle contracts before commencing Phase 1 software implementation.
+#### Phase 0B.4: Final Cross-Contract Audit (Active Subphase)
+- **Objective:** Independent architectural review and cross-contract consistency audit of the synthesized puzzle contracts before commencing Phase 1 software implementation.
 - **Prerequisites:** Completion of Phase 0B.3.
-- **In-Scope:** Verification of domain contracts against architecture axioms, formal Phase 0B acceptance sign-off.
+- **In-Scope:** Verification of domain contracts against architecture axioms, terminology matrix synchronization, and final pre-implementation audit.
 - **Out-of-Scope:** Phase 1 coding.
-- **Deliverables:** Phase 0B acceptance report.
+- **Deliverables:** Phase 0B.4 cross-contract audit report.
 - **Acceptance Gate Criteria (`PHASE_0B4_PASS`):**
   - [ ] Formal sign-off on discrete `GearCubeState`, `Move`, `PiecePlacementView`, and `KinematicPlan` contracts.
   - [ ] Zero unverified mechanical assumptions promoted to test oracles without evidence.

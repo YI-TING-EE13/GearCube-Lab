@@ -133,10 +133,12 @@ From Scherphuis' exhaustive table of the 41,472 standard states `[REF-JAAP-01]`:
 
 ## 7. Directional Semantics & Public Move Interface
 
-### 7.1. Explicit Directional Sign
-Although a $180^\circ$ turn on an isolated outer face produces the same spatial boundary whether turned clockwise ($+180^\circ$) or counter-clockwise ($-180^\circ$), the coupled intermediate gear cogs rotate in opposite directions.
-- In the public domain contract, move direction is maintained explicitly: `CW (+180°)` and `CCW (-180°)` [`PROJECT_DECISION`].
-- Direction will not be artificially collapsed in `packages/core` unless formal synthesis in Phase 0B.3 proves discrete state equivalence across all component arrays.
+### 7.1. Explicit Directional Modeling
+Although a $180^\circ$ turn on an isolated outer face produces the same spatial boundary whether turned clockwise (`CW`) or counter-clockwise (`CCW`), the coupled intermediate gear cogs rotate in opposite directions.
+- In the public domain contract, move direction is maintained explicitly: `CW` and `CCW` [`PROJECT_DECISION`].
+- `CW` and `CCW` are defined observationally as viewed directly from outside the selected face toward the cube center.
+- In the right-handed coordinate convention where each face's positive axis is its outward normal, `CW` corresponds to negative right-hand rotation (outer: $-180^\circ$, middle: $-90^\circ$) and `CCW` corresponds to positive right-hand rotation (outer: $+180^\circ$, middle: $+90^\circ$).
+- `CW` and `CCW` produce distinct discrete state transitions on the coupled middle slice and gear cogs ($\text{CW} \neq \text{CCW}$) and are never collapsed in Core.
 
 ### 7.2. Six-Face Public/UI Interface
 The user-facing simulator and domain API will expose all six outer faces:
@@ -162,7 +164,7 @@ OBS-L (Left)  = Orange  (#FF5800)
 
 ### 8.2. Architectural Decoupling
 - `ColorScheme` and `VisualSkin` belong strictly to presentation layers.
-- Discrete `PuzzleState` in the domain core operates strictly on canonical piece indices, positions, and phase integers.
+- Discrete `GearCubeState` in the domain core operates strictly on canonical piece indices, positions, and phase integers.
 - Switching visual themes (e.g., standard plastic, stickerless, high-contrast, or Daiso OEM) does not modify solver or domain logic.
 
 ---
@@ -178,7 +180,7 @@ OBS-L (Left)  = Orange  (#FF5800)
 | Standard unmarked state count ($41,472$) | `SOURCE_SUPPORTED` | Scherphuis `[REF-JAAP-01]` |
 | Source distance maxima: 12 (`Single turns`), 6 (`Multiple turns`) | `SOURCE_SUPPORTED` | Scherphuis `[REF-JAAP-01]` |
 | Solver cost metric mapping to source categories | `OPEN / TO DEFINE` | To be formalized during Phase 4 solver & benchmark design |
-| Explicit move direction ($+180^\circ$ vs. $-180^\circ$) | `PROJECT_DECISION` | Conservative domain modeling before Phase 0B.3 synthesis |
+| Explicit move direction (`CW` vs. `CCW`, $\text{CW} \neq \text{CCW}$) | `PROJECT_DECISION` | Distinct discrete transitions on coupled middle slice and gears |
 | Six-face public Move API ($\{ \text{U}, \text{D}, \text{F}, \text{B}, \text{R}, \text{L} \}$) | `PROJECT_DECISION` | Intuitive UI/simulator interaction |
 | Default visual color scheme | `PROJECT_DECISION` | Standard WCA-style Rubik's orientation |
 | Daiso SKU `4550480834955` equivalence | `OPEN` | Unverified; reclassified to optional validation |

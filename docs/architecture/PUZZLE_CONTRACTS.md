@@ -26,7 +26,14 @@ Before specifying the interface definitions, we define four strictly separated d
 /** Canonical outer face identifiers */
 export type Face = 'U' | 'D' | 'F' | 'B' | 'L' | 'R';
 
-/** Legal face turn direction (CW = +180°, CCW = -180°) */
+/**
+ * Canonical outer face turn direction.
+ * Defined observationally as viewed directly from outside the selected face toward the cube center.
+ * In the right-handed coordinate convention (where each face's positive axis is its outward normal):
+ * - CW: negative right-hand rotation about the outward normal axis (outer: -180°, middle: -90°)
+ * - CCW: positive right-hand rotation about the outward normal axis (outer: +180°, middle: +90°)
+ * CW and CCW produce distinct discrete state transitions on the coupled middle slice and gear cogs (CW != CCW).
+ */
 export type Direction = 'CW' | 'CCW';
 
 /**
@@ -95,7 +102,7 @@ export interface PuzzleCoreAPI {
 
 ## 3. Derived Materialized View & Kinematic Contracts
 
-*(Specified in detail in [`KINEMATIC_CONTRACT.md`](KINEMATIC_CONTRACT.md).)*
+*(Specified in detail in [`KINEMATIC_CONTRACT.md`](KINEMATIC_CONTRACT.md). These interfaces are downstream contracts owned by `packages/kinematics` and `packages/renderer`. The pure Domain Core has ZERO dependencies on kinematics, rendering, or animation timing, and does not import `KinematicPlanner` or `KinematicPlan`.)*
 
 ```typescript
 export interface CornerPlacement {
@@ -149,6 +156,16 @@ export interface KinematicPlan {
   evaluate(progress: number): readonly ComponentTransform[];
 }
 
+/**
+ * Downstream kinematic trajectory generator contract (owned by packages/kinematics).
+ * Note: Pure Domain Core does NOT import or depend on this interface.
+ */
+export type KinematicPlanner = (
+  fromState: GearCubeState,
+  move: Move,
+  toState: GearCubeState
+) => KinematicPlan;
+
 /** Active transition lifecycle */
 export interface ActiveTransition {
   readonly fromState: GearCubeState;
@@ -188,7 +205,7 @@ export interface RendererAdapter {
   executeAnimation(plan: KinematicPlan): Promise<void>;
 
   /** Instantly snaps the 3D meshes to reflect a discrete state */
-  snapToState(state: PuzzleState): void;
+  snapToState(state: GearCubeState, spatialFrame?: SpatialFrame): void;
 }
 ```
 
@@ -231,7 +248,7 @@ export interface SolverResult {
 
 /** Messages exchanged between UI thread and Solver Web Worker */
 export type SolverWorkerRequest =
-  | { type: 'START_SOLVE'; state: PuzzleState; config: SolverConfig }
+  | { type: 'START_SOLVE'; state: GearCubeState; config: SolverConfig }
   | { type: 'CANCEL_SOLVE' };
 
 export type SolverWorkerResponse =
@@ -291,7 +308,7 @@ export interface DetectedFaceFeature {
 export interface VisionRecognitionResult {
   readonly timestamp: number;
   readonly rawFeatures: readonly DetectedFaceFeature[];
-  readonly candidateState?: PuzzleState;
+  readonly candidateState?: GearCubeState;
   readonly isValidState: boolean;
   readonly validationErrors: readonly string[];
   readonly confidenceScore: number;

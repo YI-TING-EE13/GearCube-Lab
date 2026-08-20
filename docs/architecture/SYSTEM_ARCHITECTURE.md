@@ -128,7 +128,7 @@ graph TD
 - **Responsibilities:**
   - Streams webcam video feed via WebRTC `getUserMedia`.
   - Segments face boundaries, classifies sticker colors, and detects gear orientations.
-  - Reconstructs candidate `PuzzleState` and performs state consistency and reachability validation before ingestion into Core, allowing user corrections for ambiguous detections.
+  - Reconstructs candidate `GearCubeState` and performs state consistency and reachability validation before ingestion into Core, allowing user corrections for ambiguous detections.
 
 ---
 
@@ -138,7 +138,7 @@ graph TD
 Communication between the UI main thread and the Solver Web Worker occurs exclusively via serializable JSON-compatible messages:
 
 ```
-[ UI Thread ]  --- { type: 'START_SEARCH', state: PuzzleState, algorithm: 'IDA_STAR' } ---> [ Worker ]
+[ UI Thread ]  --- { type: 'START_SEARCH', state: GearCubeState, algorithm: 'IDA_STAR' } ---> [ Worker ]
 [ UI Thread ]  <-- { type: 'SEARCH_PROGRESS', nodes: 14500, depth: 4, elapsedMs: 120 } <--- [ Worker ]
 [ UI Thread ]  <-- { type: 'SEARCH_COMPLETE', solution: Move[], metrics: BenchmarkMetrics } - [ Worker ]
 ```

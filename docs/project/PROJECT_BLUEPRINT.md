@@ -163,12 +163,12 @@ $$\text{Presentation Layer (UI/3D)} \longrightarrow \text{Domain Core Contracts}
 ## 13. Data Flow
 
 1. **User Action:** User clicks "Rotate Front Face Clockwise ($180^\circ$)".
-2. **UI Dispatch:** UI dispatches `applyMove(currentState, { face: 'F', turns: 1 })` to the Domain Core.
-3. **Core Validation:** Domain Core validates move legality, generates the immutable next `PuzzleState`, and computes the state hash.
+2. **UI Dispatch:** UI dispatches `applyMove(currentState, { face: 'F', direction: 'CW' })` to the Domain Core.
+3. **Core Validation:** Domain Core validates move legality, generates the immutable next `GearCubeState`, and computes the state hash.
 4. **Kinematic Translation:** Kinematic Engine computes the continuous rotational trajectory (including driving gear and intermediate gear rotations).
 5. **Renderer Execution:** 3D Renderer animates the gear meshes along the kinematic trajectory.
 6. **State Synchronization:** Upon animation completion, UI state store updates the active puzzle state.
-7. **Solver Notification:** If Solve Mode is active, the Solver Worker receives the new `PuzzleState` to evaluate optimal solution branches.
+7. **Solver Notification:** If Solve Mode is active, the Solver Worker receives the new `GearCubeState` to evaluate optimal solution branches.
 
 ---
 
@@ -247,7 +247,7 @@ All inter-module communication is governed by immutable TypeScript interfaces de
 - **Local WebRTC Capture:** Access user webcam with explicit browser permission.
 - **Perspective Rectification:** Detect cube face boundaries and correct planar perspective distortion.
 - **Color & Feature Segmentation:** Identify sticker colors and gear orientations.
-- **State Consistency & Validation:** Camera / vision processing produces a candidate `PuzzleState`. Before it becomes authoritative Core state, the candidate must pass the formally defined state consistency and/or reachability validation available for the finalized puzzle model. Invalid or uncertain recognition must remain user-correctable.
+- **State Consistency & Validation:** Camera / vision processing produces a candidate `GearCubeState`. Before it becomes authoritative Core state, the candidate must pass the formally defined state consistency and/or reachability validation available for the finalized puzzle model. Invalid or uncertain recognition must remain user-correctable.
 
 ---
 
@@ -328,20 +328,13 @@ The project roadmap is structured into 9 sequential phases (detailed in [`docs/d
 
 ---
 
-## 29. Open Questions & Unverified Physical Facts
+## 29. Open Questions & Deferred Physical Characterization
 
-The following mechanical parameters are explicitly tagged as **`OPEN` / `TO VERIFY`** and must be empirically determined in Phase 0B:
+The canonical Standard Gear Cube reference model is formally decided and synthesized (`41,472` reachable states, $180^\circ$ face flips, $F^{12}=I$, 2-tetrad corner structure, 3 middle slices in $V_4 \times \mathbb{Z}_3$). The following items remain deferred or open:
 
-1. `[OPEN]` **Exact Commercial Generation:** Whether the reference Daiso model matches 1st, 2nd, or 3rd generation Gear Cube designs.
-2. `[OPEN]` **Gear Tooth Counts & Ratios:** Exact tooth count on center-edge gears vs. corner gears.
-3. `[OPEN]` **Middle-Layer Angular Ratio & Direction:** Exact degree rotation and rotational direction of the intermediate slice gears during a $180^\circ$ face turn.
-4. `[OPEN]` **Affected Piece Set:** Exact piece coupling mapping for each legal face move.
-5. `[OPEN]` **Gear-Phase Periodicity:** Total number of $180^\circ$ face turns along a single axis required to restore edge gears to their initial rotational orientation.
-6. `[OPEN]` **Directional Asymmetry:** Whether $+180^\circ$ and $-180^\circ$ face turns produce distinct or equivalent physical states.
-7. `[OPEN]` **Complete Piece Taxonomy:** Formalized index mapping for all corners, edges, and internal core shafts.
-8. `[OPEN]` **State-Space Size:** Total theoretical reachable permutations given the specific gear coupling constraints.
-
----
+1. `[OPEN / OPTIONAL_PHYSICAL_VALIDATION]` **Daiso Commercial Equivalence:** Whether the physical Daiso SKU `4550480834955` matches 1st-generation Gear Cube mechanics or contains physical mold variations.
+2. `[OPEN / PHASE_2_KINEMATICS_DERIVATION]` **Local Gear Tooth Mesh Profile & Signed Spin Axis:** Exact 3D tooth geometry and local signed rotation vector alignment for 3D visual rendering.
+3. `[OPEN / TO DEFINE]` **Solver Cost Metric Mapping:** Formalization of GearCube Lab solver cost metrics relative to Jaap's published `Single turns` and `Multiple turns` distance tables.
 
 ## 30. Definition of Done for Major Milestones
 

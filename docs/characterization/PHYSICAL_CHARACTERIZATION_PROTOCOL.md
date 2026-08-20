@@ -167,7 +167,7 @@ To avoid overwhelming the human operator, physical characterization is partition
   - Any visible asymmetric markings, logos, or manufacturing textures.
 - **Required Evidence:** 6 photos (one for each observational face: U, D, F, B, R, L).
 - **Reset/Recovery:** N/A.
-- **Contract Decision Informed:** Solved target state contract (`isSolved`), initial `PuzzleState` definition.
+- **Contract Decision Informed:** Solved target state contract (`isSolved`), initial `GearCubeState` definition.
 
 ---
 
@@ -237,7 +237,7 @@ To avoid overwhelming the human operator, physical characterization is partition
   - State of the central face components.
 - **Required Evidence:** Photos of all 6 faces after the single 180° turn.
 - **Reset/Recovery:** Apply reverse 180° turn on `OBS-F`.
-- **Contract Decision Informed:** Discrete `PuzzleState` candidate schema, `applyMove(state, move)` transition function.
+- **Contract Decision Informed:** Discrete `GearCubeState` candidate schema, `applyMove(state, move)` transition function.
 
 ---
 
@@ -313,7 +313,7 @@ BATCH A: Initial Semantic Reconnaissance (Minimum First Operator Workload)
 -----------------------------------------------------------------------------------
   1. EXP-REF-01   — Solved reference state 6-face photos
   2. EXP-MOVE-01  — Operation envelope & intermediate pose exploration (F, R, U)
-  3. EXP-DIR-01   — Test CW (+180°) vs. CCW (-180°) on OBS-F
+  3. EXP-DIR-01   — Test CW vs. CCW on OBS-F
   4. EXP-STATE-01 — Document single 180° turn component changes on OBS-F
 ===================================================================================
                                       │ (Proceed upon Batch A evaluation)
@@ -363,8 +363,8 @@ A formal Phase 0B analysis proves that all face operations can be derived by spa
 | Contract Question | Informing Experiments | Evidence Tier | Blocking For |
 | :--- | :--- | :--- | :--- |
 | What constitutes a legal discrete `Move`? | `EXP-MOVE-01`, `EXP-DIR-01` | Tier A | Phase 1 Core |
-| Does `Move.turns` require a directional sign ($+1$ vs. $-1$)? | `EXP-DIR-01` | Tier A | Phase 1 Core |
-| What observable component fields define `PuzzleState`? | `EXP-STATE-01`, `EXP-REF-01` | Tier A | Phase 1 Core |
+| Does `Move.direction` require distinct signs (`CW` vs. `CCW`)? | `EXP-DIR-01` | Tier A | Phase 1 Core |
+| What observable component fields define `GearCubeState`? | `EXP-STATE-01`, `EXP-REF-01` | Tier A | Phase 1 Core |
 | Does visible component phase/orientation participate in `isSolved()` and state equality? | `EXP-STATE-01`, `EXP-PERIOD-01` | Tier A | Phase 1 Core |
 | What is the single-axis cycle invariant $F^N = I$? | `EXP-PERIOD-01` | Tier A | Phase 1 Tests |
 | What continuous rotation trajectory does the renderer animate? | `EXP-KIN-01` | Tier B | Phase 2 Kinematics |

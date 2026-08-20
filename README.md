@@ -6,7 +6,7 @@
 
 ## Project Status
 
-**Current Status:** `Phase 0B — Reference Model Adoption & Contract Synthesis`
+**Current Status:** `Phase 0B.4 — Final Cross-Contract Audit`
 
 > [!IMPORTANT]
 > **This repository is currently in its architectural design and governance specification phase.**

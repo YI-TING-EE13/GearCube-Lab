@@ -50,8 +50,8 @@
 
 We formally adopt **Option D**:
 
-1. **Canonical Domain Boundary:** `GearCubeState` in `packages/core` is an immutable, readable value object structured around fixed-reference orientation-normalized orbit coordinates ($24 \times 12 \times 12 \times 12 = 41,472$ true Cartesian domain).
-2. **Application / Display Frame:** Discrete `SpatialFrame` ($0 \dots 3$) tracks how the canonical fixed-reference frame maps to the currently displayed physical cube body in world space ($96 = 24 \times 4$).
+1. **Canonical Domain Boundary:** `GearCubeState` in the Core/domain layer is an immutable, readable value object structured around fixed-reference orientation-normalized orbit coordinates ($24 \times 12 \times 12 \times 12 = 41,472$ true Cartesian domain).
+2. **Application / Display Frame:** Discrete `SpatialFrame` ($0 \dots 3$) tracks how the canonical fixed-reference frame maps to the currently displayed physical cube body in world space (yielding $96 = 24 \times 4$ reachable corner pairs and $165,888 = 41,472 \times 4$ expanded fixed-spatial puzzle states, strictly distinct from Jaap's separately documented 165,888 edge-base-marked variant).
 3. **Renderer Layer Boundary:** Camera orientation, orbital controls, and view matrices are strictly external presentation concerns completely separate from both canonical state and `SpatialFrame`.
 4. **Solver Layer Boundary:** Search algorithms in Phase 4 consume canonical `GearCubeState` (or compact bijective integer codecs derived directly from it) with zero dependency on display frames or render trees.
 5. **Derived Materialized View:** Physical piece slots, individual gear phases, and center orientations are computed on-demand via pure function `materializeState(state, spatialFrame) -> PiecePlacementView`.

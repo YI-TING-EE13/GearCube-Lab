@@ -42,7 +42,7 @@ We formally adopt **Option B**:
 
 1. **Canonical MVP Puzzle Model:** The MVP simulator will implement the published combinatorial and mechanical rules of the **standard / original Gear Cube** designed by Oskar van Deventer / Meffert's (standard unmarked edge-base variant, 41,472 reachable states).
 2. **Reclassification of Daiso Characterization:** The physical Daiso puzzle (SKU `4550480834955`) and the Phase 0B.1 characterization protocol are reclassified as **optional validation and high-fidelity modeling tools**. They no longer block Phase 1 Core or Phase 2 Kinematics.
-3. **Explicit Directional Modeling:** Move direction (`CW +180°` vs. `CCW -180°`) remains explicitly distinct in the domain contract until formal synthesis in Phase 0B.3.
+3. **Explicit Directional Modeling:** Move direction (`CW` vs. `CCW`, defined observationally from outside the face) remains explicitly distinct in the domain contract ($\text{CW} \neq \text{CCW}$).
 4. **Decoupled Visual Defaults:** A standard 6-color palette (White/Yellow, Green/Blue, Red/Orange) is adopted as a presentation-only default and decoupled from state representation.
 
 ---
