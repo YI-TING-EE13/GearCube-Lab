@@ -41,15 +41,18 @@
 
 ---
 
-## 5. Current Physical Reference
+## 5. Canonical Reference Model & Physical References
 
 | Parameter | Specification | Status |
 | :--- | :--- | :--- |
-| **Physical Model Reference** | Daiso Rotating 3D Gear Puzzle | `VERIFIED` |
-| **Product SKU / ID** | `4550480834955` | `VERIFIED` |
-| **Legal Face Turn Operation** | Two successive $90^\circ$ turns $= 180^\circ$ rotation required to complete one legal face operation | `VERIFIED` |
-| **Intermediate $90^\circ$ Pose** | Intermediate physical state during turn animation; **not a legal discrete solver state** | `DECIDED` |
-| **Coupled Mechanism Behavior** | Exact affected pieces, intermediate gear displacement, and coupling directions | `OPEN` / `TO VERIFY` |
+| **Canonical MVP Model** | Standard / Original Gear Cube (Oskar van Deventer / Meffert's design) | `PROJECT_DECISION` |
+| **Published State Space** | $41,472$ reachable states ($4!(4\cdot 3)^3$) for standard unmarked edge-base variant | `SOURCE_SUPPORTED` |
+| **Legal Face Operation** | $180^\circ$ face rotation ("flip"); cycles middle slice $90^\circ$ and rotates gear edges $60^\circ$ | `SOURCE_SUPPORTED` |
+| **Intermediate $90^\circ$ Pose** | Intermediate animation pose; locks orthogonal turns; **not a legal discrete solver state** | `DECIDED` / `SOURCE_SUPPORTED` |
+| **Single-Axis Periodicity** | 12 repeated directed face flips return puzzle to exact starting state (represented as $F^{12} = I$) | `SOURCE_SUPPORTED` |
+| **Published Distance Maxima** | Jaap table reports max distance 12 (`Single turns`) and 6 (`Multiple turns`); project metric mapping is `OPEN / TO DEFINE` | `SOURCE_SUPPORTED` |
+| **Physical Inspiration / Target** | Daiso Rotating 3D Gear Puzzle (SKU `4550480834955`) | `PROJECT_DECISION` |
+| **Daiso Equivalence** | Exact mechanical equivalence between Daiso SKU and Meffert's reference model | `OPEN` / `OPTIONAL_PHYSICAL_VALIDATION` |
 
 ---
 

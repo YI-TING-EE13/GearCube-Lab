@@ -6,7 +6,7 @@
 
 ## Project Status
 
-**Current Status:** `Phase 0A — Project Governance & Canonical Design Baseline`
+**Current Status:** `Phase 0B — Reference Model Adoption & Contract Synthesis`
 
 > [!IMPORTANT]
 > **This repository is currently in its architectural design and governance specification phase.**
@@ -16,7 +16,7 @@
 
 ## Project Vision & Capabilities (Planned)
 
-GearCube Lab is a personal software and AI research platform dedicated to the deep study of mechanical gear puzzles, specifically focusing on the physical 3D Gear Cube (initial physical reference: Daiso Rotating 3D Gear Puzzle, SKU `4550480834955`).
+GearCube Lab is a personal software and AI research platform dedicated to the deep study of mechanical gear puzzles, focusing on the standard 3D Gear Cube (canonical MVP reference model: Oskar van Deventer / Meffert's design; physical inspiration: Daiso Rotating 3D Gear Puzzle, SKU `4550480834955`).
 
 Planned capabilities include:
 - **Interactive 3D Simulation:** WebGL/Three.js-based rendering featuring visibly coupled gear kinematics, responsive camera controls, and modular visual skins.

@@ -12,8 +12,10 @@ docs/
 ├── README.md                           # This index and documentation navigation guide
 ├── project/
 │   └── PROJECT_BLUEPRINT.md            # Primary 30-section long-term project blueprint
+├── reference/
+│   └── STANDARD_GEAR_CUBE_SPEC.md      # Canonical standard Gear Cube reference model specification
 ├── characterization/
-│   ├── PHYSICAL_CHARACTERIZATION_PROTOCOL.md # Phase 0B empirical experiment protocol
+│   ├── PHYSICAL_CHARACTERIZATION_PROTOCOL.md # Optional physical characterization protocol
 │   └── OBSERVATION_TEMPLATE.md         # Reusable operator observation recording form
 ├── architecture/
 │   ├── SYSTEM_ARCHITECTURE.md          # High-level architecture, module boundaries, & data flows
@@ -25,7 +27,8 @@ docs/
 ├── operations/
 │   └── DEPLOYMENT.md                   # Static HTTPS hosting, Web Worker rules, & security posture
 └── decisions/
-    └── ADR-0001-FOUNDATION.md          # Architecture Decision Record: Core foundations & tech stack
+    ├── ADR-0001-FOUNDATION.md          # Architecture Decision Record: Core foundations & tech stack
+    └── ADR-0002-STANDARD-GEAR-CUBE-REFERENCE.md # Decision Record: Standard Gear Cube model adoption
 ```
 
 ---
@@ -36,12 +39,14 @@ Throughout all documents in `docs/`, technical specifications and mechanical ass
 
 | Status Tag | Meaning & Governance Rule |
 | :--- | :--- |
+| **`SOURCE_SUPPORTED`** | Grounded directly in credible, cited published literature or primary inventor records. |
+| **`PROJECT_DECISION`** | Formally agreed upon architectural decisions recorded in an Architecture Decision Record (ADR). |
 | **`VERIFIED`** | Empirically or mathematically confirmed through reproducible physical tests or formal proofs. |
 | **`OBSERVED`** | Directly witnessed and documented in an operator observation log for a specific trial. |
 | **`INFERRED`** | Logically or mathematically deduced from verified or observed data, pending confirmation. |
-| **`DECIDED`** | Formally agreed upon architectural decisions recorded in an Architecture Decision Record (ADR). |
 | **`PROPOSED`** | Recommended technical direction under evaluation; subject to change before milestone sign-off. |
 | **`OPEN` / `TO VERIFY`** | Unverified hypothesis or unknown physical parameter; **prohibited** from being used as a test oracle or hardcoded logic until empirically verified. |
+| **`OPTIONAL_PHYSICAL_VALIDATION`** | Characterization items deferred for optional comparative hardware research. |
 | **`INCONCLUSIVE`** | Experiment was executed, but evidence was ambiguous or inconsistent; requires re-testing. |
 
 ---
@@ -49,7 +54,9 @@ Throughout all documents in `docs/`, technical specifications and mechanical ass
 ## 3. Quick Document Navigator
 
 - **Product Vision & Requirements:** [`docs/project/PROJECT_BLUEPRINT.md`](project/PROJECT_BLUEPRINT.md)
-- **Physical Characterization Protocol:** [`docs/characterization/PHYSICAL_CHARACTERIZATION_PROTOCOL.md`](characterization/PHYSICAL_CHARACTERIZATION_PROTOCOL.md)
+- **Standard Gear Cube Specification:** [`docs/reference/STANDARD_GEAR_CUBE_SPEC.md`](reference/STANDARD_GEAR_CUBE_SPEC.md)
+- **Reference Model Decision (ADR-0002):** [`docs/decisions/ADR-0002-STANDARD-GEAR-CUBE-REFERENCE.md`](decisions/ADR-0002-STANDARD-GEAR-CUBE-REFERENCE.md)
+- **Physical Characterization Protocol (Optional):** [`docs/characterization/PHYSICAL_CHARACTERIZATION_PROTOCOL.md`](characterization/PHYSICAL_CHARACTERIZATION_PROTOCOL.md)
 - **Observation Recording Template:** [`docs/characterization/OBSERVATION_TEMPLATE.md`](characterization/OBSERVATION_TEMPLATE.md)
 - **Module Boundaries & Data Flow:** [`docs/architecture/SYSTEM_ARCHITECTURE.md`](architecture/SYSTEM_ARCHITECTURE.md)
 - **Type Interfaces & Contracts:** [`docs/architecture/PUZZLE_CONTRACTS.md`](architecture/PUZZLE_CONTRACTS.md)
@@ -57,4 +64,4 @@ Throughout all documents in `docs/`, technical specifications and mechanical ass
 - **Test Invariants & Protocols:** [`docs/development/TEST_STRATEGY.md`](development/TEST_STRATEGY.md)
 - **Developer Guidelines & Tooling:** [`docs/development/DEVELOPMENT_GUIDE.md`](development/DEVELOPMENT_GUIDE.md)
 - **Production Deployment & Security:** [`docs/operations/DEPLOYMENT.md`](operations/DEPLOYMENT.md)
-- **Foundational Architecture Decisions:** [`docs/decisions/ADR-0001-FOUNDATION.md`](decisions/ADR-0001-FOUNDATION.md)
+- **Foundational Architecture Decisions (ADR-0001):** [`docs/decisions/ADR-0001-FOUNDATION.md`](decisions/ADR-0001-FOUNDATION.md)

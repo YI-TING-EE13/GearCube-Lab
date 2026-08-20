@@ -28,7 +28,7 @@ export type Face = 'U' | 'D' | 'F' | 'B' | 'L' | 'R';
 
 /**
  * Represents a discrete legal move.
- * For the reference Gear Cube, one legal face turn consists of two 90° turns = 180°.
+ * For the canonical standard Gear Cube, one legal face turn consists of two 90° turns = 180°.
  * Direction represents +180° (clockwise) or -180° (counter-clockwise).
  */
 export interface Move {
@@ -37,7 +37,7 @@ export interface Move {
    * Multiplier of 180° rotation:
    * +1 = 180° Clockwise
    * -1 = 180° Counter-Clockwise
-   * (Note: Whether +1 and -1 are physically distinct states is [OPEN / TO VERIFY])
+   * (Direction is maintained explicitly in public Move API [PROJECT_DECISION])
    */
   readonly turns: 1 | -1;
 }
@@ -49,7 +49,7 @@ export interface Move {
 export interface CornerState {
   readonly id: number; // 0..7
   readonly position: number; // 0..7
-  readonly orientation: number; // [OPEN / TO VERIFY: exact orientation group]
+  readonly orientation: number; // 0..2 (tetrad orbit orientation)
 }
 
 /**
@@ -59,7 +59,7 @@ export interface CornerState {
 export interface EdgeGearState {
   readonly id: number; // 0..11
   readonly position: number; // 0..11
-  readonly gearPhase: number; // [OPEN / TO VERIFY: integer steps 0..(N-1)]
+  readonly gearPhase: number; // integer steps 0..2 (3 shared twist phases per slice)
 }
 
 /**
@@ -77,12 +77,10 @@ export interface PuzzleState {
  * Formal specification of the physical puzzle model rules.
  */
 export interface PuzzleDefinition {
-  readonly id: string; // e.g. "daiso-gear-cube-4550480834955"
+  readonly id: string; // e.g. "standard-gear-cube-mefferts"
   readonly name: string;
   readonly legalFaces: readonly Face[];
-  readonly baseTurnAngleDegrees: 180; // [VERIFIED]
-  readonly gearRatio: number; // [OPEN / TO VERIFY]
-  readonly edgeGearPhasesCount: number; // [OPEN / TO VERIFY]
+  readonly baseTurnAngleDegrees: 180; // [SOURCE_SUPPORTED]
 }
 
 /**
