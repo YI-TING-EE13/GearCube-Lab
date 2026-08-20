@@ -1,6 +1,6 @@
 # ROADMAP.md — Project Lifecycle & Dependency-Ordered Milestones
 
-> **Current Project Phase:** `Phase 0A — Governance & Canonical Blueprint`
+> **Current Project Phase:** `Phase 0B.1 — Physical Characterization Protocol`
 > **Status:** Active Execution
 
 ---
@@ -8,10 +8,14 @@
 ## 1. Roadmap Lifecycle Overview
 
 ```text
-[ Phase 0A: Governance & Design Baseline ] (Current)
+[ Phase 0A: Governance & Design Baseline ] (Accepted)
       │
       ▼
-[ Phase 0B: Physical Mechanism Characterization ]
+[ Phase 0B: Physical Mechanism Characterization ] (Active)
+      ├─ 0B.1: Physical Characterization Protocol (Current)
+      ├─ 0B.2: Operator Physical Observation
+      ├─ 0B.3: Mechanical Contract Synthesis
+      └─ 0B.4: Contract Review and Acceptance
       │
       ▼
 [ Phase 1: Discrete Domain Core Engine ]
@@ -62,19 +66,58 @@
 
 ---
 
-### Phase 0B: Physical Mechanism Characterization & Contract Finalization
-- **Objective:** Empirically characterize the Daiso Gear Cube reference model (SKU `4550480834955`), determine exact gear ratios, cycle periods, piece taxonomy, and finalize core mathematical contracts.
-- **Prerequisites:** Completion of Phase 0A.
-- **In-Scope:** Physical testing protocol, recording exact gear tooth counts, measuring middle slice rotation angles, verifying whether $+180^\circ$ and $-180^\circ$ produce distinct physical states.
-- **Out-of-Scope:** Writing application code or rendering 3D scenes.
+### Phase 0B: Physical Mechanism Characterization & Contract Synthesis
+
+Phase 0B is partitioned into four dependency-ordered subphases:
+
+#### Phase 0B.1: Physical Characterization Protocol (Active Subphase)
+- **Objective:** Design reproducible, observation-first, non-destructive experimental protocols, observation templates, and execution batching for the physical Daiso puzzle (SKU: `4550480834955`).
+- **Prerequisites:** Completion and acceptance of Phase 0A.
+- **In-Scope:** `docs/characterization/PHYSICAL_CHARACTERIZATION_PROTOCOL.md`, `docs/characterization/OBSERVATION_TEMPLATE.md`, roadmap subphase updates.
+- **Out-of-Scope:** Physical observation execution, software implementation, modifying Core contracts.
+- **Deliverables:**
+  - `docs/characterization/PHYSICAL_CHARACTERIZATION_PROTOCOL.md`
+  - `docs/characterization/OBSERVATION_TEMPLATE.md`
+- **Verification:** Internal consistency check, link validation, protocol review.
+- **Acceptance Gate Criteria (`PHASE_0B1_PASS`):**
+  - [x] Observation-first experiment matrix defined with clear Tier A/B/C separation.
+  - [x] Execution batches established with Batch A focused on initial semantic reconnaissance.
+  - [x] Observation template provided without premature taxonomy dependencies.
+
+#### Phase 0B.2: Operator Physical Observation
+- **Objective:** Human operator physically executes experiment batches on the Daiso Gear Cube and records raw visual/tactile observations.
+- **Prerequisites:** Completion and acceptance of Phase 0B.1.
+- **In-Scope:** Operator observation logs (starting with Batch A initial reconnaissance), photographic/video evidence collection.
+- **Out-of-Scope:** Software implementation, guessing unobserved mechanics.
+- **Deliverables:**
+  - Raw observation logs stored in `docs/characterization/evidence/` or submitted via issue/PR.
+- **Verification:** Cross-check evidence completeness against protocol requirements.
+- **Acceptance Gate Criteria (`PHASE_0B2_PASS`):**
+  - [ ] Batch A observations recorded with unambiguous photographic evidence.
+  - [ ] Reference solved state and move endpoint behaviors documented without assumed symmetry.
+
+#### Phase 0B.3: Mechanical Contract Synthesis
+- **Objective:** Synthesize operator observations into formal discrete state schemas, move algebra rules (via full empirical coverage or evidence-backed symmetry derivation), and continuous kinematic equations.
+- **Prerequisites:** Completion of Phase 0B.2.
+- **In-Scope:** `docs/research/MECHANICAL_CHARACTERIZATION_REPORT.md`, candidate updates to `docs/architecture/PUZZLE_CONTRACTS.md`.
+- **Out-of-Scope:** Production software coding.
 - **Deliverables:**
   - `docs/research/MECHANICAL_CHARACTERIZATION_REPORT.md`
-  - Finalized `docs/architecture/PUZZLE_CONTRACTS.md` with verified parameters replacing `OPEN` tags.
-- **Verification:** Reproducible physical experiment logs and mathematical group closure proofs.
-- **Acceptance Gate Criteria (`PHASE_0B_PASS`):**
-  - [ ] Exact gear ratio and edge-gear phase count empirically proven.
-  - [ ] Move inverse rules ($M \cdot M^{-1} = I$) mathematically validated.
-  - [ ] Canonical piece taxonomy fully mapped.
+  - Formal candidate contract updates replacing verified `OPEN` tags.
+- **Verification:** Mathematical group closure checks, state equality validation rules.
+- **Acceptance Gate Criteria (`PHASE_0B3_PASS`):**
+  - [ ] Discrete move semantics (+180° / -180° distinctness, component transformations) formalized.
+  - [ ] Remaining unresolved mechanics explicitly tagged as `OPEN` if non-blocking for Phase 1.
+
+#### Phase 0B.4: Contract Review and Acceptance
+- **Objective:** Independent architectural review of the synthesized puzzle contracts before commencing Phase 1 software implementation.
+- **Prerequisites:** Completion of Phase 0B.3.
+- **In-Scope:** Verification of domain contracts against architecture axioms, formal Phase 0B acceptance sign-off.
+- **Out-of-Scope:** Phase 1 coding.
+- **Deliverables:** Phase 0B acceptance report.
+- **Acceptance Gate Criteria (`PHASE_0B4_PASS`):**
+  - [ ] Formal sign-off on discrete `PuzzleState` and `Move` contracts.
+  - [ ] Zero unverified mechanical assumptions promoted to test oracles without evidence.
 
 ---
 

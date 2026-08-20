@@ -301,8 +301,8 @@ Refer to [`docs/development/TEST_STRATEGY.md`](../development/TEST_STRATEGY.md) 
 ## 27. Development Phases
 
 The project roadmap is structured into 9 sequential phases (detailed in [`docs/development/ROADMAP.md`](../development/ROADMAP.md)):
-- **Phase 0A:** Project Governance & Canonical Design Baseline *(Current)*
-- **Phase 0B:** Physical Mechanism Characterization & Puzzle Contract Finalization
+- **Phase 0A:** Project Governance & Canonical Design Baseline *(Accepted)*
+- **Phase 0B:** Physical Mechanism Characterization & Puzzle Contract Synthesis *(Active)*
 - **Phase 1:** Discrete Gear Cube Core & State Engine
 - **Phase 2:** 3D Model, Visual Assets, and Kinematic Animation Engine
 - **Phase 3:** Interactive UI, History, Undo/Redo, and Scramble
