@@ -72,20 +72,22 @@ graph TD
 
 ### 3.1. Puzzle Domain Core (`packages/core`)
 - **Responsibilities:**
-  - Defines the discrete representation of the Gear Cube (corners, edges, center axes).
-  - Validates move legality ($180^\circ$ face rotations).
+  - Defines the discrete representation of the Standard Gear Cube structured around natural orbit coordinates (corners in $S_4$, 3 edge slices in $V_4 \times \mathbb{Z}_3$; detailed in [`GEAR_CUBE_STATE_MODEL.md`](GEAR_CUBE_STATE_MODEL.md)).
+  - Validates move legality (strictly directed $180^\circ$ face flips).
   - Applies discrete state transitions: $\text{State}_{t+1} = \text{applyMove}(\text{State}_t, \text{Move})$.
-  - Computes deterministic state keys for transposition tables and hash sets.
-  - Checks solved-state criteria and formally established group invariants (derived in Phase 0B).
+  - Computes deterministic string serialization and exports derived materialized piece views via `materializeState()`.
+  - Checks solved-state criteria and group invariants.
 - **Prohibited Dependencies:** Zero runtime dependencies. No Three.js, React, DOM, or node-specific built-ins.
 
 ### 3.2. Kinematic Engine (`packages/kinematics`)
 - **Responsibilities:**
-  - Converts discrete move transitions into continuous interpolation plans.
-  - Computes gear rotation ratios and coupled angular velocities:
-    $$\theta_{\text{intermediate\_gear}}(t) = f(\theta_{\text{face}}(t), \text{gear\_ratio})$$
-  - Generates keyframe trajectories for smooth 3D animation without snapping.
-- **Prohibited Dependencies:** Does not depend on WebGL rendering contexts or DOM elements.
+  - Converts discrete move transitions into continuous kinematic trajectories parameterized by normalized mechanical progress $p \in [0, 1]$ (detailed in [`KINEMATIC_CONTRACT.md`](KINEMATIC_CONTRACT.md)).
+  - Computes exact coupled angular displacements:
+    - Outer face: $180^\circ \cdot p$
+    - Middle slice: $90^\circ \cdot p$
+    - Intermediate gear cogs: $60^\circ \cdot p$
+  - Generates evaluated rigid-body component transforms for smooth 3D animation.
+- **Prohibited Dependencies:** Does not depend on WebGL rendering contexts, Three.js meshes, or DOM elements.
 
 ### 3.3. 3D Renderer & Visual Skins (`packages/renderer`)
 - **Responsibilities:**

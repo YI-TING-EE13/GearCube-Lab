@@ -1,6 +1,6 @@
 # ROADMAP.md — Project Lifecycle & Dependency-Ordered Milestones
 
-> **Current Project Phase:** `Phase 0B.2 — Standard Gear Cube Reference Specification`
+> **Current Project Phase:** `Phase 0B.3 — Discrete & Kinematic Contract Synthesis`
 > **Status:** Active Execution
 
 ---
@@ -77,34 +77,29 @@ Phase 0B is partitioned into four dependency-ordered subphases:
   - `docs/characterization/PHYSICAL_CHARACTERIZATION_PROTOCOL.md`
   - `docs/characterization/OBSERVATION_TEMPLATE.md`
 
-#### Phase 0B.2: Standard Gear Cube Reference Specification (Active Subphase)
+#### Phase 0B.2: Standard Gear Cube Reference Specification (Accepted)
 - **Objective:** Adopt the published mechanical, combinatorial, and mathematical rules of the standard/original Gear Cube (Oskar van Deventer / Meffert's design) as the canonical MVP puzzle model.
-- **Prerequisites:** Completion and acceptance of Phase 0B.1.
-- **In-Scope:** `docs/reference/STANDARD_GEAR_CUBE_SPEC.md`, `docs/decisions/ADR-0002-STANDARD-GEAR-CUBE-REFERENCE.md`, roadmap updates, literature provenance cross-checking.
-- **Out-of-Scope:** Software implementation, physical testing execution, modifying production contracts.
+- **Status:** `ACCEPTED` (Commit `b1139c1`).
 - **Deliverables:**
   - `docs/reference/STANDARD_GEAR_CUBE_SPEC.md`
   - `docs/decisions/ADR-0002-STANDARD-GEAR-CUBE-REFERENCE.md`
-- **Verification:** Literature provenance validation (Scherphuis, Storer), link validation.
-- **Acceptance Gate Criteria (`PHASE_0B2_PASS`):**
-  - [x] Standard Gear Cube formally adopted as canonical MVP reference model with published state space ($41,472$).
-  - [x] Daiso physical characterization reclassified as optional validation tooling.
-  - [x] Sourced distinction between standard and edge-base marked variants documented.
-  - [x] Published God's Algorithm distance maxima documented from source (`Single turns`: 12, `Multiple turns`: 6; cost metric mapping classified as `OPEN / TO DEFINE`).
-  - [x] Explicit directional modeling (+180° vs -180°) and 6-face UI move set preserved.
-  - [x] Default color mapping defined as visual presentation only.
 
-#### Phase 0B.3: Discrete & Kinematic Contract Synthesis
-- **Objective:** Translate the adopted standard reference specification into implementation-ready conceptual contracts, state schemas, move algebra rules, and continuous kinematic trajectories.
-- **Prerequisites:** Completion of Phase 0B.2.
-- **In-Scope:** Candidate contract updates in `docs/architecture/PUZZLE_CONTRACTS.md`, synthesis report.
+#### Phase 0B.3: Discrete & Kinematic Contract Synthesis (Active Subphase)
+- **Objective:** Translate the adopted standard reference specification into implementation-ready conceptual contracts, state schemas, move algebra rules, derived piece placement views, and continuous kinematic trajectories.
+- **Prerequisites:** Completion and acceptance of Phase 0B.2.
+- **In-Scope:** `docs/architecture/GEAR_CUBE_STATE_MODEL.md`, `docs/architecture/KINEMATIC_CONTRACT.md`, `docs/decisions/ADR-0003-CORE-STATE-REPRESENTATION.md`, candidate updates to `docs/architecture/PUZZLE_CONTRACTS.md`, `SYSTEM_ARCHITECTURE.md`, `TEST_STRATEGY.md`.
 - **Out-of-Scope:** Production software coding.
 - **Deliverables:**
-  - Formal candidate contract updates replacing verified `OPEN` tags with sourced parameters.
-- **Verification:** Mathematical group closure checks, state equality validation rules.
+  - `docs/architecture/GEAR_CUBE_STATE_MODEL.md`
+  - `docs/architecture/KINEMATIC_CONTRACT.md`
+  - `docs/decisions/ADR-0003-CORE-STATE-REPRESENTATION.md`
+- **Verification:** Mathematical group closure checks, exhaustive reachable-state traversal ($41,472$), inverse round-trips, link validation.
 - **Acceptance Gate Criteria (`PHASE_0B3_PASS`):**
-  - [ ] Discrete move semantics (+180° / -180° distinctness, component transformations) formalized.
-  - [ ] Kinematic trajectory coupling ratios formalized.
+  - [x] Canonical readable state schema defined and mapped to $4!(4\cdot 3)^3 = 41,472$ decomposition.
+  - [x] Exact 12-move transition table formalized and verified with 0 closure or inverse failures.
+  - [x] Exhaustive reachable state count verified at exactly 41,472.
+  - [x] Derived non-authoritative `PiecePlacementView` and `StateCodec` boundaries specified.
+  - [x] Continuous kinematic trajectories parameterized by mechanical progress $p \in [0, 1]$ specified for all 12 moves.
 
 #### Phase 0B.4: Contract Review and Acceptance
 - **Objective:** Independent architectural review of the synthesized puzzle contracts before commencing Phase 1 software implementation.
@@ -113,7 +108,7 @@ Phase 0B is partitioned into four dependency-ordered subphases:
 - **Out-of-Scope:** Phase 1 coding.
 - **Deliverables:** Phase 0B acceptance report.
 - **Acceptance Gate Criteria (`PHASE_0B4_PASS`):**
-  - [ ] Formal sign-off on discrete `PuzzleState`, `Move`, and `KinematicPlan` contracts.
+  - [ ] Formal sign-off on discrete `GearCubeState`, `Move`, `PiecePlacementView`, and `KinematicPlan` contracts.
   - [ ] Zero unverified mechanical assumptions promoted to test oracles without evidence.
 
 ---

@@ -275,9 +275,9 @@ All inter-module communication is governed by immutable TypeScript interfaces de
 ## 24. Testing Strategy Overview
 
 Refer to [`docs/development/TEST_STRATEGY.md`](../development/TEST_STRATEGY.md) for the complete 12-level testing pyramid:
-- Pure Core unit tests and formally derived property invariants (upon Phase 0B verification).
-- Deterministic move sequence reversibility ($M \cdot M^{-1} = I$).
-- Kinematic continuous interpolation assertions.
+- Pure Core unit tests and group-theoretic property invariants (formalized in [`GEAR_CUBE_STATE_MODEL.md`](../architecture/GEAR_CUBE_STATE_MODEL.md)).
+- Deterministic move sequence reversibility ($M \cdot M^{-1} = I$) and single-axis 12-flip identity ($F^{12} = I$).
+- Kinematic continuous interpolation assertions (formalized in [`KINEMATIC_CONTRACT.md`](../architecture/KINEMATIC_CONTRACT.md)).
 - Web Worker solver search determinism tests.
 - Seeded benchmark regression tests.
 - Browser-level Playwright UI interaction tests.

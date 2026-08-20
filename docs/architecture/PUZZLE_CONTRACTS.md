@@ -20,62 +20,51 @@ Before specifying the interface definitions, we define four strictly separated d
 
 ## 2. Discrete Domain Core Contracts
 
-*(The following TypeScript interfaces are conceptual definitions for documentation purposes. No source code files are created in this phase.)*
+*(The following TypeScript interfaces are conceptual definitions for documentation purposes, specified in detail in [`GEAR_CUBE_STATE_MODEL.md`](GEAR_CUBE_STATE_MODEL.md). No source code files are created in this phase.)*
 
 ```typescript
-/** Canonical face identifiers */
+/** Canonical outer face identifiers */
 export type Face = 'U' | 'D' | 'F' | 'B' | 'L' | 'R';
 
+/** Legal face turn direction (CW = +180°, CCW = -180°) */
+export type Direction = 'CW' | 'CCW';
+
 /**
- * Represents a discrete legal move.
- * For the canonical standard Gear Cube, one legal face turn consists of two 90° turns = 180°.
- * Direction represents +180° (clockwise) or -180° (counter-clockwise).
+ * Represents a discrete legal face flip.
+ * For the canonical Standard Gear Cube, one legal face turn is 180°.
  */
 export interface Move {
   readonly face: Face;
-  /**
-   * Multiplier of 180° rotation:
-   * +1 = 180° Clockwise
-   * -1 = 180° Counter-Clockwise
-   * (Direction is maintained explicitly in public Move API [PROJECT_DECISION])
-   */
-  readonly turns: 1 | -1;
+  readonly direction: Direction;
+}
+
+/** Canonical corner configuration index in S_4 (0..23) */
+export type CornerConfiguration = number;
+
+/** Relative edge permutation class within the Klein four-group V_4 (0..3) */
+export type SlicePermutationClass = 0 | 1 | 2 | 3;
+
+/** Abstract common twist class of middle-layer edge cogs in Z_3 (0, 1, 2) */
+export type SliceGearPhase = 0 | 1 | 2;
+
+/** Discrete coordinate state of a single edge slice orbit (12 distinct states) */
+export interface EdgeSliceCoordinate {
+  readonly permutationClass: SlicePermutationClass;
+  readonly phase: SliceGearPhase;
 }
 
 /**
- * Discrete corner piece representation.
- * Models position index and physical orientation.
+ * Immutable canonical discrete state of the Standard Gear Cube.
+ * True Cartesian domain: 24 * 12 * 12 * 12 = 41,472 reachable states.
  */
-export interface CornerState {
-  readonly id: number; // 0..7
-  readonly position: number; // 0..7
-  readonly orientation: number; // 0..2 (tetrad orbit orientation)
+export interface GearCubeState {
+  readonly cornerConfiguration: CornerConfiguration;
+  readonly sliceX: EdgeSliceCoordinate;
+  readonly sliceY: EdgeSliceCoordinate;
+  readonly sliceZ: EdgeSliceCoordinate;
 }
 
-/**
- * Discrete gear edge piece representation.
- * Models edge slot position and rotational gear phase.
- */
-export interface EdgeGearState {
-  readonly id: number; // 0..11
-  readonly position: number; // 0..11
-  readonly gearPhase: number; // integer steps 0..2 (3 shared twist phases per slice)
-}
-
-/**
- * Immutable snapshot of the discrete puzzle state.
- * This is the authoritative domain source of truth.
- */
-export interface PuzzleState {
-  readonly corners: readonly CornerState[];
-  readonly edges: readonly EdgeGearState[];
-  /** Optional metadata for tracking historical depth */
-  readonly depth?: number;
-}
-
-/**
- * Formal specification of the physical puzzle model rules.
- */
+/** Formal specification of the physical puzzle model rules */
 export interface PuzzleDefinition {
   readonly id: string; // e.g. "standard-gear-cube-mefferts"
   readonly name: string;
@@ -83,61 +72,90 @@ export interface PuzzleDefinition {
   readonly baseTurnAngleDegrees: 180; // [SOURCE_SUPPORTED]
 }
 
-/**
- * Core functional operations contract.
- */
+/** Core functional operations contract */
 export interface PuzzleCoreAPI {
   /** Applies a legal move to a state and returns the resulting immutable state */
-  applyMove(state: PuzzleState, move: Move): PuzzleState;
-
-  /** Returns all currently legal moves for the given state */
-  getLegalMoves(state: PuzzleState): readonly Move[];
+  applyMove(state: GearCubeState, move: Move): GearCubeState;
 
   /** Validates whether the state matches the canonical solved target state */
-  isSolved(state: PuzzleState): boolean;
+  isSolved(state: GearCubeState): boolean;
 
   /** Validates whether two state instances are combinatorially identical */
-  areStatesEqual(a: PuzzleState, b: PuzzleState): boolean;
+  equalsState(a: GearCubeState, b: GearCubeState): boolean;
 
-  /** Generates a deterministic string key for hash tables / transposition sets */
-  serializeState(state: PuzzleState): string;
+  /** Generates a deterministic string key for debugging and serialization */
+  serializeLogicalState(state: GearCubeState): string;
 
-  /** Validates state consistency and reachability invariants against the puzzle definition */
-  validateState(state: PuzzleState): { isValid: boolean; error?: string };
+  /** Validates state consistency and coordinate domain invariants */
+  validateState(state: unknown): { readonly isValid: boolean; readonly error?: string };
 }
 ```
 
 ---
 
-## 3. Kinematic Animation Contracts
+## 3. Derived Materialized View & Kinematic Contracts
+
+*(Specified in detail in [`KINEMATIC_CONTRACT.md`](KINEMATIC_CONTRACT.md).)*
 
 ```typescript
-/** Keyframe transform for a single physical sub-assembly */
-export interface ComponentTransformKeyframe {
+export interface CornerPlacement {
+  readonly slotIndex: number; // 0..7
+  readonly pieceId: number;   // 0..7
+}
+
+export interface EdgePlacement {
+  readonly slotIndex: number; // 0..11
+  readonly pieceId: number;   // 0..11
+  readonly gearPhase: SliceGearPhase; // 0..2
+}
+
+export interface CenterPlacement {
+  readonly face: Face;
+  readonly orientationAngleDegrees: number; // 0, 90, 180, 270
+}
+
+/** Derived, human-readable physical piece placement view (non-authoritative) */
+export interface PiecePlacementView {
+  readonly corners: readonly CornerPlacement[];
+  readonly edges: readonly EdgePlacement[];
+  readonly centers: readonly CenterPlacement[];
+}
+
+/**
+ * Discrete 4-state spatial frame representing the physical slot
+ * location of the reference corner piece DBL (0: UFL, 1: UBR, 2: DFR, 3: DBL).
+ * Solved / canonical value: 3.
+ */
+export type SpatialFrame = 0 | 1 | 2 | 3;
+
+/** Materialization function contract */
+export type StateMaterializer = (
+  state: GearCubeState,
+  spatialFrame?: SpatialFrame
+) => PiecePlacementView;
+
+/** Continuous 3D spatial transformation for a component */
+export interface ComponentTransform {
   readonly componentId: string;
+  readonly position: [number, number, number];
   readonly rotationEuler: [number, number, number];
   readonly rotationQuaternion: [number, number, number, number];
 }
 
-/** Complete time-based animation trajectory for a move */
+/** Complete kinematic animation trajectory */
 export interface KinematicPlan {
   readonly move: Move;
   readonly durationMs: number;
-  readonly keyframes: readonly {
-    readonly timeNormalized: number; // 0.0 to 1.0
-    readonly transforms: readonly ComponentTransformKeyframe[];
-  }[];
+  evaluate(progress: number): readonly ComponentTransform[];
 }
 
-/** Kinematics Generator API */
-export interface KinematicsAPI {
-  /** Generates a continuous kinematic animation trajectory from a discrete move */
-  generateKinematicPlan(
-    fromState: PuzzleState,
-    move: Move,
-    definition: PuzzleDefinition,
-    durationMs: number
-  ): KinematicPlan;
+/** Active transition lifecycle */
+export interface ActiveTransition {
+  readonly fromState: GearCubeState;
+  readonly toState: GearCubeState;
+  readonly move: Move;
+  readonly plan: KinematicPlan;
+  readonly progress: number; // 0.0 to 1.0
 }
 ```
 

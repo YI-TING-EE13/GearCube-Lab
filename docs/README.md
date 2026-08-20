@@ -19,7 +19,9 @@ docs/
 │   └── OBSERVATION_TEMPLATE.md         # Reusable operator observation recording form
 ├── architecture/
 │   ├── SYSTEM_ARCHITECTURE.md          # High-level architecture, module boundaries, & data flows
-│   └── PUZZLE_CONTRACTS.md             # Core type contracts, state models, kinematics, & solver APIs
+│   ├── PUZZLE_CONTRACTS.md             # Core type contracts, state models, kinematics, & solver APIs
+│   ├── GEAR_CUBE_STATE_MODEL.md        # Canonical discrete state schema & transition algebra
+│   └── KINEMATIC_CONTRACT.md           # Continuous 3D physical kinematics & animation contract
 ├── development/
 │   ├── DEVELOPMENT_GUIDE.md            # Environment policies, coding standards, & workflows
 │   ├── ROADMAP.md                      # Dependency-ordered project lifecycle (Phases 0A–8) & gates
@@ -28,7 +30,8 @@ docs/
 │   └── DEPLOYMENT.md                   # Static HTTPS hosting, Web Worker rules, & security posture
 └── decisions/
     ├── ADR-0001-FOUNDATION.md          # Architecture Decision Record: Core foundations & tech stack
-    └── ADR-0002-STANDARD-GEAR-CUBE-REFERENCE.md # Decision Record: Standard Gear Cube model adoption
+    ├── ADR-0002-STANDARD-GEAR-CUBE-REFERENCE.md # Decision Record: Standard Gear Cube model adoption
+    └── ADR-0003-CORE-STATE-REPRESENTATION.md # Decision Record: Canonical state & derived views
 ```
 
 ---
@@ -55,7 +58,10 @@ Throughout all documents in `docs/`, technical specifications and mechanical ass
 
 - **Product Vision & Requirements:** [`docs/project/PROJECT_BLUEPRINT.md`](project/PROJECT_BLUEPRINT.md)
 - **Standard Gear Cube Specification:** [`docs/reference/STANDARD_GEAR_CUBE_SPEC.md`](reference/STANDARD_GEAR_CUBE_SPEC.md)
+- **Canonical Discrete State Model:** [`docs/architecture/GEAR_CUBE_STATE_MODEL.md`](architecture/GEAR_CUBE_STATE_MODEL.md)
+- **Continuous Kinematic Contract:** [`docs/architecture/KINEMATIC_CONTRACT.md`](architecture/KINEMATIC_CONTRACT.md)
 - **Reference Model Decision (ADR-0002):** [`docs/decisions/ADR-0002-STANDARD-GEAR-CUBE-REFERENCE.md`](decisions/ADR-0002-STANDARD-GEAR-CUBE-REFERENCE.md)
+- **Canonical State Representation (ADR-0003):** [`docs/decisions/ADR-0003-CORE-STATE-REPRESENTATION.md`](decisions/ADR-0003-CORE-STATE-REPRESENTATION.md)
 - **Physical Characterization Protocol (Optional):** [`docs/characterization/PHYSICAL_CHARACTERIZATION_PROTOCOL.md`](characterization/PHYSICAL_CHARACTERIZATION_PROTOCOL.md)
 - **Observation Recording Template:** [`docs/characterization/OBSERVATION_TEMPLATE.md`](characterization/OBSERVATION_TEMPLATE.md)
 - **Module Boundaries & Data Flow:** [`docs/architecture/SYSTEM_ARCHITECTURE.md`](architecture/SYSTEM_ARCHITECTURE.md)
