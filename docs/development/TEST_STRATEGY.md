@@ -53,14 +53,20 @@
 
 ## 3. Detailed Test Levels & Invariants
 
-### Level 1: Pure Core Unit Tests
-- **Scope:** `packages/core`
-- **Focus:** Basic state initialization, solved state recognition (`isSolved(SOLVED_GEAR_CUBE_STATE) === true`), move dispatching, structural equality.
+### Level 1: Pure Core Value Domains, Validation & State Operations
+- **Scope:** `packages/core` (`packages/core/tests/types.test.ts`, `packages/core/tests/validation.test.ts`, `packages/core/tests/state.test.ts`, `packages/core/tests/domain.test.ts`)
+- **Focus:** Canonical value collections, derived literal-union types, order-independent exact-key runtime validation, solved state recognition, structural state equality, and 41,472 Cartesian domain cardinality.
 - **Invariants Tested:**
-  - Applying zero moves leaves state unchanged.
-  - State objects are deeply immutable value objects (modifications return new instances).
-  - State serialization `serializeLogicalState()` produces identical deterministic strings for identical states.
-  - Structural equality `equalsState(a, b)` strictly compares canonical discrete fields.
+  - Canonical `FACES` ordered deterministically as `['U', 'D', 'F', 'B', 'R', 'L']` ($6$ unique faces).
+  - Canonical `DIRECTIONS` contains exactly `['CW', 'CCW']` with zero numeric angle semantics.
+  - Canonical `ALL_MOVES` contains exactly 12 directed moves in canonical $(FACES \times DIRECTIONS)$ order.
+  - Canonical `CORNER_CONFIGURATIONS` contains exactly 24 integers $0 \dots 23$.
+  - Internal `V4_PERMUTATIONS` and slot sequences (`SLICE_X_SLOTS`, `SLICE_Y_SLOTS`, `SLICE_Z_SLOTS`) faithfully encode frozen coordinate geometry.
+  - Static constants and arrays are deeply frozen at module evaluation time via `Object.freeze()`.
+  - Type guards (`isFace`, `isDirection`, `isMove`, `isCornerConfiguration`, `isSlicePermutationClass`, `isSliceGearPhase`, `isEdgeSliceCoordinate`, `isGearCubeState`) enforce order-independent exact own-key set equality via `Reflect.ownKeys()`.
+  - Extraneous properties (such as `spatialFrame`, `history`, `solverCost`, symbol keys, or non-enumerable properties) are strictly rejected.
+  - `equalsGearCubeState(a, b)` strictly compares canonical discrete coordinates.
+  - Authoritative `SOLVED_GEAR_CUBE_STATE` is recognized by `isSolved()`, and exactly 1 state out of all 41,472 Cartesian coordinate tuples satisfies `isSolved()`.
 
 ### Level 2: Group Theory Invariants & Move Inverses
 - **Scope:** `packages/core`

@@ -115,19 +115,23 @@ Phase 0B is partitioned into four dependency-ordered subphases:
 ---
 
 ### Phase 1: Discrete Domain Core Engine
-- **Objective:** Implement the pure TypeScript combinatorial state engine and move validator.
+- **Objective:** Implement the pure TypeScript combinatorial state engine, move validator, and coordinate model.
 - **Prerequisites:** Completion of Phase 0B.
-- **In-Scope:** `packages/core`, state representations, move application, state consistency validation, deterministic state hashing.
-- **Out-of-Scope:** Three.js rendering, UI components, Web Workers, solvers.
-- **Deliverables:**
-  - `packages/core/src/state.ts`
-  - `packages/core/src/moves.ts`
-  - `packages/core/src/validation.ts`
-  - Comprehensive unit test suite in Vitest.
-- **Verification Commands:** `npm test -- core` (100% pass, $\ge 95\%$ branch coverage).
-- **Acceptance Gate Criteria (`PHASE_1_PASS`):**
-  - [ ] Pure Core compiles with zero external dependencies.
-  - [ ] Move invariants and state equality pass property-based fuzz tests ($> 100,000$ iterations).
+
+#### Phase 1A: Project Bootstrap & Core Package Boundary (Completed)
+- Package boundary isolation, zero-dependency pure Core setup, workspace verification scripts.
+
+#### Phase 1B: Canonical State / Value Types & Validation (Completed)
+- Canonical value collections (`FACES`, `DIRECTIONS`, `CORNER_CONFIGURATIONS`, `SLICE_PERMUTATION_CLASSES`, `SLICE_GEAR_PHASES`), derived literal types, exact own-key validation guards (`isFace`, `isDirection`, `isMove`, `isCornerConfiguration`, `isSlicePermutationClass`, `isSliceGearPhase`, `isEdgeSliceCoordinate`, `isGearCubeState`), static constants, `SOLVED_GEAR_CUBE_STATE`, `equalsGearCubeState`, `isSolved`, and 41,472 Cartesian domain cardinality verification.
+
+#### Phase 1C: Move Transition Engine & Action Algebra (Next)
+- Canonical move application (`applyMove`), 12-move action generator, and transition table execution.
+
+#### Phase 1D: Coordinate Views & Structural Codecs
+- Derived `PiecePlacementView` materialization and compact integer serialization codecs.
+
+#### Phase 1E: Group Invariants & Exhaustive Reachable State Closure
+- Exhaustive BFS traversal ($41,472$ reachable states), group closure checks, and move inverse round-trips.
 
 ---
 
