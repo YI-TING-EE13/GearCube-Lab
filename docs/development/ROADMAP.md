@@ -124,11 +124,12 @@ Phase 0B is partitioned into four dependency-ordered subphases:
 #### Phase 1B: Canonical State / Value Types & Validation (Completed)
 - Canonical value collections (`FACES`, `DIRECTIONS`, `CORNER_CONFIGURATIONS`, `SLICE_PERMUTATION_CLASSES`, `SLICE_GEAR_PHASES`), derived literal types, exact own-key validation guards (`isFace`, `isDirection`, `isMove`, `isCornerConfiguration`, `isSlicePermutationClass`, `isSliceGearPhase`, `isEdgeSliceCoordinate`, `isGearCubeState`), static constants, `SOLVED_GEAR_CUBE_STATE`, `equalsGearCubeState`, `isSolved`, and 41,472 Cartesian domain cardinality verification.
 
-#### Phase 1C: Move Transition Engine & Action Algebra (Next)
-- Canonical move application (`applyMove`), 12-move action generator, and transition table execution.
+#### Phase 1C: Move Transition Engine & Action Algebra (Completed)
+- Direct canonical move application (`applyMove`), $O(1)$ precomputed transition tables (`transition-data.ts`), exact 12 solved-state golden vectors, input validation, output anti-aliasing, 497,664 transition closure, 497,664 direct vs independent test oracle equivalence, 497,664 inverse round-trips, and 12-repeat identity.
 
-#### Phase 1D: Coordinate Views & Structural Codecs
-- Derived `PiecePlacementView` materialization and compact integer serialization codecs.
+#### Phase 1D: Coordinate Views & Structural Codecs (Next)
+- Derived `PiecePlacementView` materialization (`materializeState`), `SpatialFrame` orientation lifecycle, and compact integer serialization codecs.
+
 
 #### Phase 1E: Group Invariants & Exhaustive Reachable State Closure
 - Exhaustive BFS traversal ($41,472$ reachable states), group closure checks, and move inverse round-trips.

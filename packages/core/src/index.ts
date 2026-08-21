@@ -46,3 +46,6 @@ export {
 
 // State Operations (from state.ts)
 export { equalsGearCubeState, isSolved } from './state.js';
+
+// Canonical Transition Operations (from transitions.ts)
+export { applyMove } from './transitions.js';
