@@ -28,7 +28,8 @@ docs/
 │   ├── TEST_STRATEGY.md                # 12-level testing pyramid, property invariants, & validation
 │   ├── PHASE_1A_IMPLEMENTATION_PLAN.md # Phase 1A project bootstrap & package boundary plan
 │   ├── PHASE_1B_IMPLEMENTATION_PLAN.md # Phase 1B canonical state / value types & validation plan
-│   └── PHASE_1C_IMPLEMENTATION_PLAN.md # Phase 1C direct canonical move-transition engine plan
+│   ├── PHASE_1C_IMPLEMENTATION_PLAN.md # Phase 1C direct canonical move-transition engine plan
+│   └── ADR_0004_CENTER_ORIENTATION_PLAN.md # ADR-0004 Center orientation semantics plan
 ├── operations/
 │   └── DEPLOYMENT.md                   # Static HTTPS hosting, Web Worker rules, & security posture
 └── decisions/
@@ -74,6 +75,7 @@ Throughout all documents in `docs/`, technical specifications and mechanical ass
 - **Phase 1A Bootstrap Plan:** [`docs/development/PHASE_1A_IMPLEMENTATION_PLAN.md`](development/PHASE_1A_IMPLEMENTATION_PLAN.md)
 - **Phase 1B State & Validation Plan:** [`docs/development/PHASE_1B_IMPLEMENTATION_PLAN.md`](development/PHASE_1B_IMPLEMENTATION_PLAN.md)
 - **Phase 1C Move-Transition Engine Plan:** [`docs/development/PHASE_1C_IMPLEMENTATION_PLAN.md`](development/PHASE_1C_IMPLEMENTATION_PLAN.md)
+- **ADR-0004 Center Orientation Plan:** [`docs/development/ADR_0004_CENTER_ORIENTATION_PLAN.md`](development/ADR_0004_CENTER_ORIENTATION_PLAN.md)
 - **Developer Guidelines & Tooling:** [`docs/development/DEVELOPMENT_GUIDE.md`](development/DEVELOPMENT_GUIDE.md)
 - **Production Deployment & Security:** [`docs/operations/DEPLOYMENT.md`](operations/DEPLOYMENT.md)
 - **Foundational Architecture Decisions (ADR-0001):** [`docs/decisions/ADR-0001-FOUNDATION.md`](decisions/ADR-0001-FOUNDATION.md)
