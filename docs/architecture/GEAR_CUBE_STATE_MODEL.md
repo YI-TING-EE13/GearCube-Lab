@@ -208,7 +208,23 @@ export const SOLVED_GEAR_CUBE_STATE: GearCubeState = {
 
 ---
 
-## 7. Move Application and Frame Lifecycle
+## 7. Derived Center Piece Placement & Orientation Quotient
+
+*(Pursuant to [`ADR-0004`](../decisions/ADR-0004-CENTER-ORIENTATION-SEMANTICS.md))*:
+
+1. **Zero Independent Center Coordinates:**
+   Face center pieces contribute zero independent degrees of freedom to `GearCubeState`. The canonical state space cardinality remains strictly frozen at **$41,472$** states.
+2. **Deterministic Center Placement Derivation (Model A):**
+   Center piece placement in canonical slots `['U', 'D', 'F', 'B', 'R', 'L']` is uniquely determined by the raw coordinate tuple $(C, k_X, k_Y, k_Z)$ via Model A algebraic composition:
+   $$\text{centerPlacement}(C, k_X, k_Y, k_Z) = \text{CENTER\_PERM\_OF\_C}[C] \circ K_X[k_X] \circ K_Y[k_Y] \circ K_Z[k_Z]$$
+   - Edge gear twist phases $(p_X, p_Y, p_Z)$ have zero influence on center piece placement.
+   - For full 24-row dictionary and slice action definitions, see [`ADR-0004`](../decisions/ADR-0004-CENTER-ORIENTATION-SEMANTICS.md).
+3. **Center Orientation Quotient:**
+   For the standard unmarked Gear Cube, physical center axial orientation is unobservable at discrete endpoints, path-dependent in the physical rotation group, and quotiented out of the discrete state model and materialized view.
+
+---
+
+## 8. Move Application and Frame Lifecycle
 
 ```text
 1. User invokes UI move (F_physical, D_physical) on (canonicalState, spatialFrame)
@@ -219,7 +235,7 @@ export const SOLVED_GEAR_CUBE_STATE: GearCubeState = {
 
 ---
 
-## 8. Synchronous Exhaustive Verification Evidence
+## 9. Synchronous Exhaustive Verification Evidence
 
 Captured output from foreground Python verification suite (`uv run python`):
 

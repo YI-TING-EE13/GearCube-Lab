@@ -127,8 +127,9 @@ Phase 0B is partitioned into four dependency-ordered subphases:
 #### Phase 1C: Move Transition Engine & Action Algebra (Completed)
 - Direct canonical move application (`applyMove`), $O(1)$ precomputed transition tables (`transition-data.ts`), exact 12 solved-state golden vectors, input validation, output anti-aliasing, 497,664 transition closure, 497,664 direct vs independent test oracle equivalence, 497,664 inverse round-trips, and 12-repeat identity.
 
-#### Phase 1D: Coordinate Views & Structural Codecs (Next)
-- Derived `PiecePlacementView` materialization (`materializeState`), `SpatialFrame` orientation lifecycle, and compact integer serialization codecs.
+#### Phase 1D: Coordinate Views & Structural Codecs (Plan Repair Pending)
+- Derived `PiecePlacementView` materialization (`materializeState`), quotiented center placement (`CenterPlacement` with `{ slot, pieceId }` pursuant to accepted [`ADR-0004`](../decisions/ADR-0004-CENTER-ORIENTATION-SEMANTICS.md)), `SpatialFrame` orientation lifecycle, and compact integer serialization codecs.
+- **Status:** `BLOCKED` on Phase 1D implementation plan repair and acceptance. Physical center mechanics contract resolved by accepted [`ADR-0004`](../decisions/ADR-0004-CENTER-ORIENTATION-SEMANTICS.md). Phase 1D implementation plan requires repair and independent review before production implementation.
 
 
 #### Phase 1E: Group Invariants & Exhaustive Reachable State Closure

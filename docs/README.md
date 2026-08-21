@@ -32,10 +32,11 @@ docs/
 │   └── ADR_0004_CENTER_ORIENTATION_PLAN.md # ADR-0004 Center orientation semantics plan
 ├── operations/
 │   └── DEPLOYMENT.md                   # Static HTTPS hosting, Web Worker rules, & security posture
-└── decisions/
-    ├── ADR-0001-FOUNDATION.md          # Architecture Decision Record: Core foundations & tech stack
-    ├── ADR-0002-STANDARD-GEAR-CUBE-REFERENCE.md # Decision Record: Standard Gear Cube model adoption
-    └── ADR-0003-CORE-STATE-REPRESENTATION.md # Decision Record: Canonical state & derived views
+├── decisions/
+│   ├── ADR-0001-FOUNDATION.md          # Architecture Decision Record: Core foundations & tech stack
+│   ├── ADR-0002-STANDARD-GEAR-CUBE-REFERENCE.md # Decision Record: Standard Gear Cube model adoption
+│   ├── ADR-0003-CORE-STATE-REPRESENTATION.md # Decision Record: Canonical state & derived views
+│   └── ADR-0004-CENTER-ORIENTATION-SEMANTICS.md # Decision Record (Accepted): Center orientation quotient & derivation
 ```
 
 ---
@@ -79,3 +80,4 @@ Throughout all documents in `docs/`, technical specifications and mechanical ass
 - **Developer Guidelines & Tooling:** [`docs/development/DEVELOPMENT_GUIDE.md`](development/DEVELOPMENT_GUIDE.md)
 - **Production Deployment & Security:** [`docs/operations/DEPLOYMENT.md`](operations/DEPLOYMENT.md)
 - **Foundational Architecture Decisions (ADR-0001):** [`docs/decisions/ADR-0001-FOUNDATION.md`](decisions/ADR-0001-FOUNDATION.md)
+- **Center Orientation Semantics Decision (ADR-0004 - Accepted):** [`docs/decisions/ADR-0004-CENTER-ORIENTATION-SEMANTICS.md`](decisions/ADR-0004-CENTER-ORIENTATION-SEMANTICS.md)

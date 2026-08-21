@@ -24,9 +24,11 @@ The Kinematics Engine is a purely downstream continuous transformation layer:
 
 ### 2.2. Angular Displacements per Legal Face Operation
 During a single legal directed face flip from $p = 0.0$ to $p = 1.0$:
-- **Outer Face Layer:** Rotates by **$\pm 180^\circ$** around the face normal axis.
-- **Perpendicular Middle Layer:** Rotates by **$\pm 90^\circ$** around the same normal axis.
+- **Outer Face Layer & Selected Outer Center:** Rotates by **$\pm 180^\circ$** around the selected face normal axis.
+- **Perpendicular Middle Layer & Four Adjacent Centers:** Rotates by **$\pm 90^\circ$** around the same normal axis, moving center piece identities across face slots.
+- **Opposite Outer Face Center:** Remains completely fixed (**$0^\circ$** rotation).
 - **Coupled Edge Gear Cogs:** Rotate by **$\pm 60^\circ$** around their local gear rotation axes.
+- **Endpoint State Quotient (Pursuant to [`ADR-0004`](../decisions/ADR-0004-CENTER-ORIENTATION-SEMANTICS.md)):** At discrete animation completion ($p = 1.0$), physical center axial orientation angles are unobservable on standard unmarked caps and quotiented out of discrete logical endpoint state.
 
 ---
 

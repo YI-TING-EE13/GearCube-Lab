@@ -116,9 +116,16 @@ export interface EdgePlacement {
   readonly gearPhase: SliceGearPhase; // 0..2
 }
 
+export type CenterSlot = 'U' | 'D' | 'F' | 'B' | 'R' | 'L';
+export type CenterPieceId = 'center-U' | 'center-D' | 'center-F' | 'center-B' | 'center-R' | 'center-L';
+
+/**
+ * Derived physical center piece placement in fixed-spatial slots.
+ * (Pursuant to ADR-0004, center axial orientation is quotiented for the standard unmarked model).
+ */
 export interface CenterPlacement {
-  readonly face: Face;
-  readonly orientationAngleDegrees: number; // 0, 90, 180, 270
+  readonly slot: CenterSlot;
+  readonly pieceId: CenterPieceId;
 }
 
 /** Derived, human-readable physical piece placement view (non-authoritative) */
