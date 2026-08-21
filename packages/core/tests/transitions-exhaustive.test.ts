@@ -29,166 +29,206 @@ import { applyMove } from '../src/transitions.js';
 // physical piece arrays and rigid reference frame normalization.
 // ============================================================================
 
-/** Reference Klein-4 V4 permutations */
-const ORACLE_V4: readonly (readonly [number, number, number, number])[] = Object.freeze([
-  Object.freeze([0, 1, 2, 3] as const),
-  Object.freeze([1, 0, 3, 2] as const),
-  Object.freeze([2, 3, 0, 1] as const),
-  Object.freeze([3, 2, 1, 0] as const),
-]);
+/** Reference tables for canonical state materialization */
+const T_REF: readonly (readonly number[])[] = [
+  [0, 1, 2, 3], [1, 0, 2, 3], [0, 2, 1, 3], [2, 0, 1, 3], [1, 2, 0, 3], [2, 1, 0, 3],
+  [1, 0, 2, 3], [0, 1, 2, 3], [1, 2, 0, 3], [2, 1, 0, 3], [0, 2, 1, 3], [2, 0, 1, 3],
+  [2, 0, 1, 3], [0, 2, 1, 3], [2, 1, 0, 3], [1, 2, 0, 3], [0, 1, 2, 3], [1, 0, 2, 3],
+  [2, 1, 0, 3], [1, 2, 0, 3], [2, 0, 1, 3], [0, 2, 1, 3], [1, 0, 2, 3], [0, 1, 2, 3],
+];
 
-/** Reference S_4 corner permutations for T_free */
-const S4_PERMUTATIONS: readonly (readonly [number, number, number, number])[] = ((): readonly (readonly [number, number, number, number])[] => {
-  const perms: [number, number, number, number][] = [];
-  for (let i = 0; i < 4; i++) {
-    for (let j = 0; j < 4; j++) {
-      if (j === i) continue;
-      for (let k = 0; k < 4; k++) {
-        if (k === i || k === j) continue;
-        for (let l = 0; l < 4; l++) {
-          if (l === i || l === j || l === k) continue;
-          perms.push([i, j, k, l]);
-        }
-      }
-    }
+const T_FREE: readonly (readonly number[])[] = [
+  [0, 1, 2, 3], [0, 1, 3, 2], [0, 2, 1, 3], [0, 2, 3, 1], [0, 3, 1, 2], [0, 3, 2, 1],
+  [1, 0, 2, 3], [1, 0, 3, 2], [1, 2, 0, 3], [1, 2, 3, 0], [1, 3, 0, 2], [1, 3, 2, 0],
+  [2, 0, 1, 3], [2, 0, 3, 1], [2, 1, 0, 3], [2, 1, 3, 0], [2, 3, 0, 1], [2, 3, 1, 0],
+  [3, 0, 1, 2], [3, 0, 2, 1], [3, 1, 0, 2], [3, 1, 2, 0], [3, 2, 0, 1], [3, 2, 1, 0],
+];
+
+const B_X: readonly (readonly number[])[] = [
+  [0, 1, 2, 3], [0, 1, 3, 2], [0, 3, 2, 1], [0, 3, 1, 2], [0, 2, 3, 1], [0, 2, 1, 3],
+  [0, 1, 3, 2], [0, 1, 2, 3], [0, 2, 3, 1], [0, 2, 1, 3], [0, 3, 2, 1], [0, 3, 1, 2],
+  [0, 3, 1, 2], [0, 3, 2, 1], [0, 2, 1, 3], [0, 2, 3, 1], [0, 1, 2, 3], [0, 1, 3, 2],
+  [0, 2, 1, 3], [0, 2, 3, 1], [0, 3, 1, 2], [0, 3, 2, 1], [0, 1, 3, 2], [0, 1, 2, 3],
+];
+
+const B_Y: readonly (readonly number[])[] = [
+  [0, 1, 2, 3], [0, 3, 2, 1], [0, 2, 1, 3], [0, 3, 1, 2], [0, 2, 3, 1], [0, 1, 3, 2],
+  [0, 3, 2, 1], [0, 1, 2, 3], [0, 2, 3, 1], [0, 1, 3, 2], [0, 2, 1, 3], [0, 3, 1, 2],
+  [0, 3, 1, 2], [0, 2, 1, 3], [0, 1, 3, 2], [0, 2, 3, 1], [0, 1, 2, 3], [0, 3, 2, 1],
+  [0, 1, 3, 2], [0, 2, 3, 1], [0, 3, 1, 2], [0, 2, 1, 3], [0, 3, 2, 1], [0, 1, 2, 3],
+];
+
+const B_Z: readonly (readonly number[])[] = [
+  [0, 1, 2, 3], [0, 1, 3, 2], [0, 2, 1, 3], [0, 2, 3, 1], [0, 3, 1, 2], [0, 3, 2, 1],
+  [0, 1, 3, 2], [0, 1, 2, 3], [0, 3, 1, 2], [0, 3, 2, 1], [0, 2, 1, 3], [0, 2, 3, 1],
+  [0, 2, 3, 1], [0, 2, 1, 3], [0, 3, 2, 1], [0, 3, 1, 2], [0, 1, 2, 3], [0, 1, 3, 2],
+  [0, 3, 2, 1], [0, 3, 1, 2], [0, 2, 3, 1], [0, 2, 1, 3], [0, 1, 3, 2], [0, 1, 2, 3],
+];
+
+const V4: readonly (readonly number[])[] = [
+  [0, 1, 2, 3], [1, 0, 3, 2], [2, 3, 0, 1], [3, 2, 1, 0],
+];
+
+const FRAME_PERMS: Record<number, {
+  readonly T_ref: readonly number[];
+  readonly T_free: readonly number[];
+  readonly X: readonly number[];
+  readonly Y: readonly number[];
+  readonly Z: readonly number[];
+}> = {
+  3: { T_ref: [0, 1, 2, 3], T_free: [0, 1, 2, 3], X: [0, 1, 2, 3], Y: [0, 1, 2, 3], Z: [0, 1, 2, 3] },
+  2: { T_ref: [1, 0, 3, 2], T_free: [1, 0, 3, 2], X: [1, 0, 3, 2], Y: [2, 3, 0, 1], Z: [1, 0, 3, 2] },
+  1: { T_ref: [2, 3, 0, 1], T_free: [2, 3, 0, 1], X: [3, 2, 1, 0], Y: [1, 0, 3, 2], Z: [2, 3, 0, 1] },
+  0: { T_ref: [3, 2, 1, 0], T_free: [3, 2, 1, 0], X: [2, 3, 0, 1], Y: [3, 2, 1, 0], Z: [3, 2, 1, 0] },
+};
+
+const CORNER_LOOKUP = new Map<string, CornerConfiguration>();
+for (let i = 0; i < 24; i++) {
+  CORNER_LOOKUP.set(`${T_REF[i]!.join(',')}|${T_FREE[i]!.join(',')}`, i as CornerConfiguration);
+}
+
+const V4_LOOKUP = new Map<string, SlicePermutationClass>();
+for (let k = 0; k < 4; k++) {
+  V4_LOOKUP.set(V4[k]!.join(','), k as SlicePermutationClass);
+}
+
+const CORNER_SLOTS = ['UFL', 'UBR', 'DFR', 'DBL', 'UFR', 'UBL', 'DFL', 'DBR'];
+const EDGE_SLOTS = ['UB', 'UF', 'DF', 'DB', 'FL', 'FR', 'BR', 'BL', 'UR', 'UL', 'DL', 'DR'];
+const CORNER_SLOT_COORDS: Record<string, readonly [number, number, number]> = {
+  UFL: [-1, 1, 1], UBR: [1, 1, -1], DFR: [1, -1, 1], DBL: [-1, -1, -1],
+  UFR: [1, 1, 1], UBL: [-1, 1, -1], DFL: [-1, -1, 1], DBR: [1, -1, -1],
+};
+const EDGE_SLOT_COORDS: Record<string, readonly [number, number, number]> = {
+  UB: [0, 1, -1], UF: [0, 1, 1], DF: [0, -1, 1], DB: [0, -1, -1],
+  FL: [-1, 0, 1], FR: [1, 0, 1], BR: [1, 0, -1], BL: [-1, 0, -1],
+  UR: [1, 1, 0], UL: [-1, 1, 0], DL: [-1, -1, 0], DR: [1, -1, 0],
+};
+
+function rotX180(v: readonly [number, number, number]): [number, number, number] { return [v[0], -v[1], -v[2]]; }
+function rotY180(v: readonly [number, number, number]): [number, number, number] { return [-v[0], v[1], -v[2]]; }
+function rotZ180(v: readonly [number, number, number]): [number, number, number] { return [-v[0], -v[1], v[2]]; }
+function rotX90(v: readonly [number, number, number], d: number): [number, number, number] { return d === 1 ? [v[0], -v[2], v[1]] : [v[0], v[2], -v[1]]; }
+function rotY90(v: readonly [number, number, number], d: number): [number, number, number] { return d === 1 ? [v[2], v[1], -v[0]] : [-v[2], v[1], v[0]]; }
+function rotZ90(v: readonly [number, number, number], d: number): [number, number, number] { return d === 1 ? [-v[1], v[0], v[2]] : [v[1], -v[0], v[2]]; }
+
+const PHYS_CORNER_MAP: Record<string, readonly number[]> = {};
+const PHYS_EDGE_MAP: Record<string, readonly number[]> = {};
+const PHYS_EDGE_DP: Record<string, readonly number[]> = {};
+
+for (const move of ALL_MOVES) {
+  const { face, direction } = move;
+  const key = `${face}-${direction}`;
+  const dirSign = direction === 'CW' ? 1 : -1;
+  const cp: number[] = [];
+  for (let s = 0; s < 8; s++) {
+    const name = CORNER_SLOTS[s]!;
+    const coord = CORNER_SLOT_COORDS[name]!;
+    let nc = coord;
+    if ((face === 'U' && coord[1] === 1) || (face === 'D' && coord[1] === -1)) nc = rotY180(coord);
+    else if ((face === 'F' && coord[2] === 1) || (face === 'B' && coord[2] === -1)) nc = rotZ180(coord);
+    else if ((face === 'R' && coord[0] === 1) || (face === 'L' && coord[0] === -1)) nc = rotX180(coord);
+    const nSlot = Object.keys(CORNER_SLOT_COORDS).find(k => CORNER_SLOT_COORDS[k]![0] === nc[0] && CORNER_SLOT_COORDS[k]![1] === nc[1] && CORNER_SLOT_COORDS[k]![2] === nc[2])!;
+    cp.push(CORNER_SLOTS.indexOf(nSlot));
   }
-  return Object.freeze(perms.map((p) => Object.freeze(p)));
-})();
+  PHYS_CORNER_MAP[key] = cp;
 
-/** S_4 rank lookup */
-const S4_TO_RANK = new Map<string, CornerConfiguration>(
-  S4_PERMUTATIONS.map((p, idx) => [p.join(','), idx])
-);
-
-/** Canonical base edge permutation tables B_X, B_Y, B_Z */
-const ORACLE_BASES = {
-  X: [
-    [0, 1, 2, 3], [0, 1, 3, 2], [0, 3, 2, 1], [0, 3, 1, 2],
-    [0, 2, 3, 1], [0, 2, 1, 3], [0, 1, 3, 2], [0, 1, 2, 3],
-    [0, 2, 3, 1], [0, 2, 1, 3], [0, 3, 2, 1], [0, 3, 1, 2],
-    [0, 3, 1, 2], [0, 3, 2, 1], [0, 2, 1, 3], [0, 2, 3, 1],
-    [0, 1, 2, 3], [0, 1, 3, 2], [0, 2, 1, 3], [0, 2, 3, 1],
-    [0, 3, 1, 2], [0, 3, 2, 1], [0, 1, 3, 2], [0, 1, 2, 3],
-  ],
-  Y: [
-    [0, 1, 2, 3], [0, 3, 2, 1], [0, 2, 1, 3], [0, 3, 1, 2],
-    [0, 2, 3, 1], [0, 1, 3, 2], [0, 3, 2, 1], [0, 1, 2, 3],
-    [0, 2, 3, 1], [0, 1, 3, 2], [0, 2, 1, 3], [0, 3, 1, 2],
-    [0, 3, 1, 2], [0, 2, 1, 3], [0, 1, 3, 2], [0, 2, 3, 1],
-    [0, 1, 2, 3], [0, 3, 2, 1], [0, 1, 3, 2], [0, 2, 3, 1],
-    [0, 3, 1, 2], [0, 2, 1, 3], [0, 3, 2, 1], [0, 1, 2, 3],
-  ],
-  Z: [
-    [0, 1, 2, 3], [0, 1, 3, 2], [0, 2, 1, 3], [0, 2, 3, 1],
-    [0, 3, 1, 2], [0, 3, 2, 1], [0, 1, 3, 2], [0, 1, 2, 3],
-    [0, 3, 1, 2], [0, 3, 2, 1], [0, 2, 1, 3], [0, 2, 3, 1],
-    [0, 2, 3, 1], [0, 2, 1, 3], [0, 3, 2, 1], [0, 3, 1, 2],
-    [0, 1, 2, 3], [0, 1, 3, 2], [0, 3, 2, 1], [0, 3, 1, 2],
-    [0, 2, 3, 1], [0, 2, 1, 3], [0, 1, 3, 2], [0, 1, 2, 3],
-  ],
-} as const;
-
-/** Free-corner slot swaps on T_free [0: UFR, 1: UBL, 2: DFL, 3: DBR] */
-const CORNER_SWAPS_FREE: Record<Face, readonly [number, number]> = {
-  U: [0, 1],
-  D: [2, 3],
-  F: [0, 2],
-  B: [1, 3],
-  R: [0, 3],
-  L: [1, 2],
-};
-
-/** Slot source maps for edge transformations under physical move */
-const EDGE_SRC_MAPS: Record<Face, Record<Direction, Record<'X' | 'Y' | 'Z', readonly [number, number, number, number]>>> = {
-  U: {
-    CW: { X: [1, 0, 2, 3], Y: [1, 2, 3, 0], Z: [1, 0, 2, 3] },
-    CCW: { X: [1, 0, 2, 3], Y: [3, 0, 1, 2], Z: [1, 0, 2, 3] },
-  },
-  D: {
-    CW: { X: [0, 1, 3, 2], Y: [3, 0, 1, 2], Z: [0, 1, 3, 2] },
-    CCW: { X: [0, 1, 3, 2], Y: [1, 2, 3, 0], Z: [0, 1, 3, 2] },
-  },
-  F: {
-    CW: { X: [0, 2, 1, 3], Y: [1, 0, 2, 3], Z: [1, 2, 3, 0] },
-    CCW: { X: [0, 2, 1, 3], Y: [1, 0, 2, 3], Z: [3, 0, 1, 2] },
-  },
-  B: {
-    CW: { X: [3, 1, 2, 0], Y: [0, 1, 3, 2], Z: [3, 0, 1, 2] },
-    CCW: { X: [3, 1, 2, 0], Y: [0, 1, 3, 2], Z: [1, 2, 3, 0] },
-  },
-  R: {
-    CW: { X: [1, 2, 3, 0], Y: [0, 2, 1, 3], Z: [3, 1, 2, 0] },
-    CCW: { X: [3, 0, 1, 2], Y: [0, 2, 1, 3], Z: [3, 1, 2, 0] },
-  },
-  L: {
-    CW: { X: [3, 0, 1, 2], Y: [3, 1, 2, 0], Z: [0, 2, 1, 3] },
-    CCW: { X: [1, 2, 3, 0], Y: [3, 1, 2, 0], Z: [0, 2, 1, 3] },
-  },
-};
-
-/** Gear twist phase deltas in Z_3 */
-const EDGE_DELTA_PHASES: Record<Face, Record<Direction, Record<'X' | 'Y' | 'Z', SliceGearPhase>>> = {
-  U: { CW: { X: 0, Y: 1, Z: 0 }, CCW: { X: 0, Y: 2, Z: 0 } },
-  D: { CW: { X: 0, Y: 2, Z: 0 }, CCW: { X: 0, Y: 1, Z: 0 } },
-  F: { CW: { X: 0, Y: 0, Z: 1 }, CCW: { X: 0, Y: 0, Z: 2 } },
-  B: { CW: { X: 0, Y: 0, Z: 2 }, CCW: { X: 0, Y: 0, Z: 1 } },
-  R: { CW: { X: 1, Y: 0, Z: 0 }, CCW: { X: 2, Y: 0, Z: 0 } },
-  L: { CW: { X: 2, Y: 0, Z: 0 }, CCW: { X: 1, Y: 0, Z: 0 } },
-};
+  const ep: number[] = [];
+  const dp: number[] = [];
+  for (let s = 0; s < 12; s++) {
+    const name = EDGE_SLOTS[s]!;
+    const coord = EDGE_SLOT_COORDS[name]!;
+    let nc = coord;
+    let dPhase = 0;
+    if (face === 'U') {
+      if (coord[1] === 1) nc = rotY180(coord);
+      else if (coord[1] === 0) { nc = rotY90(coord, dirSign === 1 ? -1 : 1); dPhase = dirSign === 1 ? 1 : 2; }
+    } else if (face === 'D') {
+      if (coord[1] === -1) nc = rotY180(coord);
+      else if (coord[1] === 0) { nc = rotY90(coord, dirSign === 1 ? 1 : -1); dPhase = dirSign === 1 ? 2 : 1; }
+    } else if (face === 'F') {
+      if (coord[2] === 1) nc = rotZ180(coord);
+      else if (coord[2] === 0) { nc = rotZ90(coord, dirSign === 1 ? -1 : 1); dPhase = dirSign === 1 ? 1 : 2; }
+    } else if (face === 'B') {
+      if (coord[2] === -1) nc = rotZ180(coord);
+      else if (coord[2] === 0) { nc = rotZ90(coord, dirSign === 1 ? 1 : -1); dPhase = dirSign === 1 ? 2 : 1; }
+    } else if (face === 'R') {
+      if (coord[0] === 1) nc = rotX180(coord);
+      else if (coord[0] === 0) { nc = rotX90(coord, dirSign === 1 ? -1 : 1); dPhase = dirSign === 1 ? 1 : 2; }
+    } else if (face === 'L') {
+      if (coord[0] === -1) nc = rotX180(coord);
+      else if (coord[0] === 0) { nc = rotX90(coord, dirSign === 1 ? 1 : -1); dPhase = dirSign === 1 ? 2 : 1; }
+    }
+    const nSlot = Object.keys(EDGE_SLOT_COORDS).find(k => EDGE_SLOT_COORDS[k]![0] === nc[0] && EDGE_SLOT_COORDS[k]![1] === nc[1] && EDGE_SLOT_COORDS[k]![2] === nc[2])!;
+    ep.push(EDGE_SLOTS.indexOf(nSlot));
+    dp.push(dPhase);
+  }
+  PHYS_EDGE_MAP[key] = ep;
+  PHYS_EDGE_DP[key] = dp;
+}
 
 /**
  * Independent reference transition oracle.
  * Materializes logical placement from raw geometry and normalizes back to canonical coordinates.
  */
 function referenceOracle(state: GearCubeState, move: Move): GearCubeState {
-  const { face, direction } = move;
   const c = state.cornerConfiguration;
+  const tRefC = T_REF[c]!;
+  const tFreeC = T_FREE[c]!;
+  const bxC = B_X[c]!;
+  const byC = B_Y[c]!;
+  const bzC = B_Z[c]!;
+  const v4x = V4[state.sliceX.permutationClass]!;
+  const v4y = V4[state.sliceY.permutationClass]!;
+  const v4z = V4[state.sliceZ.permutationClass]!;
 
-  // 1. Next corner configuration S_4 rank
-  const pFree = [...S4_PERMUTATIONS[c]];
-  const [s1, s2] = CORNER_SWAPS_FREE[face];
-  const tmp = pFree[s1];
-  pFree[s1] = pFree[s2];
-  pFree[s2] = tmp;
-  const nextC = S4_TO_RANK.get(pFree.join(','))!;
+  const fp = FRAME_PERMS[3]!;
+  const cView = [
+    tRefC[fp.T_ref[0]!]!, tRefC[fp.T_ref[1]!]!, tRefC[fp.T_ref[2]!]!, tRefC[fp.T_ref[3]!]!,
+    4 + tFreeC[fp.T_free[0]!]!, 4 + tFreeC[fp.T_free[1]!]!, 4 + tFreeC[fp.T_free[2]!]!, 4 + tFreeC[fp.T_free[3]!]!,
+  ];
+  const eView = [
+    bxC[v4x[fp.X[0]!]!]!, bxC[v4x[fp.X[1]!]!]!, bxC[v4x[fp.X[2]!]!]!, bxC[v4x[fp.X[3]!]!]!,
+    4 + byC[v4y[fp.Y[0]!]!]!, 4 + byC[v4y[fp.Y[1]!]!]!, 4 + byC[v4y[fp.Y[2]!]!]!, 4 + byC[v4y[fp.Y[3]!]!]!,
+    8 + bzC[v4z[fp.Z[0]!]!]!, 8 + bzC[v4z[fp.Z[1]!]!]!, 8 + bzC[v4z[fp.Z[2]!]!]!, 8 + bzC[v4z[fp.Z[3]!]!]!,
+  ];
 
-  // 2. Next edge permutation classes
-  const srcMap = EDGE_SRC_MAPS[face][direction];
-  const dpMap = EDGE_DELTA_PHASES[face][direction];
+  const key = `${move.face}-${move.direction}`;
+  const cMap = PHYS_CORNER_MAP[key]!;
+  const eMap = PHYS_EDGE_MAP[key]!;
+  const eDp = PHYS_EDGE_DP[key]!;
 
-  function computeNextSlice(sl: 'X' | 'Y' | 'Z', currentK: SlicePermutationClass, currentP: SliceGearPhase) {
-    const baseC = ORACLE_BASES[sl][c];
-    const v4 = ORACLE_V4[currentK];
-    const e = [baseC[v4[0]], baseC[v4[1]], baseC[v4[2]], baseC[v4[3]]];
-    const src = srcMap[sl];
-    const newE = [e[src[0]], e[src[1]], e[src[2]], e[src[3]]];
+  const nextCView: number[] = new Array(8);
+  for (let s = 0; s < 8; s++) nextCView[cMap[s]!] = cView[s]!;
+  const nextEView: number[] = new Array(12);
+  for (let s = 0; s < 12; s++) nextEView[eMap[s]!] = eView[s]!;
 
-    const baseNextC = ORACLE_BASES[sl][nextC];
-    let nextK: SlicePermutationClass = 0;
-    for (let candidateK = 0; candidateK < 4; candidateK++) {
-      const candidateV4 = ORACLE_V4[candidateK];
-      if (
-        baseNextC[candidateV4[0]] === newE[0] &&
-        baseNextC[candidateV4[1]] === newE[1] &&
-        baseNextC[candidateV4[2]] === newE[2] &&
-        baseNextC[candidateV4[3]] === newE[3]
-      ) {
-        nextK = candidateK as SlicePermutationClass;
-        break;
-      }
-    }
+  const dblSlot = nextCView.indexOf(3);
+  const nextFp = FRAME_PERMS[dblSlot]!;
 
-    return {
-      permutationClass: nextK,
-      phase: ((currentP + dpMap[sl]) % 3) as SliceGearPhase,
-    };
-  }
+  const tRefCur = `${nextCView[nextFp.T_ref[0]!]!},${nextCView[nextFp.T_ref[1]!]!},${nextCView[nextFp.T_ref[2]!]!},${nextCView[nextFp.T_ref[3]!]!}`;
+  const tFreeCur = `${nextCView[4 + nextFp.T_free[0]!]! - 4},${nextCView[4 + nextFp.T_free[1]!]! - 4},${nextCView[4 + nextFp.T_free[2]!]! - 4},${nextCView[4 + nextFp.T_free[3]!]! - 4}`;
+  const nextC = CORNER_LOOKUP.get(`${tRefCur}|${tFreeCur}`)!;
+
+  const nbx = B_X[nextC]!;
+  const xCur = `${nbx.indexOf(nextEView[nextFp.X[0]!]!)},${nbx.indexOf(nextEView[nextFp.X[1]!]!)},${nbx.indexOf(nextEView[nextFp.X[2]!]!)},${nbx.indexOf(nextEView[nextFp.X[3]!]!)}`;
+  const nextKx = V4_LOOKUP.get(xCur)!;
+  const nextPx = ((state.sliceX.phase + eDp[0]!) % 3) as SliceGearPhase;
+
+  const nby = B_Y[nextC]!;
+  const yCur = `${nby.indexOf(nextEView[4 + nextFp.Y[0]!]! - 4)},${nby.indexOf(nextEView[4 + nextFp.Y[1]!]! - 4)},${nby.indexOf(nextEView[4 + nextFp.Y[2]!]! - 4)},${nby.indexOf(nextEView[4 + nextFp.Y[3]!]! - 4)}`;
+  const nextKy = V4_LOOKUP.get(yCur)!;
+  const nextPy = ((state.sliceY.phase + eDp[4]!) % 3) as SliceGearPhase;
+
+  const nbz = B_Z[nextC]!;
+  const zCur = `${nbz.indexOf(nextEView[8 + nextFp.Z[0]!]! - 8)},${nbz.indexOf(nextEView[8 + nextFp.Z[1]!]! - 8)},${nbz.indexOf(nextEView[8 + nextFp.Z[2]!]! - 8)},${nbz.indexOf(nextEView[8 + nextFp.Z[3]!]! - 8)}`;
+  const nextKz = V4_LOOKUP.get(zCur)!;
+  const nextPz = ((state.sliceZ.phase + eDp[8]!) % 3) as SliceGearPhase;
 
   return {
     cornerConfiguration: nextC,
-    sliceX: computeNextSlice('X', state.sliceX.permutationClass, state.sliceX.phase),
-    sliceY: computeNextSlice('Y', state.sliceY.permutationClass, state.sliceY.phase),
-    sliceZ: computeNextSlice('Z', state.sliceZ.permutationClass, state.sliceZ.phase),
+    sliceX: { permutationClass: nextKx, phase: nextPx },
+    sliceY: { permutationClass: nextKy, phase: nextPy },
+    sliceZ: { permutationClass: nextKz, phase: nextPz },
   };
 }
 
