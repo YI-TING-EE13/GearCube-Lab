@@ -27,7 +27,8 @@ docs/
 │   ├── ROADMAP.md                      # Dependency-ordered project lifecycle (Phases 0A–8) & gates
 │   ├── TEST_STRATEGY.md                # 12-level testing pyramid, property invariants, & validation
 │   ├── PHASE_1A_IMPLEMENTATION_PLAN.md # Phase 1A project bootstrap & package boundary plan
-│   └── PHASE_1B_IMPLEMENTATION_PLAN.md # Phase 1B canonical state / value types & validation plan
+│   ├── PHASE_1B_IMPLEMENTATION_PLAN.md # Phase 1B canonical state / value types & validation plan
+│   └── PHASE_1C_IMPLEMENTATION_PLAN.md # Phase 1C direct canonical move-transition engine plan
 ├── operations/
 │   └── DEPLOYMENT.md                   # Static HTTPS hosting, Web Worker rules, & security posture
 └── decisions/
@@ -72,6 +73,7 @@ Throughout all documents in `docs/`, technical specifications and mechanical ass
 - **Test Invariants & Protocols:** [`docs/development/TEST_STRATEGY.md`](development/TEST_STRATEGY.md)
 - **Phase 1A Bootstrap Plan:** [`docs/development/PHASE_1A_IMPLEMENTATION_PLAN.md`](development/PHASE_1A_IMPLEMENTATION_PLAN.md)
 - **Phase 1B State & Validation Plan:** [`docs/development/PHASE_1B_IMPLEMENTATION_PLAN.md`](development/PHASE_1B_IMPLEMENTATION_PLAN.md)
+- **Phase 1C Move-Transition Engine Plan:** [`docs/development/PHASE_1C_IMPLEMENTATION_PLAN.md`](development/PHASE_1C_IMPLEMENTATION_PLAN.md)
 - **Developer Guidelines & Tooling:** [`docs/development/DEVELOPMENT_GUIDE.md`](development/DEVELOPMENT_GUIDE.md)
 - **Production Deployment & Security:** [`docs/operations/DEPLOYMENT.md`](operations/DEPLOYMENT.md)
 - **Foundational Architecture Decisions (ADR-0001):** [`docs/decisions/ADR-0001-FOUNDATION.md`](decisions/ADR-0001-FOUNDATION.md)
