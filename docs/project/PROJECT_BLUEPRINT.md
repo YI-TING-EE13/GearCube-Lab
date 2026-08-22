@@ -111,20 +111,20 @@
 
 ```
 +-----------------------------------------------------------------------------------+
-| GearCube Lab Web Application                                                      |
+| GearCube Lab Web Application (apps/web)                                           |
 |                                                                                   |
-|  [ User Interface (React / Zustand) ]                                             |
+|  [ User Interface & History State (React Local Orchestration) ]                   |
 |        |                                                                          |
-|        +---> [ 3D Viewport (React Three Fiber / Three.js) ]                      |
+|        +---> [ 3D Viewport & Visual Meshes (React Three Fiber / Three.js) ]       |
 |        |           ^                                                              |
 |        |           | (Kinematic Animation Keyframes)                              |
 |        v           |                                                              |
-|  [ Puzzle Domain Core (Pure TypeScript Engine) ]                                  |
+|  [ Puzzle Domain Core (Pure TypeScript Engine — packages/core) ]                  |
 |        ^           |                                                              |
 |        |           v (Discrete State & Legal Moves)                               |
-|  [ Solver Engine (Web Worker: Classical Search / AI Inference) ]                  |
+|  [ Solver Engine (Web Worker: Classical Search / AI Inference) - Future ]         |
 |                                                                                   |
-|  [ Research & Benchmark Harness (Headless Runner & Telemetry Exporter) ]          |
+|  [ Research & Benchmark Harness (Headless Runner & Telemetry Exporter) - Future ] |
 |                                                                                   |
 |  [ Vision State Ingestion (Webcam Stream & Face Recognition) - Future ]           |
 +-----------------------------------------------------------------------------------+
@@ -138,25 +138,25 @@ The system strictly adheres to unidirectional dependency boundaries:
 
 $$\text{Presentation Layer (UI/3D)} \longrightarrow \text{Domain Core Contracts} \longleftarrow \text{Solver / Research Layers}$$
 
-- **Core Layer:** Pure mathematical models and permutation contracts.
-- **Kinematic Layer:** Translates discrete moves into continuous rotational transforms.
-- **Presentation Layer:** R3F/Three.js rendering and React UI state management.
-- **Computation Layer:** Web Worker hosting search algorithms and heuristic evaluators.
-- **Research Pipeline:** Python/PyTorch offline training environment generating lightweight heuristic weights.
+- **Core Layer:** Pure mathematical models and permutation contracts (`packages/core`).
+- **Kinematic Layer:** Translates discrete moves into continuous rotational transforms (`packages/kinematics`).
+- **Presentation Layer:** R3F/Three.js rendering and React UI state management (`apps/web`).
+- **Computation Layer:** Web Worker hosting search algorithms and heuristic evaluators (Future `packages/solvers`).
+- **Research Pipeline:** Python/PyTorch offline training environment generating lightweight heuristic weights (`ml/`).
 
 ---
 
 ## 12. Module Responsibilities
 
-| Module | Core Responsibility | Dependency Restrictions |
-| :--- | :--- | :--- |
-| `packages/core` | Discrete state models, move definitions, legality checks, canonical hashing | Zero external dependencies (no React, no Three.js, no DOM) |
-| `packages/kinematics` | Gear ratio mathematical equations, continuous trajectory generation, collision/mesh math | Depends only on `core` |
-| `packages/solvers` | Classical graph search (primary: BFS, Bidirectional BFS, IDA*; optional: IDDFS, A*, Pattern Databases), heuristic estimators | Depends only on `core` |
-| `packages/renderer` | Three.js scene graph, custom shaders, visual skins, camera controls, lighting | Depends on `core` and `kinematics` |
-| `packages/ui` | React components, Zustand state stores, user interaction handlers, benchmark UI | Depends on `core`, `renderer`, and `solvers` |
-| `packages/benchmark` | Deterministic benchmark harness, seed generation, statistical metric export | Depends on `core` and `solvers` |
-| `ml/` (Python) | PyTorch model architectures, offline self-play/dataset generation, heuristic export | Python (version selected based on ML dependency compatibility) managed exclusively via `uv` |
+| Module | Core Responsibility | Dependency Restrictions | Status |
+| :--- | :--- | :--- | :--- |
+| `packages/core` | Discrete state models, move definitions, legality checks, canonical serialization, and materialized piece views | Zero external dependencies (no React, no Three.js, no DOM) | Implemented & Accepted |
+| `packages/kinematics` | Continuous trajectory generation, coupled gear angles, static piece placement projection | Depends only on `@gearcube/core` | Implemented & Accepted |
+| `apps/web` | Web application container hosting React UI components, single authoritative session state, history timeline, R3F/Three.js 3D viewport, and procedural piece geometries | Depends only on `@gearcube/core` and `@gearcube/kinematics` (no Zustand requirement for Phase 3) | Implemented & Accepted |
+| `packages/solvers` | Classical graph search (primary: BFS, Bidirectional BFS, IDA*; optional: IDDFS, A*, Pattern Databases), heuristic estimators | Depends only on `@gearcube/core` | Planned (Phase 4) |
+| `packages/benchmark` | Deterministic benchmark harness, seed generation, statistical metric export | Depends on `@gearcube/core` and `@gearcube/solvers` | Planned (Phase 5) |
+| `ml/` (Python) | PyTorch model architectures, offline self-play/dataset generation, heuristic export | Python (version selected based on ML dependency compatibility) managed exclusively via `uv` | Planned (Phase 6) |
+| `packages/vision` | Webcam video capture, color segmentation, state consistency validation, and correction | Browser WebRTC / Canvas APIs; depends on `@gearcube/core` | Planned (Phase 7) |
 
 ---
 
@@ -177,10 +177,9 @@ $$\text{Presentation Layer (UI/3D)} \longrightarrow \text{Domain Core Contracts}
 - **Language:** TypeScript 5.x with strict type checking enabled (`strict: true`, `noImplicitAny: true`).
 - **Build System & Dev Server:** Vite for rapid development and optimized tree-shaking builds.
 - **Frontend Framework:** React 18 / 19.
-- **3D Graphics:** Three.js, React Three Fiber (`@react-three/fiber`), and `@react-three/drei`.
-- **UI State Management:** Zustand for lightweight, decoupled application state.
-- **Unit & Integration Testing:** Vitest for rapid, in-memory core tests.
-- **E2E & Visual Testing:** Playwright for automated browser interactions and visual regression testing.
+- **UI State Management:** React local application state / pure transition functions (Zustand not currently required / used for Phase 3).
+- **Unit & Integration Testing:** Vitest for rapid, in-memory core, kinematics, and renderer tests.
+- **E2E & Browser Testing:** Playwright for automated browser interactions and state validation (Planned for Phase 3C).
 - **Package Management:** `npm` as initial low-complexity default.
 - **Python ML Pipeline:** Python (version selected based on ML/PyTorch dependency compatibility), PyTorch, managed exclusively via `uv`.
 

@@ -44,15 +44,20 @@ All TypeScript configuration files must enforce maximum compiler strictness:
 ```
 
 ### 2.2. Separation of Domain Logic and Framework Code
-- Pure business and mathematical logic lives in `packages/core` and `packages/kinematics`.
-- Framework-specific code (React hooks, Three.js shaders, Zustand stores, DOM listeners) lives strictly in `packages/ui` and `packages/renderer`.
-- Never import React or Three.js inside `core` or `solvers`.
+- Pure business and mathematical logic lives strictly in `packages/core` and `packages/kinematics`.
+- Framework-specific presentation code (React components, Three.js shaders, R3F viewports, DOM listeners) lives in `apps/web`.
+- Within `apps/web`:
+  - UI and interaction code must never become puzzle state truth.
+  - 3D renderer and mesh components consume canonical state and materialized transforms from `@gearcube/kinematics`.
+  - Application history and session orchestration maintain a single authoritative `GearCubeSessionState`.
+- Never import React or Three.js inside `packages/core`, `packages/kinematics`, or future `packages/solvers`.
 
 ### 2.3. Dependency Management Rules
 - **Domain Core:** Exactly zero external runtime dependencies.
+- **Kinematics:** Depends only on `@gearcube/core`.
 - **Solvers:** Zero UI/rendering dependencies.
-- **UI / Renderer:** Keep dependencies minimal, focused on standard Three.js/R3F ecosystem.
-- Always commit lockfiles (`package-lock.json`, `uv.lock`) once dependencies are created in Phase 1+.
+- **Web Application (`apps/web`):** Keep dependencies minimal, focused on React 19 and Three.js/R3F ecosystem. Zero external state management libraries (no Zustand requirement for Phase 3).
+- Always commit lockfiles (`package-lock.json`, `uv.lock`) once dependencies are modified.
 
 ---
 
@@ -87,21 +92,20 @@ All TypeScript configuration files must enforce maximum compiler strictness:
 
 ---
 
-## 6. Future Development Commands Reference
-
-*(The following commands represent future development workflows once packages and dependencies are bootstrapped in Phase 1+.)*
+## 6. Development Commands Reference
 
 ```bash
-# Future TypeScript / Node workflows (Phase 1+)
-npm install              # Install repository dependencies
+# TypeScript / Node workflows (Available)
 npm run dev              # Start Vite local development server
 npm run build            # Compile production static bundle
-npm run test             # Run full Vitest unit test suite
-npm run test:e2e         # Run Playwright browser interaction tests
-npm run lint             # Execute ESLint and type checking
-npm run typecheck        # Run tsc --noEmit
+npm run test             # Run full Vitest test suite
+npm run typecheck        # Run tsc --noEmit across workspaces
+npm run verify           # Full CI validation: typecheck + core purity + tests + build
 
-# Future Python ML workflows (Phase 6+)
+# Planned Browser E2E workflow (Introduced in Phase 3C)
+npm run test:e2e         # Run Playwright browser interaction tests (Planned Phase 3C)
+
+# Python ML workflows (Phase 6+)
 uv venv                  # Create isolated Python virtual environment
 uv pip install -r ml/requirements.txt # Install ML dependencies
 uv run python ml/train.py             # Train neural heuristic model

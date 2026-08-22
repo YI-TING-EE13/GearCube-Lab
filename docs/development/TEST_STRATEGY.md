@@ -129,21 +129,41 @@
   - Immutability & Purity: Trajectory calculation is pure, deterministic, and leaves input `PiecePlacementView` objects untouched.
 
 ### Level 5: 3D Renderer & Viewport Isolation Tests
-- **Scope:** `packages/renderer`
-- **Focus:** Headless Three.js canvas setup, visual skin binding, lighting configuration.
+- **Scope:** `apps/web` (`apps/web/src/components/cube/GearCubeModel.test.ts`, `apps/web/src/components/cube/animation.test.ts`)
+- **Focus:** Scene transform mapping, component ID routing, piece placement materialization binding, and React Three Fiber component isolation tests (pure Node/Vitest transform tests without requiring WebGL context).
 - **Invariants Tested:**
-  - Switching visual skins does not alter mesh group hierarchies or domain state.
-  - Scene graph garbage collection: disposing meshes frees GPU buffers without memory leaks.
+  - `SCENE_TRANSFORM_ADAPTER_GATE`: 1-to-1 mapping from ComponentTransforms to scene descriptors ($26/26$).
+  - `COMPONENT_IDENTITY_GATE`: Exact stable ComponentId sequence preserved ($26/26$).
+  - `PIECE_ROUTING_GATE`: 8 corners, 12 edges, 6 centers accurately routed.
+  - Easing mathematics, 12-move staging, half-turn lock, continuation, cancellation, and direct 180° execution tested in pure headless environment.
+
+### Level 5B: Application History & Deterministic Scramble Tests (Phase 3 Pure Tests)
+- **Scope:** `apps/web/src/components/history/` (`history.test.ts`, `scramble.test.ts`)
+- **Focus:** Pure history state transitions, timeline navigation, FNV-1a UTF-16 seed hashing, and Mulberry32 scramble generation.
+- **Invariants Tested:**
+  - `HISTORY_INITIAL_GATE` & `HISTORY_COMMIT_GATE`: History starts empty at `cursorIndex === -1`; completed moves append entries.
+  - `NO_HISTORY_AT_HALF_GATE` & `NO_HISTORY_ON_CANCEL_GATE`: Midpoint lock and cancel operations create zero history entries.
+  - `DIRECT_HISTORY_COMMIT_GATE`: Direct 180° moves create exactly one canonical entry.
+  - `UNDO_GATE`, `REDO_GATE`, `REDO_TRUNCATION_GATE`: Instant snapshot restore and redo branch truncation.
+  - `FRAME_AWARE_HISTORY_GATE`: Exact `(GearCubeState, SpatialFrame)` restored simultaneously.
+  - `SESSION_HISTORY_ALIGNMENT_GATE`: Session state/frame strictly matches history cursor snapshot at all IDLE endpoints.
+  - `SEEDED_SCRAMBLE_DETERMINISM_GATE`: Exact seed string + length produces bit-for-bit identical move sequences.
+  - `EMPTY_SEED_DETERMINISM_GATE`: Empty string seed deterministically produces reproducible move sequence.
+  - `SCRAMBLE_VALID_MOVE_GATE`: All scramble moves belong to `ALL_MOVES` without consecutive same-face moves.
+  - `SCRAMBLE_BASELINE_GATE`: Applying scramble atomically establishes new baseline, clears prior history, and snaps projection.
+  - `MODE_COMPATIBILITY_GATE`: Mode switches do not alter history entries or cursor.
+  - `BUSY_INPUT_BLOCK_GATE`: History navigation and scramble rejected while puzzle is busy.
+  - `IMMUTABILITY_GATE`: Domain structures remain strictly unmutated.
 
 ### Level 6: Web Worker Asynchronous Protocol Tests
-- **Scope:** `packages/solvers`
+- **Scope:** `packages/solvers` (Future Phase 4)
 - **Focus:** Message passing between main thread and worker threads.
 - **Invariants Tested:**
   - Worker responds with `PROGRESS` telemetry within $100 \text{ ms}$ of search initiation.
   - `CANCEL_SOLVE` message cleanly aborts ongoing search and terminates worker loop.
 
 ### Level 7: Deterministic Solver Search Correctness
-- **Scope:** `packages/solvers`
+- **Scope:** `packages/solvers` (Future Phase 4)
 - **Focus:** Algorithm verification on standardized test scrambles.
 - **Invariants Tested:**
   - BFS returns strictly shortest-path solutions on test depths.
@@ -152,18 +172,30 @@
   - Solved states yield 0-move solutions immediately.
 
 ### Level 8: Seeded Benchmark Determinism & Metrics
-- **Scope:** `packages/benchmark`
+- **Scope:** `packages/benchmark` (Future Phase 5)
 - **Focus:** Empirical repeatability of research runs.
 - **Invariants Tested:**
   - Running a benchmark suite twice with seed `1337` produces bit-for-bit identical node expansion counts and solution paths.
 
-### Level 9: Browser End-to-End Tests (Playwright)
-- **Scope:** Whole Web Application
-- **Focus:** User interaction flows in real headless browser environments.
-- **Invariants Tested:**
-  - Clicking face turn buttons rotates the 3D model and updates move history.
-  - Clicking "Undo" steps the 3D cube and UI state backward reliably.
-  - Solution playback controls correctly step through solution paths.
+### Level 9: Browser End-to-End Tests (Playwright — Planned for Phase 3C)
+- **Scope:** Whole Web Application (`playwright.config.ts`, `tests/e2e/**`)
+- **Focus:** User interaction flows and state validation in real headless browser environments.
+- **Invariants Tested (Behavioral / DOM-Level Assertions):**
+  - Viewport, controls, and canvas render cleanly on initial app load.
+  - Face move button clicks commit single entries in the timeline.
+  - TWO_STEP midpoint lock and cancel create zero history entries.
+  - TWO_STEP and DIRECT_180 completions create exactly one canonical history entry.
+  - Undo and Redo buttons navigate history and update UI indicators.
+  - Executing new move after Undo truncates future redo branch.
+  - Clicking any chip in timeline scrubber navigates to that exact step.
+  - "Back to baseline" navigates to cursor -1 while preserving redo chips.
+  - Seeded scramble input produces reproducible sequence and resets baseline.
+  - Keyboard shortcuts (`u/d/f/b/r/l`, Shift, Ctrl+Z, Ctrl+Y) trigger moves and undo/redo.
+  - Input focus exclusion: typing in seed text input does not trigger puzzle moves.
+  - Busy-state blocking: controls disabled while animating or at midpoint lock.
+  - Responsive narrow layout: controls remain accessible and functional.
+  - Zero unhandled console/runtime errors.
+- **Assertion Principle:** `PLAYWRIGHT_PIXEL_PERFECT_ASSERTIONS: NO` and `RENDERER_PIXELS_USED_AS_STATE_ORACLE: NO` (assertions verify DOM interactions, disabled states, and text/attribute state indicators; not WebGL canvas pixels).
 
 ### Level 10: Performance & Responsiveness Regression
 - **Scope:** Production Web Bundle
@@ -172,7 +204,7 @@
   - 3D rendering responsiveness targets $\ge 55 \text{ FPS}$ during continuous rotation animations on reference testing profiles.
   - UI main thread responsiveness stays $< 16 \text{ ms}$ during active solver worker execution.
 
-### Level 11: ML Model Evaluation & Reproducibility (Python / PyTorch)
+### Level 11: ML Model Evaluation & Reproducibility (Python / PyTorch — Future Phase 6)
 - **Scope:** `ml/`
 - **Focus:** Heuristic value accuracy and training stability.
 - **Invariants Tested:**
@@ -180,7 +212,7 @@
   - Monotonicity: For any state $S$, predicted cost satisfies $V(S) \le V(\text{applyMove}(S, M)) + 1$.
   - Seeded training runs yield validation loss within $\pm 1\%$ tolerance.
 
-### Level 12: Vision State Validation & Error Correction Tests
+### Level 12: Vision State Validation & Error Correction Tests (Future Phase 7)
 - **Scope:** `packages/vision`
 - **Focus:** Webcam frame segmentation, color classification, state consistency validation, and user correction.
 - **Invariants Tested:**
@@ -191,14 +223,14 @@
 
 ## 4. Test Tooling & Commands Roadmap
 
-*(The following commands represent future intended test execution workflows once Phase 1+ dependencies are bootstrapped.)*
-
-| Test Category | Target Framework | Future Execution Command |
-| :--- | :--- | :--- |
-| **Pure Unit & Core Invariants** | Vitest | `npm run test:core` |
-| **Solver & Worker Tests** | Vitest | `npm run test:solvers` |
-| **Kinematics Math Tests** | Vitest | `npm run test:kinematics` |
-| **Browser E2E Tests** | Playwright | `npm run test:e2e` |
-| **Performance Profiling** | Vitest / Custom | `npm run test:perf` |
-| **ML Training & Heuristics** | pytest (uv) | `uv run pytest ml/tests/` |
-| **Full Continuous Integration Suite** | All | `npm run test:all` |
+| Test Category | Target Framework | Execution Command | Status |
+| :--- | :--- | :--- | :--- |
+| **Pure Unit & Core Invariants** | Vitest | `npm run test` (or `npx vitest run packages/core`) | Available |
+| **Kinematics Math Tests** | Vitest | `npx vitest run packages/kinematics` | Available |
+| **Renderer & Animation Tests** | Vitest | `npx vitest run apps/web` | Available |
+| **History & Scramble Tests** | Vitest | `npx vitest run apps/web/src/components/history` | Planned (Phase 3A) |
+| **Browser E2E Tests** | Playwright | `npm run test:e2e` | Planned (Phase 3C) |
+| **Solver & Worker Tests** | Vitest | `npm run test:solvers` | Planned (Phase 4) |
+| **Performance Profiling** | Vitest / Custom | `npm run test:perf` | Planned (Phase 5) |
+| **ML Training & Heuristics** | pytest (uv) | `uv run pytest ml/tests/` | Planned (Phase 6) |
+| **Full Continuous Integration Suite** | All | `npm run verify` | Available |
