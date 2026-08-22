@@ -1,7 +1,7 @@
 # ROADMAP.md — Project Lifecycle & Dependency-Ordered Milestones
 
 > **Current Project Phase:** `Phase 2 — 3D Graphics & Kinematic Animation`
-> **Status:** Active Execution (Phase 2E Turn Interaction Mode Toggle Plan Frozen — Ready for Independent Acceptance)
+> **Status:** Active Execution (Phase 2E Turn Interaction Mode Toggle Implemented — Ready for Verification)
 
 ---
 
@@ -208,14 +208,30 @@ Phase 0B is partitioned into four dependency-ordered subphases:
   - Automated Acceptance: `PASS` (14 test files, 153 tests passed; typecheck and web build clean).
   - Human Browser Acceptance: `PASS` (Two-step 90° staging, midpoint hold, continuation, and cancellation).
 
-#### Phase 2E: Turn Interaction Mode Toggle (Planned / Specification Frozen)
+#### Phase 2E: Turn Interaction Mode Toggle (Implemented & Verified)
 - **Objective:** User-selectable turn interaction mode switch (`TWO_STEP` vs `DIRECT_180`), state machine extension (`DIRECT_FULL_ANIMATING`), mode switching isolation, and MoveControls toggle UI.
-- **Status:** `PLANNED / READY_FOR_INDEPENDENT_ACCEPTANCE`
+- **Status:** `IMPLEMENTED_VERIFIED_READY_FOR_INDEPENDENT_ACCEPTANCE`
 - **Prerequisites:** Completion of Phase 2D (`ACCEPTED & COMMITTED`).
 - **Deliverables:**
   - `animation.ts`: `TurnInteractionMode` ('TWO_STEP' | 'DIRECT_180'), `DIRECT_FULL_ANIMATING` phase, mode switching function, and direct 180° execution.
   - `animation.test.ts`: Automated test suite for mode switching, direct 180° execution, isolation, and regression.
   - `MoveControls.tsx` & `App.css`: Direct 180° toggle switch and mode status display.
+- **Verification Evidence:**
+  - `DEFAULT_MODE_GATE`: `PASS` (initial session defaults to TWO_STEP).
+  - `IDLE_MODE_SWITCH_GATE`: `PASS` (clean switching between TWO_STEP and DIRECT_180 when IDLE).
+  - `MODE_SWITCH_BLOCKED_WHILE_BUSY_GATE`: `PASS` (mode changes rejected across all busy/animating/locked states).
+  - `DIRECT_180_START_GATE`: `PASS` (starts DIRECT_FULL_ANIMATING with uncommitted domain state).
+  - `DIRECT_180_MID_PROGRESS_GATE`: `PASS` (continuous evaluation at midpoint without entering lock).
+  - `DIRECT_180_COMPLETION_GATE`: `PASS` (full canonical commit and fresh endpoint projection at 400ms).
+  - `DIRECT_180_INPUT_BLOCKED_GATE`: `PASS` (inputs ignored during animation).
+  - `DIRECT_180_TWELVE_MOVE_GATE`: `12 / 12 PASS` (all canonical moves complete in 1 click).
+  - `TWO_STEP_REGRESSION_GATE`: `PASS` (Phase 2D staging, lock, continue, cancel preserved).
+  - `MODE_ISOLATION_GATE`: `PASS` (modes strictly isolated to their lifecycle paths).
+  - `MIXED_MODE_SEQUENCE_GATE`: `PASS` (alternating multi-move sequences chain accurately).
+  - `FRESH_ENDPOINT_PROJECTION_GATE`: `PASS` (fresh projection on full completion).
+  - `IMMUTABILITY_GATE`: `PASS` (domain structures remain unmutated).
+  - Web TypeScript & Vite build: `PASS`.
+  - Manual Browser Gates: `NEEDS_HUMAN_VERIFICATION`.
 
 ---
 

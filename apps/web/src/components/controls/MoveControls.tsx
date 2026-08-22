@@ -1,27 +1,31 @@
 /**
  * @file MoveControls.tsx
- * @description UI overlay providing 12 face move controls with Phase 2D physical half-turn lock guidance and selective button enablement.
+ * @description UI overlay providing 12 face move controls with Phase 2D physical half-turn lock guidance, Phase 2E Direct 180° toggle switch, and selective button enablement.
  */
 
 import React from 'react';
 import { FACES, type Face, type Direction, type Move } from '@gearcube/core';
-import type { StagedMoveSession } from '../cube/animation';
+import type { StagedMoveSession, TurnInteractionMode } from '../cube/animation';
 
 export interface MoveControlsProps {
+  readonly interactionMode: TurnInteractionMode;
+  readonly isIdle: boolean;
   readonly isAnimating: boolean;
   readonly stagedMove: StagedMoveSession | null;
   readonly onTriggerMove: (move: Move) => void;
+  readonly onChangeInteractionMode: (mode: TurnInteractionMode) => void;
 }
 
 interface FaceMoveGroupProps {
   readonly face: Face;
+  readonly interactionMode: TurnInteractionMode;
   readonly isAnimating: boolean;
   readonly stagedMove: StagedMoveSession | null;
   readonly onTriggerMove: (move: Move) => void;
 }
 
 const FaceMoveGroup: React.FC<FaceMoveGroupProps> = React.memo(
-  ({ face, isAnimating, stagedMove, onTriggerMove }) => {
+  ({ face, interactionMode, isAnimating, stagedMove, onTriggerMove }) => {
     const isLocked = stagedMove?.phase === 'HALF_TURN_LOCKED';
     const isStagedFace = stagedMove?.move.face === face;
 
@@ -37,7 +41,7 @@ const FaceMoveGroup: React.FC<FaceMoveGroupProps> = React.memo(
       }
     };
 
-    // Tooltip and accessibility text tailored to half-turn staging state
+    // Tooltip and accessibility text tailored to interaction mode and half-turn staging state
     const getButtonTitle = (direction: Direction): string => {
       if (isLocked && isStagedFace) {
         if (stagedMove.move.direction === direction) {
@@ -45,6 +49,9 @@ const FaceMoveGroup: React.FC<FaceMoveGroupProps> = React.memo(
         } else {
           return `${face} ${direction} — Reverse to origin`;
         }
+      }
+      if (interactionMode === 'DIRECT_180') {
+        return `${face} ${direction === 'CW' ? 'Clockwise' : 'Counter-Clockwise'} (180° full turn)`;
       }
       return `${face} ${direction === 'CW' ? 'Clockwise' : 'Counter-Clockwise'} (90° physical step)`;
     };
@@ -87,8 +94,23 @@ const FaceMoveGroup: React.FC<FaceMoveGroupProps> = React.memo(
 FaceMoveGroup.displayName = 'FaceMoveGroup';
 
 export const MoveControls: React.FC<MoveControlsProps> = React.memo(
-  ({ isAnimating, stagedMove, onTriggerMove }) => {
+  ({
+    interactionMode,
+    isIdle,
+    isAnimating,
+    stagedMove,
+    onTriggerMove,
+    onChangeInteractionMode,
+  }) => {
     const isLocked = stagedMove?.phase === 'HALF_TURN_LOCKED';
+    const isDirect180 = interactionMode === 'DIRECT_180';
+
+    const handleToggleMode = (e: React.MouseEvent) => {
+      e.stopPropagation();
+      if (isIdle) {
+        onChangeInteractionMode(isDirect180 ? 'TWO_STEP' : 'DIRECT_180');
+      }
+    };
 
     return (
       <div
@@ -97,6 +119,24 @@ export const MoveControls: React.FC<MoveControlsProps> = React.memo(
       >
         <div className={`move-controls-panel ${isLocked ? 'panel-half-turn-locked' : ''}`}>
           <div className="move-controls-header">
+            <div className="header-title-row">
+              <span className="panel-title">Face Controls</span>
+              <button
+                type="button"
+                className={`mode-toggle-btn ${isDirect180 ? 'mode-direct-active' : ''}`}
+                disabled={!isIdle}
+                onClick={handleToggleMode}
+                onPointerDown={(e) => e.stopPropagation()}
+                aria-label={`Direct 180° turn mode: ${isDirect180 ? 'ON' : 'OFF'}`}
+                title={`Toggle Direct 180° turn mode (Currently ${isDirect180 ? 'ON' : 'OFF'})`}
+              >
+                <span className="mode-toggle-label">Direct 180°</span>
+                <span className={`mode-toggle-pill ${isDirect180 ? 'pill-on' : 'pill-off'}`}>
+                  {isDirect180 ? 'ON' : 'OFF'}
+                </span>
+              </button>
+            </div>
+
             {isLocked && stagedMove ? (
               <div className="half-turn-guidance">
                 <span className="locked-badge">HALF-TURN: {stagedMove.move.face} {stagedMove.move.direction}</span>
@@ -105,16 +145,18 @@ export const MoveControls: React.FC<MoveControlsProps> = React.memo(
                 </span>
               </div>
             ) : isAnimating ? (
-              <span className="animating-indicator">Turning (90°)...</span>
-            ) : (
-              <span className="panel-title">Face Controls</span>
-            )}
+              <span className="animating-indicator">
+                Turning ({isDirect180 ? '180°' : '90°'})...
+              </span>
+            ) : null}
           </div>
+
           <div className="faces-grid">
             {FACES.map((face) => (
               <FaceMoveGroup
                 key={face}
                 face={face}
+                interactionMode={interactionMode}
                 isAnimating={isAnimating}
                 stagedMove={stagedMove}
                 onTriggerMove={onTriggerMove}

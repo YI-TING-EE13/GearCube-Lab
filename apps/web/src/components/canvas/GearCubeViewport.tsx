@@ -1,6 +1,6 @@
 /**
  * @file GearCubeViewport.tsx
- * @description React Three Fiber canvas viewport hosting the interactive Phase 2D staged Gear Cube session, lighting, OrbitControls, and MoveControls overlay.
+ * @description React Three Fiber canvas viewport hosting the interactive Phase 2E staged Gear Cube session, lighting, OrbitControls, and MoveControls overlay with turn interaction mode switching.
  */
 
 import React, { useState, useCallback } from 'react';
@@ -11,10 +11,13 @@ import { GearCubeModel } from '../cube/GearCubeModel';
 import { MoveControls } from '../controls/MoveControls';
 import {
   type GearCubeSessionState,
+  type TurnInteractionMode,
   createInitialSessionState,
   startMove,
   stepAnimation,
   isSessionAnimating,
+  isSessionIdle,
+  setTurnInteractionMode,
 } from '../cube/animation';
 
 interface AnimatedGearCubeSceneProps {
@@ -49,7 +52,12 @@ export const GearCubeViewport: React.FC = () => {
     setSession((prev) => stepAnimation(prev, nowMs));
   }, []);
 
+  const handleChangeInteractionMode = useCallback((mode: TurnInteractionMode) => {
+    setSession((prev) => setTurnInteractionMode(prev, mode));
+  }, []);
+
   const isAnimating = isSessionAnimating(session);
+  const isIdle = isSessionIdle(session);
 
   return (
     <div className="canvas-container" style={{ width: '100vw', height: '100vh', position: 'relative' }}>
@@ -81,11 +89,14 @@ export const GearCubeViewport: React.FC = () => {
         />
       </Canvas>
 
-      {/* 12-Move Control Overlay with Phase 2D Staging Support */}
+      {/* 12-Move Control Overlay with Phase 2E Turn Interaction Mode Support */}
       <MoveControls
+        interactionMode={session.interactionMode}
+        isIdle={isIdle}
         isAnimating={isAnimating}
         stagedMove={session.stagedMove}
         onTriggerMove={handleTriggerMove}
+        onChangeInteractionMode={handleChangeInteractionMode}
       />
     </div>
   );

@@ -1,6 +1,6 @@
 /**
  * @file animation.ts
- * @description Pure animation session state, cubic easing, physical two-step turn staging lifecycle, and transition functions with injected timestamps.
+ * @description Pure animation session state, cubic easing, physical two-step turn staging lifecycle, direct 180 turn mode, and transition functions with injected timestamps.
  */
 
 import {
@@ -25,11 +25,17 @@ import {
 /** Duration of a single 90-degree physical user input step in milliseconds */
 export const PHYSICAL_STEP_DURATION_MS = 200;
 
-/** Full canonical 180-degree move duration in milliseconds (sum of two 90-degree steps) */
+/** Full canonical 180-degree move duration in milliseconds (sum of two 90-degree steps or direct 180 turn) */
 export const FULL_CANONICAL_MOVE_DURATION_MS = 400;
+
+/** Direct 180-degree turn duration in milliseconds */
+export const DIRECT_180_DURATION_MS = FULL_CANONICAL_MOVE_DURATION_MS;
 
 /** Backward-compatible alias for canonical full move duration */
 export const MOVE_DURATION_MS = FULL_CANONICAL_MOVE_DURATION_MS;
+
+/** Supported user turn interaction modes */
+export type TurnInteractionMode = 'TWO_STEP' | 'DIRECT_180';
 
 /**
  * Standard cubic ease-in-out monotonic function: [0, 1] -> [0, 1].
@@ -43,14 +49,15 @@ export function easeInOutCubic(t: number): number {
 }
 
 /**
- * Lifecycle states for physical two-step turn staging.
+ * Lifecycle states for physical two-step turn staging and direct 180 turns.
  */
 export type StagingPhase =
   | 'IDLE'
   | 'FIRST_HALF_ANIMATING'
   | 'HALF_TURN_LOCKED'
   | 'SECOND_HALF_ANIMATING'
-  | 'CANCEL_HALF_ANIMATING';
+  | 'CANCEL_HALF_ANIMATING'
+  | 'DIRECT_FULL_ANIMATING';
 
 /**
  * Encapsulates the active staged canonical move, single kinematics plan, and segment timing.
@@ -73,10 +80,18 @@ export interface GearCubeSessionState {
   readonly currentFrame: SpatialFrame;
   readonly stagedMove: StagedMoveSession | null;
   readonly displayTransforms: readonly ComponentTransform[];
+  readonly interactionMode: TurnInteractionMode;
 }
 
 /**
- * Returns true if an animation segment is actively transitioning (first half, second half, or cancel).
+ * Returns true if the session is fully idle at a resting canonical endpoint.
+ */
+export function isSessionIdle(session: GearCubeSessionState): boolean {
+  return session.stagedMove === null;
+}
+
+/**
+ * Returns true if an animation segment is actively transitioning.
  */
 export function isSessionAnimating(session: GearCubeSessionState): boolean {
   if (session.stagedMove === null) return false;
@@ -84,7 +99,8 @@ export function isSessionAnimating(session: GearCubeSessionState): boolean {
   return (
     phase === 'FIRST_HALF_ANIMATING' ||
     phase === 'SECOND_HALF_ANIMATING' ||
-    phase === 'CANCEL_HALF_ANIMATING'
+    phase === 'CANCEL_HALF_ANIMATING' ||
+    phase === 'DIRECT_FULL_ANIMATING'
   );
 }
 
@@ -103,7 +119,28 @@ export function getStagingPhase(session: GearCubeSessionState): StagingPhase {
 }
 
 /**
- * Creates the initial solved session state with default spatial frame and fresh static transforms.
+ * Pure function to switch turn interaction mode.
+ * Mode switching is allowed strictly when the session is fully IDLE.
+ * If the session is busy (animating or half-turn locked), returns unchanged session.
+ */
+export function setTurnInteractionMode(
+  session: GearCubeSessionState,
+  mode: TurnInteractionMode
+): GearCubeSessionState {
+  if (!isSessionIdle(session)) {
+    return session;
+  }
+  if (session.interactionMode === mode) {
+    return session;
+  }
+  return {
+    ...session,
+    interactionMode: mode,
+  };
+}
+
+/**
+ * Creates the initial solved session state with default spatial frame, fresh static transforms, and TWO_STEP default mode.
  */
 export function createInitialSessionState(): GearCubeSessionState {
   const currentState = SOLVED_GEAR_CUBE_STATE;
@@ -116,28 +153,30 @@ export function createInitialSessionState(): GearCubeSessionState {
     currentFrame,
     stagedMove: null,
     displayTransforms,
+    interactionMode: 'TWO_STEP',
   };
 }
 
 /**
- * Initiates or advances a physical move transition according to the staging state machine.
+ * Initiates or advances a move transition according to the active interaction mode and state machine.
  *
- * - From IDLE: Starts FIRST_HALF_ANIMATING (p: 0.0 -> 0.5).
- * - From HALF_TURN_LOCKED:
- *   - Same face + same direction: Starts SECOND_HALF_ANIMATING (p: 0.5 -> 1.0).
- *   - Same face + opposite direction: Starts CANCEL_HALF_ANIMATING (p: 0.5 -> 0.0).
- *   - Other faces: Blocked (returns unchanged session).
- * - During active animation (FIRST/SECOND/CANCEL): Inputs ignored.
+ * - In TWO_STEP mode:
+ *   - From IDLE: Starts FIRST_HALF_ANIMATING (p: 0.0 -> 0.5, 200ms).
+ *   - From HALF_TURN_LOCKED:
+ *     - Same face + same direction: Starts SECOND_HALF_ANIMATING (p: 0.5 -> 1.0, 200ms).
+ *     - Same face + opposite direction: Starts CANCEL_HALF_ANIMATING (p: 0.5 -> 0.0, 200ms).
+ *     - Other faces: Blocked (returns unchanged session).
+ * - In DIRECT_180 mode:
+ *   - From IDLE: Starts DIRECT_FULL_ANIMATING (p: 0.0 -> 1.0, 400ms).
+ * - During active animation: Inputs ignored.
  */
 export function startMove(
   session: GearCubeSessionState,
   move: Move,
   nowMs: number,
-  stepDurationMs: number = PHYSICAL_STEP_DURATION_MS
+  stepDurationMs?: number
 ): GearCubeSessionState {
-  const duration = Math.max(1, stepDurationMs);
-
-  // Case 1: Session is idle -> Start first half physical step (p: 0.0 -> 0.5)
+  // Case 1: Session is fully idle -> Start new move based on interactionMode
   if (session.stagedMove === null || session.stagedMove.phase === 'IDLE') {
     const fromView = materializeState(session.currentState, session.currentFrame);
     const nextState = applyMove(session.currentState, move);
@@ -145,27 +184,51 @@ export function startMove(
     const toView = materializeState(nextState, nextFrame);
     const plan = planKinematics(fromView, move, toView);
 
-    const stagedMove: StagedMoveSession = {
-      move,
-      plan,
-      nextState,
-      nextFrame,
-      phase: 'FIRST_HALF_ANIMATING',
-      segmentStartTimeMs: nowMs,
-      segmentDurationMs: duration,
-    };
+    if (session.interactionMode === 'DIRECT_180') {
+      const duration = Math.max(1, stepDurationMs ?? DIRECT_180_DURATION_MS);
+      const stagedMove: StagedMoveSession = {
+        move,
+        plan,
+        nextState,
+        nextFrame,
+        phase: 'DIRECT_FULL_ANIMATING',
+        segmentStartTimeMs: nowMs,
+        segmentDurationMs: duration,
+      };
 
-    return {
-      currentState: session.currentState,
-      currentFrame: session.currentFrame,
-      stagedMove,
-      displayTransforms: session.displayTransforms,
-    };
+      return {
+        currentState: session.currentState,
+        currentFrame: session.currentFrame,
+        stagedMove,
+        displayTransforms: session.displayTransforms,
+        interactionMode: session.interactionMode,
+      };
+    } else {
+      const duration = Math.max(1, stepDurationMs ?? PHYSICAL_STEP_DURATION_MS);
+      const stagedMove: StagedMoveSession = {
+        move,
+        plan,
+        nextState,
+        nextFrame,
+        phase: 'FIRST_HALF_ANIMATING',
+        segmentStartTimeMs: nowMs,
+        segmentDurationMs: duration,
+      };
+
+      return {
+        currentState: session.currentState,
+        currentFrame: session.currentFrame,
+        stagedMove,
+        displayTransforms: session.displayTransforms,
+        interactionMode: session.interactionMode,
+      };
+    }
   }
 
-  // Case 2: Session is holding at half-turn lock (p = 0.5)
+  // Case 2: Session is holding at half-turn lock (p = 0.5) in TWO_STEP mode
   if (session.stagedMove.phase === 'HALF_TURN_LOCKED') {
-    // Only inputs on the active staged face are allowed
+    const duration = Math.max(1, stepDurationMs ?? PHYSICAL_STEP_DURATION_MS);
+
     if (move.face !== session.stagedMove.move.face) {
       return session; // OTHER_FACE_INPUT: BLOCKED
     }
@@ -202,12 +265,13 @@ export function startMove(
 }
 
 /**
- * Advances the physical animation session according to the current timestamp.
- * Evaluates the active kinematic trajectory across local segment progress ranges.
+ * Advances the animation session according to the current timestamp.
+ * Evaluates the active kinematic trajectory across progress ranges for the active phase.
  *
  * - FIRST_HALF_ANIMATING completion: Enters HALF_TURN_LOCKED at p = 0.5 (no logical commit).
  * - SECOND_HALF_ANIMATING completion: Commits nextState/nextFrame and snaps fresh endpoint projection.
  * - CANCEL_HALF_ANIMATING completion: Retains original state/frame and snaps fresh original projection.
+ * - DIRECT_FULL_ANIMATING completion: Commits nextState/nextFrame and snaps fresh endpoint projection.
  */
 export function stepAnimation(
   session: GearCubeSessionState,
@@ -237,6 +301,7 @@ export function stepAnimation(
         currentFrame: session.currentFrame,
         stagedMove,
         displayTransforms: midpointTransforms,
+        interactionMode: session.interactionMode,
       };
     }
 
@@ -250,11 +315,6 @@ export function stepAnimation(
 
   if (phase === 'SECOND_HALF_ANIMATING') {
     if (rawSegmentP >= 1.0) {
-      // Full turn completion sequence:
-      // 1. Commit nextState
-      // 2. Commit nextFrame
-      // 3. Clear staged move session
-      // 4. Materialize fresh endpoint projection from committed logical state
       const finalView = materializeState(nextState, nextFrame);
       const finalTransforms = placementToTransforms(finalView);
       return {
@@ -262,6 +322,7 @@ export function stepAnimation(
         currentFrame: nextFrame,
         stagedMove: null,
         displayTransforms: finalTransforms,
+        interactionMode: session.interactionMode,
       };
     }
 
@@ -275,10 +336,6 @@ export function stepAnimation(
 
   if (phase === 'CANCEL_HALF_ANIMATING') {
     if (rawSegmentP >= 1.0) {
-      // Cancel completion sequence:
-      // 1. Retain original currentState and currentFrame unchanged
-      // 2. Clear staged move session
-      // 3. Materialize fresh original projection
       const finalView = materializeState(session.currentState, session.currentFrame);
       const finalTransforms = placementToTransforms(finalView);
       return {
@@ -286,10 +343,32 @@ export function stepAnimation(
         currentFrame: session.currentFrame,
         stagedMove: null,
         displayTransforms: finalTransforms,
+        interactionMode: session.interactionMode,
       };
     }
 
     const canonicalP = 0.5 * (1.0 - easedSegmentP);
+    const displayTransforms = plan.evaluate(canonicalP);
+    return {
+      ...session,
+      displayTransforms,
+    };
+  }
+
+  if (phase === 'DIRECT_FULL_ANIMATING') {
+    if (rawSegmentP >= 1.0) {
+      const finalView = materializeState(nextState, nextFrame);
+      const finalTransforms = placementToTransforms(finalView);
+      return {
+        currentState: nextState,
+        currentFrame: nextFrame,
+        stagedMove: null,
+        displayTransforms: finalTransforms,
+        interactionMode: session.interactionMode,
+      };
+    }
+
+    const canonicalP = easedSegmentP;
     const displayTransforms = plan.evaluate(canonicalP);
     return {
       ...session,
