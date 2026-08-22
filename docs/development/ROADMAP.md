@@ -1,7 +1,7 @@
 # ROADMAP.md — Project Lifecycle & Dependency-Ordered Milestones
 
-> **Current Project Phase:** `Phase 0B.4 — Final Cross-Contract Audit`
-> **Status:** Active Execution
+> **Current Project Phase:** `Phase 1D — Coordinate Views & Structural Codecs (Pending Post-Repair Integration & Independent Re-Acceptance)`
+> **Status:** Active Execution (ADR-0005 Documentation Synchronization)
 
 ---
 
@@ -11,14 +11,20 @@
 [ Phase 0A: Governance & Design Baseline ] (Accepted)
       │
       ▼
-[ Phase 0B: Reference Model Adoption & Contract Synthesis ] (Active)
+[ Phase 0B: Reference Model Adoption & Contract Synthesis ] (Accepted)
       ├─ 0B.1: Physical Characterization Protocol (Accepted; Optional Tooling)
       ├─ 0B.2: Standard Gear Cube Reference Specification (Accepted)
       ├─ 0B.3: Discrete & Kinematic Contract Synthesis (Accepted)
-      └─ 0B.4: Final Cross-Contract Audit (Current)
+      └─ 0B.4: Final Cross-Contract Audit (Accepted)
       │
       ▼
 [ Phase 1: Discrete Domain Core Engine ]
+      ├─ 1A: Project Bootstrap & Core Package Boundary (Accepted)
+      ├─ 1B: Canonical State / Value Types & Validation (Accepted)
+      ├─ 1C: Move Transition Engine & Action Algebra (Accepted Baseline)
+      │     └─ ADR-0005 Canonical Transition Repair (Accepted & Committed)
+      ├─ 1D: Coordinate Views & Structural Codecs (Preserved Pending Integration)
+      └─ 1E: Group Invariants & Reachable State Closure (Blocked on 1D)
       │
       ▼
 [ Phase 2: 3D Graphics & Kinematic Animation ]
@@ -102,15 +108,14 @@ Phase 0B is partitioned into four dependency-ordered subphases:
   - [x] Derived non-authoritative `PiecePlacementView` and `StateCodec` boundaries specified.
   - [x] Continuous kinematic trajectories parameterized by mechanical progress $p \in [0, 1]$ specified for all 12 moves.
 
-#### Phase 0B.4: Final Cross-Contract Audit (Active Subphase)
+#### Phase 0B.4: Final Cross-Contract Audit (Accepted)
 - **Objective:** Independent architectural review and cross-contract consistency audit of the synthesized puzzle contracts before commencing Phase 1 software implementation.
+- **Status:** `ACCEPTED`.
 - **Prerequisites:** Completion of Phase 0B.3.
-- **In-Scope:** Verification of domain contracts against architecture axioms, terminology matrix synchronization, and final pre-implementation audit.
-- **Out-of-Scope:** Phase 1 coding.
 - **Deliverables:** Phase 0B.4 cross-contract audit report.
 - **Acceptance Gate Criteria (`PHASE_0B4_PASS`):**
-  - [ ] Formal sign-off on discrete `GearCubeState`, `Move`, `PiecePlacementView`, and `KinematicPlan` contracts.
-  - [ ] Zero unverified mechanical assumptions promoted to test oracles without evidence.
+  - [x] Formal sign-off on discrete `GearCubeState`, `Move`, `PiecePlacementView`, and `KinematicPlan` contracts.
+  - [x] Zero unverified mechanical assumptions promoted to test oracles without evidence.
 
 ---
 
@@ -118,22 +123,23 @@ Phase 0B is partitioned into four dependency-ordered subphases:
 - **Objective:** Implement the pure TypeScript combinatorial state engine, move validator, and coordinate model.
 - **Prerequisites:** Completion of Phase 0B.
 
-#### Phase 1A: Project Bootstrap & Core Package Boundary (Completed)
+#### Phase 1A: Project Bootstrap & Core Package Boundary (Completed & Accepted)
 - Package boundary isolation, zero-dependency pure Core setup, workspace verification scripts.
 
-#### Phase 1B: Canonical State / Value Types & Validation (Completed)
+#### Phase 1B: Canonical State / Value Types & Validation (Completed & Accepted)
 - Canonical value collections (`FACES`, `DIRECTIONS`, `CORNER_CONFIGURATIONS`, `SLICE_PERMUTATION_CLASSES`, `SLICE_GEAR_PHASES`), derived literal types, exact own-key validation guards (`isFace`, `isDirection`, `isMove`, `isCornerConfiguration`, `isSlicePermutationClass`, `isSliceGearPhase`, `isEdgeSliceCoordinate`, `isGearCubeState`), static constants, `SOLVED_GEAR_CUBE_STATE`, `equalsGearCubeState`, `isSolved`, and 41,472 Cartesian domain cardinality verification.
 
-#### Phase 1C: Move Transition Engine & Action Algebra (Completed)
-- Direct canonical move application (`applyMove`), $O(1)$ precomputed transition tables (`transition-data.ts`), exact 12 solved-state golden vectors, input validation, output anti-aliasing, 497,664 transition closure, 497,664 direct vs independent test oracle equivalence, 497,664 inverse round-trips, and 12-repeat identity.
+#### Phase 1C: Move Transition Engine & Action Algebra (Historical Baseline & Supersession)
+- Direct canonical move application (`applyMove`), $O(1)$ precomputed transition tables (`transition-data.ts`), exact 12 solved-state golden vectors, input validation, output anti-aliasing, 497,664 transition closure, 497,664 inverse round-trips, and 12-repeat identity.
+- **Supersession & Repair Notice:** The original Phase 1C baseline evaluated $D, B, L$ moves under a body-fixed assumption without reference-frame normalization. Corrective decision [`ADR-0005`](../decisions/ADR-0005-CANONICAL-MOVE-TRANSITION-ALGEBRA.md) adopted reference-normalized canonical move transition algebra. The transition tables and test oracles were repaired and committed in commit `59f0313c2ce1c513f80d967d3f78cd86f7870003` (`Repair canonical move transitions`), achieving $497,664 / 497,664$ canonical oracle equivalence ($248,832 / 248,832$ $U/F/R$ non-regression and $248,832 / 248,832$ $D/B/L$ correction).
 
-#### Phase 1D: Coordinate Views & Structural Codecs (Plan Repair Pending)
+#### Phase 1D: Coordinate Views & Structural Codecs (Preserved Pending Integration)
 - Derived `PiecePlacementView` materialization (`materializeState`), quotiented center placement (`CenterPlacement` with `{ slot, pieceId }` pursuant to accepted [`ADR-0004`](../decisions/ADR-0004-CENTER-ORIENTATION-SEMANTICS.md)), `SpatialFrame` orientation lifecycle, and compact integer serialization codecs.
-- **Status:** `BLOCKED` on Phase 1D implementation plan repair and acceptance. Physical center mechanics contract resolved by accepted [`ADR-0004`](../decisions/ADR-0004-CENTER-ORIENTATION-SEMANTICS.md). Phase 1D implementation plan requires repair and independent review before production implementation.
-
+- **Status:** `PRESERVED_PENDING_FINAL_INDEPENDENT_ACCEPTANCE`. Implementation plan was repaired and accepted in commit `cb19af5`. The existing implementation remains preserved in its dedicated worktree and will be integrated and independently re-accepted following ADR-0005 documentation synchronization.
 
 #### Phase 1E: Group Invariants & Exhaustive Reachable State Closure
 - Exhaustive BFS traversal ($41,472$ reachable states), group closure checks, and move inverse round-trips.
+- **Status:** `BLOCKED` until Phase 1D final acceptance.
 
 ---
 

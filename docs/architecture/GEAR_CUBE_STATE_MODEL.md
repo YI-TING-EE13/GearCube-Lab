@@ -1,6 +1,6 @@
 # GEAR_CUBE_STATE_MODEL.md — Canonical Discrete State & Transition Specification
 
-> **Document Status:** `DECIDED` (Phase 0B.3 Baseline)
+> **Document Status:** `DECIDED` (Harmonized with [`ADR-0005`](../decisions/ADR-0005-CANONICAL-MOVE-TRANSITION-ALGEBRA.md))
 > **Target Model:** Standard / Original Gear Cube (Oskar van Deventer / Meffert's Reference Model)
 > **Applicability:** Pure TypeScript Domain Core (`packages/core`)
 
@@ -22,7 +22,8 @@ This document formalizes the canonical discrete state representation, full-state
 4. **Spatial Frame & Materialization Decoupling:**
    $$\text{Camera Viewpoint} \neq \text{Cube Spatial Frame} \neq \text{Canonical Puzzle State}$$
    `SpatialFrame` represents the discrete 4-state rigid orientation of the physical cube body relative to the display world coordinate system ($96 = 24 \times 4$). `materializeState(canonicalState, spatialFrame) -> PiecePlacementView` maps canonical state to physical 3D space without visual piece teleportation.
-5. **Direct Canonical Transitions:** Move transitions are computed directly on canonical coordinates via deterministic algebra and frozen lookup tables.
+5. **Reference-Normalized Canonical Transitions ([`ADR-0005`](../decisions/ADR-0005-CANONICAL-MOVE-TRANSITION-ALGEBRA.md)):**
+   Move transitions are computed directly on canonical coordinates via `applyMove(state, move): GearCubeState`. Under moves that rotate the reference corner `DBL` ($D, B, L$), canonical normalization automatically absorbs the induced rigid body rotation, preserving group closure on the 41,472-state domain without requiring `SpatialFrame` as an input to canonical transitions. Solvers operate exclusively on `GearCubeState`.
 
 ---
 
@@ -224,58 +225,57 @@ export const SOLVED_GEAR_CUBE_STATE: GearCubeState = {
 
 ---
 
-## 8. Move Application and Frame Lifecycle
+## 8. Move Application and Application Composition Lifecycle
 
-```text
-1. User invokes UI move (F_physical, D_physical) on (canonicalState, spatialFrame)
-2. Canonical transition: nextCanonicalState = directApplyMove(canonicalState, F_physical, D_physical)
-3. Frame update: nextSpatialFrame = nextFrame(spatialFrame, F_physical)
-4. Render: materializeState(nextCanonicalState, nextSpatialFrame)
+*(Pursuant to [`ADR-0005`](../decisions/ADR-0005-CANONICAL-MOVE-TRANSITION-ALGEBRA.md))*:
+
+Canonical discrete state transitions and spatial presentation are decoupled into a clean 3-step composition pipeline:
+
+```typescript
+// 1. Domain Core: Closed canonical transition on reference-normalized state
+const nextState = applyMove(state, move);
+
+// 2. Presentation Layer: Track discrete body orientation relative to world frame
+const nextFrame = nextSpatialFrame(frame, move.face);
+
+// 3. Materializer: Map canonical coordinates to physical 3D piece slots
+const nextView = materializeState(nextState, nextFrame);
 ```
+
+### Invariant Boundaries:
+1. **Domain Core Independence:** `applyMove(state, move)` requires only `GearCubeState` and `Move`. Solvers operate exclusively on `GearCubeState` without `SpatialFrame`.
+2. **Deterministic Frame Evolution:** `nextSpatialFrame(frame, face)` evolves strictly as a function of the current frame and the rotated face normal axis.
+3. **Continuous 3D Animation:** Downstream renderer/kinematics layers derive continuous mesh transformations from `(fromView, move, toView)` without mutating discrete state.
 
 ---
 
-## 9. Synchronous Exhaustive Verification Evidence
+## 9. Exhaustive Verification Evidence & Acceptance Gates
 
-Captured output from foreground Python verification suite (`uv run python`):
+Canonical move transitions have been verified across the entire Cartesian coordinate domain ($41,472$ states $\times 12$ legal directed moves $= 497,664$ transitions) in the core automated test suite (`packages/core/tests/transitions.test.ts` and `packages/core/tests/transitions-exhaustive.test.ts`):
 
 ```text
-fixed-spatial pairs = 96
-reference-normalized pairs = 24
-unique T_free permutations = 24
-unique T_ref arrangements among normalized states = 6
-T_free -> T_ref ambiguity = 0
-96 <-> 24 x 4 frame bijection = True
-corner materialization round-trip failures = 0
-
-expanded full physical-state count = 165888
-unique canonical-state/frame decompositions = 165888
-full-state normalization round-trip failures = 0
-representatives per canonical state = 4
-
 canonical domain size = 41472
-direct transition closure: 497664, failure count = 0
-direct move/inverse round trips: 497664, failure count = 0
-direct-vs-oracle transition comparisons: 497664, mismatch count = 0
-canonical BFS reachability = 41472
+canonical transition closure: 497664, failure count = 0
+canonical direct move/inverse round trips: 497664, failure count = 0
+canonical direct-vs-oracle equivalence: 497664, mismatch count = 0
+U/F/R non-regression: 248832, regression count = 0
+D/B/L reference-normalized correction: 248832, mismatch count = 0
+12-repeat move identity across full domain: 41472 x 12, failure count = 0
 
-application-level transition comparisons = 1990656
-application-level mismatch count = 0
-
-physical-face 12-repeat lifecycle failures on all 995328 runs = 0
-kinematic physical-frame endpoint mismatches on all 48 cases = 0
+application-level transition characterization = 1990656 (41472 x 4 x 12)
+phase-aware piece placement matches = 1990656 / 1990656
+phase-aware gear phase matches = 1990656 / 1990656
+phase-aware full endpoint matches = 1990656 / 1990656
 ```
 
-| Verification Check | Target / Oracle | Exhaustive Execution Result | Evidence Class |
+| Verification Check | Target / Oracle | Execution Result | Evidence Status |
 | :--- | :--- | :--- | :---: |
-| **Expanded Full Physical States** | $41,472 \times 4 = 165,888$ | **165,888 unique physical states** | `EXHAUSTIVELY_VERIFIED` |
-| **Full-State Normalization Round-Trip** | $\text{normalize}(\text{materialize}(s, f)) = (s, f)$ | **0 failures across all 165,888 states** | `EXHAUSTIVELY_VERIFIED` |
-| **Representatives Per State** | Exact 4:1 fiber | **Exactly 4 for all 41,472 states** | `EXHAUSTIVELY_VERIFIED` |
-| **Application Move Contract** | Full physical UI lifecycle vs physical oracle | **$0$ mismatches across all $1,990,656$ transitions** | `EXHAUSTIVELY_VERIFIED` |
-| **Physical Face 12-Repeat** | 12 repeated physical turns on all states/faces | **$0$ failures across all $995,328$ evaluations** | `EXHAUSTIVELY_VERIFIED` |
-| **Frame-Aware Kinematic Endpoint** | 3D rotation endpoint matches discrete slot cycle | **$0$ mismatches across all 48 cases** | `EXHAUSTIVELY_VERIFIED` |
 | **Canonical Cartesian Domain Size** | $24 \times 12^3 = 41,472$ | **$41,472$ unique coordinate tuples** | `EXHAUSTIVELY_VERIFIED` |
 | **Direct Transition Closure** | All $41,472 \times 12$ transitions valid | **$0$ closure failures** ($497,664$ transitions) | `EXHAUSTIVELY_VERIFIED` |
 | **Direct Move Invertibility** | $\text{apply}(\text{apply}(s, m), m^{-1}) = s$ | **$0$ inverse failures** ($497,664$ round-trips) | `EXHAUSTIVELY_VERIFIED` |
-| **Direct vs Oracle Equivalence** | $\text{direct}(s, m) == \text{oracle}(s, m)$ | **$0$ mismatches** ($497,664$ transitions) | `EXHAUSTIVELY_VERIFIED` |
-| **Reachable State Count (BFS)** | $41,472$ | **$41,472$ reachable states from solved** | `EXHAUSTIVELY_VERIFIED` |
+| **U/F/R Semantic Non-Regression** | Phase 1C Baseline | **$248,832 / 248,832$ matches ($0$ regressions)** | `EXHAUSTIVELY_VERIFIED` |
+| **D/B/L Reference-Normalized Correction** | Independent Reference Oracle | **$248,832 / 248,832$ matches ($0$ mismatches)** | `EXHAUSTIVELY_VERIFIED` |
+| **Direct vs Oracle Equivalence Gate** | Independent Reference Oracle | **$497,664 / 497,664$ matches ($0$ mismatches)** | `EXHAUSTIVELY_VERIFIED` |
+| **12-Repeat Identity Gate** | $M^{12}(s) = s$ on all states/moves | **$0$ failures across $41,472 \times 12$ runs** | `EXHAUSTIVELY_VERIFIED` |
+| **Application Lifecycle Characterization** | Phase-Aware Physical Oracle | **$1,990,656 / 1,990,656$ full endpoint matches** | `CHARACTERIZED_PENDING_PHASE1D_REACCEPTANCE` |
+| **Reachable State Count (BFS)** | $41,472$ | **$41,472$ reachable states from solved** | `DEFERRED_TO_PHASE_1E` |

@@ -69,27 +69,38 @@
   - Authoritative `SOLVED_GEAR_CUBE_STATE` is recognized by `isSolved()`, and exactly 1 state out of all 41,472 Cartesian coordinate tuples satisfies `isSolved()`.
 
 ### Level 2: Group Theory Invariants & Move Inverses
-- **Scope:** `packages/core/src/transitions.ts`, `packages/core/src/transition-data.ts`
-- **Focus:** Canonical move transitions, golden vector precision, independent oracle equivalence, and move algebra invariants.
-- **Invariants Tested (Implemented & Verified in Phase 1C):**
-  - **12 Solved-State Golden Vectors:** Bit-for-bit match against authoritative physical/canonical derivations for all 12 directed moves from `SOLVED_GEAR_CUBE_STATE`.
-  - **Single-Step Transition Closure:** $497,664 / 497,664$ transitions ($41,472 \text{ states} \times 12 \text{ moves}$) produce valid canonical `GearCubeState` instances with 0 failures.
-  - **Direct vs Independent Reference Oracle Equivalence:** $497,664 / 497,664$ production transitions match an independently derived physical/canonical test oracle with 0 mismatches.
-  - **Inverse Move Cancellation:** $\text{applyMove}(\text{applyMove}(S, M), \text{inverseMove}(M)) = S$ for all $497,664$ state-move pairs with 0 failures.
-  - **12-Repeat Identity:** For every canonical state and directed move, applying the move 12 consecutive times returns the initial state ($M^{12}(S) = S$).
-  - **Opposing Face Commutativity:** $U \cdot D = D \cdot U$, $F \cdot B = B \cdot F$, $R \cdot L = L \cdot R$.
-  - **Defensive Input Validation & Anti-Aliasing:** Deterministic state-first `TypeError` rejection on malformed inputs; immutable inputs with fresh outer and slice object allocation on all valid calls.
+- **Scope:** `packages/core/src/transitions.ts`, `packages/core/src/transition-data.ts` (`packages/core/tests/transitions.test.ts`, `packages/core/tests/transitions-exhaustive.test.ts`)
+- **Focus:** Canonical move transitions, golden vector precision, dual-suite independent oracle equivalence, and move algebra invariants.
+- **Invariants Tested (Harmonized & Verified pursuant to [`ADR-0005`](../decisions/ADR-0005-CANONICAL-MOVE-TRANSITION-ALGEBRA.md)):**
+  - **12 Solved-State Golden Vectors:** Bit-for-bit match against reference-normalized canonical derivations for all 12 directed moves from `SOLVED_GEAR_CUBE_STATE` (`transitions.test.ts`).
+  - **U/F/R Semantic Non-Regression Gate:** $248,832 / 248,832$ positive-face transitions match the immutable Phase 1C baseline with 0 regressions (`transitions.test.ts`).
+  - **D/B/L Reference-Normalized Correction Gate:** $248,832 / 248,832$ negative-face transitions match the independent reference-normalized oracle with 0 mismatches (`transitions.test.ts`).
+  - **Full Canonical Acceptance Gate:** $497,664 / 497,664$ transitions ($41,472 \text{ states} \times 12 \text{ moves}$) match the independent oracle with 0 mismatches (`transitions.test.ts`).
+  - **Single-Step Transition Closure:** $497,664 / 497,664$ transitions produce valid canonical `GearCubeState` instances with 0 failures (`transitions-exhaustive.test.ts`).
+  - **Direct vs Independent Reference Oracle Equivalence:** $497,664 / 497,664$ production transitions match an independently derived physical/canonical test oracle with 0 mismatches (`transitions-exhaustive.test.ts`). The test-local oracle derives next state strictly from 3D geometry and canonical normalization without reading production transition tables.
+  - **Inverse Move Cancellation:** $\text{applyMove}(\text{applyMove}(S, M), \text{inverseMove}(M)) = S$ for all $497,664$ state-move pairs with 0 failures (`transitions-exhaustive.test.ts`).
+  - **12-Repeat Identity:** For every canonical state and directed move, applying the move 12 consecutive times returns the initial state ($M^{12}(S) = S$) across all $41,472 \text{ states} \times 12 \text{ moves}$ (`transitions-exhaustive.test.ts`).
+  - **Opposing Face Commutativity:** $U \cdot D = D \cdot U$, $F \cdot B = B \cdot F$, $R \cdot L = L \cdot R$ (`transitions.test.ts`).
+  - **Defensive Input Validation & Anti-Aliasing:** Deterministic state-first `TypeError` rejection on malformed inputs; immutable inputs with fresh outer and slice object allocation on all valid calls (`transitions.test.ts`).
   - *(Note: Whole-domain BFS reachability traversal visiting exactly 41,472 states is deferred to Phase 1E).*
 
-
 ### Level 3: Coordinate Domain & Materializer Consistency
-- **Scope:** `packages/core/src/validation.ts`, `packages/core/src/materializer.ts`
-- **Focus:** Domain coordinate validity and derived physical placement mapping.
+- **Scope:** `packages/core/src/validation.ts`, `packages/core/src/materializer.ts`, `packages/core/src/serialization.ts`
+- **Focus:** Domain coordinate validity, derived physical placement mapping, and compact serialization.
 - **Invariants Tested:**
   - Corner permutations strictly within $S_4$ ($|S_4| = 24$) with $96 \leftrightarrow 24 \times 4$ `SpatialFrame` bijection.
   - Edge slice permutations strictly within Klein four-group $V_4$ ($|V_4| = 4$).
   - Edge gear phase indices strictly within $\mathbb{Z}_3 = \{0, 1, 2\}$.
   - Full-state materializer determinism: $\text{normalizePhysicalState}(\text{materializeState}(S, f)) = (S, f)$ produces idempotent, pure round-trips for all $165,888$ expanded fixed-spatial states ($41,472 \times 4$) without mutating canonical domain state.
+- **Phase 1D Post-Integration Re-Acceptance Gates (Pending Integration):**
+  - Model A Raw Center Dict: $1,536 / 1,536$ evaluations.
+  - Center Placement Identity: $41,472 / 41,472$ states.
+  - Center Placement Goldens: Solved + 12 directed moves.
+  - State Materialization: $165,888 / 165,888$ state-frame pairs.
+  - Full-State Normalization: $165,888 / 165,888$ round-trips.
+  - Full Application Move Lifecycle: $1,990,656 / 1,990,656$ phase-aware transitions ($\text{materialize}(\text{applyMove}(s, m), \text{nextSpatialFrame}(f, m.\text{face})) \equiv \text{simPhysical}(\text{materialize}(s, f), m)$).
+  - Serialization Round-Trip: $41,472 / 41,472$ states.
+  - Serialization Uniqueness: Exactly $41,472$ distinct integer keys.
 
 ### Level 4: Kinematic Trajectory Math Tests
 - **Scope:** `packages/kinematics`
