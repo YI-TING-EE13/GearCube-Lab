@@ -1,7 +1,7 @@
 # ROADMAP.md — Project Lifecycle & Dependency-Ordered Milestones
 
-> **Current Project Phase:** `Phase 2 — 3D Graphics & Kinematic Animation (Planning Phase)`
-> **Status:** Active Execution (Phase 2A Implementation Scope Frozen — Ready for Implementation)
+> **Current Project Phase:** `Phase 2 — 3D Graphics & Kinematic Animation`
+> **Status:** Active Execution (Phase 2C Move Animation & Controls Plan Frozen — Ready for Independent Acceptance)
 
 ---
 
@@ -145,7 +145,7 @@ Phase 0B is partitioned into four dependency-ordered subphases:
 
 ### Phase 2: 3D Model, Visual Assets, and Kinematic Animation Engine (In Progress)
 - **Objective:** Scaffolding Vite + React + Three.js / R3F, implementing modular 3D gear geometry, and coupling visual motion via kinematic trajectory planning.
-- **Status:** `IN PROGRESS` — Phase 2A implemented & verified; Phase 2B/2C planned.
+- **Status:** `IN PROGRESS` — Phase 2A/2B completed & accepted; Phase 2C planned.
 - **Prerequisites:** Completion of Phase 1 (`ACCEPTED & COMMITTED`).
 
 #### Phase 2A: Pure Kinematic Engine & Static Projection (Completed & Accepted)
@@ -166,9 +166,9 @@ Phase 0B is partitioned into four dependency-ordered subphases:
   - `PHASE2A_PHYSICAL_TRANSITION_GATE`: `528 / 528 PASS` (48 solved + 480 scrambled transitions across all 4 SpatialFrames and 12 moves).
   - Root verification (`npm run verify`): 12 test files, 136 tests passed, clean workspace typecheck and web build.
 
-#### Phase 2B: Modular 3D Geometry, Visual Meshes & R3F Viewport (Implemented & Verified)
+#### Phase 2B: Modular 3D Geometry, Visual Meshes & R3F Viewport (Completed & Accepted)
 - **Objective:** Scaffolding React Three Fiber viewport in `apps/web`, procedural gear piece geometries, and static projection binding.
-- **Status:** `IMPLEMENTED_VERIFIED_READY_FOR_INDEPENDENT_ACCEPTANCE`
+- **Status:** `ACCEPTED & COMMITTED` (Commit `773c4adb03bb75bec95f3d57186b3fb12ccb6657`)
 - **Prerequisites:** Completion of Phase 2A (`ACCEPTED & COMMITTED`).
 - **Deliverables:**
   - `GearCubeViewport.tsx`: React Three Fiber Canvas with camera, lighting, and OrbitControls.
@@ -183,8 +183,15 @@ Phase 0B is partitioned into four dependency-ordered subphases:
   - Web TypeScript & Vite build: `PASS`.
   - Manual browser smoke test: `PASS` (responsive canvas, 26 pieces rendered, orbit controls functional, 0 runtime errors).
 
-#### Phase 2C: Continuous Animation Binding & Turn Execution (Planned)
-- React Three Fiber continuous animation loop, time easing, transition execution, and snap-to-core at $p=1.0$.
+#### Phase 2C: Move Animation & Face Controls (Planned / Specification Frozen)
+- **Objective:** React Three Fiber continuous animation binding, 12 face move controls (`U/D/F/B/R/L CW/CCW`), $C^1$ cubic time easing (`MOVE_DURATION_MS = 400`), SpatialFrame lifecycle integration, and endpoint snap-to-fresh-projection.
+- **Status:** `PLANNED / CANONICAL SPECIFICATION FROZEN`
+- **Prerequisites:** Completion of Phase 2B (`ACCEPTED & COMMITTED`).
+- **Deliverables:**
+  - `MoveControls.tsx`: 12-move directional button overlay matrix.
+  - `animation.ts`: Pure animation session state, `easeInOutCubic` easing, transition lifecycle.
+  - `animation.test.ts`: Pure Node/Vitest test suite verifying 12-move planning, evaluation, completion commit, and sequential move chaining.
+  - Viewport & CSS integration: Non-blocking UI overlay, disabled controls during animation, OrbitControls preserved.
 
 ---
 
