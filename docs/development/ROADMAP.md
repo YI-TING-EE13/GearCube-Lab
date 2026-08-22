@@ -1,7 +1,7 @@
 # ROADMAP.md — Project Lifecycle & Dependency-Ordered Milestones
 
 > **Current Project Phase:** `Phase 2 — 3D Graphics & Kinematic Animation`
-> **Status:** Active Execution (Phase 2C Move Animation & Controls Implemented — Ready for Verification)
+> **Status:** Active Execution (Phase 2D Physical Turn Staging Plan Frozen — Ready for Independent Acceptance)
 
 ---
 
@@ -145,7 +145,7 @@ Phase 0B is partitioned into four dependency-ordered subphases:
 
 ### Phase 2: 3D Model, Visual Assets, and Kinematic Animation Engine (In Progress)
 - **Objective:** Scaffolding Vite + React + Three.js / R3F, implementing modular 3D gear geometry, and coupling visual motion via kinematic trajectory planning.
-- **Status:** `IN PROGRESS` — Phase 2A/2B completed & accepted; Phase 2C planned.
+- **Status:** `IN PROGRESS` — Phase 2A/2B/2C completed & accepted; Phase 2D planned.
 - **Prerequisites:** Completion of Phase 1 (`ACCEPTED & COMMITTED`).
 
 #### Phase 2A: Pure Kinematic Engine & Static Projection (Completed & Accepted)
@@ -183,9 +183,9 @@ Phase 0B is partitioned into four dependency-ordered subphases:
   - Web TypeScript & Vite build: `PASS`.
   - Manual browser smoke test: `PASS` (responsive canvas, 26 pieces rendered, orbit controls functional, 0 runtime errors).
 
-#### Phase 2C: Move Animation & Face Controls (Implemented & Verified)
+#### Phase 2C: Move Animation & Face Controls (Completed & Accepted)
 - **Objective:** React Three Fiber continuous animation binding, 12 face move controls (`U/D/F/B/R/L CW/CCW`), $C^1$ cubic time easing (`MOVE_DURATION_MS = 400`), SpatialFrame lifecycle integration, and endpoint snap-to-fresh-projection.
-- **Status:** `IMPLEMENTED_VERIFIED_READY_FOR_INDEPENDENT_ACCEPTANCE`
+- **Status:** `ACCEPTED & COMMITTED` (Commit `d1ccab37bdf9cbe71dfc96ec2efdeb5081d19985`)
 - **Prerequisites:** Completion of Phase 2B (`ACCEPTED & COMMITTED`).
 - **Deliverables:**
   - `MoveControls.tsx`: 12-move directional button overlay matrix.
@@ -193,15 +193,17 @@ Phase 0B is partitioned into four dependency-ordered subphases:
   - `animation.test.ts`: Pure Node/Vitest test suite verifying 12-move planning, evaluation, completion commit, and sequential move chaining.
   - Viewport & CSS integration: Non-blocking UI overlay, disabled controls during animation, OrbitControls preserved.
 - **Verification Evidence:**
-  - `INITIAL_SOLVED_RENDER_GATE`: `PASS` (exact 26 solved transforms).
-  - `MOVE_START_GATE`: `PASS` (valid pre-derived kinematics plan and target state).
-  - `MID_ANIMATION_EVALUATION_GATE`: `PASS` (continuous evaluation without NaN).
-  - `COMPLETION_GATE`: `PASS` (atomic commit and fresh endpoint projection).
-  - `SEQUENTIAL_MOVE_GATE`: `PASS` (sequential multi-move execution without drift).
-  - `INPUT_IGNORED_GATE`: `PASS` (concurrency isolation).
-  - `TWELVE_MOVE_COVERAGE_GATE`: `12 / 12 PASS` (all moves start and complete).
-  - `IMMUTABILITY_GATE`: `PASS` (input state/frame objects unmutated).
-  - Web TypeScript & Vite build: `PASS`.
+  - Automated Acceptance: `PASS` (14 test files, 149 tests passed; typecheck and web build clean).
+  - Human Browser Acceptance: `PASS` (Interactive 12-move controls, continuous animation, OrbitControls preserved).
+
+#### Phase 2D: Physical Two-Step Turn Staging (Planned / Specification Frozen)
+- **Objective:** Physical two-step turn interaction state machine (90° physical step / 200 ms per step), half-turn lock, continuation to 180° canonical endpoint, and cancellation back to origin.
+- **Status:** `PLANNED / READY_FOR_INDEPENDENT_ACCEPTANCE`
+- **Prerequisites:** Completion of Phase 2C (`ACCEPTED & COMMITTED`).
+- **Deliverables:**
+  - `animation.ts`: Staging state machine (`IDLE`, `FIRST_HALF_ANIMATING`, `HALF_TURN_LOCKED`, `SECOND_HALF_ANIMATING`, `CANCEL_HALF_ANIMATING`) and progress lerping.
+  - `animation.test.ts`: Automated test suite for half-turn holding, continuation, cancellation, and symmetry.
+  - `MoveControls.tsx` & `App.css`: Visual half-turn lock status and selective button enablement.
 
 ---
 
