@@ -803,3 +803,230 @@ If any of the following conditions arise during implementation, stop immediately
 - **`PHASE2D_NEW_ADR_REQUIRED`:** `NO` (The physical two-step turn staging is purely an interactive animation scheduling pattern in `apps/web`; the canonical 180° move algebra and kinematic trajectory formulation remain intact under ADR-0005 and ADR-0006).
 - **`NEW_RUNTIME_DEPENDENCIES`:** `NONE`
 - **`PHASE2D_SCOPE_FROZEN`:** `YES`
+
+---
+---
+
+# PART IV: Phase 2E — Turn Interaction Mode Toggle Specification
+
+> **Phase Status:** `PLANNED / CANONICAL SPECIFICATION FROZEN`
+> **Authoritative Starting Commit:** `47882728cf9ad5e4fd7b0435b446e2db23c24fe6` (`Implement Phase 2D physical turn staging`)
+> **Applicability:** Web Application (`apps/web`), Turn Interaction Preference, Move Controls & Animation Engine
+
+---
+
+## 35. Phase 2E Goal & Product Interaction Contract
+
+### 35.1. Product Goal
+Provide a user-selectable turn interaction mode switch allowing users to toggle between the physical two-step staging mode (`TWO_STEP`) and direct one-click 180° canonical move execution (`DIRECT_180`), without altering the authoritative domain contracts of `@gearcube/core` or kinematic formulation of `@gearcube/kinematics`.
+
+### 35.2. Canonical Modes & Constants
+- **`TURN_INTERACTION_MODES`:** `TWO_STEP`, `DIRECT_180`
+- **`DEFAULT_TURN_INTERACTION_MODE`:** `TWO_STEP`
+- **`DIRECT_180_DURATION_MS`:** `400`
+- **`PHYSICAL_STEP_DURATION_MS`:** `200`
+- **`USER_CONTROL_LABEL`:** `Direct 180°: OFF / ON` (`OFF` = `TWO_STEP`, `ON` = `DIRECT_180`)
+- **`MODE_PERSISTENCE`:** `NONE` (In-memory session state only; resets to `TWO_STEP` on reload)
+- **`INITIAL_PAGE_LOAD_MODE`:** `TWO_STEP`
+- **`CORE_TURN_MODE`:** `NONE`
+- **`KINEMATICS_TURN_MODE`:** `NONE`
+
+---
+
+## 36. Mode Semantics & Execution Models
+
+### 36.1. TWO_STEP Mode Semantics (Default)
+Preserves accepted Phase 2D physical turn staging behavior unchanged:
+1. First input on Face $M$: animates $p: 0.0 \to 0.5$ over 200 ms -> enters `HALF_TURN_LOCKED` at physical midpoint with zero state/frame commit.
+2. Same direction input: animates $p: 0.5 \to 1.0$ over 200 ms -> commits canonical state/frame and snaps to fresh endpoint projection.
+3. Opposite direction input: animates $p: 0.5 \to 0.0$ over 200 ms -> cancels back to origin without state/frame commit and snaps to fresh original projection.
+4. Other 5 faces: strictly blocked during `HALF_TURN_LOCKED`.
+
+- **`TWO_STEP_BEHAVIOR_CHANGED`:** `NO`
+
+### 36.2. DIRECT_180 Mode Semantics
+When `interactionMode === "DIRECT_180"` and session is `IDLE`:
+1. Single click on any of the 12 directed move buttons derives exactly one canonical plan: `plan = planKinematics(fromView, move, toView)`.
+2. Enters `DIRECT_FULL_ANIMATING` and animates canonical progress $p: 0.0 \to 1.0$ over 400 ms (`DIRECT_180_DURATION_MS`).
+3. Passes smoothly and continuously through $p = 0.5$ at $t = 200\text{ ms}$ without stopping or entering `HALF_TURN_LOCKED`.
+4. At completion ($t = 400\text{ ms}$): commits `currentState = nextState`, `currentFrame = nextFrame`, and snaps to fresh endpoint projection: `placementToTransforms(materializeState(currentState, currentFrame))`.
+
+- **`DIRECT_180_HALF_TURN_LOCK`:** `NO`
+- **`DIRECT_180_LOGICAL_COMMIT_BEFORE_COMPLETION`:** `NO`
+- **`DIRECT_180_PLAN_COUNT_PER_MOVE`:** `1`
+- **`DIRECT_180_PERMANENT_ENDPOINT`:** `FRESH_MATERIALIZATION`
+
+---
+
+## 37. Extended State Machine & Pure Session Model
+
+### 37.1. Staging Lifecycle Phases:
+- **`IDLE`:** Session rests at a stable canonical endpoint. Mode switching, all 12 move controls, and Camera OrbitControls (drag/orbit/zoom) are enabled.
+- **`FIRST_HALF_ANIMATING`:** Animating canonical progress $p: 0.0 \to 0.5$ over 200 ms. All move inputs and turn-interaction-mode switches are disabled. Camera OrbitControls (drag/orbit/zoom) remain enabled.
+- **`HALF_TURN_LOCKED`:** Holding at physical midpoint ($p = 0.5$). Active face controls enabled (finish/reverse); all other face controls and mode switches disabled. Camera OrbitControls (drag/orbit/zoom) remain enabled.
+- **`SECOND_HALF_ANIMATING`:** Animating canonical progress $p: 0.5 \to 1.0$ over 200 ms. All move inputs and turn-interaction-mode switches are disabled. Camera OrbitControls (drag/orbit/zoom) remain enabled.
+- **`CANCEL_HALF_ANIMATING`:** Animating canonical progress $p: 0.5 \to 0.0$ over 200 ms. All move inputs and turn-interaction-mode switches are disabled. Camera OrbitControls (drag/orbit/zoom) remain enabled.
+- **`DIRECT_FULL_ANIMATING`:** Animating canonical progress $p: 0.0 \to 1.0$ over 400 ms. All move inputs and turn-interaction-mode switches are disabled. Camera OrbitControls (drag/orbit/zoom) remain enabled.
+
+### 37.2. State Transition Flowchart:
+```text
+                             [ IDLE ]
+                            /        \
+                           /          \
+           [ Mode: TWO_STEP ]        [ Mode: DIRECT_180 ]
+                  │                           │
+                  ▼                           ▼
+       [ FIRST_HALF_ANIMATING ]    [ DIRECT_FULL_ANIMATING ]
+         (p: 0.0 -> 0.5, 200ms)      (p: 0.0 -> 1.0, 400ms)
+                  │                           │
+                  ▼                           │
+         [ HALF_TURN_LOCKED ]                 │
+          /                \                  │
+     Same Dir            Opposite Dir         │
+        /                    \                │
+       ▼                      ▼               │
+[ SECOND_HALF_ANIMATING ]  [ CANCEL_HALF_ANIMATING ]
+  (p: 0.5 -> 1.0, 200ms)     (p: 0.5 -> 0.0, 200ms)  │
+       │                      │               │
+       ▼                      ▼               │
+  Commit State/Frame     Retain State/Frame   │
+       │                      │               │
+       ▼                      ▼               ▼
+ Fresh Endpoint Proj   Fresh Original Proj  Commit State/Frame & Fresh Proj
+       │                      │               │
+       └──────────────────────┴───────────────┘
+                              ▼
+                           [ IDLE ]
+```
+
+### 37.3. Mode Switching Policy & Invariants:
+- **`MODE_SWITCH_ALLOWED_WHEN`:** `IDLE_ONLY`
+- **`MODE_SWITCH_DURING_FIRST_HALF`:** `BLOCKED`
+- **`MODE_SWITCH_AT_HALF_TURN_LOCKED`:** `BLOCKED`
+- **`MODE_SWITCH_DURING_SECOND_HALF`:** `BLOCKED`
+- **`MODE_SWITCH_DURING_CANCEL`:** `BLOCKED`
+- **`MODE_SWITCH_DURING_DIRECT_FULL`:** `BLOCKED`
+- **`MOVE_INPUT_DISABLED_DURING_ACTIVE_ANIMATION`:** `YES`
+- **`TURN_MODE_SWITCH_DISABLED_WHILE_NOT_IDLE`:** `YES`
+- **`CAMERA_ORBIT_DISABLED_BY_TURN_STAGING`:** `NO`
+- **`CAMERA_ZOOM_DISABLED_BY_TURN_STAGING`:** `NO`
+- **`ORBIT_CONTROLS_ACTIVE_DURING`:** `IDLE, FIRST_HALF_ANIMATING, HALF_TURN_LOCKED, SECOND_HALF_ANIMATING, CANCEL_HALF_ANIMATING, DIRECT_FULL_ANIMATING`
+
+> **Note on Input Scoping:** In this specification, "input blocked" and "input disabled" refer strictly to puzzle move triggering and turn-interaction-mode changes. Camera inspection controls (drag, orbit, rotate, zoom) remain continuously active and unimpeded across all staging phases.
+
+---
+
+## 38. Architecture Invariants & Layer Boundaries
+
+- **`CORE_CHANGED`:** `NO`
+- **`KINEMATICS_CHANGED`:** `NO`
+- **`CANONICAL_MOVE_MODEL_CHANGED`:** `NO`
+- **`NO_INTERMEDIATE_LOGICAL_STATE`:** `YES`
+- **`NO_RENDERER_DERIVED_STATE`:** `YES`
+- **`NO_FLOAT_ACCUMULATION`:** `YES`
+- **`DIRECT_AND_TWO_STEP_USE_EXISTING_KINEMATIC_PLAN`:** `YES`
+
+---
+
+## 39. MoveControls UI Specification
+
+### 39.1. UI Overlay Requirements:
+- **`TURN_MODE_CONTROL_VISIBLE`:** `YES`
+- **`TURN_MODE_CONTROL_DISABLED_WHILE_NOT_IDLE`:** `YES`
+- **`CURRENT_MODE_VISIBILITY`:** `REQUIRED`
+
+### 39.2. Header & Controls Layout:
+- Header includes `Face Controls` title, interactive `Direct 180°` toggle switch, and dynamic status indicator.
+- When in `TWO_STEP` mode and locked: displays existing Phase 2D half-turn guidance banner.
+- When in `DIRECT_180` mode and animating: displays `Turning (180°)...` indicator.
+- During any animation or half-turn lock: mode switch control is disabled (`disabled={!isIdle}`).
+
+---
+
+## 40. Testing & Verification Strategy for Phase 2E
+
+### 40.1. Automated Test Gates (`apps/web/src/components/cube/animation.test.ts`):
+1. **`DEFAULT_MODE_GATE`:** Initial session initializes with `interactionMode === "TWO_STEP"`.
+2. **`IDLE_MODE_SWITCH_GATE`:** `setTurnInteractionMode` successfully toggles between `"TWO_STEP"` and `"DIRECT_180"` while session is `IDLE`.
+3. **`MODE_SWITCH_BLOCKED_WHILE_BUSY_GATE`:** Attempting to switch mode while in `FIRST_HALF_ANIMATING`, `HALF_TURN_LOCKED`, `SECOND_HALF_ANIMATING`, `CANCEL_HALF_ANIMATING`, or `DIRECT_FULL_ANIMATING` is strictly rejected and leaves mode unchanged.
+4. **`DIRECT_180_START_GATE`:** In `DIRECT_180` mode, `startMove` initiates `DIRECT_FULL_ANIMATING` with `durationMs = 400` and leaves domain state uncommitted.
+5. **`DIRECT_180_MID_PROGRESS_GATE`:** At $t = 200\text{ ms}$, display transforms correspond to continuous canonical $p = 0.5$; phase remains `DIRECT_FULL_ANIMATING` and does NOT enter `HALF_TURN_LOCKED`.
+6. **`DIRECT_180_COMPLETION_GATE`:** At $t = 400\text{ ms}$, completes full canonical move, commits `nextState`/`nextFrame` exactly once, clears active session, and snaps to fresh endpoint projection.
+7. **`DIRECT_180_INPUT_BLOCKED_GATE`:** Inputs during `DIRECT_FULL_ANIMATING` are strictly ignored.
+8. **`DIRECT_180_TWELVE_MOVE_GATE`:** All 12 directed moves in `ALL_MOVES` complete accurately with 1 click in `DIRECT_180` mode.
+9. **`TWO_STEP_REGRESSION_GATE`:** All Phase 2D two-step staging tests (holding, continuing, cancelling, 12-move symmetry) pass without regression.
+10. **`MODE_ISOLATION_GATE`:** `DIRECT_180` never enters `HALF_TURN_LOCKED`; `TWO_STEP` never enters `DIRECT_FULL_ANIMATING`.
+11. **`MIXED_MODE_SEQUENCE_GATE`:** Alternating sequences between `TWO_STEP` and `DIRECT_180` chain seamlessly across different axes from the prior committed endpoint.
+12. **`FRESH_ENDPOINT_PROJECTION_GATE`:** Fresh endpoint materialization verified on completion in both modes.
+13. **`IMMUTABILITY_GATE`:** Domain structures remain unmutated throughout mode switching and execution.
+14. **`RENDERER_REGRESSION_GATE`:** `GearCubeModel.test.ts` passes 100%.
+15. **`WEB_TYPECHECK_GATE`:** `npm run typecheck --workspace=@gearcube/web` passes with 0 errors.
+16. **`WEB_BUILD_GATE`:** `npm run build --workspace=@gearcube/web` passes with 0 bundling errors.
+17. **`ROOT_VERIFY_GATE`:** `npm run verify` passes with 0 failures.
+
+### 40.2. Manual Human Browser Smoke Gates:
+- **`HUMAN_TOGGLE_VISIBLE_GATE`:** `REQUIRED / TO_VERIFY` (Direct 180° toggle switch visible in MoveControls header).
+- **`HUMAN_DEFAULT_TWO_STEP_GATE`:** `REQUIRED / TO_VERIFY` (Default toggle state is OFF / TWO_STEP).
+- **`HUMAN_DIRECT_180_ONE_CLICK_FULL_TURN_GATE`:** `REQUIRED / TO_VERIFY` (Toggling ON enables one-click full 180° turn).
+- **`HUMAN_DIRECT_180_SMOOTH_MIDPOINT_CONTINUOUS_GATE`:** `REQUIRED / TO_VERIFY` (Direct turn passes smoothly through midpoint without stopping).
+- **`HUMAN_TOGGLE_DISABLED_DURING_ANIMATION_GATE`:** `REQUIRED / TO_VERIFY` (Toggle disabled during any animation).
+- **`HUMAN_TOGGLE_DISABLED_AT_HALF_TURN_LOCK_GATE`:** `REQUIRED / TO_VERIFY` (Toggle disabled during midpoint hold in TWO_STEP mode).
+- **`HUMAN_MODE_SWITCH_SURVIVES_IDLE_CYCLES_GATE`:** `REQUIRED / TO_VERIFY` (Mode can be freely switched back and forth when IDLE).
+- **`HUMAN_MIXED_MODE_SEQUENCE_NO_DRIFT_GATE`:** `REQUIRED / TO_VERIFY` (Executing moves in mixed modes accumulates zero visual drift).
+- **`HUMAN_ORBIT_ZOOM_SURVIVES_BOTH_MODES_GATE`:** `REQUIRED / TO_VERIFY` (Camera orbit and zoom remain fully interactive across all 6 staging states: IDLE, FIRST_HALF_ANIMATING, HALF_TURN_LOCKED, SECOND_HALF_ANIMATING, CANCEL_HALF_ANIMATING, and DIRECT_FULL_ANIMATING).
+- **`CONSOLE_RUNTIME_ERROR_GATE`:** `NOT_VERIFIED_BY_AGENT` (Human independent verification).
+
+---
+
+## 41. Frozen Phase 2E Implementation Scope
+
+### 41.1. Files to MODIFY (exactly 6 files):
+1. `apps/web/src/components/cube/animation.ts` (Add `TurnInteractionMode`, `DIRECT_FULL_ANIMATING` phase, mode setter, and direct 180 execution)
+2. `apps/web/src/components/cube/animation.test.ts` (Comprehensive unit test suite for mode switching, direct 180 execution, isolation, and regression)
+3. `apps/web/src/components/canvas/GearCubeViewport.tsx` (Wire interaction mode state and mode switch handler)
+4. `apps/web/src/components/controls/MoveControls.tsx` (Add Direct 180° toggle switch, mode status display, and disablement during busy states)
+5. `apps/web/src/App.css` (Styles for mode toggle switch and updated header layout)
+6. `docs/development/ROADMAP.md` (Update Phase 2 status and record Phase 2E milestones)
+
+### 41.2. Files to CREATE:
+- `NONE`
+
+### 41.3. Future Implementation File Count:
+- **`FUTURE_IMPLEMENTATION_FILE_COUNT`:** `6` (0 CREATE, 6 MODIFY)
+
+### 41.4. Files Explicitly UNCHANGED:
+- `package.json`
+- `package-lock.json` (Zero new dependencies)
+- `tsconfig.base.json`
+- `scripts/check-core-deps.mjs`
+- `packages/core/**` (100% frozen)
+- `packages/kinematics/**` (100% frozen)
+- `apps/web/src/App.tsx`
+- `apps/web/src/components/cube/GearCubeModel.tsx`
+- `apps/web/src/components/cube/CornerPiece.tsx`
+- `apps/web/src/components/cube/EdgePiece.tsx`
+- `apps/web/src/components/cube/CenterPiece.tsx`
+- `apps/web/src/components/cube/materials.ts`
+- `docs/architecture/**`
+- `docs/decisions/**`
+
+---
+
+## 42. Stop Conditions
+
+If any of the following conditions arise during implementation, stop immediately:
+1. **`CORE_CHANGE_REQUIRED`:** Any requirement to modify `@gearcube/core`.
+2. **`KINEMATICS_CHANGE_REQUIRED`:** Any requirement to modify `@gearcube/kinematics`.
+3. **`NEW_DEPENDENCY_REQUIRED`:** Any requirement to install new runtime or dev dependencies.
+4. **`SCOPE_EXPANSION_REQUIRED`:** Any requirement to edit files outside the frozen 6-file scope.
+5. **`ARCHITECTURE_CONFLICT`:** Any conflict with ADR-0004, ADR-0005, or ADR-0006.
+6. **`WEBGL_TEST_DEPENDENCY_REQUIRED`:** Any automated test requiring headless WebGL or browser mocking.
+7. **`USE_FRAME_OUTSIDE_CANVAS_REQUIRED`:** Any architectural failure preventing `useFrame` from executing inside a Canvas descendant.
+
+---
+
+## 43. Architecture Review & Decision Status
+
+- **`PHASE2E_NEW_ADR_REQUIRED`:** `NO` (The turn interaction mode toggle is purely a user preference and animation scheduling pattern in `apps/web`; the canonical 180° move algebra and kinematic trajectory formulation remain intact under ADR-0005 and ADR-0006).
+- **`NEW_RUNTIME_DEPENDENCIES`:** `NONE`
+- **`PHASE2E_SCOPE_FROZEN`:** `YES`

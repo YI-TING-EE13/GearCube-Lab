@@ -1,7 +1,7 @@
 # ROADMAP.md — Project Lifecycle & Dependency-Ordered Milestones
 
 > **Current Project Phase:** `Phase 2 — 3D Graphics & Kinematic Animation`
-> **Status:** Active Execution (Phase 2D Physical Turn Staging Implemented — Ready for Independent Verification)
+> **Status:** Active Execution (Phase 2E Turn Interaction Mode Toggle Plan Frozen — Ready for Independent Acceptance)
 
 ---
 
@@ -145,7 +145,7 @@ Phase 0B is partitioned into four dependency-ordered subphases:
 
 ### Phase 2: 3D Model, Visual Assets, and Kinematic Animation Engine (In Progress)
 - **Objective:** Scaffolding Vite + React + Three.js / R3F, implementing modular 3D gear geometry, and coupling visual motion via kinematic trajectory planning.
-- **Status:** `IN PROGRESS` — Phase 2A/2B/2C completed & accepted; Phase 2D planned.
+- **Status:** `IN PROGRESS` — Phase 2A/2B/2C/2D completed & accepted; Phase 2E planned.
 - **Prerequisites:** Completion of Phase 1 (`ACCEPTED & COMMITTED`).
 
 #### Phase 2A: Pure Kinematic Engine & Static Projection (Completed & Accepted)
@@ -196,30 +196,26 @@ Phase 0B is partitioned into four dependency-ordered subphases:
   - Automated Acceptance: `PASS` (14 test files, 149 tests passed; typecheck and web build clean).
   - Human Browser Acceptance: `PASS` (Interactive 12-move controls, continuous animation, OrbitControls preserved).
 
-#### Phase 2D: Physical Two-Step Turn Staging (Implemented & Verified)
+#### Phase 2D: Physical Two-Step Turn Staging (Completed & Accepted)
 - **Objective:** Physical two-step turn interaction state machine (90° physical step / 200 ms per step), half-turn lock, continuation to 180° canonical endpoint, and cancellation back to origin.
-- **Status:** `IMPLEMENTED_VERIFIED_READY_FOR_INDEPENDENT_ACCEPTANCE`
+- **Status:** `ACCEPTED & COMMITTED` (Commit `47882728cf9ad5e4fd7b0435b446e2db23c24fe6`)
 - **Prerequisites:** Completion of Phase 2C (`ACCEPTED & COMMITTED`).
 - **Deliverables:**
   - `animation.ts`: Staging state machine (`IDLE`, `FIRST_HALF_ANIMATING`, `HALF_TURN_LOCKED`, `SECOND_HALF_ANIMATING`, `CANCEL_HALF_ANIMATING`) and progress lerping.
   - `animation.test.ts`: Automated test suite for half-turn holding, continuation, cancellation, and symmetry.
   - `MoveControls.tsx` & `App.css`: Visual half-turn lock status and selective button enablement.
 - **Verification Evidence:**
-  - `FIRST_HALF_GATE`: `PASS` (exact p=0.5 evaluation, no logical state commit).
-  - `HALF_TURN_LOCK_GATE`: `PASS` (stable midpoint hold, no drift over time).
-  - `SAME_DIRECTION_CONTINUE_GATE`: `PASS` (second 90° step completes full canonical 180° move and commits).
-  - `OPPOSITE_DIRECTION_CANCEL_GATE`: `PASS` (opposite direction cancels back to origin without state mutation).
-  - `OTHER_FACE_BLOCKED_GATE`: `PASS` (all other faces blocked at midpoint).
-  - `INITIAL_CCW_SYMMETRY_GATE`: `PASS` (symmetrical CCW behavior).
-  - `TWELVE_DIRECTED_MOVE_STAGING_GATE`: `12 / 12 PASS` (all moves support two-step staging).
-  - `TWELVE_DIRECTED_MOVE_CANCEL_GATE`: `12 / 12 PASS` (all moves support two-step cancellation).
-  - `SEQUENTIAL_CANONICAL_MOVE_GATE`: `PASS` (multi-move sequences chain accurately).
-  - `NO_HALF_STATE_COMMIT_GATE`: `PASS` (domain state unmutated at midpoint).
-  - `FRESH_ENDPOINT_PROJECTION_GATE`: `PASS` (fresh projection on full completion).
-  - `FRESH_CANCEL_PROJECTION_GATE`: `PASS` (fresh projection on cancellation).
-  - `INPUT_DURING_ANIMATION_GATE`: `PASS` (concurrency isolation during transitions).
-  - `IMMUTABILITY_GATE`: `PASS` (input state/frame objects unmutated).
-  - Web TypeScript & Vite build: `PASS`.
+  - Automated Acceptance: `PASS` (14 test files, 153 tests passed; typecheck and web build clean).
+  - Human Browser Acceptance: `PASS` (Two-step 90° staging, midpoint hold, continuation, and cancellation).
+
+#### Phase 2E: Turn Interaction Mode Toggle (Planned / Specification Frozen)
+- **Objective:** User-selectable turn interaction mode switch (`TWO_STEP` vs `DIRECT_180`), state machine extension (`DIRECT_FULL_ANIMATING`), mode switching isolation, and MoveControls toggle UI.
+- **Status:** `PLANNED / READY_FOR_INDEPENDENT_ACCEPTANCE`
+- **Prerequisites:** Completion of Phase 2D (`ACCEPTED & COMMITTED`).
+- **Deliverables:**
+  - `animation.ts`: `TurnInteractionMode` ('TWO_STEP' | 'DIRECT_180'), `DIRECT_FULL_ANIMATING` phase, mode switching function, and direct 180° execution.
+  - `animation.test.ts`: Automated test suite for mode switching, direct 180° execution, isolation, and regression.
+  - `MoveControls.tsx` & `App.css`: Direct 180° toggle switch and mode status display.
 
 ---
 
