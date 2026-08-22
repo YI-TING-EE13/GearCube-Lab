@@ -1,7 +1,7 @@
 # ROADMAP.md — Project Lifecycle & Dependency-Ordered Milestones
 
-> **Current Milestone:** `Phase 2 — 3D Graphics & Kinematic Animation (Completed & Accepted)`
-> **Next Milestone:** `Phase 3 — Interactive UI, History, Undo/Redo, and Scramble (Not Started / Planning Next)`
+> **Current Milestone:** `Phase 3 — Interactive UI, History, Undo/Redo, and Scramble (Planning / Ready for Independent Acceptance)`
+> **Previous Milestone:** `Phase 2 — 3D Graphics & Kinematic Animation (Completed & Accepted)`
 
 ---
 
@@ -35,7 +35,11 @@
       └─ 2E: Turn Interaction Mode Toggle (Completed & Accepted)
       │
       ▼
-[ Phase 3: Interactive UI, History & Scramble ]
+[ Phase 3: Interactive UI, History & Scramble ] (Active Planning)
+      ├─ 3 Preflight: Architecture & Test Documentation Sync (Planned)
+      ├─ 3A: Application History & Deterministic Scramble Engine (Planned)
+      ├─ 3B: Interactive Play Store, Undo/Redo & Timeline Scrubber UI (Planned)
+      └─ 3C: Keyboard Controls, Responsive Layout & Playwright Browser E2E (Planned)
       │
       ▼
 [ Phase 4: Classical Solver Infrastructure ]
@@ -227,18 +231,24 @@ Phase 0B is partitioned into four dependency-ordered subphases:
 
 ---
 
-### Phase 3: Interactive UI, History, Undo/Redo, and Scramble
-- **Objective:** Implement the user-facing `Play Mode` UI, button-based face controls, history scrubber, undo/redo, and scramble generator.
-- **Prerequisites:** Completion of Phase 2.
-- **In-Scope:** `packages/ui`, Zustand application stores, control overlay, move history timeline.
-- **Out-of-Scope:** Solver execution, benchmark suite.
-- **Deliverables:**
-  - Responsive control panels matching Apple-inspired minimalist aesthetic.
-  - Deterministic scramble generator with seed input.
-- **Verification:** Playwright E2E interaction test suite; manual usability audit.
+### Phase 3: Interactive UI, History, Undo/Redo, and Scramble (Planning)
+- **Objective:** Implement the user-facing `Play Mode` UI, button-based face controls, history timeline scrubber, undo/redo, deterministic scramble generator, keyboard shortcuts, and automated Playwright browser E2E tests.
+- **Status:** `PLANNING / READY_FOR_INDEPENDENT_ACCEPTANCE` (Implementation blocked pending Architecture & Test Documentation Sync; formalized in [`docs/development/PHASE_3_IMPLEMENTATION_PLAN.md`](./PHASE_3_IMPLEMENTATION_PLAN.md)).
+- **Prerequisites:** Completion of Phase 2 (`ACCEPTED & COMMITTED`).
+- **In-Scope:** Architecture doc sync preflight, application history state, timeline scrubber, undo/redo, Mulberry32 deterministic scramble generator, keyboard shortcuts, responsive control overlay, root Playwright browser E2E test suite.
+- **Out-of-Scope:** Solver algorithms, benchmark harness, computer vision.
+- **Subphases:**
+  - **Phase 3 Preflight:** Architecture & Test Documentation Sync (`docs/architecture/SYSTEM_ARCHITECTURE.md`, `docs/development/TEST_STRATEGY.md`).
+  - **Phase 3A:** Application History & Deterministic Scramble Engine (`apps/web/src/components/history/history.ts`, `scramble.ts`, Vitest unit test suites).
+  - **Phase 3B:** Interactive Play Store, Undo/Redo & Timeline Scrubber UI (`HistoryControls.tsx`, `TimelineScrubber.tsx`, `ScramblePanel.tsx`).
+  - **Phase 3C:** Keyboard Controls, Responsive Layout & Playwright Browser E2E (`useKeyboardControls.ts`, responsive CSS, `playwright.config.ts`, `tests/e2e/**`, human browser acceptance).
 - **Acceptance Gate Criteria (`PHASE_3_PASS`):**
+  - [ ] Architecture documentation synchronized with accepted single-app topology prior to code implementation.
   - [ ] Undo/Redo traverses arbitrary move histories without state desynchronization.
-  - [ ] Keyboard shortcuts and button clicks reliably trigger animations.
+  - [ ] Scramble generator deterministically reproduces sequences from seeds without consecutive same-face moves.
+  - [ ] Keyboard shortcuts and button clicks reliably trigger moves while guarding focus and animation states.
+  - [ ] Root Playwright browser E2E test suite validates all primary user interaction workflows.
+  - [ ] Full Phase 2 regression suite (14 test files, 168 tests) remains 100% passing.
 
 ---
 
