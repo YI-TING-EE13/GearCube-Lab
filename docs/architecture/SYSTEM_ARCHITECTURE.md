@@ -51,9 +51,9 @@ graph TD
     %% Interactions
     UI -->|Render Calls & Skin Config| Renderer
     UI -->|Dispatches Moves| Core
-    Core -->|State Transitions| Kinematics
+    Core -->|materializeState -> fromView/toView| Kinematics
     Core -->|Generates Hashes| Encoding
-    Kinematics -->|Keyframe Trajectories| Renderer
+    Kinematics -->|Evaluated Transforms| Renderer
 
     UI -->|Initiates Solve / Config| SolverWorker
     SolverWorker -->|Evaluates States & Legal Moves| Core
@@ -81,13 +81,13 @@ graph TD
 
 ### 3.2. Kinematic Engine (`packages/kinematics`)
 - **Responsibilities:**
-  - Converts discrete move transitions into continuous kinematic trajectories parameterized by normalized mechanical progress $p \in [0, 1]$ (detailed in [`KINEMATIC_CONTRACT.md`](KINEMATIC_CONTRACT.md)).
+  - Converts physical piece placement views `(fromView, move, toView)` into continuous kinematic trajectories parameterized by normalized mechanical progress $p \in [0, 1]$ pursuant to [`ADR-0006`](../decisions/ADR-0006-VIEW-BASED-KINEMATICS-AND-RENDERER-QUOTIENTS.md) and [`KINEMATIC_CONTRACT.md`](KINEMATIC_CONTRACT.md).
   - Computes exact coupled angular displacements:
     - Outer face: $180^\circ \cdot p$
     - Middle slice: $90^\circ \cdot p$
     - Intermediate gear cogs: $60^\circ \cdot p$
   - Generates evaluated rigid-body component transforms for smooth 3D animation.
-- **Prohibited Dependencies:** Does not depend on WebGL rendering contexts, Three.js meshes, or DOM elements.
+- **Prohibited Dependencies:** Does not depend on WebGL rendering contexts, Three.js meshes, React, or DOM elements.
 
 ### 3.3. 3D Renderer & Visual Skins (`packages/renderer`)
 - **Responsibilities:**

@@ -31,6 +31,7 @@ docs/
 │   ├── PHASE_1C_IMPLEMENTATION_PLAN.md # Phase 1C direct canonical move-transition engine plan
 │   ├── PHASE_1D_IMPLEMENTATION_PLAN.md # Phase 1D SpatialFrame, Materialization & Serialization plan
 │   ├── PHASE_1E_IMPLEMENTATION_PLAN.md # Phase 1E Group Invariants & Exhaustive Reachable State Closure plan
+│   ├── PHASE_2_IMPLEMENTATION_PLAN.md # Phase 2 3D Graphics & Kinematic Animation plan
 │   ├── ADR_0004_CENTER_ORIENTATION_PLAN.md # ADR-0004 Center orientation semantics plan
 │   └── ADR_0005_TRANSITION_REPAIR_PLAN.md # ADR-0005 Canonical transition repair plan
 ├── operations/
@@ -40,7 +41,8 @@ docs/
 │   ├── ADR-0002-STANDARD-GEAR-CUBE-REFERENCE.md # Decision Record: Standard Gear Cube model adoption
 │   ├── ADR-0003-CORE-STATE-REPRESENTATION.md # Decision Record: Canonical state & derived views
 │   ├── ADR-0004-CENTER-ORIENTATION-SEMANTICS.md # Decision Record (Accepted): Center orientation quotient & derivation
-│   └── ADR-0005-CANONICAL-MOVE-TRANSITION-ALGEBRA.md # Decision Record (Accepted): Canonical move transition algebra
+│   ├── ADR-0005-CANONICAL-MOVE-TRANSITION-ALGEBRA.md # Decision Record (Accepted): Canonical move transition algebra
+│   └── ADR-0006-VIEW-BASED-KINEMATICS-AND-RENDERER-QUOTIENTS.md # Decision Record (Accepted): View-based kinematics & renderer quotients
 ```
 
 ---
@@ -82,6 +84,7 @@ Throughout all documents in `docs/`, technical specifications and mechanical ass
 - **Phase 1C Move-Transition Engine Plan:** [`docs/development/PHASE_1C_IMPLEMENTATION_PLAN.md`](development/PHASE_1C_IMPLEMENTATION_PLAN.md)
 - **Phase 1D Materialization & Serialization Plan:** [`docs/development/PHASE_1D_IMPLEMENTATION_PLAN.md`](development/PHASE_1D_IMPLEMENTATION_PLAN.md)
 - **Phase 1E Exhaustive Reachability Plan:** [`docs/development/PHASE_1E_IMPLEMENTATION_PLAN.md`](development/PHASE_1E_IMPLEMENTATION_PLAN.md)
+- **Phase 2 Graphics & Kinematics Plan:** [`docs/development/PHASE_2_IMPLEMENTATION_PLAN.md`](development/PHASE_2_IMPLEMENTATION_PLAN.md)
 - **ADR-0004 Center Orientation Plan:** [`docs/development/ADR_0004_CENTER_ORIENTATION_PLAN.md`](development/ADR_0004_CENTER_ORIENTATION_PLAN.md)
 - **ADR-0005 Transition Repair Plan:** [`docs/development/ADR_0005_TRANSITION_REPAIR_PLAN.md`](development/ADR_0005_TRANSITION_REPAIR_PLAN.md)
 - **Developer Guidelines & Tooling:** [`docs/development/DEVELOPMENT_GUIDE.md`](development/DEVELOPMENT_GUIDE.md)
@@ -89,3 +92,4 @@ Throughout all documents in `docs/`, technical specifications and mechanical ass
 - **Foundational Architecture Decisions (ADR-0001):** [`docs/decisions/ADR-0001-FOUNDATION.md`](decisions/ADR-0001-FOUNDATION.md)
 - **Center Orientation Semantics Decision (ADR-0004 - Accepted):** [`docs/decisions/ADR-0004-CENTER-ORIENTATION-SEMANTICS.md`](decisions/ADR-0004-CENTER-ORIENTATION-SEMANTICS.md)
 - **Canonical Move Transition Algebra Decision (ADR-0005 - Accepted):** [`docs/decisions/ADR-0005-CANONICAL-MOVE-TRANSITION-ALGEBRA.md`](decisions/ADR-0005-CANONICAL-MOVE-TRANSITION-ALGEBRA.md)
+- **View-Based Kinematics & Renderer Quotients Decision (ADR-0006 - Accepted):** [`docs/decisions/ADR-0006-VIEW-BASED-KINEMATICS-AND-RENDERER-QUOTIENTS.md`](decisions/ADR-0006-VIEW-BASED-KINEMATICS-AND-RENDERER-QUOTIENTS.md)

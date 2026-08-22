@@ -1,7 +1,7 @@
 # ROADMAP.md — Project Lifecycle & Dependency-Ordered Milestones
 
-> **Current Project Phase:** `Phase 1E — Group Invariants & Exhaustive Reachable State Closure (Implemented / Ready for Independent Acceptance)`
-> **Status:** Active Execution (Phase 1E Core Acceptance Implementation Complete & Verified)
+> **Current Project Phase:** `Phase 2 — 3D Graphics & Kinematic Animation (Planning Phase)`
+> **Status:** Active Execution (Phase 2 Architecture Contract Accepted; Pending Phase 2A Scope Freeze)
 
 ---
 
@@ -18,16 +18,16 @@
       └─ 0B.4: Final Cross-Contract Audit (Accepted)
       │
       ▼
-[ Phase 1: Discrete Domain Core Engine ]
+[ Phase 1: Discrete Domain Core Engine ] (Completed & Accepted)
       ├─ 1A: Project Bootstrap & Core Package Boundary (Accepted)
       ├─ 1B: Canonical State / Value Types & Validation (Accepted)
       ├─ 1C: Move Transition Engine & Action Algebra (Accepted Baseline)
       │     └─ ADR-0005 Canonical Transition Repair (Accepted & Committed)
       ├─ 1D: Coordinate Views & Structural Codecs (Completed & Accepted)
-      └─ 1E: Group Invariants & Reachable State Closure (Implemented / Ready for Review)
+      └─ 1E: Group Invariants & Reachable State Closure (Completed & Accepted)
       │
       ▼
-[ Phase 2: 3D Graphics & Kinematic Animation ]
+[ Phase 2: 3D Graphics & Kinematic Animation ] (Active Planning)
       │
       ▼
 [ Phase 3: Interactive UI, History & Scramble ]
@@ -119,7 +119,7 @@ Phase 0B is partitioned into four dependency-ordered subphases:
 
 ---
 
-### Phase 1: Discrete Domain Core Engine
+### Phase 1: Discrete Domain Core Engine (Completed & Accepted)
 - **Objective:** Implement the pure TypeScript combinatorial state engine, move validator, and coordinate model.
 - **Prerequisites:** Completion of Phase 0B.
 
@@ -137,21 +137,22 @@ Phase 0B is partitioned into four dependency-ordered subphases:
 - Derived `PiecePlacementView` materialization (`materializeState`), quotiented center placement (`CenterPlacement` with `{ slot, pieceId }` pursuant to accepted [`ADR-0004`](../decisions/ADR-0004-CENTER-ORIENTATION-SEMANTICS.md)), Model A center identity derivation, `SpatialFrame` orientation lifecycle (`nextSpatialFrame`), and strict canonical logical serialization (`serializeLogicalState`, `deserializeLogicalState`).
 - **Status:** `ACCEPTED & COMMITTED` (Commit `e31cd87b0db153140d9c4780ac2b7f4953d294d0`). Successfully integrated and verified with 165,888/165,888 materialization recoveries, 1,990,656/1,990,656 lifecycle transitions verified against independent physical oracle, and 41,472/41,472 serialization round-trips with zero dependency drift.
 
-#### Phase 1E: Group Invariants & Exhaustive Reachable State Closure (Implemented / Ready for Independent Acceptance)
+#### Phase 1E: Group Invariants & Exhaustive Reachable State Closure (Completed & Accepted)
 - Exhaustive BFS traversal ($41,472 / 41,472$ states reachable from solved), reachable-set 12-move graph closure ($497,664 / 497,664$), per-directed-move domain bijections ($12 / 12$), derived strong connectedness, and canonical directed move metric distance characterization (diameter 8).
-- **Status:** `IMPLEMENTED_VERIFIED_READY_FOR_INDEPENDENT_ACCEPTANCE`. Formalized in [`packages/core/tests/core-reachability.test.ts`](../../packages/core/tests/core-reachability.test.ts) (6 tests passing in 3.1s; full repository verify passing 10 test files and 123 tests).
+- **Status:** `ACCEPTED & COMMITTED` (Commit `ac91e8cde3deae0ecbe18ed3b3accf384e3e3694`). Formalized in [`packages/core/tests/core-reachability.test.ts`](../../packages/core/tests/core-reachability.test.ts) (6 tests passing in 2.96s; full repository verify passing 10 test files and 123 tests).
 
 ---
 
-### Phase 2: 3D Model, Visual Assets, and Kinematic Animation Engine
+### Phase 2: 3D Model, Visual Assets, and Kinematic Animation Engine (Active Planning)
 - **Objective:** Scaffolding Vite + React + Three.js / R3F, implementing modular 3D gear geometry, and coupling visual motion via kinematic trajectory planning.
-- **Prerequisites:** Completion of Phase 1.
-- **In-Scope:** `packages/kinematics`, `packages/renderer`, R3F canvas, procedural/instanced gear meshes, visual skins.
-- **Out-of-Scope:** Solvers, complex UI panels, camera vision.
+- **Status:** `ACTIVE / PLANNING` — Architecture contract accepted ([`ADR-0006`](../decisions/ADR-0006-VIEW-BASED-KINEMATICS-AND-RENDERER-QUOTIENTS.md)); implementation plan formalized in [`PHASE_2_IMPLEMENTATION_PLAN.md`](PHASE_2_IMPLEMENTATION_PLAN.md) (Pending Phase 2A Scope Freeze).
+- **Prerequisites:** Completion of Phase 1 (`ACCEPTED & COMMITTED`).
+- **In-Scope:** `packages/kinematics`, 3D viewport component in `apps/web`, procedural gear meshes, continuous rotation interpolation, snap-to-core at $p=1.0$.
+- **Out-of-Scope:** Solvers, complex UI panels, camera vision, drag-to-turn gestures.
 - **Deliverables:**
-  - Kinematic animation generator.
+  - Kinematic trajectory generator.
   - 3D viewport component rendering coupled gear motion during face turns.
-- **Verification:** Performance profiling on Chrome DevTools against proposed 60 FPS target; visual inspection of tooth meshing.
+- **Verification:** Performance profiling on Chrome DevTools against proposed 60 FPS target; visual inspection of tooth meshing; automated kinematic transform unit tests in Vitest.
 - **Acceptance Gate Criteria (`PHASE_2_PASS`):**
   - [ ] 3D animations smoothly interpolate without visual clipping or mesh desynchronization.
   - [ ] Renderer state is 100% derived from Core state; zero state mutations in Three.js.

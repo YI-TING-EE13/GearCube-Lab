@@ -1,6 +1,6 @@
 # PUZZLE_CONTRACTS.md — Canonical Type Contracts & Interface Specifications
 
-> **Document Status:** `DECIDED`
+> **Document Status:** `DECIDED` (Kinematics contracts updated pursuant to accepted [`ADR-0006`](../decisions/ADR-0006-VIEW-BASED-KINEMATICS-AND-RENDERER-QUOTIENTS.md))
 > **Applicability:** Pure TypeScript Type Definitions & Interface Specifications (Reference Only)
 
 ---
@@ -148,35 +148,38 @@ export type StateMaterializer = (
   spatialFrame?: SpatialFrame
 ) => PiecePlacementView;
 
-/** Continuous 3D spatial transformation for a component */
+/** Stable physical component identifier matching Core piece identity */
+export type ComponentId = CornerPieceId | EdgePieceId | CenterPieceId;
+
+/** Continuous 3D spatial transformation for a component (Quaternion sole orientation authority) */
 export interface ComponentTransform {
-  readonly componentId: string;
-  readonly position: [number, number, number];
-  readonly rotationEuler: [number, number, number];
-  readonly rotationQuaternion: [number, number, number, number];
+  readonly componentId: ComponentId;
+  readonly position: readonly [number, number, number];
+  readonly rotationQuaternion: readonly [number, number, number, number]; // [x, y, z, w]
 }
 
-/** Complete kinematic animation trajectory */
+/** Complete kinematic animation trajectory (duration-free pure evaluation) */
 export interface KinematicPlan {
   readonly move: Move;
-  readonly durationMs: number;
+  /** Computes component transforms at normalized mechanical progress p in [0, 1] */
   evaluate(progress: number): readonly ComponentTransform[];
 }
 
 /**
- * Downstream kinematic trajectory generator contract (owned by packages/kinematics).
- * Note: Pure Domain Core does NOT import or depend on this interface.
+ * Downstream kinematic trajectory generator contract (owned by packages/kinematics pursuant to ADR-0006).
+ * Consumes authoritative physical piece placement views derived from Core.
+ * Note: Pure Domain Core does NOT import or depend on this interface, and kinematics does NOT own puzzle state.
  */
 export type KinematicPlanner = (
-  fromState: GearCubeState,
+  fromView: PiecePlacementView,
   move: Move,
-  toState: GearCubeState
+  toView: PiecePlacementView
 ) => KinematicPlan;
 
-/** Active transition lifecycle */
+/** Active transition lifecycle managed by the application controller */
 export interface ActiveTransition {
-  readonly fromState: GearCubeState;
-  readonly toState: GearCubeState;
+  readonly fromView: PiecePlacementView;
+  readonly toView: PiecePlacementView;
   readonly move: Move;
   readonly plan: KinematicPlan;
   readonly progress: number; // 0.0 to 1.0
