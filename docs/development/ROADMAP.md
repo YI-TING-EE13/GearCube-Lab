@@ -1,7 +1,7 @@
 # ROADMAP.md — Project Lifecycle & Dependency-Ordered Milestones
 
-> **Current Project Phase:** `Phase 1E — Group Invariants & Exhaustive Reachable State Closure (Planning Phase)`
-> **Status:** Active Execution (Phase 1E Implementation Planning)
+> **Current Project Phase:** `Phase 1E — Group Invariants & Exhaustive Reachable State Closure (Implemented / Ready for Independent Acceptance)`
+> **Status:** Active Execution (Phase 1E Core Acceptance Implementation Complete & Verified)
 
 ---
 
@@ -24,7 +24,7 @@
       ├─ 1C: Move Transition Engine & Action Algebra (Accepted Baseline)
       │     └─ ADR-0005 Canonical Transition Repair (Accepted & Committed)
       ├─ 1D: Coordinate Views & Structural Codecs (Completed & Accepted)
-      └─ 1E: Group Invariants & Reachable State Closure (Active Planning)
+      └─ 1E: Group Invariants & Reachable State Closure (Implemented / Ready for Review)
       │
       ▼
 [ Phase 2: 3D Graphics & Kinematic Animation ]
@@ -137,9 +137,9 @@ Phase 0B is partitioned into four dependency-ordered subphases:
 - Derived `PiecePlacementView` materialization (`materializeState`), quotiented center placement (`CenterPlacement` with `{ slot, pieceId }` pursuant to accepted [`ADR-0004`](../decisions/ADR-0004-CENTER-ORIENTATION-SEMANTICS.md)), Model A center identity derivation, `SpatialFrame` orientation lifecycle (`nextSpatialFrame`), and strict canonical logical serialization (`serializeLogicalState`, `deserializeLogicalState`).
 - **Status:** `ACCEPTED & COMMITTED` (Commit `e31cd87b0db153140d9c4780ac2b7f4953d294d0`). Successfully integrated and verified with 165,888/165,888 materialization recoveries, 1,990,656/1,990,656 lifecycle transitions verified against independent physical oracle, and 41,472/41,472 serialization round-trips with zero dependency drift.
 
-#### Phase 1E: Group Invariants & Exhaustive Reachable State Closure (Active Planning)
-- Exhaustive BFS traversal ($41,472$ reachable states), group closure checks, move inverse round-trips, per-move domain bijections, and structural invariant verification.
-- **Status:** `ACTIVE / PLANNING`. Implementation plan formalized in [`docs/development/PHASE_1E_IMPLEMENTATION_PLAN.md`](PHASE_1E_IMPLEMENTATION_PLAN.md).
+#### Phase 1E: Group Invariants & Exhaustive Reachable State Closure (Implemented / Ready for Independent Acceptance)
+- Exhaustive BFS traversal ($41,472 / 41,472$ states reachable from solved), reachable-set 12-move graph closure ($497,664 / 497,664$), per-directed-move domain bijections ($12 / 12$), derived strong connectedness, and canonical directed move metric distance characterization (diameter 8).
+- **Status:** `IMPLEMENTED_VERIFIED_READY_FOR_INDEPENDENT_ACCEPTANCE`. Formalized in [`packages/core/tests/core-reachability.test.ts`](../../packages/core/tests/core-reachability.test.ts) (6 tests passing in 3.1s; full repository verify passing 10 test files and 123 tests).
 
 ---
 

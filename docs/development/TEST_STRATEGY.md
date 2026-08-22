@@ -82,7 +82,14 @@
   - **12-Repeat Identity:** For every canonical state and directed move, applying the move 12 consecutive times returns the initial state ($M^{12}(S) = S$) across all $41,472 \text{ states} \times 12 \text{ moves}$ (`transitions-exhaustive.test.ts`).
   - **Opposing Face Commutativity:** $U \cdot D = D \cdot U$, $F \cdot B = B \cdot F$, $R \cdot L = L \cdot R$ (`transitions.test.ts`).
   - **Defensive Input Validation & Anti-Aliasing:** Deterministic state-first `TypeError` rejection on malformed inputs; immutable inputs with fresh outer and slice object allocation on all valid calls (`transitions.test.ts`).
-  - *(Note: Whole-domain BFS reachability traversal visiting exactly 41,472 states is deferred to Phase 1E).*
+  - **Phase 1E Whole-Domain BFS Reachability & Graph-Topology Gates (`core-reachability.test.ts`):**
+    - **Dense-Rank Bijection Gate:** Test-local $\text{rank}(S) = C \cdot 1728 + (k_X \cdot 3 + p_X) \cdot 144 + (k_Y \cdot 3 + p_Y) \cdot 12 + (k_Z \cdot 3 + p_Z)$ maps the 41,472 Cartesian coordinate tuples bijectively onto $[0..41471]$ with 0 collisions and 0 gaps.
+    - **Exhaustive BFS Solved-Reachability Gate:** Starting from `SOLVED_GEAR_CUBE_STATE`, expanding all 12 directed moves via an $O(|V| + |E|)$ FIFO queue reaches exactly $41,472 / 41,472$ unique canonical states with normal queue exhaustion (`head === queue.length`).
+    - **Reachable-Set Consistency Assertions:** All 41,472 discovered states satisfy `isGearCubeState(state) === true` and exactly 1 state satisfies `isSolved(state) === true`.
+    - **Reachable-Set 12-Move Graph Closure Gate:** For every reachable state $S$ ($41,472$) and move $m \in \text{ALL\_MOVES}$ ($12$), $497,664 / 497,664$ transitions land strictly within the BFS-reachable set.
+    - **Per-Directed-Move Domain Bijection Gate:** For each of the 12 moves in `ALL_MOVES`, applying the move across all 41,472 reachable states produces an image set of cardinality exactly 41,472 ($12 / 12$ moves act as permutations in $S_{41472}$).
+    - **Directed Graph Strong Connectedness (Derived Result):** Combined from Phase 1E BFS reachability from solved ($41,472 / 41,472$) and existing Level 2 inverse-move regression ($497,664 / 497,664$ inverse recoveries), establishing that the state space forms 1 strongly connected component.
+    - **Canonical Directed Move Metric Characterization (Informational):** Informational BFS depth distribution recorded (maximum depth / diameter 8 under 12 directed unit-cost moves; total accumulated states 41,472). Explicitly distinguished from external literature single-turn metrics.
 
 ### Level 3: Coordinate Domain & Materializer Consistency
 - **Scope:** `packages/core/src/spatial-frame.ts`, `packages/core/src/materializer.ts`, `packages/core/src/serialization.ts` (`packages/core/tests/materializer.test.ts`, `packages/core/tests/serialization.test.ts`)
