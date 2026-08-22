@@ -166,10 +166,22 @@ Phase 0B is partitioned into four dependency-ordered subphases:
   - `PHASE2A_PHYSICAL_TRANSITION_GATE`: `528 / 528 PASS` (48 solved + 480 scrambled transitions across all 4 SpatialFrames and 12 moves).
   - Root verification (`npm run verify`): 12 test files, 136 tests passed, clean workspace typecheck and web build.
 
-#### Phase 2B: Modular 3D Geometry, Visual Meshes & R3F Viewport (Planned)
+#### Phase 2B: Modular 3D Geometry, Visual Meshes & R3F Viewport (Implemented & Verified)
 - **Objective:** Scaffolding React Three Fiber viewport in `apps/web`, procedural gear piece geometries, and static projection binding.
-- **Status:** `PLANNED / ARCHITECTURE RECONNAISSANCE COMPLETE` (Scope formalized in [`PHASE_2_IMPLEMENTATION_PLAN.md`](PHASE_2_IMPLEMENTATION_PLAN.md)).
+- **Status:** `IMPLEMENTED_VERIFIED_READY_FOR_INDEPENDENT_ACCEPTANCE`
 - **Prerequisites:** Completion of Phase 2A (`ACCEPTED & COMMITTED`).
+- **Deliverables:**
+  - `GearCubeViewport.tsx`: React Three Fiber Canvas with camera, lighting, and OrbitControls.
+  - `GearCubeModel.tsx`: ComponentTransform-driven scene renderer for 26 persistent piece groups.
+  - `CornerPiece.tsx`, `EdgePiece.tsx`, `CenterPiece.tsx`: Procedural 3D geometries with physical face sticker mappings.
+  - `materials.ts`: Semantic face color palette and sticker orientation helpers.
+  - `GearCubeModel.test.ts`: Pure Node/Vitest transform adapter and piece routing unit test suite.
+- **Verification Evidence:**
+  - `SCENE_TRANSFORM_ADAPTER_GATE`: `26 / 26 PASS` (1-to-1 mapping from ComponentTransforms to scene descriptors).
+  - `COMPONENT_IDENTITY_GATE`: `26 / 26 PASS` (exact stable ComponentId sequence preserved).
+  - `PIECE_ROUTING_GATE`: `8 corners / 12 edges / 6 centers PASS` (routed by physical ComponentId).
+  - Web TypeScript & Vite build: `PASS`.
+  - Manual browser smoke test: `PASS` (responsive canvas, 26 pieces rendered, orbit controls functional, 0 runtime errors).
 
 #### Phase 2C: Continuous Animation Binding & Turn Execution (Planned)
 - React Three Fiber continuous animation loop, time easing, transition execution, and snap-to-core at $p=1.0$.

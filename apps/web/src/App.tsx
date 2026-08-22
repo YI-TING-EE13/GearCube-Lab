@@ -1,12 +1,10 @@
-import * as coreBootstrap from '@gearcube/core';
-
-void coreBootstrap;
+import React from 'react';
+import { GearCubeViewport } from './components/canvas/GearCubeViewport';
 
 export default function App() {
   return (
-    <main className="container">
-      <h1>GearCube Lab</h1>
-      <p>Workspace initialized. Pure Core boundary verified.</p>
+    <main className="app-container">
+      <GearCubeViewport />
     </main>
   );
 }
