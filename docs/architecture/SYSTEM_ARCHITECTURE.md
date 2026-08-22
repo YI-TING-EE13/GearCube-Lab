@@ -95,15 +95,16 @@ graph TD
   - Implements interchangeable visual skins and face sticker materials.
   - Consumes Kinematic Plans and ComponentTransforms to position 3D meshes along calculated trajectories.
   - Maintains zero puzzle state authority: rendering is strictly downstream of domain state and kinematic projections.
-- **Topology Note:** Implemented directly within `apps/web/src/components/` rather than as an isolated `packages/renderer` package; maintains strict layer separation by depending only on `@gearcube/core` and `@gearcube/kinematics`.
+- **Topology Note:** Implemented directly within `apps/web/src/components/` rather than as an isolated `packages/renderer` package; maintains strict layer separation by consuming domain projections internally from `@gearcube/core` and `@gearcube/kinematics` alongside presentation framework dependencies (React, React Three Fiber, Three.js).
 
 ### 3.4. Application & UI State (`apps/web` — Conceptual Presentation Layer)
 - **Responsibilities:**
-  - Orchestrates interactive application UI, move history timeline, undo/redo stacks, and deterministic seeded scramble generation.
-  - Manages single authoritative session state (`GearCubeSessionState` in `apps/web/src/components/cube/animation.ts` and `apps/web/src/components/history/history.ts`) via React local state / reducer with pure transition functions.
+  - Orchestrates interactive application UI, controls, and presentation lifecycle.
+  - Manages single authoritative session state (`GearCubeSessionState` in `apps/web/src/components/cube/animation.ts`) via React local state / pure transition functions.
+  - Hosts planned Phase 3 extensions (canonical move history timeline, undo/redo stacks, and deterministic seeded scramble generator under `apps/web/src/components/history/**` — Planned Phase 3A) which wrap and reference canonical session snapshots without becoming a second puzzle authority.
   - Dispatches move requests to the Domain Core and initiates solver worker tasks.
   - Renders minimalist controls, solution playback bars, and telemetry metrics.
-- **Topology Note:** Implemented directly within `apps/web` rather than as a separate `packages/ui` package; uses zero external state-management libraries (no Zustand requirement for Phase 3).
+- **Topology Note:** Implemented directly within `apps/web` rather than as a separate `packages/ui` package; uses standard React presentation tools without external state-management libraries (no Zustand requirement for Phase 3). Project-internal workspace dependencies are limited to `@gearcube/core` and `@gearcube/kinematics`.
 
 ### 3.5. Solver Engine (`packages/solvers` — Future Phase 4)
 - **Responsibilities:**

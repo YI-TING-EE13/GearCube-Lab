@@ -44,19 +44,21 @@ All TypeScript configuration files must enforce maximum compiler strictness:
 ```
 
 ### 2.2. Separation of Domain Logic and Framework Code
-- Pure business and mathematical logic lives strictly in `packages/core` and `packages/kinematics`.
-- Framework-specific presentation code (React components, Three.js shaders, R3F viewports, DOM listeners) lives in `apps/web`.
+- **Puzzle Domain Truth:** Discrete representation, state transitions, move legality, and canonical validation live strictly in `packages/core` with zero framework or runtime dependencies.
+- **Kinematic Mathematics:** Continuous trajectory planning, gear ratios, and rigid-body transform projection live in `packages/kinematics`, depending solely on `@gearcube/core`.
+- **Presentation & Framework Code:** Framework-specific presentation code (React components, Three.js shaders, R3F viewports, DOM listeners) lives in `apps/web`.
+- **Application-Level Pure Logic:** Pure TypeScript logic governing application interaction, session orchestration, and history state transitions (such as planned Phase 3 `apps/web/src/components/history/history.ts` and `scramble.ts`) lives in `apps/web`. These modules must consume Core contracts (`Move`, `GearCubeState`, `SpatialFrame`) without redefining puzzle mechanics or becoming a second canonical domain authority.
 - Within `apps/web`:
   - UI and interaction code must never become puzzle state truth.
   - 3D renderer and mesh components consume canonical state and materialized transforms from `@gearcube/kinematics`.
-  - Application history and session orchestration maintain a single authoritative `GearCubeSessionState`.
-- Never import React or Three.js inside `packages/core`, `packages/kinematics`, or future `packages/solvers`.
+  - Application orchestration maintains a single authoritative `GearCubeSessionState` (`apps/web/src/components/cube/animation.ts`), with planned Phase 3 history navigation referencing canonical session snapshots.
+- Never import React, Three.js, or DOM APIs inside `packages/core`, `packages/kinematics`, or future `packages/solvers`.
 
 ### 2.3. Dependency Management Rules
-- **Domain Core:** Exactly zero external runtime dependencies.
-- **Kinematics:** Depends only on `@gearcube/core`.
-- **Solvers:** Zero UI/rendering dependencies.
-- **Web Application (`apps/web`):** Keep dependencies minimal, focused on React 19 and Three.js/R3F ecosystem. Zero external state management libraries (no Zustand requirement for Phase 3).
+- **Domain Core (`packages/core`):** Exactly zero external runtime dependencies.
+- **Kinematics Engine (`packages/kinematics`):** Pure mathematical module depending solely on `@gearcube/core`.
+- **Solvers (`packages/solvers` — Future Phase 4):** Pure combinatorial search algorithms with zero UI/rendering dependencies.
+- **Web Application (`apps/web`):** Project-internal workspace dependencies are limited to `@gearcube/core` and `@gearcube/kinematics`. External dependencies are kept minimal, focused on React 19 and Three.js/R3F presentation stack with zero external state management libraries (no Zustand requirement for Phase 3).
 - Always commit lockfiles (`package-lock.json`, `uv.lock`) once dependencies are modified.
 
 ---
