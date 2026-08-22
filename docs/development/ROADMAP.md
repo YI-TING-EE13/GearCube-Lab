@@ -1,7 +1,7 @@
 # ROADMAP.md — Project Lifecycle & Dependency-Ordered Milestones
 
-> **Current Project Phase:** `Phase 1D — Coordinate Views & Structural Codecs (Pending Post-Repair Integration & Independent Re-Acceptance)`
-> **Status:** Active Execution (ADR-0005 Documentation Synchronization)
+> **Current Project Phase:** `Phase 1D — Coordinate Views & Structural Codecs (Integrated / Ready for Independent Acceptance)`
+> **Status:** Active Execution (Phase 1D Integration & Verification)
 
 ---
 
@@ -23,7 +23,7 @@
       ├─ 1B: Canonical State / Value Types & Validation (Accepted)
       ├─ 1C: Move Transition Engine & Action Algebra (Accepted Baseline)
       │     └─ ADR-0005 Canonical Transition Repair (Accepted & Committed)
-      ├─ 1D: Coordinate Views & Structural Codecs (Preserved Pending Integration)
+      ├─ 1D: Coordinate Views & Structural Codecs (Integrated / Ready for Review)
       └─ 1E: Group Invariants & Reachable State Closure (Blocked on 1D)
       │
       ▼
@@ -133,9 +133,9 @@ Phase 0B is partitioned into four dependency-ordered subphases:
 - Direct canonical move application (`applyMove`), $O(1)$ precomputed transition tables (`transition-data.ts`), exact 12 solved-state golden vectors, input validation, output anti-aliasing, 497,664 transition closure, 497,664 inverse round-trips, and 12-repeat identity.
 - **Supersession & Repair Notice:** The original Phase 1C baseline evaluated $D, B, L$ moves under a body-fixed assumption without reference-frame normalization. Corrective decision [`ADR-0005`](../decisions/ADR-0005-CANONICAL-MOVE-TRANSITION-ALGEBRA.md) adopted reference-normalized canonical move transition algebra. The transition tables and test oracles were repaired and committed in commit `59f0313c2ce1c513f80d967d3f78cd86f7870003` (`Repair canonical move transitions`), achieving $497,664 / 497,664$ canonical oracle equivalence ($248,832 / 248,832$ $U/F/R$ non-regression and $248,832 / 248,832$ $D/B/L$ correction).
 
-#### Phase 1D: Coordinate Views & Structural Codecs (Preserved Pending Integration)
-- Derived `PiecePlacementView` materialization (`materializeState`), quotiented center placement (`CenterPlacement` with `{ slot, pieceId }` pursuant to accepted [`ADR-0004`](../decisions/ADR-0004-CENTER-ORIENTATION-SEMANTICS.md)), `SpatialFrame` orientation lifecycle, and compact integer serialization codecs.
-- **Status:** `PRESERVED_PENDING_FINAL_INDEPENDENT_ACCEPTANCE`. Implementation plan was repaired and accepted in commit `cb19af5`. The existing implementation remains preserved in its dedicated worktree and will be integrated and independently re-accepted following ADR-0005 documentation synchronization.
+#### Phase 1D: Coordinate Views & Structural Codecs (Integrated / Ready for Independent Acceptance)
+- Derived `PiecePlacementView` materialization (`materializeState`), quotiented center placement (`CenterPlacement` with `{ slot, pieceId }` pursuant to accepted [`ADR-0004`](../decisions/ADR-0004-CENTER-ORIENTATION-SEMANTICS.md)), Model A center identity derivation, `SpatialFrame` orientation lifecycle (`nextSpatialFrame`), and strict canonical logical serialization (`serializeLogicalState`, `deserializeLogicalState`).
+- **Status:** `INTEGRATED_READY_FOR_INDEPENDENT_ACCEPTANCE` (Pending Final Independent Acceptance). Implementation conforms to accepted Phase 1D plan (`cb19af5`) and has been transplanted onto the repaired ADR-0005 baseline (`7c5fd1e`), passing all 8 independent re-acceptance gates with zero dependency drift.
 
 #### Phase 1E: Group Invariants & Exhaustive Reachable State Closure
 - Exhaustive BFS traversal ($41,472$ reachable states), group closure checks, and move inverse round-trips.

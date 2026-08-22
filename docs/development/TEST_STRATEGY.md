@@ -85,17 +85,21 @@
   - *(Note: Whole-domain BFS reachability traversal visiting exactly 41,472 states is deferred to Phase 1E).*
 
 ### Level 3: Coordinate Domain & Materializer Consistency
-- **Scope:** `packages/core/src/validation.ts`, `packages/core/src/materializer.ts`, `packages/core/src/serialization.ts`
-- **Focus:** Domain coordinate validity, derived physical placement mapping, and compact serialization.
-- **Invariants Tested:**
-  - Corner permutations strictly within $S_4$ ($|S_4| = 24$) with $96 \leftrightarrow 24 \times 4$ `SpatialFrame` bijection.
-  - Edge slice permutations strictly within Klein four-group $V_4$ ($|V_4| = 4$).
-  - Edge gear phase indices strictly within $\mathbb{Z}_3 = \{0, 1, 2\}$.
-  - Full-state materializer determinism: $\text{normalizePhysicalState}(\text{materializeState}(S, f)) = (S, f)$ produces idempotent, pure round-trips for all $165,888$ expanded fixed-spatial states ($41,472 \times 4$) without mutating canonical domain state.
-- **Phase 1D Post-Integration Re-Acceptance Gates (Pending Integration):**
+- **Scope:** `packages/core/src/spatial-frame.ts`, `packages/core/src/materializer.ts`, `packages/core/src/serialization.ts` (`packages/core/tests/materializer.test.ts`, `packages/core/tests/serialization.test.ts`)
+- **Focus:** 4-state `SpatialFrame` orientation lifecycle, Model A center identity derivation, $165,888$ state-frame piece placement view materialization, inverse normalization bijection, $1,990,656$ application lifecycle transitions against independent physical simulation oracle, and strict deterministic canonical logical serialization.
+- **Invariants Tested (Implemented & Verified in Phase 1D):**
+  - Canonical `SPATIAL_FRAMES = [0, 1, 2, 3]` with canonical reference frame `DEFAULT_SPATIAL_FRAME = 3`.
+  - All 24 `SpatialFrame` $\times$ physical-face transitions in `nextSpatialFrame()` verified.
+  - Self-inverse involution invariant: every slot permutation in `FRAME_SLOT_PERMS` satisfies $\sigma^2 = I$.
+  - Exact Model A $S_4 / V_4$ algebraic factorization: $1,536 / 1,536$ coordinate keys verified with 0 mismatches against reference mechanics.
+  - Quotiented center placements (`CenterPlacement` with `{ slot, pieceId }`) verified for Solved and all 12 single-move golden vectors without axial orientation endpoint fields.
+  - Full-state materializer determinism: $\text{normalizePiecePlacement}(\text{materializeState}(S, f)) \equiv (S, f)$ verified for all $165,888$ expanded fixed-spatial states ($41,472 \times 4$).
+  - Exhaustive Application Lifecycle: $1,990,656 / 1,990,656$ transitions ($41,472 \times 4 \times 12$) verified against an independent physical 3D coordinate simulation oracle with 0 mismatches across corners, edges, and centers.
+  - Canonical logical serialization (`serializeLogicalState` / `deserializeLogicalState`): exact grammar `C:<C>|X:<kx>.<px>|Y:<ky>.<py>|Z:<kz>.<pz>`, $41,472 / 41,472$ bijective round-trips, $41,472$ unique serialization strings, and strict `TypeError` validation on all malformed/out-of-range inputs.
+- **Phase 1D Post-Integration Re-Acceptance Gates (Integrated / Ready for Independent Acceptance):**
   - Model A Raw Center Dict: $1,536 / 1,536$ evaluations.
   - Center Placement Identity: $41,472 / 41,472$ states.
-  - Center Placement Goldens: Solved + 12 directed moves.
+  - Center Placement Goldens: Solved + 12 directed moves (13/13).
   - State Materialization: $165,888 / 165,888$ state-frame pairs.
   - Full-State Normalization: $165,888 / 165,888$ round-trips.
   - Full Application Move Lifecycle: $1,990,656 / 1,990,656$ phase-aware transitions ($\text{materialize}(\text{applyMove}(s, m), \text{nextSpatialFrame}(f, m.\text{face})) \equiv \text{simPhysical}(\text{materialize}(s, f), m)$).

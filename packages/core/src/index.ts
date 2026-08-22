@@ -49,3 +49,43 @@ export { equalsGearCubeState, isSolved } from './state.js';
 
 // Canonical Transition Operations (from transitions.ts)
 export { applyMove } from './transitions.js';
+
+// SpatialFrame Lifecycle & Operations (from spatial-frame.ts)
+export {
+  SPATIAL_FRAMES,
+  DEFAULT_SPATIAL_FRAME,
+  isSpatialFrame,
+  nextSpatialFrame,
+} from './spatial-frame.js';
+
+export type { SpatialFrame } from './spatial-frame.js';
+
+// Piece Placement Materialization & Vocabularies (from materializer.ts)
+export {
+  CORNER_SLOTS,
+  EDGE_SLOTS,
+  CENTER_SLOTS,
+  CORNER_PIECE_IDS,
+  EDGE_PIECE_IDS,
+  CENTER_PIECE_IDS,
+  materializeState,
+} from './materializer.js';
+
+export type {
+  CornerSlot,
+  CornerPieceId,
+  CornerPlacement,
+  EdgeSlot,
+  EdgePieceId,
+  EdgePlacement,
+  CenterSlot,
+  CenterPieceId,
+  CenterPlacement,
+  PiecePlacementView,
+} from './materializer.js';
+
+// Logical State Serialization (from serialization.ts)
+export {
+  serializeLogicalState,
+  deserializeLogicalState,
+} from './serialization.js';
