@@ -238,7 +238,7 @@ Phase 0B is partitioned into four dependency-ordered subphases:
 - **In-Scope:** Architecture doc sync preflight, application history state, timeline scrubber, undo/redo, Mulberry32 deterministic scramble generator, keyboard shortcuts, responsive control overlay, root Playwright browser E2E test suite.
 - **Out-of-Scope:** Solver algorithms, benchmark harness, computer vision.
 - **Subphases:**
-  - **Phase 3 Preflight:** Architecture & Test Documentation Sync (`docs/architecture/SYSTEM_ARCHITECTURE.md`, `docs/development/TEST_STRATEGY.md`).
+  - **Phase 3 Preflight:** Architecture & Test Documentation Sync (`docs/architecture/SYSTEM_ARCHITECTURE.md`, `docs/development/TEST_STRATEGY.md`, `docs/project/PROJECT_BLUEPRINT.md`, `docs/development/DEVELOPMENT_GUIDE.md`).
   - **Phase 3A:** Application History & Deterministic Scramble Engine (`apps/web/src/components/history/history.ts`, `scramble.ts`, Vitest unit test suites).
   - **Phase 3B:** Interactive Play Store, Undo/Redo & Timeline Scrubber UI (`HistoryControls.tsx`, `TimelineScrubber.tsx`, `ScramblePanel.tsx`).
   - **Phase 3C:** Keyboard Controls, Responsive Layout & Playwright Browser E2E (`useKeyboardControls.ts`, responsive CSS, `playwright.config.ts`, `tests/e2e/**`, human browser acceptance).

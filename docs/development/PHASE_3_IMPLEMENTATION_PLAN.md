@@ -10,24 +10,27 @@
 ## 1. Executive Summary & Objective
 
 Phase 3 builds the complete user-facing interactive puzzle experience on top of the accepted Phase 2 3D visual and kinematic engine. It introduces:
-1. **Architecture & Test Documentation Preflight Sync:** Reconciling historical architectural docs (`SYSTEM_ARCHITECTURE.md`, `TEST_STRATEGY.md`) with actual accepted `apps/web` topology prior to implementation.
-2. **Canonical Move History & Timeline:** Linear history of committed canonical moves and resulting `(GearCubeState, SpatialFrame)` pairs.
-3. **Undo & Redo Operations:** Reversible step navigation and arbitrary timeline scrubbing while puzzle is `IDLE`.
-4. **Deterministic Seeded Scramble Generator:** PRNG-driven move sequence generation from user seed with instant baseline reset.
-5. **Keyboard Interaction:** Ergonomic key bindings for 12 face moves (`U/D/F/B/R/L` with Shift for CCW) and `Ctrl+Z` / `Ctrl+Y` undo/redo.
-6. **Responsive Play Mode UI:** Minimalist, high-performance control layout with timeline scrubber, scramble panel, and mode toggle.
+1. **Architecture & Test Documentation Preflight Sync:** Reconciling historical architectural docs (`SYSTEM_ARCHITECTURE.md`, `TEST_STRATEGY.md`, `PROJECT_BLUEPRINT.md`, `DEVELOPMENT_GUIDE.md`) with actual accepted `apps/web` topology prior to code implementation.
+2. **Canonical Move History & Timeline:** Linear history of committed canonical moves and resulting `(GearCubeState, SpatialFrame)` pairs without wall-clock timestamp metadata.
+3. **Instant Snapshot Undo & Redo:** Immediate, deterministic state/frame restoration and arbitrary timeline scrubbing while puzzle is `IDLE`.
+4. **Deterministic Seeded Scramble Generator:** FNV-1a UTF-16 seed hashing, Mulberry32 PRNG-driven move sequence generation with consecutive same-face filtering, and atomic baseline establishment.
+5. **Keyboard Interaction:** Ergonomic key bindings for 12 face moves (`U/D/F/B/R/L` with Shift for CCW) and `Ctrl+Z` / `Ctrl+Y` undo/redo with input focus guarding.
+6. **Responsive Play Mode UI:** Minimalist, high-performance control layout with timeline scrubber, scramble panel, mode toggle, and "Back to baseline" navigation.
 7. **Playwright Browser E2E Automation:** Headless browser integration tests validating end-to-end user workflows, state integrity, and focus management.
 
 ---
 
-## 2. Architecture, State Ownership & Dependencies
+## 2. Architecture, State Ownership & Invariants
 
-### 2.1. Single Source of Truth Invariant
+### 2.1. Single Source of Truth & Session Consistency Invariant
 - **`RECOMMENDED_APPLICATION_STATE_ARCHITECTURE`:** `APPS_WEB_LOCAL_APPLICATION_STATE`
 - **`ONE_APPLICATION_CANONICAL_SESSION_AUTHORITY`:** `YES`
-- No secondary or duplicate state stores are introduced. The application state maintains a single coherent session model.
-- History snapshots store pure domain `(GearCubeState, SpatialFrame)` structures. Render transforms are **never** stored as history truth.
-- `apps/web` retains sole ownership of application-level session orchestration. No artificial extraction of `packages/ui` or `packages/renderer` is needed for Phase 3.
+- **`SESSION_HISTORY_CONSISTENCY_REQUIRED`:** `YES`
+- **`HISTORY_IS_SECOND_PUZZLE_AUTHORITY`:** `NO` (History is immutable canonical navigation evidence; `GearCubeSessionState` remains the live application authority).
+- At every stable `IDLE` endpoint:
+  - If `cursorIndex === -1`: `session.currentState` and `session.currentFrame` structurally equal `initialBaselineState` and `initialBaselineFrame`.
+  - If `cursorIndex >= 0`: `session.currentState` and `session.currentFrame` structurally equal `entries[cursorIndex].resultingState` and `entries[cursorIndex].resultingFrame`.
+- Every operation changing the history cursor restores the session from the corresponding canonical snapshot in the same atomic transition.
 
 ### 2.2. State Model Hierarchy
 ```text
@@ -50,8 +53,15 @@ Phase 3 builds the complete user-facing interactive puzzle experience on top of 
 - **`ARCHITECTURE_DOCUMENT_DRIFT`:** `NON_BLOCKING_FOR_PHASE3_PLAN`
 - **`ARCHITECTURE_DOC_SYNC_REQUIRED_BEFORE_IMPLEMENTATION`:** `YES`
 - **`PHASE3_IMPLEMENTATION_BLOCKED_BY_DOC_SYNC`:** `YES`
+- **`PHASE3_PREFLIGHT_REQUIRED_DOCS`:** `4`
+  1. `docs/architecture/SYSTEM_ARCHITECTURE.md`
+  2. `docs/development/TEST_STRATEGY.md`
+  3. `docs/project/PROJECT_BLUEPRINT.md`
+  4. `docs/development/DEVELOPMENT_GUIDE.md`
+- **`PROJECT_BLUEPRINT_SYNC_REQUIRED`:** `YES`
+- **`DEVELOPMENT_GUIDE_SYNC_REQUIRED`:** `YES`
 - **`PHASE3_NEW_ADR_REQUIRED`:** `NO`
-- **Reasoning:** Current architecture documents (`SYSTEM_ARCHITECTURE.md`, `TEST_STRATEGY.md`) historically describe concrete modular packages (`packages/ui`, `packages/renderer`, Zustand) that were consolidated into `apps/web` during accepted Phase 2. Because canonical dependency direction (`UI -> Renderer -> Kinematics -> Core`) and domain authority remain strictly preserved, no new ADR is required. However, a dedicated preflight documentation sync must be executed before Phase 3A implementation begins.
+- **Reasoning:** Current architecture documents describe concrete modular packages (`packages/ui`, `packages/renderer`, Zustand) that were consolidated into `apps/web` during accepted Phase 2. Because canonical dependency direction (`UI -> Renderer -> Kinematics -> Core`) and domain authority remain strictly preserved, no new ADR is required. However, a dedicated preflight documentation sync must be executed before Phase 3A implementation begins.
 
 ### 2.4. Dependency & Tooling Evaluation (Zustand & Playwright)
 - **`ZUSTAND_RECOMMENDATION`:** `DO_NOT_USE` (React state / reducer with pure state transition functions is 100% sufficient; zero extra runtime dependencies).
@@ -72,7 +82,8 @@ Phase 3 builds the complete user-facing interactive puzzle experience on top of 
 
 ### 3.1. History Unit & Entry Definition
 - **`HISTORY_UNIT`:** `CANONICAL_COMMITTED_MOVE`
-- A history entry is created **only** when a canonical 180° move completes and commits.
+- **`CANONICAL_HISTORY_CONTAINS_WALL_CLOCK_TIME`:** `NO` (Timestamps are non-canonical and omitted from domain history).
+- A history entry is created **only** when a canonical 180° move completes and commits:
   - Completed `TWO_STEP` second half: **Created**.
   - Completed `DIRECT_180` turn: **Created**.
   - `TWO_STEP` midpoint lock (`HALF_TURN_LOCKED`): **NOT Created**.
@@ -87,7 +98,6 @@ export interface HistoryEntry {
   readonly resultingState: GearCubeState;
   readonly resultingFrame: SpatialFrame;
   readonly notation: string; // e.g. "U+", "F-", "R+"
-  readonly timestamp: number;
 }
 
 export interface PlayHistoryState {
@@ -102,53 +112,117 @@ export interface PlayHistoryState {
 - **`HISTORY_FRAME_AWARE`:** `YES`
 - **`UNDO_FRAME_AWARE`:** `YES`
 - **`REDO_FRAME_AWARE`:** `YES`
+- **`SCRAMBLE_FRAME_AWARE`:** `YES`
 - Every history step explicitly pairs `GearCubeState` with its corresponding `SpatialFrame`. Restoring any history point restores both domain state and spatial frame simultaneously.
 
 ---
 
-## 4. Undo, Redo, and Scrubber Semantics
+## 4. Undo, Redo, Scrubber & Reset Semantics
 
 ### 4.1. Lifecycle Constraints
 - **`UNDO_ALLOWED_WHEN`:** `IDLE_ONLY` (`session.stagedMove === null`)
 - **`REDO_ALLOWED_WHEN`:** `IDLE_ONLY` (`session.stagedMove === null`)
 - **`SCRUB_ALLOWED_WHEN`:** `IDLE_ONLY` (`session.stagedMove === null`)
-- While puzzle is busy (`FIRST_HALF_ANIMATING`, `HALF_TURN_LOCKED`, `SECOND_HALF_ANIMATING`, `CANCEL_HALF_ANIMATING`, `DIRECT_FULL_ANIMATING`), Undo, Redo, and Timeline Scrubbing are strictly disabled.
+- **`RESET_ALLOWED_WHEN`:** `IDLE_ONLY` (`session.stagedMove === null`)
+- **`UNDO_PRESERVES_INTERACTION_MODE`:** `YES`
+- **`REDO_PRESERVES_INTERACTION_MODE`:** `YES`
+- **`SCRUB_PRESERVES_INTERACTION_MODE`:** `YES`
+- While puzzle is busy (`FIRST_HALF_ANIMATING`, `HALF_TURN_LOCKED`, `SECOND_HALF_ANIMATING`, `CANCEL_HALF_ANIMATING`, `DIRECT_FULL_ANIMATING`), Undo, Redo, Timeline Scrubbing, and Reset are strictly disabled.
 
-### 4.2. Navigation & Truncation Rules
+### 4.2. Undo / Redo Model & Core Invariants
+- **`UNDO_REDO_MODEL`:** `INSTANT_CANONICAL_SNAPSHOT_RESTORE`
+- **`UNDO_ANIMATION`:** `NO`
+- **`REDO_ANIMATION`:** `NO`
+- **`CORE_INVERSE_MOVE_PUBLIC_API_EXISTS`:** `NO`
+- **`CORE_API_EXTENSION_REQUIRED`:** `NO`
+- **`UI_DUPLICATES_INVERSE_MOVE_ALGEBRA`:** `NO` (Restoration directly uses recorded snapshots and fresh projection materialization without calculating or applying inverse moves).
+
+### 4.3. Navigation & Truncation Rules
 1. **Undo (`cursorIndex > -1`):**
    - Decrements `cursorIndex` by 1.
    - Target snapshot: `cursorIndex === -1 ? (initialBaselineState, initialBaselineFrame) : (entries[cursorIndex].resultingState, entries[cursorIndex].resultingFrame)`.
-   - Restores session state, frame, and recalculates fresh display transforms: `placementToTransforms(materializeState(targetState, targetFrame))`.
+   - Restores session state, frame, preserves `interactionMode`, and recalculates fresh display transforms: `placementToTransforms(materializeState(targetState, targetFrame))`.
 2. **Redo (`cursorIndex < entries.length - 1`):**
    - Increments `cursorIndex` by 1.
    - Restores snapshot at `entries[cursorIndex]`.
-   - Updates display transforms to fresh projection.
+   - Preserves `interactionMode` and updates display transforms to fresh projection.
 3. **Arbitrary Scrub (`-1 <= targetIndex < entries.length`):**
    - Instant-snaps cursor to `targetIndex`.
-   - Restores snapshot and derives fresh display transforms.
+   - Restores snapshot, preserves `interactionMode`, and derives fresh display transforms.
 4. **Branching on New Move (`NEW_MOVE_AFTER_UNDO: TRUNCATE_REDO_BRANCH`):**
    - When user executes a new move while `cursorIndex < entries.length - 1`, all entries with index `> cursorIndex` are discarded.
    - The new move is appended at `cursorIndex + 1`, and `cursorIndex` advances to point to the new entry.
+5. **Reset Action (`RESET_ACTION: RETURN_TO_CURRENT_HISTORY_BASELINE`):**
+   - UI Label: `"Back to baseline"`.
+   - Restores `initialBaselineState` and `initialBaselineFrame`.
+   - Sets `cursorIndex = -1`.
+   - Preserves existing `entries` as redoable future history.
+   - Preserves `interactionMode` and derives fresh display transforms. Semantically equivalent to `scrub(-1)`.
 
 ---
 
 ## 5. Deterministic Seeded Scramble Contract
 
-### 5.1. Scramble Specification
+### 5.1. Seed Normalization & Hashing Specification
+- **`SCRAMBLE_SEED_INPUT_TYPE`:** `string`
+- **`SCRAMBLE_SEED_NORMALIZATION`:** `USE_EXACT_UTF16_JS_STRING` (Do NOT trim, lowercase, or perform locale normalization; `"abc"` != `" abc"` != `"ABC"`).
+- **`EMPTY_SEED_POLICY`:** `VALID` (Empty string `""` is a valid deterministic seed; does not auto-generate a random string).
+- **`SCRAMBLE_SEED_HASH`:** `FNV1A_32_UTF16`
+  ```typescript
+  export function hashSeed(seed: string): number {
+    let hash = 0x811c9dc5;
+    for (let i = 0; i < seed.length; i++) {
+      hash ^= seed.charCodeAt(i);
+      hash = Math.imul(hash, 0x01000193) >>> 0;
+    }
+    return hash;
+  }
+  ```
+- **`SCRAMBLE_PRNG`:** `MULBERRY32`
+  ```typescript
+  export function createMulberry32(seedU32: number): () => number {
+    let a = seedU32 >>> 0;
+    return function next(): number {
+      let t = (a += 0x6d2b79f5);
+      t = Math.imul(t ^ (t >>> 15), t | 1);
+      t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+  ```
+
+### 5.2. Move Generation & Filtering
 - **`SCRAMBLE_OUTPUT`:** `readonly Move[]`
 - **`SOURCE_MOVE_VOCABULARY`:** `@gearcube/core` `ALL_MOVES` (12 directed moves).
 - **`DEFAULT_SCRAMBLE_LENGTH`:** `20`
 - **`ALLOWED_LENGTH_RANGE`:** `1 .. 50`
-- **`PRNG_ALGORITHM`:** Mulberry32 seeded with 32-bit integer hash of user seed string.
-- **`UNIFORM_RANDOM_STATE_CLAIM`:** `NO` (Pseudorandom move walk, not uniform distribution).
-- **`ADJACENT_MOVE_FILTERING`:** No two consecutive moves on the same face (e.g. `U+` followed by `U-` or `U+` on face `U` is rejected and redrawn).
+- **`INVALID_LENGTH_BEHAVIOR`:** `REJECT` (Non-integer, NaN, <1, >50 throws/rejects; no silent clamping).
+- **`CONSECUTIVE_SAME_FACE`:** `REJECT_AND_REDRAW` (Both `U CW -> U CW` and `U CW -> U CCW` rejected; opposite faces allowed).
+- **`SCRAMBLE_FILTER_DEPENDS_ONLY_ON_FACE`:** `YES`
+- **`UNIFORM_RANDOM_STATE_CLAIM`:** `NO` (Pseudorandom move walk, not uniform state sampling).
 
-### 5.2. Scramble Application Model
-- Applying a scramble computes the final `(scrambledState, scrambledFrame)` by sequentially applying `applyMove` and `nextSpatialFrame` across the scramble sequence.
-- Sets `initialBaselineState = scrambledState` and `initialBaselineFrame = scrambledFrame`.
-- Resets `entries = []` and `cursorIndex = -1`.
-- Snaps display transforms to fresh projection: `placementToTransforms(materializeState(scrambledState, scrambledFrame))`.
-- Displays the generated scramble sequence notation in the Scramble panel for user reference.
+### 5.3. Atomic Scramble Application Transaction
+- **`SCRAMBLE_ALLOWED_WHEN`:** `IDLE_ONLY`
+- **`SCRAMBLE_CREATES_HISTORY_ENTRIES`:** `NO`
+- **`SCRAMBLE_ESTABLISHES_NEW_BASELINE`:** `YES`
+- **`SCRAMBLE_PRESERVES_INTERACTION_MODE`:** `YES`
+- **`SCRAMBLE_SESSION_HISTORY_UPDATE`:** `ATOMIC`
+- **Application Steps:**
+  1. Starting from current canonical session endpoint `(session.currentState, session.currentFrame)`:
+  2. Sequentially compute final `(scrambledState, scrambledFrame)` by applying `applyMove` and `nextSpatialFrame` for each move in the scramble sequence.
+  3. Atomically update session and history:
+     ```typescript
+     session.currentState = scrambledState;
+     session.currentFrame = scrambledFrame;
+     session.stagedMove = null;
+     session.displayTransforms = placementToTransforms(materializeState(scrambledState, scrambledFrame));
+     // session.interactionMode remains unchanged
+
+     history.initialBaselineState = scrambledState;
+     history.initialBaselineFrame = scrambledFrame;
+     history.entries = [];
+     history.cursorIndex = -1;
+     ```
 
 ---
 
@@ -180,7 +254,7 @@ export interface PlayHistoryState {
   - Scramble Generator Toolbar (Seed input, Scramble button, Notation badge).
 - **Control Overlay (Bottom / Side):**
   - 12 Move Buttons Grid (Grouped by Face with +/- directions).
-  - History Toolbar (Undo, Redo, Reset Baseline buttons).
+  - History Toolbar (Undo, Redo, "Back to baseline" buttons).
   - Timeline Scrubber (Horizontal chip list showing move index and notation with active cursor highlight).
   - Collapsible Keyboard Shortcuts Help Drawer.
 
@@ -192,18 +266,18 @@ Phase 3 is decomposed into four dependency-ordered, independently verifiable sub
 
 ```text
 [ Phase 3 Preflight: Architecture & Test Documentation Sync ]
-  - Synchronize SYSTEM_ARCHITECTURE.md and TEST_STRATEGY.md with accepted apps/web topology.
+  - Synchronize SYSTEM_ARCHITECTURE.md, TEST_STRATEGY.md, PROJECT_BLUEPRINT.md, DEVELOPMENT_GUIDE.md with accepted apps/web topology.
   - Record Playwright E2E testing strategy and dependency boundaries.
         │
         ▼
 [ Phase 3A: Application History & Deterministic Scramble Foundation ]
-  - Pure domain modules: history state transitions & Mulberry32 scramble generator.
+  - Pure domain modules: history state transitions & Mulberry32/FNV-1a scramble generator.
   - Comprehensive Vitest unit tests (100% pure TypeScript).
         │
         ▼
 [ Phase 3B: Undo / Redo / Timeline / Play UI Integration ]
   - Wire history engine to session orchestration in apps/web.
-  - Timeline Scrubber component, Undo/Redo controls, Scramble UI panel.
+  - Timeline Scrubber component, Undo/Redo controls, Scramble UI panel, "Back to baseline".
         │
         ▼
 [ Phase 3C: Keyboard Controls, Responsive Layout & Playwright Browser E2E ]
@@ -212,26 +286,28 @@ Phase 3 is decomposed into four dependency-ordered, independently verifiable sub
 ```
 
 ### 8.1. Phase 3 Preflight: Architecture & Test Documentation Sync
-- **Objective:** Synchronize concrete architecture and test strategy documents with the accepted codebase.
+- **Objective:** Synchronize all 4 concrete architecture and development documents with the accepted codebase.
 - **Deliverables:**
   - `docs/architecture/SYSTEM_ARCHITECTURE.md`: Document actual `apps/web` renderer/UI placement, zero runtime Zustand dependency, and layer boundaries.
   - `docs/development/TEST_STRATEGY.md`: Formalize Playwright browser E2E test plan for interaction flows.
+  - `docs/project/PROJECT_BLUEPRINT.md`: Update historical concrete package/state topology.
+  - `docs/development/DEVELOPMENT_GUIDE.md`: Align dev workflows and workspace boundaries.
 - **Preconditions:** Phase 3 planning accepted.
 
 ### 8.2. Phase 3A: Application History & Scramble Engine
 - **Objective:** Pure domain logic for history state transitions and deterministic scramble generation.
 - **Deliverables:**
   - `apps/web/src/components/history/history.ts`: Pure history data types, push entry, undo, redo, scrub, and branch truncation functions.
-  - `apps/web/src/components/history/scramble.ts`: Mulberry32 seeded PRNG and deterministic scramble sequence generator.
+  - `apps/web/src/components/history/scramble.ts`: FNV-1a UTF-16 hasher, Mulberry32 PRNG, and deterministic scramble sequence generator.
   - `apps/web/src/components/history/history.test.ts`: 100% pure unit test coverage for all history operations.
-  - `apps/web/src/components/history/scramble.test.ts`: Determinism, seed repeatability, and move vocabulary validation.
+  - `apps/web/src/components/history/scramble.test.ts`: FNV-1a hashing, PRNG determinism, seed repeatability, and move vocabulary validation.
 - **Preconditions:** Phase 3 Preflight accepted & committed.
 
 ### 8.3. Phase 3B: Interactive Play Store, Undo/Redo & Scrubber UI
 - **Objective:** Interactive UI components and session history wiring.
 - **Deliverables:**
   - Wire history state into `GearCubeViewport.tsx` / `animation.ts`.
-  - `HistoryControls.tsx`: Undo, Redo, and Reset buttons with dynamic disablement.
+  - `HistoryControls.tsx`: Undo, Redo, and "Back to baseline" buttons with dynamic disablement.
   - `TimelineScrubber.tsx`: Scrollable move list with clickable chips for arbitrary scrub.
   - `ScramblePanel.tsx`: Seed input and scramble trigger.
   - Unit and component tests for UI interactions.
@@ -262,12 +338,15 @@ Phase 3 is decomposed into four dependency-ordered, independently verifiable sub
 8. **`REDO_TRUNCATION_GATE`:** Move made at earlier cursor truncates future redo branch.
 9. **`FRAME_AWARE_HISTORY_GATE`:** SpatialFrame correctly restored across all undo/redo/scrub operations.
 10. **`ARBITRARY_SCRUB_GATE`:** Scrubbing directly to index $k$ restores exact snapshot $k$.
-11. **`SEEDED_SCRAMBLE_DETERMINISM_GATE`:** Same seed + length produces identical move sequence.
-12. **`SCRAMBLE_VALID_MOVE_GATE`:** All scramble moves belong to `ALL_MOVES` without same-face repeats.
-13. **`SCRAMBLE_BASELINE_GATE`:** Applying scramble sets new initial baseline and clears prior play history.
-14. **`MODE_COMPATIBILITY_GATE`:** Mode switches do not alter history entries or cursor.
-15. **`BUSY_INPUT_BLOCK_GATE`:** History navigation and scramble rejected while puzzle is busy.
-16. **`IMMUTABILITY_GATE`:** State, frame, and history entries remain strictly unmutated.
+11. **`RESET_TO_BASELINE_GATE`:** Reset restores initial baseline, sets `cursorIndex = -1`, and preserves future redo entries.
+12. **`SESSION_HISTORY_ALIGNMENT_GATE`:** At every IDLE endpoint, session state/frame matches corresponding history cursor snapshot.
+13. **`SEEDED_SCRAMBLE_DETERMINISM_GATE`:** Exact seed string + length produces identical move sequence.
+14. **`EMPTY_SEED_DETERMINISM_GATE`:** Empty string seed deterministically produces reproducible move sequence.
+15. **`SCRAMBLE_VALID_MOVE_GATE`:** All scramble moves belong to `ALL_MOVES` without consecutive same-face moves.
+16. **`SCRAMBLE_BASELINE_GATE`:** Applying scramble atomically establishes new initial baseline, clears prior history, and snaps projection.
+17. **`MODE_COMPATIBILITY_GATE`:** Mode switches do not alter history entries or cursor.
+18. **`BUSY_INPUT_BLOCK_GATE`:** History navigation and scramble rejected while puzzle is busy.
+19. **`IMMUTABILITY_GATE`:** State, frame, and history entries remain strictly unmutated.
 
 ### 9.2. Playwright Browser E2E Verification Flows (`tests/e2e/play-mode.spec.ts`)
 1. **`E2E_APP_LOAD_FLOW`:** Viewport, controls, and canvas render cleanly on initial page load.
@@ -280,14 +359,15 @@ Phase 3 is decomposed into four dependency-ordered, independently verifiable sub
 8. **`E2E_REDO_FLOW`:** Clicking Redo steps forward in history.
 9. **`E2E_REDO_TRUNCATION_FLOW`:** Executing a new move after Undo discards subsequent redo entries.
 10. **`E2E_ARBITRARY_SCRUB_FLOW`:** Clicking any chip in timeline scrubber navigates to that exact step.
-11. **`E2E_SEEDED_SCRAMBLE_FLOW`:** Entering seed and clicking Scramble produces reproducible sequence and resets baseline.
-12. **`E2E_KEYBOARD_MOVE_FLOW`:** Pressing `u` triggers `U+` move; `Shift+u` triggers `U-`.
-13. **`E2E_KEYBOARD_UNDO_FLOW`:** Pressing `Ctrl+Z` / `Cmd+Z` executes Undo.
-14. **`E2E_KEYBOARD_REDO_FLOW`:** Pressing `Ctrl+Shift+Z` / `Ctrl+Y` executes Redo.
-15. **`E2E_INPUT_FOCUS_EXCLUSION_FLOW`:** Typing `u` inside seed text input does not trigger puzzle move.
-16. **`E2E_BUSY_STATE_BLOCKING_FLOW`:** Undo/Redo/Scramble/Mode buttons are disabled while animating or at midpoint lock.
-17. **`E2E_RESPONSIVE_LAYOUT_FLOW`:** UI controls remain functional and accessible across narrow viewport widths.
-18. **`E2E_CONSOLE_ERROR_GATE`:** Zero unhandled JavaScript / WebGL console errors during test run.
+11. **`E2E_RESET_BASELINE_FLOW`:** Clicking "Back to baseline" navigates to cursor -1 while preserving redo chips.
+12. **`E2E_SEEDED_SCRAMBLE_FLOW`:** Entering seed and clicking Scramble produces reproducible sequence and resets baseline.
+13. **`E2E_KEYBOARD_MOVE_FLOW`:** Pressing `u` triggers `U+` move; `Shift+u` triggers `U-`.
+14. **`E2E_KEYBOARD_UNDO_FLOW`:** Pressing `Ctrl+Z` / `Cmd+Z` executes Undo.
+15. **`E2E_KEYBOARD_REDO_FLOW`:** Pressing `Ctrl+Shift+Z` / `Ctrl+Y` executes Redo.
+16. **`E2E_INPUT_FOCUS_EXCLUSION_FLOW`:** Typing `u` inside seed text input does not trigger puzzle move.
+17. **`E2E_BUSY_STATE_BLOCKING_FLOW`:** Undo/Redo/Scramble/Mode buttons are disabled while animating or at midpoint lock.
+18. **`E2E_RESPONSIVE_LAYOUT_FLOW`:** UI controls remain functional and accessible across narrow viewport widths.
+19. **`E2E_CONSOLE_ERROR_GATE`:** Zero unhandled JavaScript / WebGL console errors during test run.
 
 ### 9.3. Regression Invariant
 - All 28 animation tests, 4 renderer tests, 12 kinematics tests, and exhaustive core tests remain 100% passing.
