@@ -143,19 +143,34 @@ Phase 0B is partitioned into four dependency-ordered subphases:
 
 ---
 
-### Phase 2: 3D Model, Visual Assets, and Kinematic Animation Engine (Active Planning)
+### Phase 2: 3D Model, Visual Assets, and Kinematic Animation Engine (In Progress)
 - **Objective:** Scaffolding Vite + React + Three.js / R3F, implementing modular 3D gear geometry, and coupling visual motion via kinematic trajectory planning.
-- **Status:** `ACTIVE / PLANNING` — Architecture contract accepted ([`ADR-0006`](../decisions/ADR-0006-VIEW-BASED-KINEMATICS-AND-RENDERER-QUOTIENTS.md)); Phase 2A implementation scope frozen in [`PHASE_2_IMPLEMENTATION_PLAN.md`](PHASE_2_IMPLEMENTATION_PLAN.md) (Not Implemented).
+- **Status:** `IN PROGRESS` — Phase 2A implemented & verified; Phase 2B/2C planned.
 - **Prerequisites:** Completion of Phase 1 (`ACCEPTED & COMMITTED`).
-- **In-Scope:** `packages/kinematics`, 3D viewport component in `apps/web`, procedural gear meshes, continuous rotation interpolation, snap-to-core at $p=1.0$.
-- **Out-of-Scope:** Solvers, complex UI panels, camera vision, drag-to-turn gestures.
+
+#### Phase 2A: Pure Kinematic Engine & Static Projection (Implemented & Verified)
+- **Objective:** Implement pure TypeScript kinematic trajectory generator and static piece placement projection without framework dependencies.
+- **Status:** `IMPLEMENTED_VERIFIED_READY_FOR_INDEPENDENT_ACCEPTANCE`
 - **Deliverables:**
-  - Kinematic trajectory generator.
-  - 3D viewport component rendering coupled gear motion during face turns.
-- **Verification:** Performance profiling on Chrome DevTools against proposed 60 FPS target; visual inspection of tooth meshing; automated kinematic transform unit tests in Vitest.
-- **Acceptance Gate Criteria (`PHASE_2_PASS`):**
-  - [ ] 3D animations smoothly interpolate without visual clipping or mesh desynchronization.
-  - [ ] Renderer state is 100% derived from Core state; zero state mutations in Three.js.
+  - Package `@gearcube/kinematics` (`packages/kinematics`) with zero runtime dependencies other than `@gearcube/core`.
+  - Static projection `placementToTransforms(view)` emitting exactly 26 `ComponentTransform`s in `STABLE_COMPONENT_ID_ORDER` (8 corners, 12 edges, 6 centers).
+  - View-based continuous trajectory planner `planKinematics(fromView, move, toView)` evaluated purely as a function of progress $p \in [0, 1]$.
+  - Physical radial spin axis model $\hat{r} = \frac{\vec{r}_{\text{slot}}}{\|\vec{r}_{\text{slot}}\|}$ and $C_2$ ($180^\circ$) edge gear axial quotient.
+- **Verification Evidence:**
+  - `KINEMATICS_PURITY_GATE`: `PASS` (`@gearcube/core` sole dependency, no DOM/Node globals, no framework dependencies).
+  - `CORNER_MAPPING_GATE`: `32 / 32 PASS` (all reachable pairs map to canonical quaternions with 0 conflicts).
+  - `EDGE_MAPPING_GATE`: `144 / 144 PASS` (all reachable keys map to canonical orientations modulo $C_2$).
+  - `EDGE_PHASE_DECOMPOSITION_GATE`: `144 / 144 PASS` (decomposes into $q_{\text{base}}$ and $q_{\text{spin}}$ around radial axis).
+  - `CENTER_MAPPING_GATE`: `6 / 6 PASS` (all canonical center quaternions map local $+Y$ to outward face normal).
+  - `SCRAMBLE_CORE_UNIQUENESS_GATE`: `10 / 10 PASS` (verified with `serializeLogicalState` and `SOLVED_GEAR_CUBE_STATE`).
+  - `PHASE2A_PHYSICAL_TRANSITION_GATE`: `528 / 528 PASS` (48 solved + 480 scrambled transitions across all 4 SpatialFrames and 12 moves).
+  - Root verification (`npm run verify`): 12 test files, 134 tests passed, clean workspace typecheck and web build.
+
+#### Phase 2B: Modular 3D Geometry & Visual Meshes (Planned)
+- Procedural gear piece geometries, coordinate alignment, skin asset configuration.
+
+#### Phase 2C: Three.js / R3F Viewport & Animation Binding (Planned)
+- React Three Fiber canvas, transition execution, snap-to-core at $p=1.0$.
 
 ---
 

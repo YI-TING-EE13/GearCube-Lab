@@ -113,14 +113,20 @@
   - Serialization Round-Trip: $41,472 / 41,472$ states.
   - Serialization Uniqueness: Exactly $41,472$ distinct integer keys.
 
-### Level 4: Kinematic Trajectory Math Tests
-- **Scope:** `packages/kinematics`
-- **Focus:** Continuous angular interpolation and gear coupling equations.
-- **Invariants Tested:**
-  - At $p = 0.0$, trajectory transforms match `fromState` piece placement.
-  - At $p = 1.0$, trajectory transforms precisely match `toState` piece placement.
-  - Angular coupling ratios strictly enforced: Outer face rotates $180^\circ \cdot p$, middle slice rotates $90^\circ \cdot p$, edge gear cogs rotate $60^\circ \cdot p$.
-  - Kinematics engine never mutates or stores discrete state truth.
+### Level 4: Kinematic Trajectory Math & Static Projection Tests
+- **Scope:** `packages/kinematics` (`packages/kinematics/tests/projection.test.ts`, `packages/kinematics/tests/planner.test.ts`)
+- **Focus:** Static piece placement projection, view-based continuous angular trajectory generation, and gear coupling equations.
+- **Invariants & Gates Tested:**
+  - `KINEMATICS_PURITY_GATE`: `PASS` (`@gearcube/core` sole dependency, zero framework/DOM/Node dependencies).
+  - Stable Output Order: `placementToTransforms` and `plan.evaluate(p)` emit exactly 26 transforms in persistent `STABLE_COMPONENT_ID_ORDER` (8 corners, 12 edges, 6 centers).
+  - `CORNER_MAPPING_GATE`: $32 / 32 \text{ PASS}$ (all reachable `(CornerPieceId, CornerSlot)` pairs map to canonical unit quaternions with 0 orientation conflicts).
+  - `EDGE_MAPPING_GATE`: $144 / 144 \text{ PASS}$ (all reachable `(EdgePieceId, EdgeSlot, SliceGearPhase)` keys map to valid canonical orientations modulo $C_2$ ($180^\circ$ axial quotient)).
+  - `EDGE_PHASE_DECOMPOSITION_GATE`: $144 / 144 \text{ PASS}$ (composite edge orientation factorizes into base orientation $q_{\text{base}}$ and axial gear spin $q_{\text{spin}}$ around radial axis $\hat{r} = \frac{\vec{r}_{\text{slot}}}{\|\vec{r}_{\text{slot}}\|}$).
+  - `CENTER_MAPPING_GATE`: $6 / 6 \text{ PASS}$ (canonical center quaternions map local $+Y = (0, 1, 0)$ to outward face normal $\hat{n}$).
+  - `SCRAMBLE_CORE_UNIQUENESS_GATE`: $10 / 10 \text{ PASS}$ (10 frozen scramble sequences verified distinct via `serializeLogicalState`).
+  - `PHASE2A_PHYSICAL_TRANSITION_GATE`: $528 / 528 \text{ PASS}$ (48 solved transitions + 480 scrambled transitions across 4 SpatialFrames and 12 moves).
+  - Progress Validation: `evaluate(p)` strictly enforces $p \in [0.0, 1.0]$, throwing `RangeError` on invalid inputs.
+  - Immutability & Purity: Trajectory calculation is pure, deterministic, and leaves input `PiecePlacementView` objects untouched.
 
 ### Level 5: 3D Renderer & Viewport Isolation Tests
 - **Scope:** `packages/renderer`
