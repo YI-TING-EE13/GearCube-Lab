@@ -1,28 +1,57 @@
-﻿/**
+/**
  * @file GearCubeViewport.tsx
- * @description React Three Fiber canvas viewport with camera, OrbitControls, lighting, and static solved Gear Cube model.
+ * @description React Three Fiber canvas viewport hosting the interactive Gear Cube session, lighting, OrbitControls, and MoveControls overlay.
  */
 
-import React, { useMemo } from 'react';
-import { Canvas } from '@react-three/fiber';
+import React, { useState, useCallback } from 'react';
+import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
-import {
-  SOLVED_GEAR_CUBE_STATE,
-  DEFAULT_SPATIAL_FRAME,
-  materializeState,
-} from '@gearcube/core';
-import { placementToTransforms } from '@gearcube/kinematics';
+import type { Move } from '@gearcube/core';
 import { GearCubeModel } from '../cube/GearCubeModel';
+import { MoveControls } from '../controls/MoveControls';
+import {
+  type GearCubeSessionState,
+  createInitialSessionState,
+  startMove,
+  stepAnimation,
+} from '../cube/animation';
+
+interface AnimatedGearCubeSceneProps {
+  readonly session: GearCubeSessionState;
+  readonly onStepAnimation: (nowMs: number) => void;
+}
+
+/**
+ * Internal Canvas-descendant driver component executing the frame loop via R3F useFrame.
+ */
+const AnimatedGearCubeScene: React.FC<AnimatedGearCubeSceneProps> = ({
+  session,
+  onStepAnimation,
+}) => {
+  useFrame(() => {
+    if (session.activeAnimation !== null) {
+      onStepAnimation(performance.now());
+    }
+  });
+
+  return <GearCubeModel transforms={session.displayTransforms} />;
+};
 
 export const GearCubeViewport: React.FC = () => {
-  // Authoritative static pipeline: Core solved state + Default frame -> Physical view -> 26 ComponentTransforms
-  const transforms = useMemo(() => {
-    const view = materializeState(SOLVED_GEAR_CUBE_STATE, DEFAULT_SPATIAL_FRAME);
-    return placementToTransforms(view);
+  const [session, setSession] = useState<GearCubeSessionState>(createInitialSessionState);
+
+  const handleTriggerMove = useCallback((move: Move) => {
+    setSession((prev) => startMove(prev, move, performance.now()));
   }, []);
 
+  const handleStepAnimation = useCallback((nowMs: number) => {
+    setSession((prev) => stepAnimation(prev, nowMs));
+  }, []);
+
+  const isAnimating = session.activeAnimation !== null;
+
   return (
-    <div className="canvas-container" style={{ width: '100vw', height: '100vh' }}>
+    <div className="canvas-container" style={{ width: '100vw', height: '100vh', position: 'relative' }}>
       <Canvas
         camera={{
           position: [3.5, 3.0, 4.5],
@@ -44,9 +73,18 @@ export const GearCubeViewport: React.FC = () => {
           maxDistance={10.0}
         />
 
-        {/* Static Gear Cube Model */}
-        <GearCubeModel transforms={transforms} />
+        {/* Dynamic Animated Gear Cube Scene */}
+        <AnimatedGearCubeScene
+          session={session}
+          onStepAnimation={handleStepAnimation}
+        />
       </Canvas>
+
+      {/* 12-Move Control Overlay */}
+      <MoveControls
+        isAnimating={isAnimating}
+        onTriggerMove={handleTriggerMove}
+      />
     </div>
   );
 };

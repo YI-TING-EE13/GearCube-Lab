@@ -1,4 +1,4 @@
-﻿html,
+html,
 body,
 #root {
   margin: 0;
@@ -7,6 +7,8 @@ body,
   height: 100%;
   overflow: hidden;
   background-color: #121214;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  color: #f0f0f2;
 }
 
 .app-container {
@@ -24,4 +26,113 @@ body,
   width: 100%;
   height: 100%;
   position: relative;
+}
+
+/* Move Controls UI Overlay */
+.move-controls-overlay {
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  pointer-events: none;
+  z-index: 10;
+  user-select: none;
+}
+
+.move-controls-panel {
+  pointer-events: auto;
+  background: rgba(22, 22, 26, 0.88);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 14px;
+  padding: 12px 18px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.move-controls-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  color: #a0a0aa;
+  text-transform: uppercase;
+}
+
+.animating-indicator {
+  font-size: 11px;
+  color: #ff9f1a;
+  font-weight: 500;
+  animation: pulse 1.2s infinite ease-in-out;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1.0; }
+}
+
+.faces-grid {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.face-control-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 8px;
+  padding: 6px 8px;
+}
+
+.face-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: #e4e4e7;
+}
+
+.button-pair {
+  display: flex;
+  gap: 4px;
+}
+
+.move-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 6px;
+  color: #ffffff;
+  font-size: 15px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.move-btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.22);
+  border-color: rgba(255, 255, 255, 0.35);
+  transform: translateY(-1px);
+}
+
+.move-btn:active:not(:disabled) {
+  transform: translateY(0);
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.move-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
 }

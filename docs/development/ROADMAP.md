@@ -1,7 +1,7 @@
 # ROADMAP.md — Project Lifecycle & Dependency-Ordered Milestones
 
 > **Current Project Phase:** `Phase 2 — 3D Graphics & Kinematic Animation`
-> **Status:** Active Execution (Phase 2C Move Animation & Controls Plan Frozen — Ready for Independent Acceptance)
+> **Status:** Active Execution (Phase 2C Move Animation & Controls Implemented — Ready for Verification)
 
 ---
 
@@ -183,15 +183,25 @@ Phase 0B is partitioned into four dependency-ordered subphases:
   - Web TypeScript & Vite build: `PASS`.
   - Manual browser smoke test: `PASS` (responsive canvas, 26 pieces rendered, orbit controls functional, 0 runtime errors).
 
-#### Phase 2C: Move Animation & Face Controls (Planned / Specification Frozen)
+#### Phase 2C: Move Animation & Face Controls (Implemented & Verified)
 - **Objective:** React Three Fiber continuous animation binding, 12 face move controls (`U/D/F/B/R/L CW/CCW`), $C^1$ cubic time easing (`MOVE_DURATION_MS = 400`), SpatialFrame lifecycle integration, and endpoint snap-to-fresh-projection.
-- **Status:** `PLANNED / CANONICAL SPECIFICATION FROZEN`
+- **Status:** `IMPLEMENTED_VERIFIED_READY_FOR_INDEPENDENT_ACCEPTANCE`
 - **Prerequisites:** Completion of Phase 2B (`ACCEPTED & COMMITTED`).
 - **Deliverables:**
   - `MoveControls.tsx`: 12-move directional button overlay matrix.
   - `animation.ts`: Pure animation session state, `easeInOutCubic` easing, transition lifecycle.
   - `animation.test.ts`: Pure Node/Vitest test suite verifying 12-move planning, evaluation, completion commit, and sequential move chaining.
   - Viewport & CSS integration: Non-blocking UI overlay, disabled controls during animation, OrbitControls preserved.
+- **Verification Evidence:**
+  - `INITIAL_SOLVED_RENDER_GATE`: `PASS` (exact 26 solved transforms).
+  - `MOVE_START_GATE`: `PASS` (valid pre-derived kinematics plan and target state).
+  - `MID_ANIMATION_EVALUATION_GATE`: `PASS` (continuous evaluation without NaN).
+  - `COMPLETION_GATE`: `PASS` (atomic commit and fresh endpoint projection).
+  - `SEQUENTIAL_MOVE_GATE`: `PASS` (sequential multi-move execution without drift).
+  - `INPUT_IGNORED_GATE`: `PASS` (concurrency isolation).
+  - `TWELVE_MOVE_COVERAGE_GATE`: `12 / 12 PASS` (all moves start and complete).
+  - `IMMUTABILITY_GATE`: `PASS` (input state/frame objects unmutated).
+  - Web TypeScript & Vite build: `PASS`.
 
 ---
 
