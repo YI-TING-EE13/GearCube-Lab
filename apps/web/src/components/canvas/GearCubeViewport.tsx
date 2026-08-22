@@ -1,6 +1,6 @@
 /**
  * @file GearCubeViewport.tsx
- * @description React Three Fiber canvas viewport hosting the interactive Gear Cube session, lighting, OrbitControls, and MoveControls overlay.
+ * @description React Three Fiber canvas viewport hosting the interactive Phase 2D staged Gear Cube session, lighting, OrbitControls, and MoveControls overlay.
  */
 
 import React, { useState, useCallback } from 'react';
@@ -14,6 +14,7 @@ import {
   createInitialSessionState,
   startMove,
   stepAnimation,
+  isSessionAnimating,
 } from '../cube/animation';
 
 interface AnimatedGearCubeSceneProps {
@@ -29,7 +30,7 @@ const AnimatedGearCubeScene: React.FC<AnimatedGearCubeSceneProps> = ({
   onStepAnimation,
 }) => {
   useFrame(() => {
-    if (session.activeAnimation !== null) {
+    if (isSessionAnimating(session)) {
       onStepAnimation(performance.now());
     }
   });
@@ -48,7 +49,7 @@ export const GearCubeViewport: React.FC = () => {
     setSession((prev) => stepAnimation(prev, nowMs));
   }, []);
 
-  const isAnimating = session.activeAnimation !== null;
+  const isAnimating = isSessionAnimating(session);
 
   return (
     <div className="canvas-container" style={{ width: '100vw', height: '100vh', position: 'relative' }}>
@@ -80,9 +81,10 @@ export const GearCubeViewport: React.FC = () => {
         />
       </Canvas>
 
-      {/* 12-Move Control Overlay */}
+      {/* 12-Move Control Overlay with Phase 2D Staging Support */}
       <MoveControls
         isAnimating={isAnimating}
+        stagedMove={session.stagedMove}
         onTriggerMove={handleTriggerMove}
       />
     </div>

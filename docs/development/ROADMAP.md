@@ -1,7 +1,7 @@
 # ROADMAP.md — Project Lifecycle & Dependency-Ordered Milestones
 
 > **Current Project Phase:** `Phase 2 — 3D Graphics & Kinematic Animation`
-> **Status:** Active Execution (Phase 2D Physical Turn Staging Plan Frozen — Ready for Independent Acceptance)
+> **Status:** Active Execution (Phase 2D Physical Turn Staging Implemented — Ready for Independent Verification)
 
 ---
 
@@ -196,14 +196,30 @@ Phase 0B is partitioned into four dependency-ordered subphases:
   - Automated Acceptance: `PASS` (14 test files, 149 tests passed; typecheck and web build clean).
   - Human Browser Acceptance: `PASS` (Interactive 12-move controls, continuous animation, OrbitControls preserved).
 
-#### Phase 2D: Physical Two-Step Turn Staging (Planned / Specification Frozen)
+#### Phase 2D: Physical Two-Step Turn Staging (Implemented & Verified)
 - **Objective:** Physical two-step turn interaction state machine (90° physical step / 200 ms per step), half-turn lock, continuation to 180° canonical endpoint, and cancellation back to origin.
-- **Status:** `PLANNED / READY_FOR_INDEPENDENT_ACCEPTANCE`
+- **Status:** `IMPLEMENTED_VERIFIED_READY_FOR_INDEPENDENT_ACCEPTANCE`
 - **Prerequisites:** Completion of Phase 2C (`ACCEPTED & COMMITTED`).
 - **Deliverables:**
   - `animation.ts`: Staging state machine (`IDLE`, `FIRST_HALF_ANIMATING`, `HALF_TURN_LOCKED`, `SECOND_HALF_ANIMATING`, `CANCEL_HALF_ANIMATING`) and progress lerping.
   - `animation.test.ts`: Automated test suite for half-turn holding, continuation, cancellation, and symmetry.
   - `MoveControls.tsx` & `App.css`: Visual half-turn lock status and selective button enablement.
+- **Verification Evidence:**
+  - `FIRST_HALF_GATE`: `PASS` (exact p=0.5 evaluation, no logical state commit).
+  - `HALF_TURN_LOCK_GATE`: `PASS` (stable midpoint hold, no drift over time).
+  - `SAME_DIRECTION_CONTINUE_GATE`: `PASS` (second 90° step completes full canonical 180° move and commits).
+  - `OPPOSITE_DIRECTION_CANCEL_GATE`: `PASS` (opposite direction cancels back to origin without state mutation).
+  - `OTHER_FACE_BLOCKED_GATE`: `PASS` (all other faces blocked at midpoint).
+  - `INITIAL_CCW_SYMMETRY_GATE`: `PASS` (symmetrical CCW behavior).
+  - `TWELVE_DIRECTED_MOVE_STAGING_GATE`: `12 / 12 PASS` (all moves support two-step staging).
+  - `TWELVE_DIRECTED_MOVE_CANCEL_GATE`: `12 / 12 PASS` (all moves support two-step cancellation).
+  - `SEQUENTIAL_CANONICAL_MOVE_GATE`: `PASS` (multi-move sequences chain accurately).
+  - `NO_HALF_STATE_COMMIT_GATE`: `PASS` (domain state unmutated at midpoint).
+  - `FRESH_ENDPOINT_PROJECTION_GATE`: `PASS` (fresh projection on full completion).
+  - `FRESH_CANCEL_PROJECTION_GATE`: `PASS` (fresh projection on cancellation).
+  - `INPUT_DURING_ANIMATION_GATE`: `PASS` (concurrency isolation during transitions).
+  - `IMMUTABILITY_GATE`: `PASS` (input state/frame objects unmutated).
+  - Web TypeScript & Vite build: `PASS`.
 
 ---
 

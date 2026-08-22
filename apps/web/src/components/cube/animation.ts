@@ -1,6 +1,6 @@
 /**
  * @file animation.ts
- * @description Pure animation session state, cubic easing, and lifecycle transition functions with injected timestamps.
+ * @description Pure animation session state, cubic easing, physical two-step turn staging lifecycle, and transition functions with injected timestamps.
  */
 
 import {
@@ -22,8 +22,14 @@ import {
   planKinematics,
 } from '@gearcube/kinematics';
 
-/** Default duration for a single 180-degree layer turn in milliseconds */
-export const MOVE_DURATION_MS = 400;
+/** Duration of a single 90-degree physical user input step in milliseconds */
+export const PHYSICAL_STEP_DURATION_MS = 200;
+
+/** Full canonical 180-degree move duration in milliseconds (sum of two 90-degree steps) */
+export const FULL_CANONICAL_MOVE_DURATION_MS = 400;
+
+/** Backward-compatible alias for canonical full move duration */
+export const MOVE_DURATION_MS = FULL_CANONICAL_MOVE_DURATION_MS;
 
 /**
  * Standard cubic ease-in-out monotonic function: [0, 1] -> [0, 1].
@@ -37,15 +43,26 @@ export function easeInOutCubic(t: number): number {
 }
 
 /**
- * Encapsulates the active kinematics plan and pre-derived target endpoint during an animation.
+ * Lifecycle states for physical two-step turn staging.
  */
-export interface AnimationSession {
+export type StagingPhase =
+  | 'IDLE'
+  | 'FIRST_HALF_ANIMATING'
+  | 'HALF_TURN_LOCKED'
+  | 'SECOND_HALF_ANIMATING'
+  | 'CANCEL_HALF_ANIMATING';
+
+/**
+ * Encapsulates the active staged canonical move, single kinematics plan, and segment timing.
+ */
+export interface StagedMoveSession {
   readonly move: Move;
   readonly plan: KinematicPlan;
   readonly nextState: GearCubeState;
   readonly nextFrame: SpatialFrame;
-  readonly startTimeMs: number;
-  readonly durationMs: number;
+  readonly phase: StagingPhase;
+  readonly segmentStartTimeMs: number;
+  readonly segmentDurationMs: number;
 }
 
 /**
@@ -54,8 +71,35 @@ export interface AnimationSession {
 export interface GearCubeSessionState {
   readonly currentState: GearCubeState;
   readonly currentFrame: SpatialFrame;
-  readonly activeAnimation: AnimationSession | null;
+  readonly stagedMove: StagedMoveSession | null;
   readonly displayTransforms: readonly ComponentTransform[];
+}
+
+/**
+ * Returns true if an animation segment is actively transitioning (first half, second half, or cancel).
+ */
+export function isSessionAnimating(session: GearCubeSessionState): boolean {
+  if (session.stagedMove === null) return false;
+  const phase = session.stagedMove.phase;
+  return (
+    phase === 'FIRST_HALF_ANIMATING' ||
+    phase === 'SECOND_HALF_ANIMATING' ||
+    phase === 'CANCEL_HALF_ANIMATING'
+  );
+}
+
+/**
+ * Returns true if the session is holding at the physical half-turn lock midpoint (p = 0.5).
+ */
+export function isSessionHalfTurnLocked(session: GearCubeSessionState): boolean {
+  return session.stagedMove?.phase === 'HALF_TURN_LOCKED';
+}
+
+/**
+ * Returns the current staging phase of the session.
+ */
+export function getStagingPhase(session: GearCubeSessionState): StagingPhase {
+  return session.stagedMove?.phase ?? 'IDLE';
 }
 
 /**
@@ -70,89 +114,188 @@ export function createInitialSessionState(): GearCubeSessionState {
   return {
     currentState,
     currentFrame,
-    activeAnimation: null,
+    stagedMove: null,
     displayTransforms,
   };
 }
 
 /**
- * Initiates a new move transition if the session is currently idle.
- * If an animation is already active, returns the existing session unmodified (INPUT_DURING_ANIMATION_POLICY: IGNORED).
+ * Initiates or advances a physical move transition according to the staging state machine.
+ *
+ * - From IDLE: Starts FIRST_HALF_ANIMATING (p: 0.0 -> 0.5).
+ * - From HALF_TURN_LOCKED:
+ *   - Same face + same direction: Starts SECOND_HALF_ANIMATING (p: 0.5 -> 1.0).
+ *   - Same face + opposite direction: Starts CANCEL_HALF_ANIMATING (p: 0.5 -> 0.0).
+ *   - Other faces: Blocked (returns unchanged session).
+ * - During active animation (FIRST/SECOND/CANCEL): Inputs ignored.
  */
 export function startMove(
   session: GearCubeSessionState,
   move: Move,
   nowMs: number,
-  durationMs: number = MOVE_DURATION_MS
+  stepDurationMs: number = PHYSICAL_STEP_DURATION_MS
 ): GearCubeSessionState {
-  if (session.activeAnimation !== null) {
-    return session;
+  const duration = Math.max(1, stepDurationMs);
+
+  // Case 1: Session is idle -> Start first half physical step (p: 0.0 -> 0.5)
+  if (session.stagedMove === null || session.stagedMove.phase === 'IDLE') {
+    const fromView = materializeState(session.currentState, session.currentFrame);
+    const nextState = applyMove(session.currentState, move);
+    const nextFrame = nextSpatialFrame(session.currentFrame, move.face);
+    const toView = materializeState(nextState, nextFrame);
+    const plan = planKinematics(fromView, move, toView);
+
+    const stagedMove: StagedMoveSession = {
+      move,
+      plan,
+      nextState,
+      nextFrame,
+      phase: 'FIRST_HALF_ANIMATING',
+      segmentStartTimeMs: nowMs,
+      segmentDurationMs: duration,
+    };
+
+    return {
+      currentState: session.currentState,
+      currentFrame: session.currentFrame,
+      stagedMove,
+      displayTransforms: session.displayTransforms,
+    };
   }
 
-  const fromView = materializeState(session.currentState, session.currentFrame);
-  const nextState = applyMove(session.currentState, move);
-  const nextFrame = nextSpatialFrame(session.currentFrame, move.face);
-  const toView = materializeState(nextState, nextFrame);
-  const plan = planKinematics(fromView, move, toView);
+  // Case 2: Session is holding at half-turn lock (p = 0.5)
+  if (session.stagedMove.phase === 'HALF_TURN_LOCKED') {
+    // Only inputs on the active staged face are allowed
+    if (move.face !== session.stagedMove.move.face) {
+      return session; // OTHER_FACE_INPUT: BLOCKED
+    }
 
-  const activeAnimation: AnimationSession = {
-    move,
-    plan,
-    nextState,
-    nextFrame,
-    startTimeMs: nowMs,
-    durationMs: Math.max(1, durationMs),
-  };
+    if (move.direction === session.stagedMove.move.direction) {
+      // SAME_FACE_SAME_DIRECTION: Continue to full canonical endpoint (p: 0.5 -> 1.0)
+      const stagedMove: StagedMoveSession = {
+        ...session.stagedMove,
+        phase: 'SECOND_HALF_ANIMATING',
+        segmentStartTimeMs: nowMs,
+        segmentDurationMs: duration,
+      };
+      return {
+        ...session,
+        stagedMove,
+      };
+    } else {
+      // SAME_FACE_OPPOSITE_DIRECTION: Cancel back to original origin (p: 0.5 -> 0.0)
+      const stagedMove: StagedMoveSession = {
+        ...session.stagedMove,
+        phase: 'CANCEL_HALF_ANIMATING',
+        segmentStartTimeMs: nowMs,
+        segmentDurationMs: duration,
+      };
+      return {
+        ...session,
+        stagedMove,
+      };
+    }
+  }
 
-  return {
-    currentState: session.currentState,
-    currentFrame: session.currentFrame,
-    activeAnimation,
-    displayTransforms: session.displayTransforms,
-  };
+  // Case 3: Animation is actively transitioning -> Ignore input
+  return session;
 }
 
 /**
- * Advances the animation session according to the current timestamp.
- * Evaluates the active kinematic trajectory at eased progress while active.
- * Atomically commits logical state and fresh endpoint projection upon completion (p >= 1.0).
+ * Advances the physical animation session according to the current timestamp.
+ * Evaluates the active kinematic trajectory across local segment progress ranges.
+ *
+ * - FIRST_HALF_ANIMATING completion: Enters HALF_TURN_LOCKED at p = 0.5 (no logical commit).
+ * - SECOND_HALF_ANIMATING completion: Commits nextState/nextFrame and snaps fresh endpoint projection.
+ * - CANCEL_HALF_ANIMATING completion: Retains original state/frame and snaps fresh original projection.
  */
 export function stepAnimation(
   session: GearCubeSessionState,
   nowMs: number
 ): GearCubeSessionState {
-  if (session.activeAnimation === null) {
+  if (session.stagedMove === null || session.stagedMove.phase === 'HALF_TURN_LOCKED') {
     return session;
   }
 
-  const { plan, nextState, nextFrame, startTimeMs, durationMs } = session.activeAnimation;
-  const elapsed = Math.max(0, nowMs - startTimeMs);
-  const rawProgress = Math.min(1.0, elapsed / durationMs);
+  const { plan, nextState, nextFrame, phase, segmentStartTimeMs, segmentDurationMs } =
+    session.stagedMove;
+  const elapsed = Math.max(0, nowMs - segmentStartTimeMs);
+  const rawSegmentP = Math.min(1.0, elapsed / segmentDurationMs);
+  const easedSegmentP = easeInOutCubic(rawSegmentP);
 
-  if (rawProgress >= 1.0) {
-    // Completion sequence:
-    // 1. Commit nextState
-    // 2. Commit nextFrame
-    // 3. Clear active animation session
-    // 4. Materialize fresh endpoint projection from committed logical state (anti-drift authority)
-    const finalView = materializeState(nextState, nextFrame);
-    const finalTransforms = placementToTransforms(finalView);
+  if (phase === 'FIRST_HALF_ANIMATING') {
+    if (rawSegmentP >= 1.0) {
+      // Midpoint completion -> enter HALF_TURN_LOCKED
+      const midpointTransforms = plan.evaluate(0.5);
+      const stagedMove: StagedMoveSession = {
+        ...session.stagedMove,
+        phase: 'HALF_TURN_LOCKED',
+        segmentStartTimeMs: nowMs,
+      };
+      return {
+        currentState: session.currentState,
+        currentFrame: session.currentFrame,
+        stagedMove,
+        displayTransforms: midpointTransforms,
+      };
+    }
 
+    const canonicalP = 0.5 * easedSegmentP;
+    const displayTransforms = plan.evaluate(canonicalP);
     return {
-      currentState: nextState,
-      currentFrame: nextFrame,
-      activeAnimation: null,
-      displayTransforms: finalTransforms,
+      ...session,
+      displayTransforms,
     };
   }
 
-  const easedProgress = easeInOutCubic(rawProgress);
-  const displayTransforms = plan.evaluate(easedProgress);
+  if (phase === 'SECOND_HALF_ANIMATING') {
+    if (rawSegmentP >= 1.0) {
+      // Full turn completion sequence:
+      // 1. Commit nextState
+      // 2. Commit nextFrame
+      // 3. Clear staged move session
+      // 4. Materialize fresh endpoint projection from committed logical state
+      const finalView = materializeState(nextState, nextFrame);
+      const finalTransforms = placementToTransforms(finalView);
+      return {
+        currentState: nextState,
+        currentFrame: nextFrame,
+        stagedMove: null,
+        displayTransforms: finalTransforms,
+      };
+    }
 
-  return {
-    currentState: session.currentState,
-    currentFrame: session.currentFrame,
-    activeAnimation: session.activeAnimation,
-    displayTransforms,
-  };
+    const canonicalP = 0.5 + 0.5 * easedSegmentP;
+    const displayTransforms = plan.evaluate(canonicalP);
+    return {
+      ...session,
+      displayTransforms,
+    };
+  }
+
+  if (phase === 'CANCEL_HALF_ANIMATING') {
+    if (rawSegmentP >= 1.0) {
+      // Cancel completion sequence:
+      // 1. Retain original currentState and currentFrame unchanged
+      // 2. Clear staged move session
+      // 3. Materialize fresh original projection
+      const finalView = materializeState(session.currentState, session.currentFrame);
+      const finalTransforms = placementToTransforms(finalView);
+      return {
+        currentState: session.currentState,
+        currentFrame: session.currentFrame,
+        stagedMove: null,
+        displayTransforms: finalTransforms,
+      };
+    }
+
+    const canonicalP = 0.5 * (1.0 - easedSegmentP);
+    const displayTransforms = plan.evaluate(canonicalP);
+    return {
+      ...session,
+      displayTransforms,
+    };
+  }
+
+  return session;
 }
