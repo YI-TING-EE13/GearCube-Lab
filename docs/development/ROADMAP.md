@@ -148,9 +148,9 @@ Phase 0B is partitioned into four dependency-ordered subphases:
 - **Status:** `IN PROGRESS` — Phase 2A implemented & verified; Phase 2B/2C planned.
 - **Prerequisites:** Completion of Phase 1 (`ACCEPTED & COMMITTED`).
 
-#### Phase 2A: Pure Kinematic Engine & Static Projection (Implemented & Verified)
+#### Phase 2A: Pure Kinematic Engine & Static Projection (Completed & Accepted)
 - **Objective:** Implement pure TypeScript kinematic trajectory generator and static piece placement projection without framework dependencies.
-- **Status:** `IMPLEMENTED_VERIFIED_READY_FOR_INDEPENDENT_ACCEPTANCE`
+- **Status:** `ACCEPTED & COMMITTED` (Commit `de0aa15ee3ab050ccb943b9b0efd9e98fdf03a85`)
 - **Deliverables:**
   - Package `@gearcube/kinematics` (`packages/kinematics`) with zero runtime dependencies other than `@gearcube/core`.
   - Static projection `placementToTransforms(view)` emitting exactly 26 `ComponentTransform`s in `STABLE_COMPONENT_ID_ORDER` (8 corners, 12 edges, 6 centers).
@@ -164,13 +164,15 @@ Phase 0B is partitioned into four dependency-ordered subphases:
   - `CENTER_MAPPING_GATE`: `6 / 6 PASS` (all canonical center quaternions map local $+Y$ to outward face normal).
   - `SCRAMBLE_CORE_UNIQUENESS_GATE`: `10 / 10 PASS` (verified with `serializeLogicalState` and `SOLVED_GEAR_CUBE_STATE`).
   - `PHASE2A_PHYSICAL_TRANSITION_GATE`: `528 / 528 PASS` (48 solved + 480 scrambled transitions across all 4 SpatialFrames and 12 moves).
-  - Root verification (`npm run verify`): 12 test files, 134 tests passed, clean workspace typecheck and web build.
+  - Root verification (`npm run verify`): 12 test files, 136 tests passed, clean workspace typecheck and web build.
 
-#### Phase 2B: Modular 3D Geometry & Visual Meshes (Planned)
-- Procedural gear piece geometries, coordinate alignment, skin asset configuration.
+#### Phase 2B: Modular 3D Geometry, Visual Meshes & R3F Viewport (Planned)
+- **Objective:** Scaffolding React Three Fiber viewport in `apps/web`, procedural gear piece geometries, and static projection binding.
+- **Status:** `PLANNED / ARCHITECTURE RECONNAISSANCE COMPLETE` (Scope formalized in [`PHASE_2_IMPLEMENTATION_PLAN.md`](PHASE_2_IMPLEMENTATION_PLAN.md)).
+- **Prerequisites:** Completion of Phase 2A (`ACCEPTED & COMMITTED`).
 
-#### Phase 2C: Three.js / R3F Viewport & Animation Binding (Planned)
-- React Three Fiber canvas, transition execution, snap-to-core at $p=1.0$.
+#### Phase 2C: Continuous Animation Binding & Turn Execution (Planned)
+- React Three Fiber continuous animation loop, time easing, transition execution, and snap-to-core at $p=1.0$.
 
 ---
 

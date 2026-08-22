@@ -1,275 +1,285 @@
-# PHASE_2_IMPLEMENTATION_PLAN.md — Phase 2 3D Graphics & Kinematic Animation Plan
+﻿# PHASE_2_IMPLEMENTATION_PLAN.md — Phase 2 3D Graphics & Kinematic Animation Plan
 
-> **Document Status:** `PHASE_2A_SCOPE_FROZEN` (Ready for Phase 2A Implementation Gate)
+> **Document Status:** `PHASE_2B_CANONICAL_PLAN_READY_FOR_ACCEPTANCE`
 > **Phase Target:** Phase 2 — 3D Model, Visual Assets, and Kinematic Animation Engine
-> **Applicability:** Kinematics Package (`packages/kinematics`), Web Application (`apps/web`), & 3D Rendering Layer
+> **Phase 2A Status:** `COMPLETED & ACCEPTED` (Commit `de0aa15ee3ab050ccb943b9b0efd9e98fdf03a85`)
+> **Phase 2B Status:** `PLANNED / CANONICAL SPECIFICATION FROZEN`
+> **Applicability:** Web Application (`apps/web`), Kinematics Package (`packages/kinematics`), & 3D Rendering Layer
 
 ---
 
-## 1. Executive Summary & Accepted Architecture Baseline
+## 1. Executive Summary & Architecture Hierarchy
 
-This document defines the frozen architectural contracts, mathematical specifications, coordinate conventions, package boundaries, and exact file scope for **Phase 2A (Pure Kinematic Engine & Static Projection)**.
+Phase 2 establishes the visual and continuous kinematic simulation layer of GearCube Lab.
+- **Phase 2A (`COMPLETED & ACCEPTED`):** Pure mathematical kinematic engine and static projection in `@gearcube/kinematics`, operating purely on `PiecePlacementView` without framework dependencies.
+- **Phase 2B (`CURRENT FROZEN TARGET`):** Static 3D Graphics, procedural mesh geometries, and React Three Fiber scene scaffolding in `apps/web`.
+- **Phase 2C (`FUTURE TARGET`):** Continuous animation binding, time easing, and interactive face turn triggers.
 
-### Accepted Architecture Foundations ([`ADR-0006`](../decisions/ADR-0006-VIEW-BASED-KINEMATICS-AND-RENDERER-QUOTIENTS.md)):
-1. **View-Based Kinematic Planner (`CASE B` Resolution):**
-   The continuous kinematic trajectory generator operates directly on physical piece placement views derived from Core:
-   $$\text{planKinematics}(fromView: PiecePlacementView, move: Move, toView: PiecePlacementView) \to KinematicPlan$$
-   This eliminates all 24/48 moving-set face inversions present in frame-agnostic state planners.
-2. **Intentional $C_2$ ($180^\circ$) Axial Quotient for Edge Gears:**
-   Continuous middle-edge gear spin ($\Delta \theta = \pm 60^\circ \cdot p$) wraps seamlessly into canonical representatives ($0^\circ, 60^\circ, 120^\circ$) under the renderer's $C_2$ axial symmetry design choice (`EDGE_GEAR_RENDERER_AXIAL_QUOTIENT: ANGLE_MOD_180`, `MVP_GEAR_GEOMETRY_POLICY: INTENTIONALLY_C2_AXIAL_SYMMETRIC_PLACEHOLDER`, `PHYSICAL_GEAR_MESH_C2_SYMMETRY_PROVEN: NO`).
-3. **Purified Kinematic Trajectory Evaluation:**
-   `KinematicPlan` is a pure mathematical function of normalized mechanical progress $p \in [0, 1]$. All clock timing, duration, easing, and requestAnimationFrame loops belong entirely to `apps/web` (`KINEMATICS_INPUT_TIME: NONE`).
-4. **Sole Orientation Authority:**
-   `ComponentTransform` uses `rotationQuaternion` as its sole orientation authority (`ORIENTATION_AUTHORITY: QUATERNION_ONLY`).
-5. **Stable Core Piece Identity:**
-   `ComponentId` is derived strictly from Core piece identity vocabularies (`CornerPieceId | EdgePieceId | CenterPieceId`), never from temporary slot names (`SLOT_USED_AS_COMPONENT_IDENTITY: NO`).
-6. **Strict Domain Core Independence:**
-   `packages/core` remains the sole logical state authority. `packages/kinematics` is a pure downstream package with zero dependencies on Three.js, React, R3F, or DOM.
-
----
-
-## 2. Lockfile & Workspace Registration Analysis
-
-### 2.1. npm Lockfile Model (Lockfile Version 3)
-- **`PACKAGE_LOCK_VERSION`:** 3
-- **`WORKSPACE_PACKAGES_RECORDED_IN_LOCKFILE`:** YES (Root `package-lock.json` explicitly records workspace packages under `"packages/core"`, `"apps/web"`, and symlink entries under `"node_modules/@gearcube/*"`).
-- **`KINEMATICS_WORKSPACE_REQUIRES_LOCK_ENTRY`:** YES (`packages/kinematics` requires an entry in `package-lock.json` to enable reproducible `npm ci` builds).
-- **`PACKAGE_LOCK_CHANGE_REQUIRED`:** YES (During Phase 2A implementation, workspace registration will update `package-lock.json`).
-
-### 2.2. packages/kinematics Package Manifest (`packages/kinematics/package.json`)
-```json
-{
-  "name": "@gearcube/kinematics",
-  "version": "0.0.0",
-  "private": true,
-  "type": "module",
-  "exports": {
-    ".": "./src/index.ts"
-  },
-  "scripts": {
-    "typecheck": "tsc -p tsconfig.json --noEmit"
-  },
-  "dependencies": {
-    "@gearcube/core": "0.0.0"
-  }
-}
+### Architectural Authority Flow:
 ```
-
-### 2.3. packages/kinematics TypeScript Configuration (`packages/kinematics/tsconfig.json`)
-```json
-{
-  "extends": "../../tsconfig.base.json",
-  "compilerOptions": {
-    "lib": ["ES2022"],
-    "types": []
-  },
-  "include": ["src/**/*"]
-}
+┌─────────────────────────────────────────────────────────────┐
+│ @gearcube/core (SOLE DOMAIN LOGICAL TRUTH)                 │
+│ GearCubeState + SpatialFrame                                │
+└──────────────────────────────┬──────────────────────────────┘
+                               │ materializeState(state, frame)
+                               ▼
+┌─────────────────────────────────────────────────────────────┐
+│ PiecePlacementView (PHYSICAL PIECE PLACEMENT VIEW)         │
+│ 8 CornerPlacements, 12 EdgePlacements, 6 CenterPlacements   │
+└──────────────────────────────┬──────────────────────────────┘
+                               │ placementToTransforms(view)
+                               ▼
+┌─────────────────────────────────────────────────────────────┐
+│ @gearcube/kinematics (PURE 3D TRANSFORMATION PROJECTION)    │
+│ 26 ComponentTransforms (Position + Unit Quaternion)         │
+└──────────────────────────────┬──────────────────────────────┘
+                               │ props: { transforms }
+                               ▼
+┌─────────────────────────────────────────────────────────────┐
+│ apps/web (REACT THREE FIBER VIEWPORT & VISUAL SCENE GRAPH)  │
+│ 26 Persistent Top-Level Piece Groups (<group key={id}>)    │
+└─────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## 3. Public API Contract & Stable Output Ordering
+## 2. Phase 2B Objective & Static Render Pipeline
 
-### 3.1. Phase 2A Complete Public TypeScript API Contract
+The primary objective of Phase 2B is to render a visually coherent, interactive static 3D Gear Cube in `apps/web` derived exclusively from the authoritative Core + Kinematics pipeline:
+
 ```typescript
-import type {
-  Move,
-  CornerPieceId,
-  EdgePieceId,
-  CenterPieceId,
-  PiecePlacementView,
-} from '@gearcube/core';
+import { SOLVED_GEAR_CUBE_STATE, DEFAULT_SPATIAL_FRAME, materializeState } from '@gearcube/core';
+import { placementToTransforms } from '@gearcube/kinematics';
 
-/** Stable physical component identifier derived from Core piece identity */
-export type ComponentId =
-  | CornerPieceId
-  | EdgePieceId
-  | CenterPieceId;
-
-/** Continuous 3D spatial transformation for a component (Quaternion sole orientation authority) */
-export interface ComponentTransform {
-  readonly componentId: ComponentId;
-  readonly position: readonly [number, number, number];
-  readonly rotationQuaternion: readonly [number, number, number, number]; // [x, y, z, w]
-}
-
-/** Complete kinematic animation trajectory (duration-free pure evaluation) */
-export interface KinematicPlan {
-  readonly move: Move;
-  /** Computes component transforms at normalized mechanical progress p in [0, 1] */
-  evaluate(progress: number): readonly ComponentTransform[];
-}
-
-/** Downstream view-based kinematic trajectory generator */
-export type KinematicPlanner = (
-  fromView: PiecePlacementView,
-  move: Move,
-  toView: PiecePlacementView
-) => KinematicPlan;
-
-/** Static placement projection function */
-export function placementToTransforms(
-  view: PiecePlacementView
-): readonly ComponentTransform[];
-
-/** Canonical trajectory generator implementation */
-export function planKinematics(
-  fromView: PiecePlacementView,
-  move: Move,
-  toView: PiecePlacementView
-): KinematicPlan;
+const state = SOLVED_GEAR_CUBE_STATE;
+const frame = DEFAULT_SPATIAL_FRAME;
+const view = materializeState(state, frame);
+const transforms = placementToTransforms(view); // exactly 26 ComponentTransforms in STABLE_COMPONENT_ID_ORDER
 ```
 
-### 3.2. Core Placement Field Inventory
-From production `packages/core/src/materializer.ts`:
-- **`CORNER_PLACEMENT_FIELDS`:** `slot: CornerSlot`, `pieceId: CornerPieceId`, `orbit: 'free' | 'ref'`
-- **`EDGE_PLACEMENT_FIELDS`:** `slot: EdgeSlot`, `pieceId: EdgePieceId`, `slice: 'X' | 'Y' | 'Z'`, `phase: SliceGearPhase` (0, 1, 2)
-- **`CENTER_PLACEMENT_FIELDS`:** `slot: CenterSlot`, `pieceId: CenterPieceId`
-- **`CORE_VIEW_ARRAY_ORDER`:** `FIXED_SPATIAL_SLOT_ORDER` (Placement arrays in `PiecePlacementView` are fixed-spatial slot ordered).
-
-### 3.3. Stable Kinematics ComponentTransform Output Ordering
-Downstream consumers (e.g. 3D scene graphs) require a persistent array index per physical piece across all puzzle transitions and frames.
-- **`KINEMATICS_TRANSFORM_ARRAY_ORDER`:** `STABLE_COMPONENT_ID_ORDER`
-- **`ARRAY_INDEX_IS_STABLE_PHYSICAL_PIECE`:** YES
-- **`SLOT_ORDER_USED_AS_KINEMATICS_OUTPUT_ORDER`:** NO
-- **Exact 26-Element Array Layout:**
-  1. `CORNER_PIECE_IDS` (8 transforms, indices 0..7): `'corner-UFL'`, `'corner-UBR'`, `'corner-DFR'`, `'corner-DBL'`, `'corner-UFR'`, `'corner-UBL'`, `'corner-DFL'`, `'corner-DBR'`
-  2. `EDGE_PIECE_IDS` (12 transforms, indices 8..19): `'edge-UB'`, `'edge-UF'`, `'edge-DF'`, `'edge-DB'`, `'edge-FL'`, `'edge-FR'`, `'edge-BR'`, `'edge-BL'`, `'edge-UR'`, `'edge-UL'`, `'edge-DL'`, `'edge-DR'`
-  3. `CENTER_PIECE_IDS` (6 transforms, indices 20..25): `'center-U'`, `'center-D'`, `'center-F'`, `'center-B'`, `'center-R'`, `'center-L'`
-- **`KINEMATIC_PLAN_OUTPUT_ORDER`:** `STABLE_COMPONENT_ID_ORDER` (For every $p \in [0, 1]$, `plan.evaluate(p)` emits the exact same 26 `ComponentId`s in the exact same stable order; `OUTPUT_ORDER_CHANGES_DURING_MOVE: NO`).
+### Hard Architecture Boundaries:
+- **`CORE_STATE_AUTHORITY`:** `packages/core`
+- **`PHYSICAL_VIEW_AUTHORITY`:** `materializeState`
+- **`SPATIAL_TRANSFORM_AUTHORITY`:** `@gearcube/kinematics`
+- **`RENDERER_LOGICAL_STATE_AUTHORITY`:** `NONE` (The renderer never derives state from meshes, never mutates state, and never performs logical puzzle transitions).
+- **`HARDCODED_RENDERER_PIECE_TRANSFORMS`:** `NO`
 
 ---
 
-## 4. Component Orientation Derivation & Finite Mapping Architecture
+## 3. apps/web Dependency Architecture & Version Policy
 
-### 4.1. Coordinate System & Local Frame Conventions
-All spatial transforms use normalized right-handed coordinates $[-1, +1]^3$:
-- $+X = \text{Right}$, $-X = \text{Left}$
-- $+Y = \text{Up}$, $-Y = \text{Down}$
-- $+Z = \text{Front}$, $-Z = \text{Back}$
-- **Home slot position $\vec{r}_{\text{home}}$:** Mathematical center of the slot matching `pieceId`. Home orientation: $q_0 = [0, 0, 0, 1]$.
+### 3.1. Renderer Package Location Decision
+- **`PHASE2B_RENDERER_LOCATION`:** `apps/web`
+- **Rationale:** Phase 2B renders the 3D scene directly in the React web application. `packages/kinematics` already provides the pure framework-neutral mathematical projection layer. Scaffolding visual components under `apps/web/src/components/cube/` avoids premature package fragmentation while keeping Domain Core and Kinematics 100% dependency-free.
 
-### 4.2. Implementation Architecture & Evidence Classification
-- **`ORIENTATION_CHARACTERIZATION_EVIDENCE`:** `SUPPORTING_NON_REPOSITORY_EVIDENCE` (Exploratory characterizations proved finite mappings exist; formal acceptance comes from checked-in TypeScript/Vitest test suites).
-- **`PYTHON_CHARACTERIZATION_REEXECUTION_REQUIRED`:** NO (Implementation tests validate all finite orientation mappings using project-native Vitest tooling).
-- **`RUNTIME_ORIENTATION_BFS`:** NO (Production kinematics does not run graph search at runtime).
+### 3.2. Frozen Current Stable Dependencies in `apps/web/package.json`
+- **`PHASE2B_DEPENDENCY_VERSION_POLICY`:** `EXACT_CURRENT_STABLE_PINS`
+- **Dependencies:**
+  - `"@gearcube/core"`: `"0.0.0"` (Existing workspace dependency)
+  - `"@gearcube/kinematics"`: `"0.0.0"` (New workspace dependency)
+  - `"react"`: `"19.2.8"` (Existing)
+  - `"react-dom"`: `"19.2.8"` (Existing)
+  - `"three"`: `"0.185.1"` (Current npm stable)
+  - `"@react-three/fiber"`: `"9.7.0"` (Current npm stable; peerDependencies: React/ReactDOM `>=19 <19.3`, Three `>=0.156`)
+  - `"@react-three/drei"`: `"10.7.8"` (Current npm stable)
+- **DevDependencies:**
+  - `"@types/three"`: `"0.185.4"` (Current npm stable)
+  - `"@types/react"`: `"19.2.18"` (Existing)
+  - `"@types/react-dom"`: `"19.2.4"` (Existing)
+  - `"@vitejs/plugin-react"`: `"6.1.0"` (Existing)
+  - `"vite"`: `"8.2.2"` (Existing)
+- **Compatibility:**
+  - **`R3F_REACT_19_2_COMPATIBLE`:** `YES`
+  - **`R3F_THREE_0_185_1_COMPATIBLE`:** `YES`
 
-### 4.3. Corner Orientation Mapping (`CORNER_ORIENTATION_IMPLEMENTATION`)
-- **`CORNER_ORIENTATION_IMPLEMENTATION`:** `FINITE_CANONICAL_MAPPING` (Finite lookup mapping / closed-form equivalent for the 32 reachable `(CornerPieceId, CornerSlot)` pairs).
-- **Properties:**
-  - `CORNER_PLACEMENT_KEY_COUNT`: 32 (8 pieces $\times$ 4 reachable slots per orbit).
-  - `CORNER_ORIENTATION_CONSISTENT`: YES (Unique canonical quaternion per pair).
-  - `CORNER_HISTORY_CONFLICTS`: 0.
-
-### 4.4. Edge Base Orientation & Radial Spin Axis (`EDGE_BASE_ORIENTATION_IMPLEMENTATION`)
-- **`EDGE_LOCAL_SPIN_AXIS_MODEL`:** Physical radial unit vector pointing from cube origin $(0,0,0)$ through the edge slot center: $\hat{r} = \frac{\vec{r}_{\text{slot}}}{\|\vec{r}_{\text{slot}}\|} = \frac{(x, y, z)}{\sqrt{2}}$.
-- **`EDGE_BASE_ORIENTATION_IMPLEMENTATION`:** `FINITE_CANONICAL_MAPPING` (Finite lookup mapping / closed-form equivalent for the 48 reachable `(EdgePieceId, EdgeSlot)` phase-zero pairs).
-- **Composite Edge Orientation:**
-  $$q_{\text{edge}} = q_{\text{spin}}(\hat{r}, \text{phase} \times 60^\circ) \otimes q_{\text{base}}(pieceId, slot)$$
-- **Properties:**
-  - `EDGE_PLACEMENT_KEY_COUNT`: 144 (12 pieces $\times$ 4 reachable slots $\times$ 3 phases).
-  - `EDGE_ORIENTATION_CONSISTENT_MOD_C2`: YES.
-  - `EDGE_HISTORY_CONFLICTS`: 0.
-
-### 4.5. Center Projection Table & Vector Verification (`CENTER_CANONICAL_QUATERNION_TABLE`)
-Pursuant to ADR-0004, center axial rotation history is quotiented out. Canonical renderer quaternions map local $+Y = (0, 1, 0)$ to outward face normal $\hat{n}$:
-- **`U` ($+Y$):** $[0, 0, 0, 1]$ (Identity)
-- **`D` ($-Y$):** $[1, 0, 0, 0]$ ($180^\circ$ around $X$)
-- **`F` ($+Z$):** $[\sqrt{2}/2, 0, 0, \sqrt{2}/2] \approx [0.7071068, 0, 0, 0.7071068]$ ($+90^\circ$ around $X$)
-- **`B` ($-Z$):** $[-\sqrt{2}/2, 0, 0, \sqrt{2}/2] \approx [-0.7071068, 0, 0, 0.7071068]$ ($-90^\circ$ around $X$)
-- **`R` ($+X$):** $[0, 0, -\sqrt{2}/2, \sqrt{2}/2] \approx [0, 0, -0.7071068, 0.7071068]$ ($-90^\circ$ around $Z$)
-- **`L` ($-X$):** $[0, 0, \sqrt{2}/2, \sqrt{2}/2] \approx [0, 0, 0.7071068, 0.7071068]$ ($+90^\circ$ around $Z$)
-- **`CENTER_CANONICAL_TABLE_VECTOR_CHECK`:** 6 / 6 verified.
-
-### 4.6. Quaternion Normalization & Sign Canonicalization
-- **`QUATERNION_UNIT_NORMALIZATION`:** YES ($\|q\| = 1.0$).
-- **`QUATERNION_SIGN_CANONICALIZATION`:** Canonical representative for double-cover $q \equiv -q$ is chosen such that the first non-zero component in order $(w, z, y, x)$ is strictly positive (`QUATERNION_SIGN_RULE_DETERMINISTIC: YES`).
+### 3.3. Drei Rationale
+- **`DREI_REQUIRED_FOR_PHASE2B`:** `YES`
+- **Rationale:** Drei is intentionally accepted to use the battle-tested, declarative `<OrbitControls />` integration which binds seamlessly to R3F's invalidation and camera loop without requiring custom event listener and lifecycle glue. Native R3F elements remain responsible for `<ambientLight />` and `<directionalLight />`.
 
 ---
 
-## 5. Physical Moving-Set Classifier & Transform Composition
+## 4. Scene Graph, Identity, and Transform Contracts
 
-### 5.1. Moving-Set Partition (`SLOT_COORDINATE_PLANE_PARTITION`)
-For a physical face move with outward unit normal $\hat{n} \in \{+X, -X, +Y, -Y, +Z, -Z\}$:
-- **Active Outer Layer (9 pieces):** Slot position $\vec{p} \cdot \hat{n} = +1$ (4 corners, 4 edge gears, 1 center).
-- **Coupled Middle Layer (8 pieces):** Slot position $\vec{p} \cdot \hat{n} = 0$ (4 edge gears, 4 adjacent centers).
-- **Opposite Fixed Layer (9 pieces):** Slot position $\vec{p} \cdot \hat{n} = -1$ (4 corners, 4 edge gears, 1 center).
+### 4.1. Scene Node Hierarchy & Identity
+- **`TOP_LEVEL_PIECE_NODE_COUNT`:** 26
+- **`PERSISTENT_COMPONENT_ID_NODE_COUNT`:** 26
+- **`SUBMESH_COUNT`:** `UNSPECIFIED_BOUNDED_BY_GEOMETRY` (Body, gear teeth, and sticker submeshes contained within each top-level group).
+- **`SCENE_OBJECT_IDENTITY`:** `COMPONENT_ID` (`CornerPieceId | EdgePieceId | CenterPieceId`).
+- **`REACT_KEY_SOURCE`:** `COMPONENT_ID` (`transform.componentId`).
+- **`SLOT_USED_AS_SCENE_IDENTITY`:** `NO` (Meshes are keyed by piece identity, never by temporary slot name).
+- **`TRANSFORM_APPLIED_AT`:** `TOP_LEVEL_PIECE_GROUP`
 
-### 5.2. Transform Composition Mathematics (`TRANSFORM_COMPOSITION_CONVENTION`)
-- **Active Outer Pieces (9 pieces):**
-  $$\vec{r}(p) = R(\hat{n}, \theta_{\text{outer}}(p)) \cdot \vec{r}_0, \quad q(p) = q_{\text{outer}}(p) \otimes q_0$$
-- **Middle Layer Centers (4 centers):**
-  $$\vec{r}(p) = R(\hat{n}, \theta_{\text{middle}}(p)) \cdot \vec{r}_0, \quad q(p) = q_{\text{middle}}(p) \otimes q_0$$
-- **Middle Layer Edge Gears (4 edge gears):**
-  $$\vec{r}(p) = R(\hat{n}, \theta_{\text{middle}}(p)) \cdot \vec{r}_0$$
-  $$\hat{r}(p) = R(\hat{n}, \theta_{\text{middle}}(p)) \cdot \hat{r}_0 \quad (\text{Radial spin axis orbit})$$
-  $$q(p) = q_{\text{spin}}(\hat{r}(p), \Delta \theta_{\text{gear}}(p)) \otimes q_{\text{middle}}(\hat{n}, \theta_{\text{middle}}(p)) \otimes q_0$$
-- **Opposite Fixed Pieces (9 pieces):**
-  $$\vec{r}(p) = \vec{r}_0, \quad q(p) = q_0$$
-
-### 5.3. Progress Validation Policy (`PROGRESS_OUT_OF_RANGE_POLICY`)
-- `evaluate(progress)` strictly enforces $p \in [0.0, 1.0]$.
-- Throws `RangeError` on $p < 0.0$, $p > 1.0$, `isNaN(p)`, or `!isFinite(p)`.
-
----
-
-## 6. Deterministic 10-State Scramble Fixture Suite
-
-The 480-case scrambled verification gate uses the following 10 reproducible move sequences:
-1. `SCRAMBLE_01`: `['U']` (Sequence length 1, Single CW turn)
-2. `SCRAMBLE_02`: `["U'"]` (Sequence length 1, Single CCW turn)
-3. `SCRAMBLE_03`: `['R', 'U']` (Sequence length 2, Multi-axis CW)
-4. `SCRAMBLE_04`: `['F', "R'"]` (Sequence length 2, Mixed CW/CCW)
-5. `SCRAMBLE_05`: `['U', 'R', 'F']` (Sequence length 3, 3-axis scramble)
-6. `SCRAMBLE_06`: `['D', 'L', 'B', 'U']` (Sequence length 4, 4-axis scramble)
-7. `SCRAMBLE_07`: `['R', 'F', 'U', 'L', 'D']` (Sequence length 5, 5-axis scramble)
-8. `SCRAMBLE_08`: `['F', "B'", 'R', "L'", 'U', "D'"]` (Sequence length 6, Alternating opposite-face scramble)
-9. `SCRAMBLE_09`: `['U', 'U', 'R', 'R']` (Sequence length 4, 360° compound face turns)
-10. `SCRAMBLE_10`: `['R', 'U', 'R', "U'", 'R', 'U']` (Sequence length 6, Alternating move sequence)
-
-- **`SCRAMBLE_FIXTURE_COUNT`:** 10
-- **`SCRAMBLE_UNIQUENESS_IDENTITY_API`:** `serializeLogicalState`
-- **`CORE_API_CHANGE_REQUIRED`:** NO
-- **`SCRAMBLE_CORE_UNIQUENESS_GATE`:** 10 / 10 REQUIRED DURING PHASE2A IMPLEMENTATION (Must be verified starting from `SOLVED_GEAR_CUBE_STATE`, executing moves via `applyMove`, serializing via `serializeLogicalState`, and asserting `new Set(serializedStrings).size === 10`).
-- **`PHASE2A_PLANNED_PHYSICAL_TRANSITION_GATE`:** **528 / 528 REQUIRED DURING IMPLEMENTATION** (1 Solved State $\times$ 4 SpatialFrames $\times$ 12 moves = 48 transitions + 10 Scramble States $\times$ 4 SpatialFrames $\times$ 12 moves = 480 transitions).
-
-### 6.2. Phase 2A Acceptance Gates & Verification Invariants
-- **`KINEMATICS_PURITY_GATE`:** `PASS_REQUIRED_DURING_IMPLEMENTATION` (Static package manifest and source import inspection guaranteeing `@gearcube/core` is the sole runtime dependency with zero framework (`three`, `react`, `react-dom`, `@react-three/fiber`, `@react-three/drei`), DOM globals, or ambient Node runtime dependence).
-- **`ROOT_VERIFY_INCLUDES_KINEMATICS`:** YES (`npm run typecheck` automatically executes across workspaces; `npm test` via Vitest automatically discovers `packages/kinematics/tests/*.test.ts`; `npm run build` succeeds).
-- **`ROOT_VERIFY_GAP`:** NONE.
-- **`CORNER_MAPPING_GATE`:** **32 / 32 REQUIRED_DURING_IMPLEMENTATION** (All 32 reachable `(CornerPieceId, CornerSlot)` pairs map to valid canonical quaternions with 0 orientation conflicts).
-- **`EDGE_MAPPING_GATE`:** **144 / 144 REQUIRED_DURING_IMPLEMENTATION** (All 144 reachable `(EdgePieceId, EdgeSlot, SliceGearPhase)` keys map to valid canonical orientations with 0 conflicts modulo $C_2$ ($180^\circ$ axial quotient)).
-- **`EDGE_PHASE_DECOMPOSITION_GATE`:** **144 / 144 REQUIRED_DURING_IMPLEMENTATION** (All 144 keys correctly decompose into base orientation $q_{\text{base}}(pieceId, slot)$ and axial spin $q_{\text{spin}}(\hat{r}, \text{phase} \times 60^\circ)$; if this gate fails: `ARCHITECTURE_REVIEW_REQUIRED`).
-- **`CENTER_MAPPING_GATE`:** **6 / 6 REQUIRED_DURING_IMPLEMENTATION** (All 6 canonical center quaternions map local $+Y = (0, 1, 0)$ to outward face normal $\hat{n}$).
+### 4.2. Declarative Quaternion Binding (Zero Object Allocation Per Render)
+- **`RENDERER_ORIENTATION_AUTHORITY`:** `ComponentTransform.rotationQuaternion`
+- **`EULER_AS_AUTHORITY`:** `NO`
+- **`R3F_QUATERNION_BINDING`:** `DECLARATIVE_XYZW_TUPLE`
+- **`R3F_QUATERNION_OBJECT_ALLOCATION_PER_RENDER`:** `NO` (R3F's `MathType<THREE.Quaternion>` accepts parameter tuples directly without creating `new THREE.Quaternion(...)` per render/frame):
+  ```tsx
+  <group
+    key={transform.componentId}
+    position={transform.position}
+    quaternion={transform.rotationQuaternion}
+  >
+    {/* Piece-local body, gear teeth, and sticker submeshes */}
+  </group>
+  ```
+- **`KINEMATICS_TYPE_CHANGE_REQUIRED`:** `NO`
+- **`RENDERER_MAGIC_ROTATION`:** `NO` (The renderer directly applies `transform.rotationQuaternion` without adding slot-specific rotation hacks).
+- **`COMPONENT_TRANSFORM_QUATERNION_APPLIED_DIRECTLY`:** `YES`
 
 ---
 
-## 7. Frozen Phase 2A Implementation Scope
+## 5. Category-Specific Local Mesh Frame Conventions
 
-### 7.1. Authorized Files to CREATE (8 files):
-1. `packages/kinematics/package.json`
-2. `packages/kinematics/tsconfig.json`
-3. `packages/kinematics/src/index.ts`
-4. `packages/kinematics/src/types.ts`
-5. `packages/kinematics/src/projection.ts`
-6. `packages/kinematics/src/planner.ts`
-7. `packages/kinematics/tests/projection.test.ts`
-8. `packages/kinematics/tests/planner.test.ts`
+### 5.1. Corner Pieces (`CornerPieceId`)
+- **`CORNER_LOCAL_GEOMETRY_ORIGIN`:** Piece center at `[0, 0, 0]`
+- **`CORNER_HOME_ORIENTATION`:** Physical piece home orientation
+- **`CORNER_HOME_TRANSFORM_QUATERNION`:** `IDENTITY` (`[0, 0, 0, 1]`)
+- **Sticker Local Normals:** Derived from physical `CornerPieceId` letters:
+  - `corner-UFR` has physical stickers U (`+Y`), F (`+Z`), R (`+X`).
+  - `corner-UBL` has physical stickers U (`+Y`), B (`-Z`), L (`-X`).
+  - Equivalent mappings apply for all 8 `CornerPieceIds`.
 
-### 7.2. Authorized Files to MODIFY (3 files):
-1. `docs/development/ROADMAP.md`
-2. `docs/development/TEST_STRATEGY.md`
-3. `package-lock.json` (Workspace registration for `@gearcube/kinematics`)
+### 5.2. Edge Gear Pieces (`EdgePieceId`)
+- **`EDGE_LOCAL_GEOMETRY_ORIGIN`:** Piece center at `[0, 0, 0]`
+- **`EDGE_HOME_ORIENTATION`:** Phase-zero physical home orientation
+- **`EDGE_HOME_TRANSFORM_QUATERNION`:** `IDENTITY` (`[0, 0, 0, 1]`)
+- **`EDGE_HOME_SPINDLE_AXIS`:** `normalize(homeSlotPosition(pieceId))`
+  - Example: `edge-UF` radial spindle axis is $\frac{(0, 1, 1)}{\sqrt{2}}$.
+  - The $C_2$-symmetric gear geometry is aligned along that local radial spindle axis.
+- **Sticker Local Normals:** Derived from physical `EdgePieceId` letters (`edge-UF` has U along `+Y` and F along `+Z`).
+- **`MVP_GEAR_GEOMETRY_POLICY`:** `INTENTIONALLY_C2_AXIAL_SYMMETRIC_PLACEHOLDER`
+- **`PHYSICAL_GEAR_C2_PROVEN`:** `NO`
 
-### 7.3. Files Explicitly UNCHANGED:
+### 5.3. Center Pieces (`CenterPieceId`)
+- **`CENTER_LOCAL_GEOMETRY_ORIGIN`:** Piece center at `[0, 0, 0]`
+- **`CENTER_LOCAL_OUTWARD_AXIS`:** `+Y` (`[0, 1, 0]`)
+- **`CENTER_LOCAL_AXIAL_SYMMETRY_AXIS`:** `+Y`
+- **`CENTER_HOME_TRANSFORM_QUATERNION`:** `NOT_GLOBALLY_IDENTITY`
+  - Because all center meshes are modeled with their outward face plate facing `+Y`, the Kinematics canonical table provides the quaternion mapping `+Y` to the outward face normal ($\hat{n}$).
+- **`CENTER_GEOMETRY_AXIAL_SYMMETRY`:** `YES`
+- **`CENTER_VISUAL_ORIENTATION_HISTORY`:** `NONE`
+
+---
+
+## 6. Physical Sticker Identity & Semantic Color Map
+
+- **`STICKER_FACE_IDENTITY_SOURCE`:** `COMPONENT_ID`
+- **`STICKER_LOCAL_NORMAL_SOURCE`:** `PHYSICAL_HOME_FACE_IDENTITY`
+- **`CURRENT_SLOT_USED_FOR_STICKER_ORIENTATION`:** `NO`
+- **`SLOT_BASED_RECOLORING`:** `NO`
+- **Standard Face Color Palette:**
+  - **`U` (Up):** `#FFFFFF` (Pure White)
+  - **`D` (Down):** `#FFD500` (Canary Yellow)
+  - **`F` (Front):** `#009B48` (Emerald Green)
+  - **`B` (Back):** `#0046AD` (Cobalt Blue)
+  - **`R` (Right):** `#B71234` (Ruby Red)
+  - **`L` (Left):** `#FF5800` (Bright Orange)
+  - **Internal Base Body:** `#1A1A1A` (Matte Dark Charcoal)
+
+---
+
+## 7. Viewport, Camera, and Styling Specification
+
+### 7.1. Camera & Lighting
+- **`CAMERA_MODEL`:** `PerspectiveCamera` (FOV 45°, near 0.1, far 100).
+- **`CAMERA_INITIAL_POSITION`:** `[3.5, 3.0, 4.5]` looking at `[0, 0, 0]`.
+- **`CONTROLS`:** `OrbitControls` (enabled rotation, damping factor 0.05, minDistance 2.5, maxDistance 10.0).
+- **`LIGHTING`:**
+  - AmbientLight: intensity 0.7 (`#FFFFFF`).
+  - Key DirectionalLight: position `[5, 8, 5]`, intensity 1.2.
+  - Fill DirectionalLight: position `[-5, -4, -5]`, intensity 0.4.
+
+### 7.2. Global CSS & Viewport Sizing
+- **`WEB_GLOBAL_STYLE_FILES`:** `apps/web/src/App.css` (present), `apps/web/src/index.css` (`NOT_PRESENT`).
+- **`PHASE2B_CSS_CHANGE_REQUIRED`:** `YES` (`apps/web/src/App.css` will be updated to establish full viewport height `100vw`, `100vh`, `margin: 0`, `overflow: hidden` without canvas clipping or scrollbars).
+
+---
+
+## 8. Component Topology in apps/web
+
+```
+apps/web/src/
+├── main.tsx
+├── App.tsx
+├── App.css
+└── components/
+    ├── canvas/
+    │   └── GearCubeViewport.tsx   (R3F Canvas, Camera, OrbitControls, Native Lights)
+    └── cube/
+        ├── GearCubeModel.tsx      (Renders 26 top-level piece groups in STABLE_COMPONENT_ID_ORDER)
+        ├── CornerPiece.tsx        (Visual corner mesh with 3 face stickers)
+        ├── EdgePiece.tsx          (Visual C2 gear mesh with 2 face stickers)
+        ├── CenterPiece.tsx        (Visual rotationally symmetric center cap)
+        ├── materials.ts           (Shared mesh standard materials and color palette)
+        └── GearCubeModel.test.ts  (Automated transform adapter & component routing tests)
+```
+
+---
+
+## 9. Static Data Pipeline & Future Phase 2C Compatibility
+
+- **`STATIC_RENDER_SOURCE`:** `CORE_PLUS_KINEMATICS`
+- **`PHASE2C_ANIMATION_COMPATIBLE`:** `YES`
+- **Compatibility Rationale:** `<GearCubeModel>` accepts `transforms: readonly ComponentTransform[]`. In Phase 2C, continuous animation will simply invoke `plan.evaluate(progress)` inside an animation loop / `useFrame` hook and pass the resulting array directly to `<GearCubeModel>` without altering piece mesh components or allocating new Three objects per frame.
+
+---
+
+## 10. Testing & Verification Strategy for Phase 2B
+
+### 10.1. Automated Test Environment & Scope
+- **`PHASE2B_AUTOMATED_TEST_ENVIRONMENT`:** `PURE_VITEST_NODE` (Pure Node environment).
+- **`WEBGL_REQUIRED_BY_AUTOMATED_TESTS`:** `NO` (Avoids fragile JSDOM/WebGL mocking).
+- **`VISUAL_ACCEPTANCE_MODE`:** `MANUAL_BROWSER_SMOKE`
+- **Automated Gates:**
+  1. `SCENE_TRANSFORM_ADAPTER_GATE`: Unit tests in `GearCubeModel.test.ts` verifying 1-to-1 mapping from 26 `ComponentTransforms` to scene props.
+  2. `COMPONENT_IDENTITY_GATE`: Verifies that all 26 top-level piece groups have persistent unique `ComponentId` keys.
+  3. `PIECE_ROUTING_GATE`: Verifies that 8 corners route to `CornerPiece`, 12 edges to `EdgePiece`, and 6 centers to `CenterPiece`.
+  4. `KINEMATICS_PURITY_GATE`: Purity check ensuring `packages/core` and `packages/kinematics` remain 100% free of Three.js/React dependencies.
+  5. `WEB_BUILD_GATE`: `npm run build --workspace=@gearcube/web` succeeds without TypeScript or Vite bundling errors.
+
+### 10.2. Visual Acceptance Criteria
+- [ ] Exactly 26 persistent top-level piece groups rendered in the 3D canvas.
+- [ ] Solved Gear Cube spatial geometry clearly recognizable.
+- [ ] Six distinct face sticker colors correctly assigned to physical piece faces.
+- [ ] Edge gear cogs visually distinct from standard Rubik's cube edges and $C_2$ symmetric.
+- [ ] Center caps visually rotationally symmetric around outward face normal.
+- [ ] Orbit controls allow free 3D rotation and zooming with mouse/touch gestures.
+- [ ] Responsive canvas filling the container without scrollbars or clipping.
+- [ ] Zero console warnings or runtime WebGL errors.
+
+---
+
+## 11. Frozen Phase 2B Implementation Scope
+
+### 11.1. Files to CREATE (7 files):
+1. `apps/web/src/components/canvas/GearCubeViewport.tsx`
+2. `apps/web/src/components/cube/GearCubeModel.tsx`
+3. `apps/web/src/components/cube/CornerPiece.tsx`
+4. `apps/web/src/components/cube/EdgePiece.tsx`
+5. `apps/web/src/components/cube/CenterPiece.tsx`
+6. `apps/web/src/components/cube/materials.ts`
+7. `apps/web/src/components/cube/GearCubeModel.test.ts`
+
+### 11.2. Files to MODIFY (5 files):
+1. `apps/web/package.json` (Add Three.js 0.185.1, R3F 9.7.0, Drei 10.7.8, and Kinematics)
+2. `apps/web/src/App.tsx` (Mount `<GearCubeViewport />`)
+3. `apps/web/src/App.css` (Full-viewport styling)
+4. `package-lock.json` (Record Three.js, R3F, Drei dependency lock entries)
+5. `docs/development/ROADMAP.md` (Update Phase 2B status)
+
+### 11.3. Files Explicitly UNCHANGED:
 - `package.json`
 - `tsconfig.base.json`
 - `scripts/check-core-deps.mjs`
 - `packages/core/**` (100% frozen)
-- `apps/web/**`
-- `docs/decisions/ADR-0006-VIEW-BASED-KINEMATICS-AND-RENDERER-QUOTIENTS.md`
+- `packages/kinematics/**` (100% frozen)
 - `docs/architecture/**`
+- `docs/decisions/**`
 
-### 7.4. Scope Freeze Declaration
-- **`PHASE2A_SCOPE_FROZEN: YES`**
+---
+
+## 12. Architecture Review & Decision Status
+
+- **`PHASE2B_NEW_ADR_REQUIRED`:** `NO` (Pursuant to ADR-0004, ADR-0005, and ADR-0006, all normative boundaries, quotients, and coordinate conventions are fully established).
+- **`PHASE2B_SCOPE_FROZEN`:** `YES`
