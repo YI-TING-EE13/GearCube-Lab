@@ -1,7 +1,7 @@
 # ROADMAP.md — Project Lifecycle & Dependency-Ordered Milestones
 
 > **Current Project Phase:** `Phase 2 — 3D Graphics & Kinematic Animation (Planning Phase)`
-> **Status:** Active Execution (Phase 2 Architecture Contract Accepted; Pending Phase 2A Scope Freeze)
+> **Status:** Active Execution (Phase 2A Implementation Scope Frozen — Ready for Implementation)
 
 ---
 
@@ -145,7 +145,7 @@ Phase 0B is partitioned into four dependency-ordered subphases:
 
 ### Phase 2: 3D Model, Visual Assets, and Kinematic Animation Engine (Active Planning)
 - **Objective:** Scaffolding Vite + React + Three.js / R3F, implementing modular 3D gear geometry, and coupling visual motion via kinematic trajectory planning.
-- **Status:** `ACTIVE / PLANNING` — Architecture contract accepted ([`ADR-0006`](../decisions/ADR-0006-VIEW-BASED-KINEMATICS-AND-RENDERER-QUOTIENTS.md)); implementation plan formalized in [`PHASE_2_IMPLEMENTATION_PLAN.md`](PHASE_2_IMPLEMENTATION_PLAN.md) (Pending Phase 2A Scope Freeze).
+- **Status:** `ACTIVE / PLANNING` — Architecture contract accepted ([`ADR-0006`](../decisions/ADR-0006-VIEW-BASED-KINEMATICS-AND-RENDERER-QUOTIENTS.md)); Phase 2A implementation scope frozen in [`PHASE_2_IMPLEMENTATION_PLAN.md`](PHASE_2_IMPLEMENTATION_PLAN.md) (Not Implemented).
 - **Prerequisites:** Completion of Phase 1 (`ACCEPTED & COMMITTED`).
 - **In-Scope:** `packages/kinematics`, 3D viewport component in `apps/web`, procedural gear meshes, continuous rotation interpolation, snap-to-core at $p=1.0$.
 - **Out-of-Scope:** Solvers, complex UI panels, camera vision, drag-to-turn gestures.
