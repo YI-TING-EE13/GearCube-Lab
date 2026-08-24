@@ -42,7 +42,7 @@ export const HistoryControls: React.FC<HistoryControlsProps> = ({
           onClick={onUndo}
           disabled={isUndoDisabled}
           aria-label="Undo move"
-          title="Undo previous move (Ctrl+Z)"
+          title="Undo previous move"
         >
           ↶ Undo
         </button>
@@ -53,7 +53,7 @@ export const HistoryControls: React.FC<HistoryControlsProps> = ({
           onClick={onRedo}
           disabled={isRedoDisabled}
           aria-label="Redo move"
-          title="Redo next move (Ctrl+Shift+Z)"
+          title="Redo next move"
         >
           ↷ Redo
         </button>

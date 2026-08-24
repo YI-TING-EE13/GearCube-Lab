@@ -24,7 +24,7 @@ function getElementHtml(html: string, ariaLabel: string): string {
 
 describe('History and Scramble UI Components (Static Structure & Accessibility)', () => {
   describe('HistoryControls', () => {
-    it('renders all control buttons and applies enabled/disabled attributes correctly', () => {
+    it('renders all control buttons and applies enabled/disabled attributes correctly without keyboard shortcut claims', () => {
       // 1. Idle state with undo available but not redo
       const htmlIdle = renderToStaticMarkup(
         <HistoryControls
@@ -41,6 +41,9 @@ describe('History and Scramble UI Components (Static Structure & Accessibility)'
       expect(htmlIdle).toContain('Undo');
       expect(htmlIdle).toContain('Redo');
       expect(htmlIdle).toContain('Back to baseline');
+
+      // Verify no premature Phase 3C keyboard shortcut claims in tooltips or labels
+      expect(htmlIdle).not.toMatch(/Ctrl|Cmd/i);
 
       const undoBtn = getElementHtml(htmlIdle, 'Undo move');
       const redoBtn = getElementHtml(htmlIdle, 'Redo move');
@@ -63,6 +66,7 @@ describe('History and Scramble UI Components (Static Structure & Accessibility)'
         />
       );
 
+      expect(htmlBusy).not.toMatch(/Ctrl|Cmd/i);
       expect(getElementHtml(htmlBusy, 'Undo move')).toContain('disabled');
       expect(getElementHtml(htmlBusy, 'Redo move')).toContain('disabled');
       expect(getElementHtml(htmlBusy, 'Back to baseline')).toContain('disabled');
@@ -149,7 +153,7 @@ describe('History and Scramble UI Components (Static Structure & Accessibility)'
       expect(scrambleBtn).not.toContain('disabled');
     });
 
-    it('disables input and scramble button when isBusy is true', () => {
+    it('disables scramble button while keeping seed input enabled when isBusy is true', () => {
       const html = renderToStaticMarkup(
         <ScramblePanel
           seed="test"
@@ -159,7 +163,9 @@ describe('History and Scramble UI Components (Static Structure & Accessibility)'
         />
       );
 
-      expect(getElementHtml(html, 'Scramble seed')).toContain('disabled');
+      // Seed input remains enabled and editable during animation/busy state
+      expect(getElementHtml(html, 'Scramble seed')).not.toContain('disabled');
+      // Scramble trigger button is disabled during busy state
       expect(getElementHtml(html, 'Generate scramble')).toContain('disabled');
     });
   });

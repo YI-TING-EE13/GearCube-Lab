@@ -318,7 +318,7 @@ Phase 3 is decomposed into four dependency-ordered, independently verifiable sub
 - **Status:** `IMPLEMENTED / READY_FOR_INDEPENDENT_ACCEPTANCE` (Pure application orchestration module `play-session.ts`, `HistoryControls`, `TimelineScrubber`, `ScramblePanel`, `GearCubeViewport` integration, and unit/static UI component tests created and passing).
 - **Deliverables:**
   - `apps/web/src/components/history/play-session.ts`: Pure application orchestration connecting `GearCubeSessionState` and `PlayHistoryState`.
-  - `apps/web/src/components/history/play-session.test.ts`: 100% pure unit & integration test coverage for session/history state transitions.
+  - `apps/web/src/components/history/play-session.test.ts`: Pure unit and integration tests covering session/history state transitions.
   - `apps/web/src/components/history/HistoryControls.tsx`: Undo, Redo, and "Back to baseline" buttons with dynamic disablement.
   - `apps/web/src/components/history/TimelineScrubber.tsx`: Scrollable move list with clickable chips for arbitrary scrub.
   - `apps/web/src/components/history/ScramblePanel.tsx`: Seed input and scramble trigger with deterministic preview.

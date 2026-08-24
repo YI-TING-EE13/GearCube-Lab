@@ -4,6 +4,8 @@
  */
 
 import { describe, it, expect } from 'vitest';
+// Explicitly import the static UI test suite so it executes within Vitest's
+// current *.test.ts include pattern without requiring config modifications.
 import './history-ui.test.js';
 import {
   SOLVED_GEAR_CUBE_STATE,
@@ -24,11 +26,13 @@ import {
   applyScrambleToPlay,
 } from './play-session.js';
 import { getCurrentSnapshot } from './history.js';
+import { generateScramble, applyScrambleSequence } from './scramble.js';
 
 describe('Play Session Orchestration', () => {
   const moveU: Move = { face: 'U', direction: 'CW' };
   const moveR: Move = { face: 'R', direction: 'CW' };
   const moveF: Move = { face: 'F', direction: 'CCW' };
+  const moveL: Move = { face: 'L', direction: 'CW' };
 
   it('INITIAL_SESSION_HISTORY_ALIGNMENT_GATE: initializes clean session and history alignment', () => {
     const app = createInitialPlayApplicationState();
@@ -281,27 +285,56 @@ describe('Play Session Orchestration', () => {
     expect(app.session.currentFrame).toBe(getCurrentSnapshot(app.history).frame);
   });
 
-  it('SCRAMBLE_BASELINE_GATE & SCRAMBLE_NO_HISTORY_ENTRIES_GATE & SCRAMBLE_FRAME_AWARE_GATE: atomic scramble baseline', () => {
+  it('SCRAMBLE_BASELINE_GATE & SCRAMBLE_NO_HISTORY_ENTRIES_GATE & SCRAMBLE_FRAME_AWARE_GATE: atomic scramble baseline from current endpoint', () => {
     let app = createInitialPlayApplicationState();
     app = setPlayInteractionMode(app, 'DIRECT_180');
 
-    // Make a move first
-    app = startPlayMove(app, moveU, 1000, 400);
+    // 1. Complete a nontrivial canonical move from solved
+    app = startPlayMove(app, moveL, 1000, 400);
     app = stepPlayAnimation(app, 1400);
     expect(app.history.entries).toHaveLength(1);
 
-    // Apply deterministic scramble
-    app = applyScrambleToPlay(app, 'test_seed_123', 20);
+    // 2. Capture pre-scramble canonical endpoint
+    const preScrambleState = app.session.currentState;
+    const preScrambleFrame = app.session.currentFrame;
+
+    // 3. Fixed seed and length
+    const seed = 'test_seed_123';
+    const length = 20;
+
+    // 4. Independently derive expected sequence and current-endpoint application
+    const moves = generateScramble(seed, length);
+    const expectedFromCurrent = applyScrambleSequence(
+      preScrambleState,
+      preScrambleFrame,
+      moves
+    );
+
+    // 5. Independently derive incorrect-control endpoint (scrambling from solved origin)
+    const wrongFromSolved = applyScrambleSequence(
+      SOLVED_GEAR_CUBE_STATE,
+      DEFAULT_SPATIAL_FRAME,
+      moves
+    );
+
+    // 6. Prove test case distinguishes current endpoint from solved origin
+    expect(expectedFromCurrent.state).not.toEqual(wrongFromSolved.state);
+    expect(expectedFromCurrent.frame).not.toBe(wrongFromSolved.frame);
+
+    // 7. Execute scramble on application
+    app = applyScrambleToPlay(app, seed, length);
+
+    // 8. Assert exact equality with expectedFromCurrent and verify all history/session contracts
+    expect(app.session.currentState).toEqual(expectedFromCurrent.state);
+    expect(app.session.currentFrame).toBe(expectedFromCurrent.frame);
+
+    expect(app.history.initialBaselineState).toEqual(expectedFromCurrent.state);
+    expect(app.history.initialBaselineFrame).toBe(expectedFromCurrent.frame);
 
     expect(app.history.entries).toHaveLength(0);
     expect(app.history.cursorIndex).toBe(-1);
-    expect(app.history.initialBaselineState).toEqual(app.session.currentState);
-    expect(app.history.initialBaselineFrame).toBe(app.session.currentFrame);
     expect(app.session.stagedMove).toBeNull();
     expect(app.session.interactionMode).toBe('DIRECT_180'); // Preserved
-
-    // Puzzle is scrambled, not solved
-    expect(app.session.currentState).not.toEqual(SOLVED_GEAR_CUBE_STATE);
   });
 
   it('MODE_COMPATIBILITY_GATE: switching mode does not affect history or baseline', () => {

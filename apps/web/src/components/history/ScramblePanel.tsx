@@ -50,7 +50,6 @@ export const ScramblePanel: React.FC<ScramblePanelProps> = ({
           onChange={(e) => onSeedChange(e.target.value)}
           placeholder="Seed string..."
           aria-label="Scramble seed"
-          disabled={isBusy}
         />
 
         <button
