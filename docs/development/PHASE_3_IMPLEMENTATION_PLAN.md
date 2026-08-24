@@ -3,11 +3,12 @@
 > **Phase Status:** `PLANNING / ACCEPTED`
 > **Phase 3A Status:** `COMPLETED / ACCEPTED`
 > **Phase 3B Status:** `COMPLETED / ACCEPTED`
-> **Phase 3C Status:** `PLANNED / PREFLIGHT_READY_FOR_INDEPENDENT_ACCEPTANCE`
+> **Phase 3C Status:** `PLANNED / PREFLIGHT_ACCEPTED / IMPLEMENTATION_UNBLOCKED`
 > **Phase 3 Preflight Status:** `ACCEPTED`
 > **Authoritative Baseline Provenance:**
 > - Phase 3 Plan Accepted Head: `7b409066905cf3bb81da1eee1f5bcb7e3af85204`
 > - Phase 3 Preflight Accepted Head: `8824f8286d5a702f4c4f0abee82e4306d19b5610`
+> - Phase 3C Preflight Accepted Head: `58299ffb9c105da2d14eee1fb4985e2c854b8c1c`
 > - Starting Production Main Baseline: `7a2d442f14ca61d257b41ba9178b1ec457b6ce2b` (Commit `Record Phase 3 preflight acceptance` on `main`)
 > **Applicability:** Web Application (`apps/web`), Interactive Play Mode, Canonical History Timeline, Undo/Redo, Deterministic Scramble, Keyboard Navigation, Playwright Browser E2E Automation
 
@@ -391,7 +392,7 @@ Phase 3 is decomposed into four dependency-ordered, independently verifiable sub
 
 ### 8.4. Phase 3C: Keyboard Controls, Responsive Layout & Playwright Browser E2E
 - **Objective:** Keyboard shortcuts, responsive CSS layout, root Playwright Chromium E2E infrastructure, and automated browser verification.
-- **Status:** `PLANNED / PREFLIGHT_READY_FOR_INDEPENDENT_ACCEPTANCE`
+- **Status:** `PLANNED / PREFLIGHT_ACCEPTED / IMPLEMENTATION_UNBLOCKED` (Preflight accepted at commit `58299ffb9c105da2d14eee1fb4985e2c854b8c1c`; implementation not started).
 - **Deliverables:**
   - `apps/web/src/components/controls/useKeyboardControls.ts`: Keyboard event listener with focus detection, repeat guarding, exact modifier normalization, and direction-relative midpoint delegation.
   - `apps/web/src/components/controls/useKeyboardControls.test.ts`: Unit tests for keyboard event parsing, focus exclusion, modifier rejection, and move triggering.
@@ -478,8 +479,13 @@ Phase 3 is decomposed into four dependency-ordered, independently verifiable sub
 - **`PHASE3B_STATUS`:** `COMPLETED / ACCEPTED`
 - **`PHASE3B_ACCEPTED`:** `YES`
 - **`PHASE3B_ACCEPTED_HEAD`:** `1d2dc0982eed1cdb52a7a4b65884d9bdd495ede2`
-- **`PHASE3C_STATUS`:** `PLANNED / PREFLIGHT_READY_FOR_INDEPENDENT_ACCEPTANCE`
+- **`PHASE3C_PREFLIGHT_STATUS`:** `ACCEPTED`
+- **`PHASE3C_PREFLIGHT_ACCEPTED`:** `YES`
+- **`PHASE3C_PREFLIGHT_ACCEPTED_HEAD`:** `58299ffb9c105da2d14eee1fb4985e2c854b8c1c`
+- **`PHASE3C_STATUS`:** `PLANNED / PREFLIGHT_ACCEPTED / IMPLEMENTATION_UNBLOCKED`
+- **`PHASE3C_IMPLEMENTATION_STATUS`:** `UNBLOCKED / NOT STARTED`
 - **`PHASE3C_STARTED`:** `NO`
+- **`PHASE3_OVERALL_COMPLETE`:** `NO`
 - **`SCOPE_FROZEN`:** `YES`
 - **`PROPOSED_FUTURE_IMPLEMENTATION_FILES`:**
   1. `apps/web/src/App.css`
