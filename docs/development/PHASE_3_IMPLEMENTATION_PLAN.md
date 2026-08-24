@@ -1,13 +1,12 @@
 # Phase 3 Implementation Plan — Interactive UI, History, Undo/Redo, and Scramble
 
 > **Phase Status:** `PLANNING / ACCEPTED`
-> **Implementation Readiness:** `READY_FOR_PHASE3A`
+> **Phase 3A Status:** `IMPLEMENTED / READY_FOR_INDEPENDENT_ACCEPTANCE`
 > **Phase 3 Preflight Status:** `ACCEPTED`
 > **Authoritative Baseline Provenance:**
 > - Phase 3 Plan Accepted Head: `7b409066905cf3bb81da1eee1f5bcb7e3af85204`
 > - Phase 3 Preflight Accepted Head: `8824f8286d5a702f4c4f0abee82e4306d19b5610`
-> - Starting Production Main Baseline: `0560ed06b1c8204096f75a69ae494eb6f22261df` (Commit `Close Phase 2 documentation` on `main`)
-> - Phase 3A Start Prerequisite: `ACCEPTED_PHASE3_DOCUMENTATION_LINEAGE_ON_MAIN`
+> - Starting Production Main Baseline: `7a2d442f14ca61d257b41ba9178b1ec457b6ce2b` (Commit `Record Phase 3 preflight acceptance` on `main`)
 > **Applicability:** Web Application (`apps/web`), Interactive Play Mode, Canonical History Timeline, Undo/Redo, Deterministic Scramble, Keyboard Navigation, Playwright Browser E2E Automation
 
 ---
@@ -305,16 +304,17 @@ Phase 3 is decomposed into four dependency-ordered, independently verifiable sub
 
 ### 8.2. Phase 3A: Application History & Scramble Engine
 - **Objective:** Pure domain logic for history state transitions and deterministic scramble generation.
-- **Status:** `READY / NOT_STARTED`
+- **Status:** `IMPLEMENTED / READY_FOR_INDEPENDENT_ACCEPTANCE` (Pure history module, FNV-1a UTF-16 hash, Mulberry32 PRNG, scramble generator with same-face rejection, and 24 unit tests across 2 test files created and passing).
 - **Deliverables:**
   - `apps/web/src/components/history/history.ts`: Pure history data types, push entry, undo, redo, scrub, and branch truncation functions.
   - `apps/web/src/components/history/scramble.ts`: FNV-1a UTF-16 hasher, Mulberry32 PRNG, and deterministic scramble sequence generator.
-  - `apps/web/src/components/history/history.test.ts`: 100% pure unit test coverage for all history operations.
-  - `apps/web/src/components/history/scramble.test.ts`: FNV-1a hashing, PRNG determinism, seed repeatability, and move vocabulary validation.
-- **Preconditions:** Phase 3 Preflight accepted (`SATISFIED`) and promoted to `main` (`ACCEPTED_PHASE3_DOCUMENTATION_LINEAGE_ON_MAIN`).
+  - `apps/web/src/components/history/history.test.ts`: 100% pure unit test coverage for all history operations (11 tests).
+  - `apps/web/src/components/history/scramble.test.ts`: FNV-1a hashing, PRNG determinism, seed repeatability, and move vocabulary validation (13 tests).
+- **Preconditions:** Phase 3 Preflight accepted (`SATISFIED`) and promoted to `main` (`SATISFIED`).
 
 ### 8.3. Phase 3B: Interactive Play Store, Undo/Redo & Scrubber UI
 - **Objective:** Interactive UI components and session history wiring.
+- **Status:** `PLANNED / BLOCKED_PENDING_PHASE3A_ACCEPTANCE`
 - **Deliverables:**
   - Wire history state into `GearCubeViewport.tsx` / `animation.ts`.
   - `HistoryControls.tsx`: Undo, Redo, and "Back to baseline" buttons with dynamic disablement.
@@ -392,7 +392,8 @@ Phase 3 is decomposed into four dependency-ordered, independently verifiable sub
 - **`DEV_DEPENDENCY_PLANNED`:** `@playwright/test` (Introduced in Phase 3C)
 - **`PHASE3_PLAN_STATUS`:** `PLANNING / ACCEPTED`
 - **`PHASE3_PREFLIGHT_STATUS`:** `ACCEPTED`
-- **`PHASE3_IMPLEMENTATION_STATUS`:** `READY_FOR_PHASE3A`
-- **`PHASE3A_STATUS`:** `READY / NOT_STARTED`
-- **`PHASE3A_START_PREREQUISITE`:** `ACCEPTED_PHASE3_DOCUMENTATION_LINEAGE_ON_MAIN`
+- **`PHASE3A_STATUS`:** `IMPLEMENTED / READY_FOR_INDEPENDENT_ACCEPTANCE`
+- **`PHASE3A_ACCEPTED`:** `NO`
+- **`PHASE3B_STATUS`:** `PLANNED / BLOCKED_PENDING_PHASE3A_ACCEPTANCE`
+- **`PHASE3B_STARTED`:** `NO`
 - **`SCOPE_FROZEN`:** `YES`
