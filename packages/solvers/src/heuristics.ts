@@ -37,6 +37,38 @@ function indexCYZ(c: number, y: number, z: number): number {
   return (c * 12 + y) * 12 + z;
 }
 
+function assertPdbConstructionInvariants(
+  name: string,
+  table: Int8Array,
+  reachableCount: number
+): void {
+  if (table.length !== 3456) {
+    throw new Error(`${name} PDB construction invariant failure: table length was ${table.length}, expected 3456`);
+  }
+  if (reachableCount !== 3456) {
+    throw new Error(`${name} PDB construction invariant failure: reachable count was ${reachableCount} / 3456`);
+  }
+
+  let min = Infinity;
+  let max = -Infinity;
+
+  for (let i = 0; i < table.length; i++) {
+    const val = table[i]!;
+    if (val === -1) {
+      throw new Error(`${name} PDB construction invariant failure: uninitialized sentinel -1 found at index ${i}`);
+    }
+    if (val < min) min = val;
+    if (val > max) max = val;
+  }
+
+  if (min !== 0) {
+    throw new Error(`${name} PDB construction invariant failure: min distance was ${min}, expected 0`);
+  }
+  if (max !== 7) {
+    throw new Error(`${name} PDB construction invariant failure: max distance was ${max}, expected 7`);
+  }
+}
+
 function buildCxyTable(): Int8Array {
   const table = new Int8Array(3456).fill(-1);
   const queue = new Int32Array(3456);
@@ -83,10 +115,7 @@ function buildCxyTable(): Int8Array {
     }
   }
 
-  if (tail !== 3456) {
-    throw new Error(`CXY PDB construction invariant failure: reachable count was ${tail} / 3456`);
-  }
-
+  assertPdbConstructionInvariants('CXY', table, tail);
   return table;
 }
 
@@ -136,10 +165,7 @@ function buildCxzTable(): Int8Array {
     }
   }
 
-  if (tail !== 3456) {
-    throw new Error(`CXZ PDB construction invariant failure: reachable count was ${tail} / 3456`);
-  }
-
+  assertPdbConstructionInvariants('CXZ', table, tail);
   return table;
 }
 
@@ -189,10 +215,7 @@ function buildCyzTable(): Int8Array {
     }
   }
 
-  if (tail !== 3456) {
-    throw new Error(`CYZ PDB construction invariant failure: reachable count was ${tail} / 3456`);
-  }
-
+  assertPdbConstructionInvariants('CYZ', table, tail);
   return table;
 }
 

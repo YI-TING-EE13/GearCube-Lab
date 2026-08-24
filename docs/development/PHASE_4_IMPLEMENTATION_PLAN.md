@@ -18,7 +18,7 @@
 > **Phase 4C Implementation Status:** `IMPLEMENTED / READY_FOR_INDEPENDENT_ACCEPTANCE`
 > **Phase 4D Status:** `PLANNED / BLOCKED_BY_PHASE4C_ACCEPTANCE`
 > **Phase 4E Status:** `PLANNED / BLOCKED_BY_PRIOR_SUBPHASES`
-> **Authoritative Main Baseline:** `879254e9390137c9ff32a0fe09dce85d5111f112` (Commit `Record Phase 4B acceptance` on `main`)
+> **Authoritative Main Baseline:** `1766d4c98014ed58bd553dbe870212b0da6bcfee` (Commit `Record Phase 4C heuristic preflight acceptance` on `main`)
 > **Applicability:** Solvers Package (`packages/solvers`), Web Application (`apps/web`), Web Worker Infrastructure (`apps/web/src/workers`), Solve Mode UI, Solution Playback, Playwright Browser E2E Automation
 
 ---
