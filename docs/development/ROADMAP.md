@@ -37,8 +37,8 @@
       ▼
 [ Phase 3: Interactive UI, History & Scramble ] (Active Planning)
       ├─ 3 Preflight: Architecture & Test Documentation Sync (Completed & Accepted)
-      ├─ 3A: Application History & Deterministic Scramble Engine (Implemented & Ready for Acceptance)
-      ├─ 3B: Interactive Play Store, Undo/Redo & Timeline Scrubber UI (Planned)
+      ├─ 3A: Application History & Deterministic Scramble Engine (Completed & Accepted)
+      ├─ 3B: Interactive Play Store, Undo/Redo & Timeline Scrubber UI (Planned / Unblocked)
       └─ 3C: Keyboard Controls, Responsive Layout & Playwright Browser E2E (Planned)
       │
       ▼
@@ -233,14 +233,14 @@ Phase 0B is partitioned into four dependency-ordered subphases:
 
 ### Phase 3: Interactive UI, History, Undo/Redo, and Scramble (Planning)
 - **Objective:** Implement the user-facing `Play Mode` UI, button-based face controls, history timeline scrubber, undo/redo, deterministic scramble generator, keyboard shortcuts, and automated Playwright browser E2E tests.
-- **Status:** `PLANNING / ACCEPTED` (Phase 3 Preflight accepted; Phase 3A implemented and ready for independent acceptance; formalized in [`docs/development/PHASE_3_IMPLEMENTATION_PLAN.md`](./PHASE_3_IMPLEMENTATION_PLAN.md)).
+- **Status:** `PLANNING / ACCEPTED` (Phase 3 Preflight accepted; Phase 3A completed and accepted; formalized in [`docs/development/PHASE_3_IMPLEMENTATION_PLAN.md`](./PHASE_3_IMPLEMENTATION_PLAN.md)).
 - **Prerequisites:** Completion of Phase 2 (`ACCEPTED & COMMITTED`) and Phase 3 Preflight promotion to `main`.
 - **In-Scope:** Architecture doc sync preflight, application history state, timeline scrubber, undo/redo, Mulberry32 deterministic scramble generator, keyboard shortcuts, responsive control overlay, root Playwright browser E2E test suite.
 - **Out-of-Scope:** Solver algorithms, benchmark harness, computer vision.
 - **Subphases:**
   - **Phase 3 Preflight:** Architecture & Test Documentation Sync (`docs/architecture/SYSTEM_ARCHITECTURE.md`, `docs/development/TEST_STRATEGY.md`, `docs/project/PROJECT_BLUEPRINT.md`, `docs/development/DEVELOPMENT_GUIDE.md`) — **Status:** `COMPLETED & ACCEPTED`.
-  - **Phase 3A:** Application History & Deterministic Scramble Engine (`apps/web/src/components/history/history.ts`, `scramble.ts`, Vitest unit test suites) — **Status:** `IMPLEMENTED / READY_FOR_INDEPENDENT_ACCEPTANCE`.
-  - **Phase 3B:** Interactive Play Store, Undo/Redo & Timeline Scrubber UI (`HistoryControls.tsx`, `TimelineScrubber.tsx`, `ScramblePanel.tsx`) — **Status:** `PLANNED / BLOCKED_PENDING_PHASE3A_ACCEPTANCE`.
+  - **Phase 3A:** Application History & Deterministic Scramble Engine (`apps/web/src/components/history/history.ts`, `scramble.ts`, Vitest unit test suites) — **Status:** `COMPLETED & ACCEPTED`.
+  - **Phase 3B:** Interactive Play Store, Undo/Redo & Timeline Scrubber UI (`HistoryControls.tsx`, `TimelineScrubber.tsx`, `ScramblePanel.tsx`) — **Status:** `PLANNED / UNBLOCKED`.
   - **Phase 3C:** Keyboard Controls, Responsive Layout & Playwright Browser E2E (`useKeyboardControls.ts`, responsive CSS, `playwright.config.ts`, `tests/e2e/**`, human browser acceptance) — **Status:** `PLANNED`.
 - **Acceptance Gate Criteria (`PHASE_3_PASS`):**
   - [ ] Architecture documentation synchronized with accepted single-app topology prior to code implementation.

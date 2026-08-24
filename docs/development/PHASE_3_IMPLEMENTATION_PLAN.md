@@ -1,7 +1,8 @@
 # Phase 3 Implementation Plan — Interactive UI, History, Undo/Redo, and Scramble
 
 > **Phase Status:** `PLANNING / ACCEPTED`
-> **Phase 3A Status:** `IMPLEMENTED / READY_FOR_INDEPENDENT_ACCEPTANCE`
+> **Phase 3A Status:** `COMPLETED / ACCEPTED`
+> **Phase 3B Status:** `PLANNED / UNBLOCKED`
 > **Phase 3 Preflight Status:** `ACCEPTED`
 > **Authoritative Baseline Provenance:**
 > - Phase 3 Plan Accepted Head: `7b409066905cf3bb81da1eee1f5bcb7e3af85204`
@@ -304,7 +305,7 @@ Phase 3 is decomposed into four dependency-ordered, independently verifiable sub
 
 ### 8.2. Phase 3A: Application History & Scramble Engine
 - **Objective:** Pure domain logic for history state transitions and deterministic scramble generation.
-- **Status:** `IMPLEMENTED / READY_FOR_INDEPENDENT_ACCEPTANCE` (Pure history module, FNV-1a UTF-16 hash, Mulberry32 PRNG, scramble generator with same-face rejection, and 24 unit tests across 2 test files created and passing).
+- **Status:** `COMPLETED / ACCEPTED` (Pure history module, FNV-1a UTF-16 hash, Mulberry32 PRNG, scramble generator with same-face rejection, and 24 unit tests across 2 test files created and passing).
 - **Deliverables:**
   - `apps/web/src/components/history/history.ts`: Pure history data types, push entry, undo, redo, scrub, and branch truncation functions.
   - `apps/web/src/components/history/scramble.ts`: FNV-1a UTF-16 hasher, Mulberry32 PRNG, and deterministic scramble sequence generator.
@@ -314,7 +315,7 @@ Phase 3 is decomposed into four dependency-ordered, independently verifiable sub
 
 ### 8.3. Phase 3B: Interactive Play Store, Undo/Redo & Scrubber UI
 - **Objective:** Interactive UI components and session history wiring.
-- **Status:** `PLANNED / BLOCKED_PENDING_PHASE3A_ACCEPTANCE`
+- **Status:** `PLANNED / UNBLOCKED`
 - **Deliverables:**
   - Wire history state into `GearCubeViewport.tsx` / `animation.ts`.
   - `HistoryControls.tsx`: Undo, Redo, and "Back to baseline" buttons with dynamic disablement.
@@ -392,8 +393,8 @@ Phase 3 is decomposed into four dependency-ordered, independently verifiable sub
 - **`DEV_DEPENDENCY_PLANNED`:** `@playwright/test` (Introduced in Phase 3C)
 - **`PHASE3_PLAN_STATUS`:** `PLANNING / ACCEPTED`
 - **`PHASE3_PREFLIGHT_STATUS`:** `ACCEPTED`
-- **`PHASE3A_STATUS`:** `IMPLEMENTED / READY_FOR_INDEPENDENT_ACCEPTANCE`
-- **`PHASE3A_ACCEPTED`:** `NO`
-- **`PHASE3B_STATUS`:** `PLANNED / BLOCKED_PENDING_PHASE3A_ACCEPTANCE`
+- **`PHASE3A_STATUS`:** `COMPLETED / ACCEPTED`
+- **`PHASE3A_ACCEPTED`:** `YES`
+- **`PHASE3B_STATUS`:** `PLANNED / UNBLOCKED`
 - **`PHASE3B_STARTED`:** `NO`
 - **`SCOPE_FROZEN`:** `YES`
