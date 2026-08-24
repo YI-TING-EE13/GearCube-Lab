@@ -107,6 +107,19 @@ describe('PlayHistory Foundation', () => {
       frame: frame2,
     });
 
+    history = appendMove(history, move3, state3, frame3);
+    expect(getCurrentSnapshot(history)).toEqual({
+      state: state3,
+      frame: frame3,
+    });
+
+    // Undo step-by-step verifying exact state and frame pairing
+    history = undo(history);
+    expect(getCurrentSnapshot(history)).toEqual({
+      state: state2,
+      frame: frame2,
+    });
+
     history = undo(history);
     expect(getCurrentSnapshot(history)).toEqual({
       state: state1,
@@ -118,6 +131,19 @@ describe('PlayHistory Foundation', () => {
       state: initialState,
       frame: initialFrame,
     });
+
+    // Redo step-by-step verifying exact state and frame pairing
+    history = redo(history);
+    expect(getCurrentSnapshot(history)).toEqual({
+      state: state1,
+      frame: frame1,
+    });
+
+    history = redo(history);
+    expect(getCurrentSnapshot(history)).toEqual({
+      state: state2,
+      frame: frame2,
+    });
   });
 
   it('UNDO_GATE & REDO_GATE: steps forward and backward correctly', () => {
@@ -127,31 +153,40 @@ describe('PlayHistory Foundation', () => {
     history = appendMove(history, move3, state3, frame3);
 
     expect(history.cursorIndex).toBe(2);
+    expect(getCurrentSnapshot(history)).toEqual({ state: state3, frame: frame3 });
     expect(canUndo(history)).toBe(true);
     expect(canRedo(history)).toBe(false);
 
     history = undo(history);
     expect(history.cursorIndex).toBe(1);
+    expect(getCurrentSnapshot(history)).toEqual({ state: state2, frame: frame2 });
     expect(canUndo(history)).toBe(true);
     expect(canRedo(history)).toBe(true);
 
     history = undo(history);
     expect(history.cursorIndex).toBe(0);
+    expect(getCurrentSnapshot(history)).toEqual({ state: state1, frame: frame1 });
     expect(canUndo(history)).toBe(true);
     expect(canRedo(history)).toBe(true);
 
     history = undo(history);
     expect(history.cursorIndex).toBe(-1);
+    expect(getCurrentSnapshot(history)).toEqual({ state: initialState, frame: initialFrame });
     expect(canUndo(history)).toBe(false);
     expect(canRedo(history)).toBe(true);
 
     // Redo back to top
     history = redo(history);
     expect(history.cursorIndex).toBe(0);
+    expect(getCurrentSnapshot(history)).toEqual({ state: state1, frame: frame1 });
+
     history = redo(history);
     expect(history.cursorIndex).toBe(1);
+    expect(getCurrentSnapshot(history)).toEqual({ state: state2, frame: frame2 });
+
     history = redo(history);
     expect(history.cursorIndex).toBe(2);
+    expect(getCurrentSnapshot(history)).toEqual({ state: state3, frame: frame3 });
     expect(canRedo(history)).toBe(false);
   });
 
@@ -204,21 +239,38 @@ describe('PlayHistory Foundation', () => {
     // Scrub to -1 (baseline)
     history = scrub(history, -1);
     expect(history.cursorIndex).toBe(-1);
-    expect(getCurrentSnapshot(history).state).toEqual(initialState);
+    expect(getCurrentSnapshot(history)).toEqual({
+      state: initialState,
+      frame: initialFrame,
+    });
 
     // Scrub directly to 1 (state2)
     history = scrub(history, 1);
     expect(history.cursorIndex).toBe(1);
-    expect(getCurrentSnapshot(history).state).toEqual(state2);
+    expect(getCurrentSnapshot(history)).toEqual({
+      state: state2,
+      frame: frame2,
+    });
+
+    // Scrub directly to 0 (state1)
+    history = scrub(history, 0);
+    expect(history.cursorIndex).toBe(0);
+    expect(getCurrentSnapshot(history)).toEqual({
+      state: state1,
+      frame: frame1,
+    });
 
     // Scrub to current index returns unchanged instance
-    const same = scrub(history, 1);
+    const same = scrub(history, 0);
     expect(same).toBe(history);
 
     // Scrub to top (2)
     history = scrub(history, 2);
     expect(history.cursorIndex).toBe(2);
-    expect(getCurrentSnapshot(history).state).toEqual(state3);
+    expect(getCurrentSnapshot(history)).toEqual({
+      state: state3,
+      frame: frame3,
+    });
   });
 
   it('INVALID_SCRUB_GATE: rejects invalid scrub targets with RangeError', () => {
@@ -239,12 +291,17 @@ describe('PlayHistory Foundation', () => {
     history = appendMove(history, move2, state2, frame2);
 
     expect(history.cursorIndex).toBe(1);
+    expect(getCurrentSnapshot(history)).toEqual({ state: state2, frame: frame2 });
+
     history = backToBaseline(history);
 
     expect(history.cursorIndex).toBe(-1);
     expect(history.entries).toHaveLength(2);
     expect(canRedo(history)).toBe(true);
-    expect(getCurrentSnapshot(history).state).toEqual(initialState);
+    expect(getCurrentSnapshot(history)).toEqual({
+      state: initialState,
+      frame: initialFrame,
+    });
 
     // Calling backToBaseline when already at baseline returns unchanged
     expect(backToBaseline(history)).toBe(history);
@@ -252,20 +309,61 @@ describe('PlayHistory Foundation', () => {
 
   it('IMMUTABILITY_GATE: operations never mutate prior history state or entries array', () => {
     const h0 = createPlayHistory(initialState, initialFrame);
-    const h1 = appendMove(h0, move1, state1, frame1);
-    const h2 = appendMove(h1, move2, state2, frame2);
+    const h0EntriesRef = h0.entries;
 
+    const h1 = appendMove(h0, move1, state1, frame1);
+    const h1EntriesRef = h1.entries;
+    const entry0Ref = h1.entries[0]!;
+
+    const h2 = appendMove(h1, move2, state2, frame2);
+    const h2EntriesRef = h2.entries;
+    const entry1Ref = h2.entries[1]!;
+
+    // h0 remains pristine
     expect(h0.entries).toHaveLength(0);
     expect(h0.cursorIndex).toBe(-1);
+    expect(h0.entries).toBe(h0EntriesRef);
+    expect(h0.initialBaselineState).toEqual(initialState);
+    expect(h0.initialBaselineFrame).toBe(initialFrame);
 
+    // h1 remains pristine
     expect(h1.entries).toHaveLength(1);
     expect(h1.cursorIndex).toBe(0);
+    expect(h1.entries).toBe(h1EntriesRef);
+    expect(h1.entries[0]).toBe(entry0Ref);
+    expect(h1.entries[0]).toEqual({
+      move: move1,
+      resultingState: state1,
+      resultingFrame: frame1,
+      notation: 'U+',
+    });
 
-    expect(h2.entries).toHaveLength(2);
-    expect(h2.cursorIndex).toBe(1);
-
+    // Undo from h2 produces hUndo without mutating h2
     const hUndo = undo(h2);
     expect(h2.cursorIndex).toBe(1);
+    expect(h2.entries).toHaveLength(2);
+    expect(h2.entries).toBe(h2EntriesRef);
+    expect(h2.entries[0]).toBe(entry0Ref);
+    expect(h2.entries[1]).toBe(entry1Ref);
     expect(hUndo.cursorIndex).toBe(0);
+    expect(hUndo.entries).toBe(h2.entries);
+
+    // Redo from hUndo produces hRedo without mutating hUndo
+    const hRedo = redo(hUndo);
+    expect(hUndo.cursorIndex).toBe(0);
+    expect(hRedo.cursorIndex).toBe(1);
+
+    // Scrub from h2 produces hScrub without mutating h2
+    const hScrub = scrub(h2, 0);
+    expect(h2.cursorIndex).toBe(1);
+    expect(hScrub.cursorIndex).toBe(0);
+
+    // Back to baseline from h2 produces hBase without mutating h2
+    const hBase = backToBaseline(h2);
+    expect(h2.cursorIndex).toBe(1);
+    expect(hBase.cursorIndex).toBe(-1);
+    expect(hBase.entries).toHaveLength(2);
+    expect(hBase.entries[0]).toBe(entry0Ref);
+    expect(hBase.entries[1]).toBe(entry1Ref);
   });
 });

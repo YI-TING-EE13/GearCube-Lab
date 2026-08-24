@@ -6,12 +6,15 @@
 import { describe, it, expect } from 'vitest';
 import {
   ALL_MOVES,
+  applyMove,
+  nextSpatialFrame,
   isMove,
   isGearCubeState,
   isSpatialFrame,
   SOLVED_GEAR_CUBE_STATE,
   DEFAULT_SPATIAL_FRAME,
   type Move,
+  type GearCubeState,
 } from '@gearcube/core';
 import {
   hashSeed,
@@ -158,16 +161,55 @@ describe('Deterministic Scramble Foundation', () => {
 
   it('SCRAMBLE_ENDPOINT_GATE & SCRAMBLE_FRAME_AWARE_GATE: sequentially evaluates state and spatial frame', () => {
     const scramble = generateScramble('abc', 20);
-    const { state, frame } = applyScrambleSequence(
+
+    // 1. Independent Core baseline calculation from solved state & default frame
+    let expectedState = SOLVED_GEAR_CUBE_STATE;
+    let expectedFrame = DEFAULT_SPATIAL_FRAME;
+    for (const move of scramble) {
+      expectedState = applyMove(expectedState, move);
+      expectedFrame = nextSpatialFrame(expectedFrame, move.face);
+    }
+
+    const result = applyScrambleSequence(
       SOLVED_GEAR_CUBE_STATE,
       DEFAULT_SPATIAL_FRAME,
       scramble
     );
 
-    expect(isGearCubeState(state)).toBe(true);
-    expect(isSpatialFrame(frame)).toBe(true);
+    expect(result.state).toEqual(expectedState);
+    expect(result.frame).toBe(expectedFrame);
+    expect(isGearCubeState(result.state)).toBe(true);
+    expect(isSpatialFrame(result.frame)).toBe(true);
 
-    // Verify evaluation on 0 moves returns initial state/frame
+    // 2. Exercise a non-default/nontrivial starting state + frame
+    const nontrivialStartState = applyMove(
+      applyMove(SOLVED_GEAR_CUBE_STATE, { face: 'R', direction: 'CW' }),
+      { face: 'F', direction: 'CCW' }
+    );
+    const nontrivialStartFrame = nextSpatialFrame(
+      nextSpatialFrame(DEFAULT_SPATIAL_FRAME, 'R'),
+      'F'
+    );
+
+    let expectedNontrivialState = nontrivialStartState;
+    let expectedNontrivialFrame = nontrivialStartFrame;
+    for (const move of scramble) {
+      expectedNontrivialState = applyMove(expectedNontrivialState, move);
+      expectedNontrivialFrame = nextSpatialFrame(expectedNontrivialFrame, move.face);
+    }
+
+    const nontrivialResult = applyScrambleSequence(
+      nontrivialStartState,
+      nontrivialStartFrame,
+      scramble
+    );
+
+    expect(nontrivialResult.state).toEqual(expectedNontrivialState);
+    expect(nontrivialResult.frame).toBe(expectedNontrivialFrame);
+    expect(nontrivialResult.state).not.toEqual(nontrivialStartState);
+    expect(nontrivialResult.frame).not.toBe(nontrivialStartFrame);
+
+    // 3. Boundary: zero-move sequence returns exact starting state/frame identity
     const identity = applyScrambleSequence(
       SOLVED_GEAR_CUBE_STATE,
       DEFAULT_SPATIAL_FRAME,
@@ -177,12 +219,34 @@ describe('Deterministic Scramble Foundation', () => {
     expect(identity.frame).toBe(DEFAULT_SPATIAL_FRAME);
   });
 
-  it('IMMUTABILITY_GATE: generated scramble arrays are frozen against mutations', () => {
+  it('IMMUTABILITY_GATE: generated scramble arrays are frozen and sequence evaluation does not mutate inputs', () => {
     const scramble = generateScramble('immutability_test', 10);
     expect(Object.isFrozen(scramble)).toBe(true);
     expect(() => {
       // @ts-expect-error - testing runtime mutation rejection
       scramble.push({ face: 'U', direction: 'CW' });
     }).toThrow();
+
+    // Verify applyScrambleSequence does not mutate input state or input moves array
+    const testMoves: Move[] = [
+      { face: 'U', direction: 'CW' },
+      { face: 'R', direction: 'CCW' },
+      { face: 'F', direction: 'CW' },
+    ];
+    const movesCopy = testMoves.map((m) => ({ ...m }));
+    const inputState: GearCubeState = {
+      cornerConfiguration: SOLVED_GEAR_CUBE_STATE.cornerConfiguration,
+      sliceX: { ...SOLVED_GEAR_CUBE_STATE.sliceX },
+      sliceY: { ...SOLVED_GEAR_CUBE_STATE.sliceY },
+      sliceZ: { ...SOLVED_GEAR_CUBE_STATE.sliceZ },
+    };
+    const inputStateSnapshot = JSON.parse(JSON.stringify(inputState));
+
+    applyScrambleSequence(inputState, DEFAULT_SPATIAL_FRAME, testMoves);
+
+    // Verify input state is unaltered
+    expect(inputState).toEqual(inputStateSnapshot);
+    // Verify input moves array and objects are unaltered
+    expect(testMoves).toEqual(movesCopy);
   });
 });
