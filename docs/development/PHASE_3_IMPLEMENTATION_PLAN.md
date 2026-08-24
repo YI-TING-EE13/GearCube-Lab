@@ -3,6 +3,7 @@
 > **Phase Status:** `PLANNING / ACCEPTED`
 > **Phase 3A Status:** `COMPLETED / ACCEPTED`
 > **Phase 3B Status:** `COMPLETED / ACCEPTED`
+> **Phase 3C Status:** `PLANNED / PREFLIGHT_READY_FOR_INDEPENDENT_ACCEPTANCE`
 > **Phase 3 Preflight Status:** `ACCEPTED`
 > **Authoritative Baseline Provenance:**
 > - Phase 3 Plan Accepted Head: `7b409066905cf3bb81da1eee1f5bcb7e3af85204`
@@ -237,34 +238,57 @@ export interface PlayHistoryState {
 ## 6. Keyboard Interaction Contract
 
 ### 6.1. Key Mapping Table
-| Key | Modifier | Move / Action | Condition |
+| Key | Modifier | Action / Move | Valid Condition |
 | :--- | :--- | :--- | :--- |
-| `u`, `d`, `f`, `b`, `r`, `l` | None | `U+`, `D+`, `F+`, `B+`, `R+`, `L+` | IDLE (or valid TWO_STEP active face) |
-| `U`, `D`, `F`, `B`, `R`, `L` | `Shift` | `U-`, `D-`, `F-`, `B-`, `R-`, `L-` | IDLE (or valid TWO_STEP active face) |
-| `z` | `Ctrl` / `Cmd` | `Undo` | IDLE & `cursorIndex > -1` |
-| `z` | `Ctrl+Shift` / `Cmd+Shift` | `Redo` | IDLE & `cursorIndex < entries.length - 1` |
-| `y` | `Ctrl` / `Cmd` | `Redo` | IDLE & `cursorIndex < entries.length - 1` |
+| `u`, `d`, `f`, `b`, `r`, `l` | None | `U+`, `D+`, `F+`, `B+`, `R+`, `L+` | IDLE (or valid matching TWO_STEP midpoint continuation) |
+| `u`, `d`, `f`, `b`, `r`, `l` | `Shift` | `U-`, `D-`, `F-`, `B-`, `R-`, `L-` | IDLE (or valid matching TWO_STEP midpoint cancellation) |
+| `z` | `Ctrl` / `Cmd` | `Undo` | IDLE & `canUndo(history)` |
+| `z` | `Ctrl+Shift` / `Cmd+Shift` | `Redo` | IDLE & `canRedo(history)` |
+| `y` | `Ctrl` / `Cmd` | `Redo` | IDLE & `canRedo(history)` |
 
-### 6.2. Keyboard Guarding Rules
-- Shortcuts are strictly ignored when focus is inside text inputs (`<input>`, `<textarea>`, `<select>`, `contenteditable`).
-- `event.repeat` is ignored to avoid rapid-fire uncontrolled input.
-- Inactive moves or moves during busy animation states are ignored.
+### 6.2. Event Interpretation & Normalization
+- **Key Normalization:** `event.key.toLowerCase()` for base letter extraction (`'u'`, `'d'`, `'f'`, `'b'`, `'r'`, `'l'`, `'z'`, `'y'`).
+- **Modifier Detection:**
+  - Direction inversion: `event.shiftKey === true` maps to Counter-Clockwise (`-`), while no Shift maps to Clockwise (`+`).
+  - History command: `(event.ctrlKey || event.metaKey) === true` for Undo/Redo shortcuts.
+- **Repeat Key Policy:** `if (event.repeat) return;` — auto-repeat is strictly ignored to prevent uncontrolled rapid-fire moves.
+- **Focus Exclusion Policy:**
+  - Target inspection: `isEditableElement(event.target)` checks whether `target` is an `<input>`, `<textarea>`, `<select>`, or has `isContentEditable === true`.
+  - When focus is in any editable element (e.g. Scramble seed input), ALL keyboard shortcuts are ignored, allowing normal text entry with full modifier support without triggering cube moves or undo/redo.
+- **`preventDefault()` Policy:** `event.preventDefault()` is invoked ONLY when the shortcut is recognized, accepted, and handled by GearCube. Unrecognized or blocked keystrokes are never intercepted, preserving browser defaults.
+
+### 6.3. Midpoint & Busy State Delegation
+- **`HALF_TURN_LOCKED` State:**
+  - Same staged face + same direction: Completes the 180° turn (e.g. pressing `u` when staged with U CW completes the move).
+  - Same staged face + opposite direction: Cancels back to origin (e.g. pressing `Shift+U` when staged with U CW reverses to baseline/origin).
+  - Unrelated face keys: Ignored.
+  - Undo / Redo / Scramble / Mode toggle: Ignored.
+  - Seed text input: Remains fully editable.
+- **Active Animation State:** While `isSessionAnimating(session)` is `true`, all action keystrokes are ignored to prevent race conditions or duplicate transitions.
+- **Module Ownership:** `apps/web/src/components/controls/useKeyboardControls.ts` (pure UI React hook mounted in `GearCubeViewport.tsx`). Delegates directly to `onTriggerMove`, `onUndo`, `onRedo`, `onResetBaseline` without duplicating application state machines.
 
 ---
 
-## 7. Responsive UI & Visual Design
+## 7. Responsive UI & Visual Design Contract
 
-### 7.1. Component Layout
-- **Canvas Area (Center):** 3D WebGL Gear Cube Viewport with OrbitControls.
-- **Header Overlay (Top):**
-  - Project Title & Status Badge.
-  - `Direct 180°` Toggle Switch (OFF = TWO_STEP, ON = DIRECT_180).
-  - Scramble Generator Toolbar (Seed input, Scramble button, Notation badge).
-- **Control Overlay (Bottom / Side):**
-  - 12 Move Buttons Grid (Grouped by Face with +/- directions).
-  - History Toolbar (Undo, Redo, "Back to baseline" buttons).
-  - Timeline Scrubber (Horizontal chip list showing move index and notation with active cursor highlight).
-  - Collapsible Keyboard Shortcuts Help Drawer.
+### 7.1. Empirical Reconnaissance Findings
+Real browser inspection across representative viewports revealed:
+- **1440x900 / 1024x768 (Desktop):** All floating overlays (History top-left, Scramble top-right, MoveControls bottom-center, Timeline bottom-left) render cleanly without collision.
+- **768x1024 (Tablet Portrait):** MoveControls width (614px) leaves only 77px side margins, causing direct bounding-box collision with bottom-left TimelineScrubber (width 152px) (`bottomOverlap: true`).
+- **390x844 / 360x800 (Mobile Portrait):** MoveControls fixed width (614px) severely overflows window boundaries (`width > 390px / 360px`), ScramblePanel overflows right boundary (`right: 541px`), and TimelineScrubber sits directly under/over the overflowing move controls.
+
+### 7.2. Responsive Breakpoint Specification
+| Viewport Class | Breakpoint Range | Overlay Positioning & Layout Strategy |
+| :--- | :--- | :--- |
+| **Desktop** | `> 900px` | 4-quadrant desktop layout: floating top bar (History left, Scramble right), centered bottom MoveControls (6 columns), bottom-left TimelineScrubber. |
+| **Tablet** | `641px .. 900px` | MoveControls compacted; TimelineScrubber elevated above bottom controls (`bottom: 160px; left: 16px;`) to eliminate collision with bottom-centered MoveControls. |
+| **Mobile Portrait** | `<= 640px` | Top bar elements wrap with responsive max-width (`calc(100vw - 32px)`); MoveControls wrap face cards into 2 rows of 3 columns (`grid-template-columns: repeat(3, 1fr)`); TimelineScrubber renders as horizontal scroll strip above bottom controls (`bottom: 190px; left: 16px; right: 16px; width: auto; overflow-x: auto;`). |
+
+### 7.3. Responsive Invariants
+- **Canvas Region:** Center 3D WebGL Gear Cube canvas retains $\ge 40\text{vh}$ interactive orbit area across all supported viewports.
+- **Zero Document Scroll:** Document `overflow: hidden; width: 100vw; height: 100vh;` with zero horizontal overflow or clipping.
+- **Accessibility & Actionability:** All primary buttons (12 face moves, mode toggle, undo, redo, baseline, scramble) remain clickable without obscuring each other.
+- **CSS-Only Implementation:** Pure CSS media queries (`@media (max-width: 900px)`, `@media (max-width: 640px)`) in `App.css` without runtime JavaScript window resize listeners.
 
 ---
 
@@ -328,15 +352,26 @@ Phase 3 is decomposed into four dependency-ordered, independently verifiable sub
 - **Preconditions:** Phase 3A accepted & committed (`SATISFIED`).
 
 ### 8.4. Phase 3C: Keyboard Controls, Responsive Layout & Playwright Browser E2E
-- **Objective:** Keyboard shortcuts, responsive CSS layout, and automated browser E2E verification.
-- **Status:** `PLANNED / UNBLOCKED`
+- **Objective:** Keyboard shortcuts, responsive CSS layout, root Playwright Chromium E2E infrastructure, and automated browser verification.
+- **Status:** `PLANNED / PREFLIGHT_READY_FOR_INDEPENDENT_ACCEPTANCE`
 - **Deliverables:**
-  - `useKeyboardControls.ts`: Keyboard event listener with focus detection and modifier parsing.
-  - `App.css`: Responsive styling for desktop sidebars and mobile stacked drawers.
-  - `playwright.config.ts`: Root Playwright E2E configuration (devDependency).
-  - `tests/e2e/play-mode.spec.ts`: Automated browser E2E test suite covering all interaction workflows.
-  - Human Browser Acceptance: Full verification of moves, undo/redo, scrub, scramble, keyboard, and orbit controls.
-- **Preconditions:** Phase 3B accepted & committed (`SATISFIED`).
+  - `apps/web/src/components/controls/useKeyboardControls.ts`: Keyboard event listener with focus detection, repeat guarding, and modifier normalization.
+  - `apps/web/src/components/controls/useKeyboardControls.test.ts`: Unit tests for keyboard event parsing, focus exclusion, and move triggering.
+  - `apps/web/src/components/canvas/GearCubeViewport.tsx`: Mount `useKeyboardControls` hook to active session state.
+  - `apps/web/src/App.css`: Responsive media queries (`max-width: 900px`, `max-width: 640px`) for tablet and mobile portrait layouts.
+  - `playwright.config.ts`: Root Playwright configuration pinning Chromium, dedicated webServer on port 4173 (`http://127.0.0.1:4173`), and zero headless pixel-matching dependencies.
+  - `tests/e2e/play-mode.spec.ts`: Automated browser E2E test suite covering 19 interaction flows.
+  - `package.json` & `package-lock.json`: Add pinned `@playwright/test@1.62.1` devDependency and `npm run test:e2e` script.
+  - `docs/development/PHASE_3_IMPLEMENTATION_PLAN.md`: Synchronized Phase 3C implementation plan.
+  - `docs/development/TEST_STRATEGY.md`: Synchronized Level 9 Playwright testing strategy.
+  - `docs/development/ROADMAP.md`: Synchronized Phase 3 roadmap status.
+- **Preconditions:** Phase 3B accepted & promoted to `main` (`SATISFIED`).
+- **Dependencies & Infrastructure:**
+  - Pinned `@playwright/test`: `1.62.1` (Node `>=20` engine compatible with project `>=22.12.0 <23`).
+  - Browser Engine: `chromium` only (Firefox/WebKit deferred).
+  - WebServer: `npm run dev --workspace=@gearcube/web -- --port 4173 --strictPort` on `http://127.0.0.1:4173`.
+  - Script Ownership: `npm run verify` preserved as fast non-browser verification; `npm run test:e2e` added for root Playwright E2E execution.
+  - Browser Installation Command: `npx playwright install chromium`.
 
 ---
 
@@ -362,30 +397,33 @@ Phase 3 is decomposed into four dependency-ordered, independently verifiable sub
 17. **`MODE_COMPATIBILITY_GATE`:** Mode switches do not alter history entries or cursor.
 18. **`BUSY_INPUT_BLOCK_GATE`:** History navigation and scramble rejected while puzzle is busy.
 19. **`IMMUTABILITY_GATE`:** State, frame, and history entries remain strictly unmutated.
+20. **`KEYBOARD_EVENT_NORMALIZATION_GATE`:** `useKeyboardControls` correctly normalizes base keys, shift modifiers, and ctrl/cmd combinations.
+21. **`KEYBOARD_FOCUS_EXCLUSION_GATE`:** Key events targeting `<input>`, `<textarea>`, `<select>`, or contenteditable elements produce zero move calls.
+22. **`KEYBOARD_REPEAT_IGNORING_GATE`:** Key repeat events (`event.repeat === true`) are strictly dropped.
 
 ### 9.2. Playwright Browser E2E Verification Flows (`tests/e2e/play-mode.spec.ts`)
-1. **`E2E_APP_LOAD_FLOW`:** Viewport, controls, and canvas render cleanly on initial page load.
-2. **`E2E_MOVE_HISTORY_FLOW`:** Clicking a face move button commits one entry in the timeline.
-3. **`E2E_TWO_STEP_MIDPOINT_FLOW`:** In TWO_STEP mode, midpoint lock creates no history entry.
-4. **`E2E_TWO_STEP_CANCEL_FLOW`:** Cancelling from midpoint creates no history entry.
-5. **`E2E_TWO_STEP_COMPLETE_FLOW`:** Completing two-step move creates exactly one history entry.
-6. **`E2E_DIRECT_180_COMPLETE_FLOW`:** In Direct 180 mode, full turn creates exactly one history entry.
-7. **`E2E_UNDO_FLOW`:** Clicking Undo steps backward in history and updates UI state.
-8. **`E2E_REDO_FLOW`:** Clicking Redo steps forward in history.
-9. **`E2E_REDO_TRUNCATION_FLOW`:** Executing a new move after Undo discards subsequent redo entries.
-10. **`E2E_ARBITRARY_SCRUB_FLOW`:** Clicking any chip in timeline scrubber navigates to that exact step.
-11. **`E2E_RESET_BASELINE_FLOW`:** Clicking "Back to baseline" navigates to cursor -1 while preserving redo chips.
-12. **`E2E_SEEDED_SCRAMBLE_FLOW`:** Entering seed and clicking Scramble produces reproducible sequence and resets baseline.
+1. **`E2E_APP_LOAD_FLOW`:** Viewport, controls, canvas, and overlays render cleanly on initial page load (`http://127.0.0.1:4173`).
+2. **`E2E_MOVE_HISTORY_FLOW`:** Clicking a face move button in TWO_STEP mode commits one entry in the timeline upon completion.
+3. **`E2E_TWO_STEP_MIDPOINT_FLOW`:** In TWO_STEP mode, clicking U CW stops at midpoint lock; timeline remains at 0 entries.
+4. **`E2E_TWO_STEP_CANCEL_FLOW`:** In TWO_STEP midpoint lock, clicking U CCW cancels back to origin; timeline remains at 0 entries.
+5. **`E2E_TWO_STEP_COMPLETE_FLOW`:** In TWO_STEP midpoint lock, clicking U CW finishes 180° turn; exactly 1 entry (`Step 1: U+`) appears.
+6. **`E2E_DIRECT_180_COMPLETE_FLOW`:** In Direct 180 mode, clicking R CW completes in one continuous turn and commits `Step 2: R+`.
+7. **`E2E_UNDO_FLOW`:** Clicking Undo steps backward in history, restores snapshot, and updates UI cursor indicator.
+8. **`E2E_REDO_FLOW`:** Clicking Redo steps forward in history and re-enables snapshot.
+9. **`E2E_REDO_TRUNCATION_FLOW`:** Executing a new move after Undo truncates subsequent redo entries and disables Redo button.
+10. **`E2E_ARBITRARY_SCRUB_FLOW`:** Clicking any chip in timeline scrubber navigates directly to that exact historical step.
+11. **`E2E_RESET_BASELINE_FLOW`:** Clicking "Back to baseline" navigates to cursor -1 while preserving future redo chips.
+12. **`E2E_SEEDED_SCRAMBLE_FLOW`:** Entering seed `"abc"` and clicking Scramble applies deterministic sequence and establishes new baseline with 0 history entries.
 13. **`E2E_KEYBOARD_MOVE_FLOW`:** Pressing `u` triggers `U+` move; `Shift+u` triggers `U-`.
 14. **`E2E_KEYBOARD_UNDO_FLOW`:** Pressing `Ctrl+Z` / `Cmd+Z` executes Undo.
 15. **`E2E_KEYBOARD_REDO_FLOW`:** Pressing `Ctrl+Shift+Z` / `Ctrl+Y` executes Redo.
-16. **`E2E_INPUT_FOCUS_EXCLUSION_FLOW`:** Typing `u` inside seed text input does not trigger puzzle move.
-17. **`E2E_BUSY_STATE_BLOCKING_FLOW`:** Undo/Redo/Scramble/Mode buttons are disabled while animating or at midpoint lock.
-18. **`E2E_RESPONSIVE_LAYOUT_FLOW`:** UI controls remain functional and accessible across narrow viewport widths.
-19. **`E2E_CONSOLE_ERROR_GATE`:** Zero unhandled JavaScript / WebGL console errors during test run.
+16. **`E2E_INPUT_FOCUS_EXCLUSION_FLOW`:** Focusing Scramble seed input and typing `u`, `r`, `z` changes input value without triggering puzzle moves or undo.
+17. **`E2E_BUSY_STATE_BLOCKING_FLOW`:** Move buttons, mode toggle, undo, redo, and scramble button are disabled during animation or at midpoint lock.
+18. **`E2E_RESPONSIVE_LAYOUT_FLOW`:** At viewports `1440x900`, `768x1024`, and `375x667`, all primary controls remain visible, non-overlapping, and clickable without document horizontal overflow.
+19. **`E2E_CONSOLE_ERROR_GATE`:** Zero unhandled JavaScript exceptions, React runtime errors, or WebGL errors during entire test run.
 
-### 9.3. Regression Invariant
-- All 28 animation tests, 4 renderer tests, 12 kinematics tests, and exhaustive core tests remain 100% passing.
+### 9.3. Regression Invariants
+- All 28 animation tests, 4 renderer tests, 12 kinematics tests, 24 history/scramble tests, 18 play-session tests, and exhaustive core tests remain 100% passing.
 - `npm run verify` passes with 0 errors.
 
 ---
@@ -394,7 +432,7 @@ Phase 3 is decomposed into four dependency-ordered, independently verifiable sub
 
 - **`PHASE3_NEW_ADR_REQUIRED`:** `NO` (All Phase 3 features operate within existing contracts under ADR-0004, ADR-0005, and ADR-0006).
 - **`NEW_RUNTIME_DEPENDENCIES`:** `NONE`
-- **`DEV_DEPENDENCY_PLANNED`:** `@playwright/test` (Introduced in Phase 3C)
+- **`DEV_DEPENDENCY_PLANNED`:** `@playwright/test@1.62.1` (Root devDependency, Chromium project only)
 - **`PHASE3_PLAN_STATUS`:** `PLANNING / ACCEPTED`
 - **`PHASE3_PREFLIGHT_STATUS`:** `ACCEPTED`
 - **`PHASE3A_STATUS`:** `COMPLETED / ACCEPTED`
@@ -402,6 +440,24 @@ Phase 3 is decomposed into four dependency-ordered, independently verifiable sub
 - **`PHASE3B_STATUS`:** `COMPLETED / ACCEPTED`
 - **`PHASE3B_ACCEPTED`:** `YES`
 - **`PHASE3B_ACCEPTED_HEAD`:** `1d2dc0982eed1cdb52a7a4b65884d9bdd495ede2`
-- **`PHASE3C_STATUS`:** `PLANNED / UNBLOCKED`
+- **`PHASE3C_STATUS`:** `PLANNED / PREFLIGHT_READY_FOR_INDEPENDENT_ACCEPTANCE`
 - **`PHASE3C_STARTED`:** `NO`
 - **`SCOPE_FROZEN`:** `YES`
+- **`PROPOSED_FUTURE_IMPLEMENTATION_FILES`:**
+  1. `apps/web/src/App.css`
+  2. `apps/web/src/components/canvas/GearCubeViewport.tsx`
+  3. `apps/web/src/components/controls/useKeyboardControls.ts`
+  4. `apps/web/src/components/controls/useKeyboardControls.test.ts`
+  5. `playwright.config.ts`
+  6. `tests/e2e/play-mode.spec.ts`
+  7. `package.json`
+  8. `package-lock.json`
+  9. `docs/development/PHASE_3_IMPLEMENTATION_PLAN.md`
+  10. `docs/development/ROADMAP.md`
+- **`EXPLICITLY_FORBIDDEN_FILES`:**
+  - `packages/core/**`
+  - `packages/kinematics/**`
+  - `apps/web/src/components/cube/animation.ts`
+  - `apps/web/src/components/history/history.ts`
+  - `apps/web/src/components/history/scramble.ts`
+  - `apps/web/src/components/history/play-session.ts`

@@ -179,24 +179,32 @@
   - Running a benchmark suite twice with seed `1337` produces bit-for-bit identical node expansion counts and solution paths.
 
 ### Level 9: Browser End-to-End Tests (Playwright — Planned for Phase 3C)
-- **Scope:** Whole Web Application (`playwright.config.ts`, `tests/e2e/**`)
+- **Scope:** Whole Web Application (`playwright.config.ts`, `tests/e2e/play-mode.spec.ts`)
 - **Focus:** User interaction flows and state validation in real headless browser environments.
+- **Infrastructure Architecture:**
+  - Pinned `@playwright/test@1.62.1` devDependency at repository root.
+  - Project configuration: `chromium` only (desktop, tablet portrait, mobile portrait viewports).
+  - Dedicated isolated webServer: `npm run dev --workspace=@gearcube/web -- --port 4173 --strictPort` on `http://127.0.0.1:4173` with `reuseExistingServer: false`.
+  - Execution command: `npm run test:e2e` (`playwright test`).
 - **Invariants Tested (Behavioral / DOM-Level Assertions):**
   - Viewport, controls, and canvas render cleanly on initial app load.
-  - Face move button clicks commit single entries in the timeline.
+  - Face move button clicks commit single entries in the timeline upon completion.
   - TWO_STEP midpoint lock and cancel create zero history entries.
   - TWO_STEP and DIRECT_180 completions create exactly one canonical history entry.
   - Undo and Redo buttons navigate history and update UI indicators.
   - Executing new move after Undo truncates future redo branch.
   - Clicking any chip in timeline scrubber navigates to that exact step.
   - "Back to baseline" navigates to cursor -1 while preserving redo chips.
-  - Seeded scramble input produces reproducible sequence and resets baseline.
-  - Keyboard shortcuts (`u/d/f/b/r/l`, Shift, Ctrl+Z, Ctrl+Y) trigger moves and undo/redo.
-  - Input focus exclusion: typing in seed text input does not trigger puzzle moves.
-  - Busy-state blocking: controls disabled while animating or at midpoint lock.
-  - Responsive narrow layout: controls remain accessible and functional.
-  - Zero unhandled console/runtime errors.
+  - Seeded scramble input produces reproducible sequence and resets baseline without creating individual move entries.
+  - Keyboard shortcuts (`u/d/f/b/r/l`, Shift, Ctrl+Z, Ctrl+Y, Cmd variants) trigger moves and undo/redo.
+  - Input focus exclusion: typing in seed text input does not trigger puzzle moves or history navigation.
+  - Busy-state blocking: controls disabled while animating or at midpoint lock; seed text input remains editable at midpoint.
+  - Responsive layout: primary controls remain accessible and functional across desktop, tablet, and mobile portrait viewports without horizontal page overflow.
+  - Zero unhandled console/runtime errors (`pageerror` and error-level console messages).
 - **Assertion Principle:** `PLAYWRIGHT_PIXEL_PERFECT_ASSERTIONS: NO` and `RENDERER_PIXELS_USED_AS_STATE_ORACLE: NO` (assertions verify DOM interactions, disabled states, and text/attribute state indicators; not WebGL canvas pixels).
+- **Complementary Acceptance Roles:**
+  - **Playwright E2E (`npm run test:e2e`):** Repeatable, repository-owned deterministic regression suite covering automated DOM interaction flows and error-free execution.
+  - **Chrome DevTools MCP:** Interactive live browser acceptance covering 3D WebGL rendering, orbit controls, zoom gestures, pointer overlay isolation, and visual layout checks.
 
 ### Level 10: Performance & Responsiveness Regression
 - **Scope:** Production Web Bundle
@@ -229,7 +237,7 @@
 | **Pure Unit & Core Invariants** | Vitest | `npm run test` (or `npx vitest run packages/core`) | Available |
 | **Kinematics Math Tests** | Vitest | `npx vitest run packages/kinematics` | Available |
 | **Renderer & Animation Tests** | Vitest | `npx vitest run apps/web` | Available |
-| **History & Scramble Tests** | Vitest | `npx vitest run apps/web/src/components/history` | Planned (Phase 3A) |
+| **History & Scramble Tests** | Vitest | `npx vitest run apps/web/src/components/history` | Available (Accepted in Phase 3A/3B) |
 | **Browser E2E Tests** | Playwright | `npm run test:e2e` | Planned (Phase 3C) |
 | **Solver & Worker Tests** | Vitest | `npm run test:solvers` | Planned (Phase 4) |
 | **Performance Profiling** | Vitest / Custom | `npm run test:perf` | Planned (Phase 5) |
