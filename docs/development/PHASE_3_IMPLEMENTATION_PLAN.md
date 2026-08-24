@@ -392,13 +392,13 @@ Phase 3 is decomposed into four dependency-ordered, independently verifiable sub
 
 ### 8.4. Phase 3C: Keyboard Controls, Responsive Layout & Playwright Browser E2E
 - **Objective:** Keyboard shortcuts, responsive CSS layout, root Playwright Chromium E2E infrastructure, and automated browser verification.
-- **Status:** `PLANNED / PREFLIGHT_ACCEPTED / IMPLEMENTATION_UNBLOCKED` (Preflight accepted at commit `58299ffb9c105da2d14eee1fb4985e2c854b8c1c`; implementation not started).
+- **Status:** `IMPLEMENTED / READY_FOR_INDEPENDENT_ACCEPTANCE` (Implementation candidate created at branch `phase/3c-keyboard-responsive-e2e`; formal independent acceptance pending).
 - **Deliverables:**
   - `apps/web/src/components/controls/useKeyboardControls.ts`: Keyboard event listener with focus detection, repeat guarding, exact modifier normalization, and direction-relative midpoint delegation.
   - `apps/web/src/components/controls/useKeyboardControls.test.ts`: Unit tests for keyboard event parsing, focus exclusion, modifier rejection, and move triggering.
   - `apps/web/src/components/canvas/GearCubeViewport.tsx`: Mount `useKeyboardControls` hook to active session state.
   - `apps/web/src/App.css`: Responsive media queries (`max-width: 900px`, `max-width: 640px`) for tablet and mobile portrait layouts.
-  - `playwright.config.ts`: Root Playwright configuration pinning Chromium, dedicated webServer on port 4173 (`http://127.0.0.1:4173`), and zero headless pixel-matching dependencies.
+  - `playwright.config.ts`: Root Playwright configuration pinning Chromium, dedicated webServer on port 4173 (`http://127.0.0.1:4173`), and outputDir in `.cache/playwright/test-results`.
   - `tests/e2e/play-mode.spec.ts`: Automated browser E2E test suite covering 19 interaction flows.
   - `package.json` & `package-lock.json`: Add pinned `@playwright/test@1.62.1` devDependency and `npm run test:e2e` script.
   - `docs/development/PHASE_3_IMPLEMENTATION_PLAN.md`: Synchronized Phase 3C implementation plan.
@@ -406,11 +406,11 @@ Phase 3 is decomposed into four dependency-ordered, independently verifiable sub
   - `docs/development/ROADMAP.md`: Synchronized Phase 3 roadmap status.
 - **Preconditions:** Phase 3B accepted & promoted to `main` (`SATISFIED`).
 - **Dependencies & Infrastructure:**
-  - Pinned `@playwright/test`: `1.62.1` (Node `>=20` engine compatible with project `>=22.12.0 <23`).
-  - Browser Engine: `chromium` only (Firefox/WebKit deferred).
-  - WebServer: `npm run dev --workspace=@gearcube/web -- --port 4173 --strictPort` on `http://127.0.0.1:4173`.
-  - Script Ownership: `npm run verify` preserved as fast non-browser verification; `npm run test:e2e` added for root Playwright E2E execution.
-  - Browser Installation Command: `npx playwright install chromium`.
+  - **`PLAYWRIGHT_DEV_DEPENDENCY`:** `@playwright/test@1.62.1 / IMPLEMENTED IN CANDIDATE` (Node `>=20` engine compatible with project `>=22.12.0 <23`).
+  - **Browser Engine:** `chromium` only (Firefox/WebKit deferred).
+  - **WebServer:** `npm run dev --workspace=@gearcube/web -- --port 4173 --strictPort --host 127.0.0.1` on `http://127.0.0.1:4173`.
+  - **Script Ownership:** `npm run verify` preserved as fast non-browser verification; `npm run test:e2e` added for root Playwright E2E execution.
+  - **Browser Installation Command:** `npx playwright install chromium`.
 
 ---
 

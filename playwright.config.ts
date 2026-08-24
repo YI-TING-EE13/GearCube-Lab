@@ -7,6 +7,7 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   retries: 0,
   reporter: 'list',
+  outputDir: './.cache/playwright/test-results',
   use: {
     baseURL: 'http://127.0.0.1:4173',
     trace: 'off',

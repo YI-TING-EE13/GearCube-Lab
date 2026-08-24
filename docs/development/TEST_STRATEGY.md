@@ -184,7 +184,7 @@
 - **Infrastructure Architecture:**
   - Pinned `@playwright/test@1.62.1` devDependency at repository root.
   - Project configuration: `chromium` only (desktop, tablet portrait, mobile portrait viewports).
-  - Dedicated isolated webServer: `npm run dev --workspace=@gearcube/web -- --port 4173 --strictPort` on `http://127.0.0.1:4173` with `reuseExistingServer: false`.
+  - Dedicated isolated webServer: `npm run dev --workspace=@gearcube/web -- --port 4173 --strictPort --host 127.0.0.1` on `http://127.0.0.1:4173` with `reuseExistingServer: false`.
   - Execution command: `npm run test:e2e` (`playwright test`).
 - **Invariants Tested (Behavioral / DOM-Level Assertions):**
   - Viewport, controls, and canvas render cleanly on initial app load.
@@ -195,11 +195,13 @@
   - Executing new move after Undo truncates future redo branch.
   - Clicking any chip in timeline scrubber navigates to that exact step.
   - "Back to baseline" navigates to cursor -1 while preserving redo chips.
-  - Seeded scramble input produces reproducible sequence and resets baseline without creating individual move entries.
-  - Keyboard shortcuts (`u/d/f/b/r/l`, Shift, Ctrl+Z, Ctrl+Y, Cmd variants) trigger moves and undo/redo.
-  - Input focus exclusion: typing in seed text input does not trigger puzzle moves or history navigation.
-  - Busy-state blocking: controls disabled while animating or at midpoint lock; seed text input remains editable at midpoint.
-  - Responsive layout: primary controls remain accessible and functional across desktop, tablet, and mobile portrait viewports without horizontal page overflow.
+  - Seeded scramble input produces reproducible sequence, preserves Direct 180 mode, and resets baseline without creating individual move entries.
+  - Keyboard shortcuts (`u/d/f/b/r/l`, Shift, Control+Z, Meta+Z, Control+Shift+Z, Meta+Shift+Z, Control+Y) trigger moves and undo/redo while rejecting unsupported modifiers (`Meta+Y`, `Ctrl+u`, `Alt+u`).
+  - Input focus exclusion: typing in seed text input and pressing `Ctrl+Z`/`Meta+Z` while focused does not trigger puzzle moves or history navigation.
+  - Busy-state blocking:
+    - **Active Animation:** all move controls, history navigation, mode toggle, and scramble buttons are disabled.
+    - **HALF_TURN_LOCKED:** only staged-face Finish and Reverse buttons/shortcuts are actionable; unrelated face moves, history, mode toggle, and scramble buttons are disabled; seed text input remains enabled and editable.
+  - Responsive layout: primary controls remain accessible and non-overlapping across desktop, tablet portrait, and mobile portrait viewports with zero horizontal document overflow and verified vertical clearance between timeline scrubber and bottom move panel during both IDLE and HALF_TURN_LOCKED states.
   - Zero unhandled console/runtime errors (`pageerror` and error-level console messages).
 - **Assertion Principle:** `PLAYWRIGHT_PIXEL_PERFECT_ASSERTIONS: NO` and `RENDERER_PIXELS_USED_AS_STATE_ORACLE: NO` (assertions verify DOM interactions, disabled states, and text/attribute state indicators; not WebGL canvas pixels).
 - **Complementary Acceptance Roles:**

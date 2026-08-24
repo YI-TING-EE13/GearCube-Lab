@@ -558,26 +558,40 @@ body,
 
   .move-controls-panel {
     width: 100%;
-    padding: 8px 10px;
+    padding: 6px 8px;
     box-sizing: border-box;
-    gap: 6px;
+    gap: 4px;
   }
 
   .header-title-row {
     font-size: 11px;
   }
 
+  .half-turn-guidance {
+    gap: 4px;
+  }
+
+  .locked-badge {
+    font-size: 10px;
+    padding: 1px 6px;
+  }
+
+  .locked-action-hint {
+    font-size: 11px;
+  }
+
   .faces-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 6px;
+    gap: 4px;
     width: 100%;
   }
 
   .face-control-card {
-    padding: 4px 6px;
+    padding: 3px 4px;
     box-sizing: border-box;
     width: 100%;
+    gap: 3px;
   }
 
   .face-label {
@@ -585,26 +599,26 @@ body,
   }
 
   .button-pair {
-    gap: 4px;
+    gap: 3px;
     width: 100%;
     justify-content: center;
   }
 
   .move-btn {
-    width: 28px;
-    height: 28px;
-    font-size: 13px;
+    width: 26px;
+    height: 26px;
+    font-size: 12px;
   }
 
   .timeline-scrubber-panel {
     left: 10px;
     right: 10px;
-    bottom: 185px;
+    bottom: 200px;
     max-width: calc(100vw - 20px);
     width: auto;
     box-sizing: border-box;
     padding: 6px 10px;
-    max-height: 90px;
+    max-height: 80px;
   }
 
   .timeline-scroll-container {
@@ -620,4 +634,4 @@ body,
     font-size: 10px;
     padding: 2px 6px;
   }
-}
+}
