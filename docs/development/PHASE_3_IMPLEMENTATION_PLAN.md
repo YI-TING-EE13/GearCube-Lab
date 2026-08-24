@@ -1,8 +1,13 @@
 # Phase 3 Implementation Plan — Interactive UI, History, Undo/Redo, and Scramble
 
-> **Phase Status:** `PLANNING / READY_FOR_INDEPENDENT_ACCEPTANCE`
-> **Implementation Readiness:** `BLOCKED_PENDING_ARCHITECTURE_DOC_SYNC`
-> **Authoritative Starting Baseline:** `0560ed06b1c8204096f75a69ae494eb6f22261df` (Commit `Close Phase 2 documentation` on `main`)
+> **Phase Status:** `PLANNING / ACCEPTED`
+> **Implementation Readiness:** `READY_FOR_PHASE3A`
+> **Phase 3 Preflight Status:** `ACCEPTED`
+> **Authoritative Baseline Provenance:**
+> - Phase 3 Plan Accepted Head: `7b409066905cf3bb81da1eee1f5bcb7e3af85204`
+> - Phase 3 Preflight Accepted Head: `8824f8286d5a702f4c4f0abee82e4306d19b5610`
+> - Starting Production Main Baseline: `0560ed06b1c8204096f75a69ae494eb6f22261df` (Commit `Close Phase 2 documentation` on `main`)
+> - Phase 3A Start Prerequisite: `ACCEPTED_PHASE3_DOCUMENTATION_LINEAGE_ON_MAIN`
 > **Applicability:** Web Application (`apps/web`), Interactive Play Mode, Canonical History Timeline, Undo/Redo, Deterministic Scramble, Keyboard Navigation, Playwright Browser E2E Automation
 
 ---
@@ -51,17 +56,20 @@ Phase 3 builds the complete user-facing interactive puzzle experience on top of 
 
 ### 2.3. Architecture Document Drift & Preflight Gate
 - **`ARCHITECTURE_DOCUMENT_DRIFT`:** `NON_BLOCKING_FOR_PHASE3_PLAN`
-- **`ARCHITECTURE_DOC_SYNC_REQUIRED_BEFORE_IMPLEMENTATION`:** `YES`
-- **`PHASE3_IMPLEMENTATION_BLOCKED_BY_DOC_SYNC`:** `YES`
-- **`PHASE3_PREFLIGHT_REQUIRED_DOCS`:** `4`
+- **`ARCHITECTURE_DOC_SYNC_REQUIRED_BEFORE_IMPLEMENTATION`:** `SATISFIED`
+- **`PHASE3_IMPLEMENTATION_BLOCKED_BY_DOC_SYNC`:** `NO`
+- **`PHASE3_PREFLIGHT_STATUS`:** `ACCEPTED`
+- **`PHASE3_IMPLEMENTATION_STATUS`:** `READY_FOR_PHASE3A`
+- **`PHASE3A_START_PREREQUISITE`:** `ACCEPTED_PHASE3_DOCUMENTATION_LINEAGE_ON_MAIN`
+- **`PHASE3_PREFLIGHT_REQUIRED_DOCS`:** `4` (All 4 synchronized and accepted at `8824f8286d5a702f4c4f0abee82e4306d19b5610`):
   1. `docs/architecture/SYSTEM_ARCHITECTURE.md`
   2. `docs/development/TEST_STRATEGY.md`
   3. `docs/project/PROJECT_BLUEPRINT.md`
   4. `docs/development/DEVELOPMENT_GUIDE.md`
-- **`PROJECT_BLUEPRINT_SYNC_REQUIRED`:** `YES`
-- **`DEVELOPMENT_GUIDE_SYNC_REQUIRED`:** `YES`
+- **`PROJECT_BLUEPRINT_SYNC_REQUIRED`:** `SATISFIED`
+- **`DEVELOPMENT_GUIDE_SYNC_REQUIRED`:** `SATISFIED`
 - **`PHASE3_NEW_ADR_REQUIRED`:** `NO`
-- **Reasoning:** Current architecture documents describe concrete modular packages (`packages/ui`, `packages/renderer`, Zustand) that were consolidated into `apps/web` during accepted Phase 2. Because canonical dependency direction (`UI -> Renderer -> Kinematics -> Core`) and domain authority remain strictly preserved, no new ADR is required. However, a dedicated preflight documentation sync must be executed before Phase 3A implementation begins.
+- **Reasoning:** Architecture documents have been synchronized with the actual accepted `apps/web` topology (React local state, R3F viewport, zero runtime Zustand dependency) while preserving conceptual layer boundaries (`UI -> Renderer -> Kinematics -> Core`). With Preflight documentation sync independently accepted, Phase 3A implementation is unlocked once the accepted documentation lineage is promoted to `main`.
 
 ### 2.4. Dependency & Tooling Evaluation (Zustand & Playwright)
 - **`ZUSTAND_RECOMMENDATION`:** `DO_NOT_USE` (React state / reducer with pure state transition functions is 100% sufficient; zero extra runtime dependencies).
@@ -287,21 +295,23 @@ Phase 3 is decomposed into four dependency-ordered, independently verifiable sub
 
 ### 8.1. Phase 3 Preflight: Architecture & Test Documentation Sync
 - **Objective:** Synchronize all 4 concrete architecture and development documents with the accepted codebase.
+- **Status:** `ACCEPTED` (`8824f8286d5a702f4c4f0abee82e4306d19b5610`)
 - **Deliverables:**
   - `docs/architecture/SYSTEM_ARCHITECTURE.md`: Document actual `apps/web` renderer/UI placement, zero runtime Zustand dependency, and layer boundaries.
   - `docs/development/TEST_STRATEGY.md`: Formalize Playwright browser E2E test plan for interaction flows.
   - `docs/project/PROJECT_BLUEPRINT.md`: Update historical concrete package/state topology.
   - `docs/development/DEVELOPMENT_GUIDE.md`: Align dev workflows and workspace boundaries.
-- **Preconditions:** Phase 3 planning accepted.
+- **Preconditions:** Phase 3 planning accepted (`SATISFIED`).
 
 ### 8.2. Phase 3A: Application History & Scramble Engine
 - **Objective:** Pure domain logic for history state transitions and deterministic scramble generation.
+- **Status:** `READY / NOT_STARTED`
 - **Deliverables:**
   - `apps/web/src/components/history/history.ts`: Pure history data types, push entry, undo, redo, scrub, and branch truncation functions.
   - `apps/web/src/components/history/scramble.ts`: FNV-1a UTF-16 hasher, Mulberry32 PRNG, and deterministic scramble sequence generator.
   - `apps/web/src/components/history/history.test.ts`: 100% pure unit test coverage for all history operations.
   - `apps/web/src/components/history/scramble.test.ts`: FNV-1a hashing, PRNG determinism, seed repeatability, and move vocabulary validation.
-- **Preconditions:** Phase 3 Preflight accepted & committed.
+- **Preconditions:** Phase 3 Preflight accepted (`SATISFIED`) and promoted to `main` (`ACCEPTED_PHASE3_DOCUMENTATION_LINEAGE_ON_MAIN`).
 
 ### 8.3. Phase 3B: Interactive Play Store, Undo/Redo & Scrubber UI
 - **Objective:** Interactive UI components and session history wiring.
@@ -380,6 +390,9 @@ Phase 3 is decomposed into four dependency-ordered, independently verifiable sub
 - **`PHASE3_NEW_ADR_REQUIRED`:** `NO` (All Phase 3 features operate within existing contracts under ADR-0004, ADR-0005, and ADR-0006).
 - **`NEW_RUNTIME_DEPENDENCIES`:** `NONE`
 - **`DEV_DEPENDENCY_PLANNED`:** `@playwright/test` (Introduced in Phase 3C)
-- **`PHASE3_PLAN_STATUS`:** `PLANNING / READY_FOR_INDEPENDENT_ACCEPTANCE`
-- **`PHASE3_IMPLEMENTATION_STATUS`:** `BLOCKED_PENDING_ARCHITECTURE_DOC_SYNC`
+- **`PHASE3_PLAN_STATUS`:** `PLANNING / ACCEPTED`
+- **`PHASE3_PREFLIGHT_STATUS`:** `ACCEPTED`
+- **`PHASE3_IMPLEMENTATION_STATUS`:** `READY_FOR_PHASE3A`
+- **`PHASE3A_STATUS`:** `READY / NOT_STARTED`
+- **`PHASE3A_START_PREREQUISITE`:** `ACCEPTED_PHASE3_DOCUMENTATION_LINEAGE_ON_MAIN`
 - **`SCOPE_FROZEN`:** `YES`
