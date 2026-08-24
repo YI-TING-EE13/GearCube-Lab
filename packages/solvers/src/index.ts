@@ -12,3 +12,6 @@ export type {
   WorkerInboundMessage,
   WorkerOutboundMessage,
 } from './protocol.js';
+
+export { solveBfs } from './bfs.js';
+export { solveBidirectionalBfs } from './bidirectional-bfs.js';

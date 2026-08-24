@@ -169,7 +169,7 @@
 
 ### Level 7: Deterministic Solver Search Correctness & Exact Distance Oracles
 - **Scope:** `packages/solvers` (Phase 4)
-- **Status:** `AVAILABLE / IMPLEMENTED & ACCEPTED IN PHASE 4A (Foundations & Oracles) / SEARCH ALGORITHMS PLANNED (Phase 4B/4C)`
+- **Status:** `AVAILABLE (Phase 4A Accepted / BFS & BiBFS Implemented in Phase 4B Candidate) / IDA* PLANNED (Phase 4C)`
 - **Focus:** Algorithm verification on independently verified exact canonical distance fixtures ($d \in [1 \dots 8]$).
 - **Available / Implemented & Accepted in Phase 4A:**
   - `DENSE_RANK_BIJECTION`: Exhaustive 41,472/41,472 Cartesian bijection and round-trip consistency in `state-index.test.ts`.
@@ -177,13 +177,16 @@
   - `EXACT_DISTANCE_ORACLE`: Independent Core-only BFS distance oracle discovering 41,472 states and canonical diameter 8 in `exact-distance-oracle.test.ts`.
   - `EXACT_DISTANCE_FIXTURES`: Deterministic serialized fixtures for depths $1 \dots 8$ in `fixtures.ts`.
   - `SOLVER_BOUNDARY_TEST`: Solver package boundary, TSConfig lib ES2022 / types [], and pure type export verification in `tests/boundary.test.ts`.
+- **Implemented in Phase 4B Candidate:**
+  - `BFS_OPTIMALITY`: Shortest-path solutions of exact length $d \in [1 \dots 8]$ in `bfs.test.ts` and `optimality.test.ts`.
+  - `BIBFS_OPTIMALITY`: Optimal solutions matching BFS length $d \in [1 \dots 8]$ under complete-layer expansion and provable lower-bound stopping rule in `bidirectional-bfs.test.ts` and `optimality.test.ts`.
+  - `SEARCH_LIMIT_GATES`: Exact `MAX_NODES` and `MAX_DEPTH` limit enforcement across both BFS and BiBFS.
+  - `SEARCH_TELEMETRY_GATES`: Interval-based telemetry emission matching algorithm contracts.
+  - `SOLVER_DETERMINISM_GATE`: Bit-for-bit identical solution paths across repeat runs for identical input.
 - **Planned / Future Subphase Tests:**
-  - BFS returns strictly shortest-path solutions of exact length $d$ (Phase 4B).
-  - Bidirectional BFS returns optimal solutions matching BFS length $d$ under the provable lower-bound stopping rule (Phase 4B).
   - IDA* returns solutions identical in length $d$ when Phase 4C admissible heuristic preflight is independently accepted (Phase 4C).
-  - Returned move sequences applied to input state produce `isSolved(result) === true`.
-  - Solved states yield 0-move solutions immediately.
-  - Scramble sequence length is never equated with expected optimal distance.
+  - Web Worker asynchronous messaging protocol and controller lifecycle (Phase 4D).
+  - Real browser Worker verification and UI solution playback (Phase 4E).
 
 ### Level 8: Seeded Benchmark Determinism & Metrics
 - **Scope:** `packages/benchmark` (Future Phase 5)
@@ -255,7 +258,7 @@
 | **Renderer & Animation Tests** | Vitest | `npx vitest run apps/web` | Available |
 | **History & Scramble Tests** | Vitest | `npx vitest run apps/web/src/components/history` | Available (Accepted in Phase 3A/3B) |
 | **Browser E2E Tests** | Playwright | `npm run test:e2e` | Available (Implemented in Phase 3C) |
-| **Solver Foundation & Oracle Tests** | Vitest | `npx vitest run packages/solvers` | Available / Implemented & Accepted in Phase 4A |
+| **Solver Foundation, Oracle & BFS Solvers** | Vitest | `npx vitest run packages/solvers` | Available (Phase 4A Accepted / Phase 4B Implemented in Candidate) |
 | **Worker Controller / Browser Worker Tests** | Vitest + Playwright | `npx vitest run apps/web/src/components/solver` / `npm run test:e2e` | Planned (Phase 4D / 4E) |
 | **Performance Profiling** | Vitest / Custom | `npm run test:perf` | Planned (Phase 5) |
 | **ML Training & Heuristics** | pytest (uv) | `uv run pytest ml/tests/` | Planned (Phase 6) |
