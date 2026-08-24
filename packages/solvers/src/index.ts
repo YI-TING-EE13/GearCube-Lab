@@ -12,5 +12,3 @@ export type {
   WorkerInboundMessage,
   WorkerOutboundMessage,
 } from './protocol.js';
-
-export { inverseMove } from './search-utils.js';

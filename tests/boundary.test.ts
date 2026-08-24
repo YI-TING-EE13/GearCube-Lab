@@ -200,11 +200,11 @@ describe('Phase 4A Solvers Package Boundary & Architectural Invariants', () => {
     expect(tsconfig.include).toEqual(['src/**/*']);
   });
 
-  it('verifies public barrel does NOT export rankState or unrankState (solver-internal only)', async () => {
+  it('verifies public barrel does NOT export rankState, unrankState, or inverseMove (solver-internal only)', async () => {
     const solvers = (await import('@gearcube/solvers')) as Record<string, unknown>;
     expect(solvers['rankState']).toBeUndefined();
     expect(solvers['unrankState']).toBeUndefined();
-    expect(typeof solvers['inverseMove']).toBe('function');
+    expect(solvers['inverseMove']).toBeUndefined();
   });
 
   it('verifies all packages/solvers/src modules import ONLY @gearcube/core and package-internal relative paths', () => {
