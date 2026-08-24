@@ -1,6 +1,6 @@
 # Phase 4 Implementation Plan — Classical Solver Infrastructure
 
-> **Phase Status:** `IMPLEMENTATION_STARTED / PHASE4A_ACCEPTED / PHASE4B_ACCEPTED / PHASE4C_HEURISTIC_PREFLIGHT_CANDIDATE_READY_FOR_INDEPENDENT_ACCEPTANCE`
+> **Phase Status:** `IMPLEMENTATION_STARTED / PHASE4A_ACCEPTED / PHASE4B_ACCEPTED / PHASE4C_HEURISTIC_PREFLIGHT_ACCEPTED / PHASE4C_IMPLEMENTATION_UNBLOCKED`
 > **Preflight Status:** `ACCEPTED`
 > **Preflight Accepted Head:** `996825befc021d322bf353f06347a7e09375af40`
 > **Phase 4 Started:** `YES`
@@ -12,10 +12,11 @@
 > **Phase 4B Status:** `COMPLETED / ACCEPTED`
 > **Phase 4B Accepted:** `YES`
 > **Phase 4B Accepted Head:** `c96fc47b185655a4b2b2372015b8903f72960d62`
-> **Phase 4C Heuristic Preflight:** `IMPLEMENTED / READY_FOR_INDEPENDENT_ACCEPTANCE`
-> **Phase 4C Heuristic Preflight Accepted:** `NO`
-> **Phase 4C Implementation Status:** `PLANNED / BLOCKED_PENDING_PREFLIGHT_ACCEPTANCE`
-> **Phase 4D Status:** `PLANNED / BLOCKED_BY_PHASE4C`
+> **Phase 4C Heuristic Preflight:** `COMPLETED / ACCEPTED`
+> **Phase 4C Heuristic Preflight Accepted:** `YES`
+> **Phase 4C Heuristic Preflight Accepted Head:** `cfaa86961c53cdfb6541479858cd572165df87d4`
+> **Phase 4C Implementation Status:** `PLANNED / IMPLEMENTATION_UNBLOCKED / NOT STARTED`
+> **Phase 4D Status:** `PLANNED / BLOCKED_BY_PHASE4C_IMPLEMENTATION`
 > **Phase 4E Status:** `PLANNED / BLOCKED_BY_PRIOR_SUBPHASES`
 > **Authoritative Main Baseline:** `879254e9390137c9ff32a0fe09dce85d5111f112` (Commit `Record Phase 4B acceptance` on `main`)
 > **Applicability:** Solvers Package (`packages/solvers`), Web Application (`apps/web`), Web Worker Infrastructure (`apps/web/src/workers`), Solve Mode UI, Solution Playback, Playwright Browser E2E Automation
@@ -562,9 +563,10 @@ The lifecycle of an active search is strictly distinct from the lifecycle of an 
 - **Accepted Head:** `c96fc47b185655a4b2b2372015b8903f72960d62`.
 
 ### 10.3. Phase 4C: IDA* Search & Admissible Heuristic
-- **Objective:** Following an independently accepted Phase 4C heuristic preflight, implement memory-bounded IDA* search and admissible heuristic estimator.
-- **Preflight Status:** **IMPLEMENTED / READY_FOR_INDEPENDENT_ACCEPTANCE**.
-- **Implementation Status:** **BLOCKED_PENDING_PREFLIGHT_ACCEPTANCE**.
+- **Objective:** Following the independently accepted Phase 4C heuristic preflight, implement memory-bounded IDA* search and admissible heuristic estimator.
+- **Preflight Status:** **COMPLETED / ACCEPTED**.
+- **Preflight Accepted Head:** `cfaa86961c53cdfb6541479858cd572165df87d4`.
+- **Implementation Status:** **PLANNED / IMPLEMENTATION_UNBLOCKED / NOT STARTED**.
 - **Allowed Files:**
   - `packages/solvers/src/heuristics.ts`
   - `packages/solvers/src/ida-star.ts`
@@ -578,7 +580,7 @@ The lifecycle of an active search is strictly distinct from the lifecycle of an 
 
 ### 10.4. Phase 4D: Web Worker Infrastructure & Protocol
 - **Objective:** Add `@gearcube/solvers` dependency to `@gearcube/web`, implement browser Worker entry adapter (`apps/web/src/workers/solver.worker.ts`), create pure framework-independent Worker controller (`solver-worker-controller.ts`) with unit tests, build `useSolverWorker` lifecycle hook, and extend boundary test.
-- **Status:** **PLANNED / BLOCKED_BY_PHASE4C**.
+- **Status:** **PLANNED / BLOCKED_BY_PHASE4C_IMPLEMENTATION**.
 - **Allowed Files:**
   - `apps/web/package.json`
   - `apps/web/src/workers/solver.worker.ts`
@@ -660,7 +662,7 @@ Implementation must STOP and request independent contract review if any of the f
 - **`PHASE4_PREFLIGHT_STATUS`:** `ACCEPTED`.
 - **`PHASE4_PREFLIGHT_ACCEPTED`:** `YES`.
 - **`PHASE4_PREFLIGHT_ACCEPTED_HEAD`:** `996825befc021d322bf353f06347a7e09375af40`.
-- **`PHASE4_STATUS`:** `IMPLEMENTATION_STARTED / PHASE4A_ACCEPTED / PHASE4B_ACCEPTED / PHASE4C_HEURISTIC_PREFLIGHT_CANDIDATE_READY_FOR_INDEPENDENT_ACCEPTANCE`.
+- **`PHASE4_STATUS`:** `IMPLEMENTATION_STARTED / PHASE4A_ACCEPTED / PHASE4B_ACCEPTED / PHASE4C_HEURISTIC_PREFLIGHT_ACCEPTED / PHASE4C_IMPLEMENTATION_UNBLOCKED`.
 - **`PHASE4_STARTED`:** `YES`.
 - **`PHASE4_ACCEPTED`:** `NO`.
 - **`PHASE4_OVERALL_COMPLETE`:** `NO`.
@@ -670,10 +672,11 @@ Implementation must STOP and request independent contract review if any of the f
 - **`PHASE4B_STATUS`:** `COMPLETED / ACCEPTED`.
 - **`PHASE4B_ACCEPTED`:** `YES`.
 - **`PHASE4B_ACCEPTED_HEAD`:** `c96fc47b185655a4b2b2372015b8903f72960d62`.
-- **`PHASE4C_HEURISTIC_PREFLIGHT`:** `IMPLEMENTED / READY_FOR_INDEPENDENT_ACCEPTANCE`.
-- **`PHASE4C_HEURISTIC_PREFLIGHT_ACCEPTED`:** `NO`.
-- **`PHASE4C_STATUS`:** `PLANNED / BLOCKED_PENDING_PREFLIGHT_ACCEPTANCE`.
-- **`PHASE4D_STATUS`:** `PLANNED / BLOCKED_BY_PHASE4C`.
+- **`PHASE4C_HEURISTIC_PREFLIGHT`:** `COMPLETED / ACCEPTED`.
+- **`PHASE4C_HEURISTIC_PREFLIGHT_ACCEPTED`:** `YES`.
+- **`PHASE4C_HEURISTIC_PREFLIGHT_ACCEPTED_HEAD`:** `cfaa86961c53cdfb6541479858cd572165df87d4`.
+- **`PHASE4C_STATUS`:** `PLANNED / IMPLEMENTATION_UNBLOCKED / NOT STARTED`.
+- **`PHASE4D_STATUS`:** `PLANNED / BLOCKED_BY_PHASE4C_IMPLEMENTATION`.
 - **`PHASE4E_STATUS`:** `PLANNED / BLOCKED_BY_PRIOR_SUBPHASES`.
 - **`PHASE4C_SELECTED_HEURISTIC`:** `H2_TWO_SLICE_PDB_MAX` ($\max(d_{CXY}, d_{CXZ}, d_{CYZ})$).
 - **`PHASE4C_PDB_RAW_ENTRIES`:** `10368` ($3 \times 3456$).

@@ -169,7 +169,7 @@
 
 ### Level 7: Deterministic Solver Search Correctness & Exact Distance Oracles
 - **Scope:** `packages/solvers` (Phase 4)
-- **Status:** `AVAILABLE (Phase 4A & Phase 4B Accepted / Phase 4C Heuristic Preflight Candidate Ready) / IDA* IMPLEMENTATION PLANNED (Phase 4C)`
+- **Status:** `AVAILABLE (Phase 4A, Phase 4B & Phase 4C Heuristic Preflight Accepted) / IDA* IMPLEMENTATION PLANNED (Phase 4C)`
 - **Focus:** Algorithm verification on independently verified exact canonical distance fixtures ($d \in [1 \dots 8]$).
 - **Available / Implemented & Accepted in Phase 4A:**
   - `DENSE_RANK_BIJECTION`: Exhaustive 41,472/41,472 Cartesian bijection and round-trip consistency in `state-index.test.ts`.
