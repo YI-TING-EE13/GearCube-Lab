@@ -1,6 +1,6 @@
 # Phase 4 Implementation Plan — Classical Solver Infrastructure
 
-> **Phase Status:** `IMPLEMENTATION_STARTED / PHASE4A_ACCEPTED / PHASE4B_ACCEPTED / PHASE4C_HEURISTIC_PREFLIGHT_UNBLOCKED`
+> **Phase Status:** `IMPLEMENTATION_STARTED / PHASE4A_ACCEPTED / PHASE4B_ACCEPTED / PHASE4C_HEURISTIC_PREFLIGHT_CANDIDATE_READY_FOR_INDEPENDENT_ACCEPTANCE`
 > **Preflight Status:** `ACCEPTED`
 > **Preflight Accepted Head:** `996825befc021d322bf353f06347a7e09375af40`
 > **Phase 4 Started:** `YES`
@@ -12,11 +12,12 @@
 > **Phase 4B Status:** `COMPLETED / ACCEPTED`
 > **Phase 4B Accepted:** `YES`
 > **Phase 4B Accepted Head:** `c96fc47b185655a4b2b2372015b8903f72960d62`
-> **Phase 4C Heuristic Preflight:** `UNBLOCKED / REQUIRED / NOT STARTED`
+> **Phase 4C Heuristic Preflight:** `IMPLEMENTED / READY_FOR_INDEPENDENT_ACCEPTANCE`
+> **Phase 4C Heuristic Preflight Accepted:** `NO`
 > **Phase 4C Implementation Status:** `PLANNED / BLOCKED_PENDING_PREFLIGHT_ACCEPTANCE`
 > **Phase 4D Status:** `PLANNED / BLOCKED_BY_PHASE4C`
 > **Phase 4E Status:** `PLANNED / BLOCKED_BY_PRIOR_SUBPHASES`
-> **Authoritative Main Baseline:** `89ab794f5b6bd5d010a295ae97c9fbb7e803243f` (Commit `Record Phase 4A acceptance` on `main`)
+> **Authoritative Main Baseline:** `879254e9390137c9ff32a0fe09dce85d5111f112` (Commit `Record Phase 4B acceptance` on `main`)
 > **Applicability:** Solvers Package (`packages/solvers`), Web Application (`apps/web`), Web Worker Infrastructure (`apps/web/src/workers`), Solve Mode UI, Solution Playback, Playwright Browser E2E Automation
 
 ---
@@ -248,16 +249,134 @@ export interface SolverOptions {
 
 ---
 
-## 7. Web Worker Architecture & Protocol
+## 7. Phase 4C Dedicated Heuristic Preflight & IDA* Search Contract
 
-### 7.1. Worker Lifecycle: Single Worker per Active Search
+### 7.1. Empirical Candidate Evaluation & Mathematical Abstraction
+For heuristic evaluation, define the canonical slice coordinate index mapping:
+$$\text{sliceIndex}(\text{slice}) = \text{slice.permutationClass} \cdot 3 + \text{slice.phase} \quad \in [0 \dots 11]$$
+Let canonical state coordinates be $C \in [0 \dots 23]$ (corner configuration), and $X, Y, Z \in [0 \dots 11]$ (slice coordinates for $X, Y, Z$ edge rings).
+
+Four candidate configurations were empirically evaluated across the entire 41,472-state canonical domain:
+1. **$H_0$ (Blind Baseline):** $h_0(S) = 0$.
+2. **$H_1$ (Single-Slice Projection Max PDB):** Computes exact abstract shortest distances over 3 single-slice abstract spaces:
+   - $CX = (C, X)$ ($24 \times 12 = 288$ abstract states)
+   - $CY = (C, Y)$ ($24 \times 12 = 288$ abstract states)
+   - $CZ = (C, Z)$ ($24 \times 12 = 288$ abstract states)
+   $$H_1(S) = \max\left(d_{CX}(C, X), \; d_{CY}(C, Y), \; d_{CZ}(C, Z)\right)$$
+3. **$H_2$ (Two-Slice Projection Max PDB) [SELECTED]:** Computes exact abstract shortest distances over 3 two-slice abstract spaces:
+   - $CXY = (C, X, Y)$ ($24 \times 12 \times 12 = 3,456$ abstract states)
+   - $CXZ = (C, X, Z)$ ($24 \times 12 \times 12 = 3,456$ abstract states)
+   - $CYZ = (C, Y, Z)$ ($24 \times 12 \times 12 = 3,456$ abstract states)
+   $$H_2(S) = \max\left(d_{CXY}(C, X, Y), \; d_{CXZ}(C, X, Z), \; d_{CYZ}(C, Y, Z)\right)$$
+4. **$H_{\text{EXACT}}$ (Test-Only Exact Oracle):** $d^*(S)$ from `packages/solvers/tests/exact-distance-oracle.ts` (analysis truth only; strictly forbidden in production).
+
+### 7.2. Abstract Transition Closure Proof
+For each projection $P \in \{CX, CY, CZ, CXY, CXZ, CYZ\}$, every canonical transition $(S, M)$ across all 41,472 states and all 12 directed moves in `ALL_MOVES` (497,664 directed edges) was evaluated to verify whether $P(\text{applyMove}(S, M))$ is uniquely determined solely by $(P(S), M)$.
+
+| Abstract Projection | State Space | Directed Transitions Checked | Closure Mismatches | Transition-Closed? |
+| :--- | :--- | :--- | :--- | :--- |
+| **$CX$** | 288 | 497,664 | **0** | **YES** |
+| **$CY$** | 288 | 497,664 | **0** | **YES** |
+| **$CZ$** | 288 | 497,664 | **0** | **YES** |
+| **$CXY$** | 3,456 | 497,664 | **0** | **YES** |
+| **$CXZ$** | 3,456 | 497,664 | **0** | **YES** |
+| **$CYZ$** | 3,456 | 497,664 | **0** | **YES** |
+
+Because closure mismatches are strictly **0** for all projections, representative-state quotient-graph successor generation is mathematically exact and deterministic.
+
+### 7.3. Empirical Results & Dominance Analysis
+The empirical evaluation over all 41,472 canonical states and 497,664 directed transitions yielded the following verified deterministic metrics:
+
+| Metric | $H_0$ (Blind) | $H_1$ (1-Slice Max) | $H_2$ (2-Slice Max) [SELECTED] | $H_{\text{EXACT}}$ [REFERENCE ONLY] |
+| :--- | :--- | :--- | :--- | :--- |
+| **Abstract Spaces & Dimensions** | None | $CX(288), CY(288), CZ(288)$ | $CXY(3456), CXZ(3456), CYZ(3456)$ | Full Canonical ($41,472$) |
+| **Raw Entry Count** | 0 | 864 | **10,368** | 41,472 |
+| **Raw Memory Footprint** | 0 B | 864 B | **10,368 B ($\approx 10.1\text{ KB}$)** | 41,472 B ($\approx 41.5\text{ KB}$) |
+| **Projection Closure Mismatches** | 0 | 0 / 497,664 | **0 / 497,664** | N/A |
+| **Abstract Table Diameters** | 0 | $CX: 6, CY: 6, CZ: 6$ | **$CXY: 7, CXZ: 7, CYZ: 7$** | 8 |
+| **Admissibility Gate ($0 \le h \le d^*$)** | 41,472 / 41,472 | 41,472 / 41,472 (0 over) | **41,472 / 41,472 (0 over)** | 41,472 / 41,472 |
+| **Consistency Gate ($h(u) \le 1 + h(v)$)** | 497,664 / 497,664 | 497,664 / 497,664 | **497,664 / 497,664** | 497,664 / 497,664 |
+| **Min $h$** | 0 | 0 | **0** | 0 |
+| **Max $h$** | 0 | 6 | **7** | 8 |
+| **Mean $h$** | 0.0000 | 4.5413 | **5.2717** | 5.6742 |
+| **Exact Match Count & Rate** | 1 (0.002%) | 18,840 (45.43%) | **33,124 (79.87%)** | 41,472 (100.0%) |
+| **Mean Residual ($d^* - h$)** | 5.6742 | 1.1329 | **0.4026** | 0.0000 |
+| **Max Residual** | 8 | 4 | **2** | 0 |
+| **Zero on Non-Goal Count** | 41,471 | 0 | **0** | 0 |
+| **Dominance ($H_2 \ge H_1$)** | N/A | Reference | **41,472 / 41,472 (100.0%)** | Dominates all |
+| **Strict Improvement ($H_2 > H_1$)**| N/A | Reference | **15,144 / 41,472 (36.52%)** | N/A |
+| **Reversals ($H_1 > H_2$)** | N/A | Reference | **0 / 41,472 (0.0%)** | N/A |
+
+#### Depth Histogram Breakdown
+| Exact Depth ($d^*$) | State Count | Mean $H_1$ | Mean $H_2$ | Exact Matches $H_1$ | Exact Matches $H_2$ |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **$0$** | 1 | 0.0000 | **0.0000** | 1 | **1** |
+| **$1$** | 12 | 1.0000 | **1.0000** | 12 | **12** |
+| **$2$** | 111 | 2.0000 | **2.0000** | 111 | **111** |
+| **$3$** | 822 | 3.0000 | **3.0000** | 822 | **822** |
+| **$4$** | 3,863 | 3.9612 | **4.0000** | 3,788 | **3,863** |
+| **$5$** | 11,706 | 4.8196 | **5.0000** | 10,650 | **11,706** |
+| **$6$** | 16,410 | 4.4060 | **5.9848** | 3,456 | **16,285** |
+| **$7$** | 8,196 | 4.9063 | **5.0791** | 0 | **324** |
+| **$8$** | 351 | 4.0000 | **6.0000** | 0 | **0** |
+
+#### Informational Scratch IDA* Expansions (Fixtures 1..8)
+| Fixture Distance ($d^*$) | $H_1$ Nodes Expanded | $H_2$ Nodes Expanded [SELECTED] | Expansion Reduction Factor |
+| :--- | :--- | :--- | :--- |
+| **$d = 1$** | 1 | **1** | $1.0\times$ |
+| **$d = 2$** | 2 | **2** | $1.0\times$ |
+| **$d = 3$** | 3 | **3** | $1.0\times$ |
+| **$d = 4$** | 4 | **4** | $1.0\times$ |
+| **$d = 5$** | 6 | **5** | $1.2\times$ |
+| **$d = 6$** | 14 | **6** | $2.3\times$ |
+| **$d = 7$** | 72 | **8** | $9.0\times$ |
+| **$d = 8$** | 209 | **21** | **$10.0\times$** |
+
+### 7.4. Selected Production Heuristic Architecture & PDB Initialization
+- **Selected Candidate:** **$H_2$ (Two-Slice Projection Max PDB)**.
+- **Production Source File:** `packages/solvers/src/heuristics.ts`.
+- **Function Signature:** `estimateIdaStarHeuristic(state: GearCubeState): number`.
+- **Visibility:** PACKAGE-INTERNAL only. It is **NOT** exported from `packages/solvers/src/index.ts`.
+- **PDB Construction Strategy:** Module-load initialization builds three `Int8Array` tables of length 3,456 each via deterministic BFS over the closed quotient transitions using `@gearcube/core` transitions and `SOLVED_GEAR_CUBE_STATE`.
+- **PDB Isolation & Counter Ownership:** PDB construction occurs outside IDA* search execution. PDB preparation transitions must **NOT** increment `nodesExpanded` or `nodesGenerated`.
+- **Zero Runtime Dependencies:** Requires zero external dependencies, zero network requests, zero DOM APIs, and zero test oracle imports.
+
+### 7.5. IDA* Algorithm & Search Execution Contract
+- **Function Signature:** `solveIdaStar(state: GearCubeState, options?: SolverOptions): SolveResult`.
+- **Public Export:** Exported from `packages/solvers/src/index.ts` alongside `solveBfs` and `solveBidirectionalBfs`.
+- **Canonical Move Cost:** 1 per directed move in `ALL_MOVES`.
+- **Deterministic Successor Order:** `ALL_MOVES` canonical index order.
+- **Start Threshold:** `estimateIdaStarHeuristic(start)`.
+- **Threshold Sequence:** Next threshold is the minimum $f$-cost ($f = g + h$) among all explored nodes that exceeded the current threshold bound.
+- **Path Cycle Policy:** Memory-bounded DFS path set (`currentPathRanks: Set<number>` or boolean array over $0 \dots 41471$). Cycles on the current path are pruned without generating children. No global closed set.
+- **Search Counters:**
+  - `nodesExpanded`: Increments once per non-goal node whose 12 legal successors are enumerated via `applyMove`. Expansions in successive threshold iterations count cumulatively.
+  - `nodesGenerated`: Increments once per candidate state produced by `applyMove` (exactly 12 per expansion).
+  - Counters are cumulative across all threshold iterations for a single `solveIdaStar` invocation.
+- **Search Limit Semantics:**
+  - `maxNodes`: Aggregate expansion budget. If `nodesExpanded === maxNodes` before expanding another non-goal node, search terminates immediately with `LIMIT_REACHED ('MAX_NODES')`.
+  - `maxDepth`: Total solution depth bound. If $h(\text{start}) > \text{maxDepth}$ or next threshold exceeds `maxDepth`, search returns `LIMIT_REACHED ('MAX_DEPTH')` without beginning the iteration. At DFS depth $g == \text{maxDepth}$, nodes are goal-tested but not expanded.
+- **Progress Telemetry:** Emits `SearchTelemetry` variant `algorithm: 'IDA_STAR'` on exact multiples of `progressIntervalNodes` expanded nodes with fields: `nodesExpanded`, `nodesGenerated`, `elapsedMs`, `threshold`, and `currentDepth`.
+- **Optimality Invariant:** For all start states, returned solution depth matches the proven optimal shortest-path distance ($d \in [1 \dots 8]$).
+
+### 7.6. Explicit Prohibitions for Phase 4C
+1. **No Exact Distance Oracle Import:** `heuristics.ts` and `ida-star.ts` must NOT import `buildExactDistanceOracle()` or test fixtures.
+2. **No Full 41,472-State PDB:** Production code must NOT embed or construct a full 41,472-entry exact distance table.
+3. **No BFS/BiBFS Fallback:** IDA* must NOT invoke BFS or BiBFS to compute heuristic values or fall back on search failure.
+4. **No Public Heuristic Export:** `estimateIdaStarHeuristic` must remain strictly internal to `@gearcube/solvers`.
+
+---
+
+## 8. Web Worker Architecture & Protocol
+
+### 8.1. Worker Lifecycle: Single Worker per Active Search
 - **One Active Worker Instance:** Each active search job runs in its own Worker instance.
 - **Request IDs:** Generated via a session-local monotonic counter converted to string (`"1"`, `"2"`, `"3"`, ...; no UUID dependency).
 - **Cancellation & Supersession:** When the user cancels a search or alters the puzzle state, the main thread invokes `worker.terminate()`, invalidates the active `requestId`, and clears the active Worker reference.
 - **Terminal Disposal:** When a terminal result (`SEARCH_COMPLETE`, `SEARCH_LIMIT_REACHED`, `SEARCH_ERROR`) is processed, the Worker instance is immediately terminated/disposed and its reference cleared. No idle completed Worker remains retained.
 - **Stale Message Protection:** Queued or in-flight messages from a terminated Worker are discarded unless their `requestId` matches the current active search.
 
-### 7.2. Message Protocol (Zero Status Duplication)
+### 8.2. Message Protocol (Zero Status Duplication)
 ```typescript
 // Main -> Worker
 export type WorkerInboundMessage = {
@@ -302,9 +421,9 @@ export type WorkerOutboundMessage =
 
 ---
 
-## 8. Solve Mode UI, Playback & Lifecycle Separation
+## 9. Solve Mode UI, Playback & Lifecycle Separation
 
-### 8.1. Separation of Active Search vs Accepted Playback Lifecycles
+### 9.1. Separation of Active Search vs Accepted Playback Lifecycles
 The lifecycle of an active search is strictly distinct from the lifecycle of an accepted solution:
 
 ```text
@@ -341,7 +460,7 @@ The lifecycle of an active search is strictly distinct from the lifecycle of an 
 └────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
-### 8.2. Playback Expected-Prefix State Guard
+### 9.2. Playback Expected-Prefix State Guard
 - **Metadata Structure:**
   - `solutionStartStateKey`: `serializeLogicalState(session.currentState)` at search completion.
   - `moves`: readonly `Move[]`.
@@ -353,7 +472,7 @@ The lifecycle of an active search is strictly distinct from the lifecycle of an 
 - **Settle Guard:** After canonical move $k$ settles to `IDLE`, `serializeLogicalState(session.currentState)` must equal `expectedStateKeys[k+1]`. Then `playbackIndex++` and `completedMoveCount++`.
 - **Mismatch Policy:** Any unexpected mismatch immediately cancels remaining playback without mutating puzzle state.
 
-### 8.3. Playback Authority & Step-Backward State Machine
+### 9.3. Playback Authority & Step-Backward State Machine
 1. **`PLAYBACK_MUST_NOT_CALL_stepPlayAnimation_DIRECTLY`:** The R3F frame loop in `GearCubeViewport` / `AnimatedGearCubeScene` remains the sole animation stepping driver.
 2. **Move Dispatch Orchestration:**
    - **In `DIRECT_180` mode:** Dispatches move once via `startPlayMove` -> frame loop animates -> settles to IDLE -> commits 1 history entry.
@@ -372,85 +491,22 @@ The lifecycle of an active search is strictly distinct from the lifecycle of an 
 
 ---
 
-## 9. Phase 4 Decomposition & Subphase Boundaries
+## 10. Implementation Subphases & Dependency Gates
 
-Phase 4 is structured into 5 strictly sequential subphases:
+### 10.1. Phase 4A: Solver Package Bootstrap & Common Contracts
+- **Objective:** Workspace bootstrap `@gearcube/solvers`, algorithm-neutral contracts, internal rank/unrank, inverseMove helper, test-only exact-distance oracle, exact distance fixtures 1..8, and executable package-boundary test.
+- **Status:** **COMPLETED / ACCEPTED**.
+- **Accepted Head:** `392bd80c48ff79b5777076371dfd54f693d57941`.
 
-### 9.1. Phase 4A: Solver Package Bootstrap & Common Contracts
-- **Objective:** Create `@gearcube/solvers` workspace package, define types, protocol, and search-utils (with `inverseMove`), implement dense rank/unrank index with exhaustive bijection tests, create test-only exact-distance oracle with test file, and add root architectural boundary test.
-- **Allowed Files:**
-  - `packages/solvers/package.json`
-  - `packages/solvers/tsconfig.json`
-  - `packages/solvers/src/index.ts`
-  - `packages/solvers/src/types.ts`
-  - `packages/solvers/src/protocol.ts`
-  - `packages/solvers/src/state-index.ts`
-  - `packages/solvers/src/search-utils.ts`
-  - `packages/solvers/tests/state-index.test.ts`
-  - `packages/solvers/tests/search-utils.test.ts`
-  - `packages/solvers/tests/exact-distance-oracle.ts`
-  - `packages/solvers/tests/exact-distance-oracle.test.ts`
-  - `packages/solvers/tests/fixtures.ts`
-  - `tests/boundary.test.ts`
-  - `package-lock.json`
-  - `docs/development/PHASE_4_IMPLEMENTATION_PLAN.md` (optional doc sync)
-  - `docs/development/ROADMAP.md` (optional doc sync)
-  - `docs/development/TEST_STRATEGY.md` (optional doc sync)
-- **Component File Ownership:**
-  - `exact-distance-oracle.ts`: Test-only Core-only BFS distance oracle helper.
-  - `exact-distance-oracle.test.ts`: Vitest test suite asserting oracle properties across 41,472 states.
-  - `fixtures.ts`: Deterministic serialized state fixtures for exact depths $1 \dots 8$.
-- **Acceptance Gates:**
-  - `DENSE_RANK_STATE_COUNT`: 41,472 states.
-  - `DENSE_RANK_RANGE`: Exactly $0 \dots 41471$.
-  - `DENSE_RANK_BIJECTION`: 41,472 / 41,472 ($\forall s: \text{unrank}(\text{rank}(s)) = s$, $\forall i: \text{rank}(\text{unrank}(i)) = i$).
-  - `EXACT_DISTANCE_ORACLE_STATE_COUNT`: 41,472 states discovered.
-  - `EXACT_DISTANCE_ORACLE_SOLVED_DEPTH`: 0 for solved state.
-  - `EXACT_DISTANCE_ORACLE_DIAMETER`: 8.
-  - `EXACT_DISTANCE_FIXTURES`: At least one deterministic serialized fixture for every exact depth $d \in [1 \dots 8]$.
-  - `SOLVER_BOUNDARY_EXECUTABLE_GATE`: `tests/boundary.test.ts` verifies `packages/solvers` imports only `@gearcube/core` and relative modules, and manifest/tsconfig match frozen purity specs.
+### 10.2. Phase 4B: BFS & Bidirectional BFS Exact Solvers
+- **Objective:** Implement exact BFS and BiBFS solvers with deterministic reconstruction, search limits (`maxNodes`, `maxDepth`), progress telemetry, and depth 1..8 optimality verification.
+- **Status:** **COMPLETED / ACCEPTED**.
+- **Accepted Head:** `c96fc47b185655a4b2b2372015b8903f72960d62`.
 
-#### 9.1.1. Executable Solver Boundary Specification (`SOLVER_BOUNDARY_EXECUTABLE_GATE`)
-- **Implementation Owner:** `tests/boundary.test.ts`.
-- **Parser Reuse:** Imports and reuses existing `extractModuleSpecifiers` helper from `scripts/check-core-deps.mjs` without modifying `scripts/check-core-deps.mjs`.
-- **Recursive Source Scan:** Recursively inspects all `packages/solvers/src/**/*.ts` source files.
-- **Allowed Module Specifiers:**
-  - `@gearcube/core`
-  - Internal relative paths starting with `./` or `../` that resolve within `packages/solvers`.
-- **Forbidden Module Specifiers:**
-  - `@gearcube/kinematics`, `apps/web`, `react`, `react-dom`, `three`, `@react-three/*`, `zustand`, browser/DOM global APIs, or any unapproved external package.
-- **Manifest Boundary Contract (`packages/solvers/package.json`):**
-  - `name`: `"@gearcube/solvers"`
-  - `version`: `"0.0.0"`
-  - `private`: `true`
-  - `type`: `"module"`
-  - `dependencies`: Exactly `{ "@gearcube/core": "0.0.0" }`
-  - `optionalDependencies`: absent
-  - `peerDependencies`: absent
-  - Zero external runtime dependencies.
-- **TypeScript Boundary Contract (`packages/solvers/tsconfig.json`):**
-  - `extends`: `"../../tsconfig.base.json"`
-  - `lib`: `["ES2022"]`
-  - `types`: `[]` (No DOM).
-- **Public Export Boundary:** Dense rank/unrank functions remain internal to `packages/solvers` and are not exported from `packages/solvers/src/index.ts`.
-
-### 9.2. Phase 4B: BFS & Bidirectional BFS Exact Solvers
-- **Objective:** Implement pure BFS and Bidirectional BFS solvers with complete-layer expansion, provable lower-bound stopping rule, deterministic tie-breaking, and exact depth 1..8 optimality tests.
-- **Allowed Files:**
-  - `packages/solvers/src/bfs.ts`
-  - `packages/solvers/src/bidirectional-bfs.ts`
-  - `packages/solvers/src/index.ts`
-  - `packages/solvers/tests/bfs.test.ts`
-  - `packages/solvers/tests/bidirectional-bfs.test.ts`
-  - `packages/solvers/tests/optimality.test.ts`
-  - `docs/development/PHASE_4_IMPLEMENTATION_PLAN.md` (optional doc sync)
-  - `docs/development/ROADMAP.md` (optional doc sync)
-  - `docs/development/TEST_STRATEGY.md` (optional doc sync)
-- **Acceptance Gate:** 100% optimal solutions across all depth 1..8 test fixtures; BFS and BiBFS return identical optimal solution lengths; solved state returns empty solution.
-
-### 9.3. Phase 4C: IDA* Search & Admissible Heuristic
+### 10.3. Phase 4C: IDA* Search & Admissible Heuristic
 - **Objective:** Following an independently accepted Phase 4C heuristic preflight, implement memory-bounded IDA* search and admissible heuristic estimator.
-- **Status:** **BLOCKED / NOT UNBLOCKED** until Phase 4C dedicated preflight is accepted.
+- **Preflight Status:** **IMPLEMENTED / READY_FOR_INDEPENDENT_ACCEPTANCE**.
+- **Implementation Status:** **BLOCKED_PENDING_PREFLIGHT_ACCEPTANCE**.
 - **Allowed Files:**
   - `packages/solvers/src/heuristics.ts`
   - `packages/solvers/src/ida-star.ts`
@@ -462,8 +518,9 @@ Phase 4 is structured into 5 strictly sequential subphases:
   - `docs/development/TEST_STRATEGY.md` (optional doc sync)
 - **Acceptance Gate:** Admissibility proof verified across state domain ($0 \le h(s) \le d^*(s)$); IDA* finds optimal solutions for depth 1..8 fixtures.
 
-### 9.4. Phase 4D: Web Worker Infrastructure & Protocol
+### 10.4. Phase 4D: Web Worker Infrastructure & Protocol
 - **Objective:** Add `@gearcube/solvers` dependency to `@gearcube/web`, implement browser Worker entry adapter (`apps/web/src/workers/solver.worker.ts`), create pure framework-independent Worker controller (`solver-worker-controller.ts`) with unit tests, build `useSolverWorker` lifecycle hook, and extend boundary test.
+- **Status:** **PLANNED / BLOCKED_BY_PHASE4C**.
 - **Allowed Files:**
   - `apps/web/package.json`
   - `apps/web/src/workers/solver.worker.ts`
@@ -484,8 +541,9 @@ Phase 4 is structured into 5 strictly sequential subphases:
   - No direct synchronous `@gearcube/solvers` search invocation exists in UI main-thread application code.
 - **Browser Worker Execution Ownership:** `REAL_BROWSER_WORKER_EXECUTION_ACCEPTANCE: DEFERRED_TO_PHASE_4E_PLAYWRIGHT`.
 
-### 9.5. Phase 4E: Solve Mode UI, Playback & Playwright Browser Acceptance
+### 10.5. Phase 4E: Solve Mode UI, Playback & Playwright Browser Acceptance
 - **Objective:** Implement SolvePanel UI, pure playback controller (`playback-controller.ts`) with unit tests, solution playback orchestration in `GearCubeViewport`, and automated Playwright E2E tests validating real Worker isolation, main-thread actionability, and solution playback.
+- **Status:** **PLANNED / BLOCKED_BY_PRIOR_SUBPHASES**.
 - **Allowed Files:**
   - `apps/web/src/components/solver/SolvePanel.tsx`
   - `apps/web/src/components/solver/PlaybackControls.tsx`
@@ -501,9 +559,9 @@ Phase 4 is structured into 5 strictly sequential subphases:
 
 ---
 
-## 10. Test Strategy & Ground-Truth Oracle
+## 11. Test Strategy & Ground-Truth Oracle
 
-### 10.1. Test-Only Exact Distance Oracle & Fixtures
+### 11.1. Test-Only Exact Distance Oracle & Fixtures
 - **Test-Only Oracle (`packages/solvers/tests/exact-distance-oracle.ts`):**
   - Imports `@gearcube/core` only (zero production solver imports).
   - Performs simple exhaustive BFS from solved state to build an exact shortest-path depth lookup table across all 41,472 states.
@@ -514,7 +572,7 @@ Phase 4 is structured into 5 strictly sequential subphases:
   3. $\text{length}(\text{IDA*}(\text{state})) = d$ (when Phase 4C heuristic is accepted)
   4. Applying returned move sequence to `state` produces `isSolved(result) === true`.
 
-### 10.2. Vitest vs Playwright Test Boundaries
+### 11.2. Vitest vs Playwright Test Boundaries
 - **Node Vitest (`*.test.ts`):** Pure unit tests, state-index bijection tests, search algorithm optimality tests, worker controller state reducers (`solver-worker-controller.test.ts`), and playback controller tests (`playback-controller.test.ts`). (No React `.test.tsx`, no DOM, no JSDOM).
 - **Playwright Chromium E2E (`tests/e2e/solve-mode.spec.ts`):** Real browser tests covering:
   1. **`WORKER_EXECUTION_GATE`:** Proves production solve executes inside a real background Web Worker.
@@ -524,7 +582,7 @@ Phase 4 is structured into 5 strictly sequential subphases:
 
 ---
 
-## 11. Implementation Stop Conditions
+## 12. Implementation Stop Conditions
 
 Implementation must STOP and request independent contract review if any of the following conditions arise:
 1. **Preflight Unapproved:** Phase 4 preflight is not independently accepted and promoted to `main`.
@@ -539,12 +597,12 @@ Implementation must STOP and request independent contract review if any of the f
 
 ---
 
-## 12. Decisions & Status Summary
+## 13. Decisions & Status Summary
 
 - **`PHASE4_PREFLIGHT_STATUS`:** `ACCEPTED`.
 - **`PHASE4_PREFLIGHT_ACCEPTED`:** `YES`.
 - **`PHASE4_PREFLIGHT_ACCEPTED_HEAD`:** `996825befc021d322bf353f06347a7e09375af40`.
-- **`PHASE4_STATUS`:** `IMPLEMENTATION_STARTED / PHASE4A_ACCEPTED / PHASE4B_ACCEPTED / PHASE4C_HEURISTIC_PREFLIGHT_UNBLOCKED`.
+- **`PHASE4_STATUS`:** `IMPLEMENTATION_STARTED / PHASE4A_ACCEPTED / PHASE4B_ACCEPTED / PHASE4C_HEURISTIC_PREFLIGHT_CANDIDATE_READY_FOR_INDEPENDENT_ACCEPTANCE`.
 - **`PHASE4_STARTED`:** `YES`.
 - **`PHASE4_ACCEPTED`:** `NO`.
 - **`PHASE4_OVERALL_COMPLETE`:** `NO`.
@@ -554,10 +612,23 @@ Implementation must STOP and request independent contract review if any of the f
 - **`PHASE4B_STATUS`:** `COMPLETED / ACCEPTED`.
 - **`PHASE4B_ACCEPTED`:** `YES`.
 - **`PHASE4B_ACCEPTED_HEAD`:** `c96fc47b185655a4b2b2372015b8903f72960d62`.
-- **`PHASE4C_HEURISTIC_PREFLIGHT`:** `UNBLOCKED / REQUIRED / NOT STARTED`.
+- **`PHASE4C_HEURISTIC_PREFLIGHT`:** `IMPLEMENTED / READY_FOR_INDEPENDENT_ACCEPTANCE`.
+- **`PHASE4C_HEURISTIC_PREFLIGHT_ACCEPTED`:** `NO`.
 - **`PHASE4C_STATUS`:** `PLANNED / BLOCKED_PENDING_PREFLIGHT_ACCEPTANCE`.
 - **`PHASE4D_STATUS`:** `PLANNED / BLOCKED_BY_PHASE4C`.
 - **`PHASE4E_STATUS`:** `PLANNED / BLOCKED_BY_PRIOR_SUBPHASES`.
+- **`PHASE4C_SELECTED_HEURISTIC`:** `H2_TWO_SLICE_PDB_MAX` ($\max(d_{CXY}, d_{CXZ}, d_{CYZ})$).
+- **`PHASE4C_PDB_RAW_ENTRIES`:** `10368` ($3 \times 3456$).
+- **`PHASE4C_PDB_MEMORY_BYTES`:** `10368` ($\approx 10.1\text{ KB}$).
+- **`PHASE4C_PROJECTION_CLOSURE_MISMATCHES`:** `0 / 497664` across all 6 projections.
+- **`PHASE4C_EXHAUSTIVE_ADMISSIBILITY`:** `41472 / 41472` ($0 \le h(s) \le d^*(s)$, 0 over-estimates).
+- **`PHASE4C_EXHAUSTIVE_CONSISTENCY`:** `497664 / 497664` ($h(u) \le 1 + h(v)$).
+- **`PHASE4C_DOMINANCE_OVER_H1`:** `41472 / 41472` ($H_2 \ge H_1$, 15,144 strictly greater, 0 reversals).
+- **`PHASE4C_HEURISTIC_PUBLIC_EXPORT`:** `NO` (`estimateIdaStarHeuristic` is package-internal).
+- **`PHASE4C_IDA_STAR_PUBLIC_EXPORT`:** `solveIdaStar`.
+- **`PHASE4C_IDA_STAR_CYCLE_POLICY`:** `CURRENT_PATH_ONLY`.
+- **`PHASE4C_IDA_STAR_MAXNODES`:** `AGGREGATE_ACROSS_ITERATIONS`.
+- **`PHASE4C_IDA_STAR_MAXDEPTH`:** `TOTAL_SOLUTION_LENGTH`.
 - **`ACTIVE_SEARCH_INTENT_CANCELLATION`:** `FROZEN` (Immediate termination on any canonical action before dispatch).
 - **`SEARCH_RESULT_REQUIRES_CURRENT_REQUEST`:** `YES`.
 - **`SEARCH_RESULT_REQUIRES_SESSION_IDLE`:** `YES`.

@@ -169,7 +169,7 @@
 
 ### Level 7: Deterministic Solver Search Correctness & Exact Distance Oracles
 - **Scope:** `packages/solvers` (Phase 4)
-- **Status:** `AVAILABLE (Phase 4A & Phase 4B Accepted) / IDA* PLANNED (Phase 4C after accepted heuristic preflight)`
+- **Status:** `AVAILABLE (Phase 4A & Phase 4B Accepted / Phase 4C Heuristic Preflight Candidate Ready) / IDA* IMPLEMENTATION PLANNED (Phase 4C)`
 - **Focus:** Algorithm verification on independently verified exact canonical distance fixtures ($d \in [1 \dots 8]$).
 - **Available / Implemented & Accepted in Phase 4A:**
   - `DENSE_RANK_BIJECTION`: Exhaustive 41,472/41,472 Cartesian bijection and round-trip consistency in `state-index.test.ts`.
@@ -183,8 +183,14 @@
   - `SEARCH_LIMIT_GATES`: Exact `MAX_NODES` and `MAX_DEPTH` limit enforcement across both BFS and BiBFS.
   - `SEARCH_TELEMETRY_GATES`: Interval-based telemetry emission matching algorithm contracts.
   - `SOLVER_DETERMINISM_GATE`: Bit-for-bit identical solution paths across repeat runs for identical input.
+- **Phase 4C Heuristic Preflight Contracts & Planned Test Gates:**
+  - `HEURISTICS_EXHAUSTIVE_ADMISSIBILITY`: All 41,472 canonical states verify $0 \le h_2(s) \le d^*(s)$ with 0 over-estimates in `heuristics.test.ts`.
+  - `HEURISTICS_EXHAUSTIVE_CONSISTENCY`: All 497,664 canonical directed transitions verify $h_2(u) \le 1 + h_2(v)$ in `heuristics.test.ts`.
+  - `HEURISTICS_PDB_STRUCTURE`: 3 two-slice abstract tables ($CXY, CXZ, CYZ$) of 3,456 entries each ($10,368\text{ B}$ raw footprint), 0 closure mismatches, diameters $\le 7$.
+  - `IDA_STAR_OPTIMALITY_1_TO_8`: Exact optimal solution depth matching BFS/BiBFS for all deterministic depth 1..8 fixtures in `ida-star.test.ts`.
+  - `IDA_STAR_SEARCH_LIMITS`: Cumulative `maxNodes` expansion limit across threshold iterations, total solution length `maxDepth` limit, and $h(\text{start}) > \text{maxDepth}$ zero-expansion abort in `ida-star.test.ts`.
+  - `IDA_STAR_SEARCH_TELEMETRY`: Telemetry emissions reporting `algorithm: 'IDA_STAR'`, cumulative counters, `threshold`, and `currentDepth` on `progressIntervalNodes` intervals.
 - **Planned / Future Subphase Tests:**
-  - IDA* returns solutions identical in length $d$ when Phase 4C admissible heuristic preflight is independently accepted (Phase 4C).
   - Web Worker asynchronous messaging protocol and controller lifecycle (Phase 4D).
   - Real browser Worker verification and UI solution playback (Phase 4E).
 

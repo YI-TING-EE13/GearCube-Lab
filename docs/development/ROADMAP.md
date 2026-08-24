@@ -1,6 +1,6 @@
 # ROADMAP.md — Project Lifecycle & Dependency-Ordered Milestones
 
-> **Current Milestone:** `Phase 4 — Classical Solver Infrastructure (Phase 4B Accepted / Phase 4C Heuristic Preflight Unblocked)`
+> **Current Milestone:** `Phase 4 — Classical Solver Infrastructure (Phase 4B Accepted / Phase 4C Heuristic Preflight Candidate Ready for Acceptance)`
 > **Previous Milestone:** `Phase 3 — Interactive UI, History, Undo/Redo, and Scramble (Completed & Accepted)`
 
 ---
@@ -42,11 +42,11 @@
       └─ 3C: Keyboard Controls, Responsive Layout & Playwright Browser E2E (Completed & Accepted)
       │
       ▼
-[ Phase 4: Classical Solver Infrastructure ] (Phase 4B Accepted / Phase 4C Heuristic Preflight Unblocked)
+[ Phase 4: Classical Solver Infrastructure ] (Phase 4B Accepted / Phase 4C Heuristic Preflight Candidate Ready for Acceptance)
       ├─ 4 Preflight: Architecture & Contract Freeze (Completed & Accepted)
       ├─ 4A: Solver Package Bootstrap & Common Contracts (Completed & Accepted)
       ├─ 4B: BFS & Bidirectional BFS Exact Solvers (Completed & Accepted)
-      ├─ 4C: IDA* Search & Admissible Heuristic (Preflight Unblocked / Implementation Blocked)
+      ├─ 4C: IDA* Search & Admissible Heuristic (Preflight Implemented & Ready for Acceptance / Implementation Blocked)
       ├─ 4D: Web Worker Infrastructure & Protocol (Planned / Blocked by Phase 4C)
       └─ 4E: Solve Mode UI, Playback & Playwright Browser Acceptance (Planned / Blocked by Prior Subphases)
       │
@@ -259,7 +259,7 @@ Phase 0B is partitioned into four dependency-ordered subphases:
 ---
 
 ### Phase 4: Classical Solver Infrastructure
-- **Status:** `Implementation Started / Phase 4A Accepted / Phase 4B Accepted / Phase 4C Heuristic Preflight Unblocked`
+- **Status:** `Implementation Started / Phase 4A Accepted / Phase 4B Accepted / Phase 4C Heuristic Preflight Candidate Ready for Acceptance`
 - **Accepted Preflight Head:** `996825befc021d322bf353f06347a7e09375af40`
 - **Phase 4 Started:** `YES`
 - **Phase 4 Accepted:** `NO`
@@ -267,7 +267,7 @@ Phase 0B is partitioned into four dependency-ordered subphases:
 - **Subphase Decomposition & Status:**
   - **4A (Bootstrap & Common Contracts):** `Completed & Accepted`
   - **4B (BFS & BiBFS Exact Solvers):** `Completed & Accepted`
-  - **4C Heuristic Preflight:** `Unblocked / Required / Not Started`
+  - **4C Heuristic Preflight:** `Implemented / Candidate Ready for Independent Acceptance`
   - **4C Implementation:** `Planned / Blocked Pending Heuristic Preflight Acceptance`
   - **4D (Web Worker Infrastructure):** `Planned / Blocked by Phase 4C`
   - **4E (Solve Mode UI & Playback):** `Planned / Blocked by Prior Subphases`
