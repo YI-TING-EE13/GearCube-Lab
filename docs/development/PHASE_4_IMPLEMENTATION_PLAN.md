@@ -361,7 +361,7 @@ The lifecycle of an active search is strictly distinct from the lifecycle of an 
 Phase 4 is structured into 5 strictly sequential subphases:
 
 ### 9.1. Phase 4A: Solver Package Bootstrap & Common Contracts
-- **Objective:** Create `@gearcube/solvers` workspace package, define types, protocol, and search-utils (with `inverseMove`), implement dense rank/unrank index with exhaustive bijection tests, create test-only exact-distance oracle, and add root architectural boundary test.
+- **Objective:** Create `@gearcube/solvers` workspace package, define types, protocol, and search-utils (with `inverseMove`), implement dense rank/unrank index with exhaustive bijection tests, create test-only exact-distance oracle with test file, and add root architectural boundary test.
 - **Allowed Files:**
   - `packages/solvers/package.json`
   - `packages/solvers/tsconfig.json`
@@ -373,18 +373,50 @@ Phase 4 is structured into 5 strictly sequential subphases:
   - `packages/solvers/tests/state-index.test.ts`
   - `packages/solvers/tests/search-utils.test.ts`
   - `packages/solvers/tests/exact-distance-oracle.ts`
+  - `packages/solvers/tests/exact-distance-oracle.test.ts`
   - `packages/solvers/tests/fixtures.ts`
   - `tests/boundary.test.ts`
   - `package-lock.json`
   - `docs/development/PHASE_4_IMPLEMENTATION_PLAN.md` (optional doc sync)
   - `docs/development/ROADMAP.md` (optional doc sync)
   - `docs/development/TEST_STRATEGY.md` (optional doc sync)
+- **Component File Ownership:**
+  - `exact-distance-oracle.ts`: Test-only Core-only BFS distance oracle helper.
+  - `exact-distance-oracle.test.ts`: Vitest test suite asserting oracle properties across 41,472 states.
+  - `fixtures.ts`: Deterministic serialized state fixtures for exact depths $1 \dots 8$.
 - **Acceptance Gates:**
+  - `DENSE_RANK_STATE_COUNT`: 41,472 states.
+  - `DENSE_RANK_RANGE`: Exactly $0 \dots 41471$.
+  - `DENSE_RANK_BIJECTION`: 41,472 / 41,472 ($\forall s: \text{unrank}(\text{rank}(s)) = s$, $\forall i: \text{rank}(\text{unrank}(i)) = i$).
   - `EXACT_DISTANCE_ORACLE_STATE_COUNT`: 41,472 states discovered.
   - `EXACT_DISTANCE_ORACLE_SOLVED_DEPTH`: 0 for solved state.
   - `EXACT_DISTANCE_ORACLE_DIAMETER`: 8.
   - `EXACT_DISTANCE_FIXTURES`: At least one deterministic serialized fixture for every exact depth $d \in [1 \dots 8]$.
-  - `SOLVER_BOUNDARY_TEST`: `tests/boundary.test.ts` verifies `packages/solvers` imports only `@gearcube/core` and relative modules, and manifest/tsconfig match frozen purity specs.
+  - `SOLVER_BOUNDARY_EXECUTABLE_GATE`: `tests/boundary.test.ts` verifies `packages/solvers` imports only `@gearcube/core` and relative modules, and manifest/tsconfig match frozen purity specs.
+
+#### 9.1.1. Executable Solver Boundary Specification (`SOLVER_BOUNDARY_EXECUTABLE_GATE`)
+- **Implementation Owner:** `tests/boundary.test.ts`.
+- **Parser Reuse:** Imports and reuses existing `extractModuleSpecifiers` helper from `scripts/check-core-deps.mjs` without modifying `scripts/check-core-deps.mjs`.
+- **Recursive Source Scan:** Recursively inspects all `packages/solvers/src/**/*.ts` source files.
+- **Allowed Module Specifiers:**
+  - `@gearcube/core`
+  - Internal relative paths starting with `./` or `../` that resolve within `packages/solvers`.
+- **Forbidden Module Specifiers:**
+  - `@gearcube/kinematics`, `apps/web`, `react`, `react-dom`, `three`, `@react-three/*`, `zustand`, browser/DOM global APIs, or any unapproved external package.
+- **Manifest Boundary Contract (`packages/solvers/package.json`):**
+  - `name`: `"@gearcube/solvers"`
+  - `version`: `"0.0.0"`
+  - `private`: `true`
+  - `type`: `"module"`
+  - `dependencies`: Exactly `{ "@gearcube/core": "0.0.0" }`
+  - `optionalDependencies`: absent
+  - `peerDependencies`: absent
+  - Zero external runtime dependencies.
+- **TypeScript Boundary Contract (`packages/solvers/tsconfig.json`):**
+  - `extends`: `"../../tsconfig.base.json"`
+  - `lib`: `["ES2022"]`
+  - `types`: `[]` (No DOM).
+- **Public Export Boundary:** Dense rank/unrank functions remain internal to `packages/solvers` and are not exported from `packages/solvers/src/index.ts`.
 
 ### 9.2. Phase 4B: BFS & Bidirectional BFS Exact Solvers
 - **Objective:** Implement pure BFS and Bidirectional BFS solvers with complete-layer expansion, provable lower-bound stopping rule, deterministic tie-breaking, and exact depth 1..8 optimality tests.
@@ -427,7 +459,14 @@ Phase 4 is structured into 5 strictly sequential subphases:
   - `docs/development/PHASE_4_IMPLEMENTATION_PLAN.md` (optional doc sync)
   - `docs/development/ROADMAP.md` (optional doc sync)
   - `docs/development/TEST_STRATEGY.md` (optional doc sync)
-- **Acceptance Gate:** Pure worker controller tests pass in Node Vitest; `@gearcube/web` builds cleanly with Worker entry; Worker starts, emits telemetry, returns results, and disposes cleanly upon completion or cancellation. (Real browser Worker execution is proven by Playwright in Phase 4E).
+- **Acceptance Gate (Non-Browser Evidence):**
+  - `@gearcube/web` typecheck and production build pass with Worker entry compiled.
+  - Pure `solver-worker-controller` unit tests pass in Node Vitest.
+  - Protocol, `requestId` tracking, stale message rejection, and terminal state transition tests pass.
+  - Source review confirms Worker construction and termination ownership is cleanly isolated behind `useSolverWorker`.
+  - Root package boundary test passes.
+  - No direct synchronous `@gearcube/solvers` search invocation exists in UI main-thread application code.
+- **Browser Worker Execution Ownership:** `REAL_BROWSER_WORKER_EXECUTION_ACCEPTANCE: DEFERRED_TO_PHASE_4E_PLAYWRIGHT`.
 
 ### 9.5. Phase 4E: Solve Mode UI, Playback & Playwright Browser Acceptance
 - **Objective:** Implement SolvePanel UI, pure playback controller (`playback-controller.ts`) with unit tests, solution playback orchestration in `GearCubeViewport`, and automated Playwright E2E tests validating real Worker isolation, main-thread actionability, and solution playback.
