@@ -1,9 +1,9 @@
 # Phase 3 Implementation Plan — Interactive UI, History, Undo/Redo, and Scramble
 
-> **Phase Status:** `IMPLEMENTED / READY_FOR_INDEPENDENT_ACCEPTANCE`
+> **Phase Status:** `COMPLETED / ACCEPTED`
 > **Phase 3A Status:** `COMPLETED / ACCEPTED`
 > **Phase 3B Status:** `COMPLETED / ACCEPTED`
-> **Phase 3C Status:** `IMPLEMENTED / READY_FOR_INDEPENDENT_ACCEPTANCE`
+> **Phase 3C Status:** `COMPLETED / ACCEPTED`
 > **Phase 3 Preflight Status:** `ACCEPTED`
 > **Authoritative Baseline Provenance:**
 > - Phase 3 Plan Accepted Head: `7b409066905cf3bb81da1eee1f5bcb7e3af85204`
@@ -392,7 +392,7 @@ Phase 3 is decomposed into four dependency-ordered, independently verifiable sub
 
 ### 8.4. Phase 3C: Keyboard Controls, Responsive Layout & Playwright Browser E2E
 - **Objective:** Keyboard shortcuts, responsive CSS layout, root Playwright Chromium E2E infrastructure, and automated browser verification.
-- **Status:** `IMPLEMENTED / READY_FOR_INDEPENDENT_ACCEPTANCE` (Implementation candidate created at branch `phase/3c-keyboard-responsive-e2e`; formal independent acceptance pending).
+- **Status:** `COMPLETED / ACCEPTED` (Pure keyboard navigation hook `useKeyboardControls.ts` + 20 unit tests PASS; responsive CSS layout with collision-free geometry on Desktop, Tablet Portrait, and Mobile Standard/Tall; root Playwright Chromium infrastructure pinning `@playwright/test@1.62.1` with 19/19 passing E2E flows; real interactive Chrome DevTools MCP browser acceptance PASS with verified Orbit drag, overlay pointer isolation, focus guarding, and zero runtime console errors; accepted candidate head `2babce72cfb5643352174dcff72d557c3bc6b317`).
 - **Deliverables:**
   - `apps/web/src/components/controls/useKeyboardControls.ts`: Keyboard event listener with focus detection, repeat guarding, exact modifier normalization, and direction-relative midpoint delegation.
   - `apps/web/src/components/controls/useKeyboardControls.test.ts`: Unit tests for keyboard event parsing, focus exclusion, modifier rejection, and move triggering.
@@ -472,7 +472,7 @@ Phase 3 is decomposed into four dependency-ordered, independently verifiable sub
 - **`PHASE3_NEW_ADR_REQUIRED`:** `NO` (All Phase 3 features operate within existing contracts under ADR-0004, ADR-0005, and ADR-0006).
 - **`NEW_RUNTIME_DEPENDENCIES`:** `NONE`
 - **`PLAYWRIGHT_DEV_DEPENDENCY`:** `@playwright/test@1.62.1 / IMPLEMENTED IN CANDIDATE` (Root devDependency, Chromium project only)
-- **`PHASE3_PLAN_STATUS`:** `PLANNING / ACCEPTED`
+- **`PHASE3_PLAN_STATUS`:** `COMPLETED / ACCEPTED`
 - **`PHASE3_PREFLIGHT_STATUS`:** `ACCEPTED`
 - **`PHASE3A_STATUS`:** `COMPLETED / ACCEPTED`
 - **`PHASE3A_ACCEPTED`:** `YES`
@@ -482,11 +482,15 @@ Phase 3 is decomposed into four dependency-ordered, independently verifiable sub
 - **`PHASE3C_PREFLIGHT_STATUS`:** `ACCEPTED`
 - **`PHASE3C_PREFLIGHT_ACCEPTED`:** `YES`
 - **`PHASE3C_PREFLIGHT_ACCEPTED_HEAD`:** `58299ffb9c105da2d14eee1fb4985e2c854b8c1c`
-- **`PHASE3C_STATUS`:** `IMPLEMENTED / READY_FOR_INDEPENDENT_ACCEPTANCE`
-- **`PHASE3C_IMPLEMENTATION_STATUS`:** `IMPLEMENTED / READY_FOR_INDEPENDENT_ACCEPTANCE`
+- **`PHASE3C_STATUS`:** `COMPLETED / ACCEPTED`
+- **`PHASE3C_IMPLEMENTATION_STATUS`:** `COMPLETED / ACCEPTED`
 - **`PHASE3C_STARTED`:** `YES`
-- **`PHASE3C_ACCEPTED`:** `NO` (Candidate for independent review)
-- **`PHASE3_OVERALL_COMPLETE`:** `NO`
+- **`PHASE3C_ACCEPTED`:** `YES`
+- **`PHASE3C_ACCEPTED_HEAD`:** `2babce72cfb5643352174dcff72d557c3bc6b317`
+- **`PHASE3_STATUS`:** `COMPLETED / ACCEPTED`
+- **`PHASE3_ACCEPTED`:** `YES`
+- **`PHASE3_ACCEPTED_HEAD`:** `2babce72cfb5643352174dcff72d557c3bc6b317`
+- **`PHASE3_OVERALL_COMPLETE`:** `YES`
 - **`SCOPE_FROZEN`:** `YES`
 - **`PROPOSED_FUTURE_IMPLEMENTATION_FILES`:**
   1. `apps/web/src/App.css`
