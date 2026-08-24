@@ -1,7 +1,13 @@
 # Phase 4 Implementation Plan — Classical Solver Infrastructure
 
-> **Phase Status:** `PLANNED / PREFLIGHT_READY_FOR_INDEPENDENT_ACCEPTANCE`
+> **Phase Status:** `PLANNED / PREFLIGHT_ACCEPTED / PHASE4A_IMPLEMENTATION_UNBLOCKED`
+> **Preflight Status:** `ACCEPTED`
+> **Preflight Accepted Head:** `996825befc021d322bf353f06347a7e09375af40`
 > **Phase 4 Started:** `NO`
+> **Phase 4 Accepted:** `NO`
+> **Phase 4 Overall Complete:** `NO`
+> **Phase 4A Implementation:** `UNBLOCKED / NOT STARTED`
+> **Phase 4C Heuristic Preflight:** `REQUIRED BEFORE PHASE4C IMPLEMENTATION`
 > **Authoritative Main Baseline:** `f87403cb9e95919c272c5d713888497c8bd92602` (Commit `Record Phase 3C and Phase 3 acceptance` on `main`)
 > **Applicability:** Solvers Package (`packages/solvers`), Web Application (`apps/web`), Web Worker Infrastructure (`apps/web/src/workers`), Solve Mode UI, Solution Playback, Playwright Browser E2E Automation
 
@@ -19,6 +25,8 @@ Phase 4 introduces the classical graph search and automated solving infrastructu
 3. **Web Worker-Isolated Execution:** Off-main-thread search execution hosted in `apps/web/src/workers/solver.worker.ts` with one Worker per active search, monotonic request ID tagging, termination-based disposal, and throttled algorithm-specific telemetry.
 4. **Interactive Solve Mode UI & Solution Playback:** UI controls in `apps/web` for algorithm selection, progress monitoring, and step-by-step or automated solution playback with expected-prefix state guarding delegating strictly through the single canonical application authority without calling frame-step functions directly.
 5. **End-to-End Test & Acceptance Strategy:** Independent depth 1..8 optimality validation against a Phase 4A test-only exact-distance oracle, pure controller/reducer unit tests in Node Vitest, and Playwright browser responsiveness tests.
+
+> **Preflight Acceptance Note:** The Phase 4 classical solver preflight specifications, package boundaries, 5-subphase decomposition (4A..4E), exact-distance oracle gates, lower-bound BiBFS stopping rule, and Web Worker lifecycle were independently reviewed and accepted at commit `996825befc021d322bf353f06347a7e09375af40`. Phase 4A implementation is unblocked; Phase 4 implementation has NOT started.
 
 ---
 
@@ -525,6 +533,18 @@ Implementation must STOP and request independent contract review if any of the f
 
 ## 12. Decisions & Status Summary
 
+- **`PHASE4_PREFLIGHT_STATUS`:** `ACCEPTED`.
+- **`PHASE4_PREFLIGHT_ACCEPTED`:** `YES`.
+- **`PHASE4_PREFLIGHT_ACCEPTED_HEAD`:** `996825befc021d322bf353f06347a7e09375af40`.
+- **`PHASE4_STATUS`:** `PLANNED / PREFLIGHT_ACCEPTED / PHASE4A_IMPLEMENTATION_UNBLOCKED`.
+- **`PHASE4_STARTED`:** `NO`.
+- **`PHASE4_ACCEPTED`:** `NO`.
+- **`PHASE4_OVERALL_COMPLETE`:** `NO`.
+- **`PHASE4A_STATUS`:** `PLANNED / IMPLEMENTATION_UNBLOCKED / NOT STARTED`.
+- **`PHASE4B_STATUS`:** `PLANNED / BLOCKED_BY_PHASE4A`.
+- **`PHASE4C_STATUS`:** `PLANNED / BLOCKED_BY_PHASE4B_AND_DEDICATED_HEURISTIC_PREFLIGHT`.
+- **`PHASE4D_STATUS`:** `PLANNED / BLOCKED_BY_PRIOR_SUBPHASES`.
+- **`PHASE4E_STATUS`:** `PLANNED / BLOCKED_BY_PRIOR_SUBPHASES`.
 - **`ACTIVE_SEARCH_INTENT_CANCELLATION`:** `FROZEN` (Immediate termination on any canonical action before dispatch).
 - **`SEARCH_RESULT_REQUIRES_CURRENT_REQUEST`:** `YES`.
 - **`SEARCH_RESULT_REQUIRES_SESSION_IDLE`:** `YES`.
@@ -562,6 +582,3 @@ Implementation must STOP and request independent contract review if any of the f
 - **`PHASE4_NEW_RUNTIME_DEPENDENCY_REQUIRED`:** `NO_EXTERNAL_RUNTIME_DEPENDENCY`.
 - **`PHASE4_NEW_ADR_REQUIRED`:** `NO` (Natural architectural elaboration of existing accepted boundaries).
 - **`IMPLEMENTATION_STOP_CONDITIONS`:** `FROZEN`.
-- **`PHASE4_STATUS`:** `PLANNED / PREFLIGHT_READY_FOR_INDEPENDENT_ACCEPTANCE`.
-- **`PHASE4_STARTED`:** `NO`.
-- **`PHASE4_ACCEPTED`:** `NO`.
