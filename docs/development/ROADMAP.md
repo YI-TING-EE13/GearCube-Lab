@@ -261,9 +261,9 @@ Phase 0B is partitioned into four dependency-ordered subphases:
   - `packages/solvers/src/bfs.ts`, `packages/solvers/src/bidirectional-bfs.ts`, `packages/solvers/src/ida-star.ts` (primary baselines)
   - Optional candidate modules (`iddfs.ts`, `aStar.ts`, `patternDatabase.ts` — deferred)
   - Browser Worker adapter (`apps/web/src/workers/solver.worker.ts`) and UI solution playback controller.
-- **Verification:** Headless unit tests verifying optimal solutions for scramble depths $1 \dots 8$; search executes in background Web Worker without directly blocking the UI.
+- **Verification:** Headless unit tests verifying optimal solutions for states with independently verified exact canonical distances $1 \dots 8$; search executes in background Web Worker without directly blocking the UI.
 - **Acceptance Gate Criteria (`PHASE_4_PASS`):**
-  - [ ] Solvers find proven optimal solutions for test scramble suites.
+  - [ ] Solvers find proven optimal solutions for independently verified exact canonical distance fixtures 1..8.
   - [ ] Search executes in Web Worker without blocking main thread user interactions.
 
 ---

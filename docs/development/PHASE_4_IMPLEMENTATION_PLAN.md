@@ -213,8 +213,14 @@ export interface SolverOptions {
 }
 ```
 
-### 6.3. Search Limits & Option Validation
-- `maxNodes`: Optional positive integer ($\ge 1$). Before expanding another node, if `nodesExpanded === maxNodes`, search terminates with `LIMIT_REACHED ('MAX_NODES')`.
+### 6.3. Search Limits & Goal-Check Ordering
+- **Deterministic Solver Order:**
+  1. Validate option bounds.
+  2. If input state is solved, return `SOLVED` (depth 0, `moves = []`) immediately before resource checks.
+  3. When a candidate state is popped from the queue, goal-test it before checking expansion limits.
+  4. Only non-goal states are subject to the `maxNodes` expansion check (`nodesExpanded === maxNodes`).
+  5. `nodesExpanded` increments only when outgoing successors are enumerated. Therefore, encountering a goal state when `nodesExpanded === maxNodes` still returns `SOLVED`.
+- `maxNodes`: Optional positive integer ($\ge 1$). Before expanding another non-goal node, if `nodesExpanded === maxNodes`, search terminates with `LIMIT_REACHED ('MAX_NODES')`.
 - `maxDepth`: Optional non-negative integer ($\ge 0$).
   - If `maxDepth === 0`: solved input returns `SOLVED` (depth 0); non-solved input returns `LIMIT_REACHED ('MAX_DEPTH')` without generating successors.
   - In BFS: nodes with depth $< \text{maxDepth}$ generate successors; nodes with depth $== \text{maxDepth}$ are goal-tested only and do not generate successors. If the queue exhausts, search returns `LIMIT_REACHED ('MAX_DEPTH')`.
@@ -297,7 +303,8 @@ The lifecycle of an active search is strictly distinct from the lifecycle of an 
 │                                                                                        │
 │  [Defensive Gate on Result]                                                            │
 │  Result accepted ONLY if:                                                              │
-│  requestId === activeRequestId AND session is IDLE AND currentState === startStateKey  │
+│  requestId === activeRequestId AND session is IDLE AND                                 │
+│  serializeLogicalState(session.currentState) === searchStartStateKey                   │
 └───────────────────────────────────────────┬────────────────────────────────────────────┘
                                             │ On Valid SEARCH_COMPLETE
                                             ▼
@@ -307,8 +314,9 @@ The lifecycle of an active search is strictly distinct from the lifecycle of an 
 │  Worker disposed -> Solution stored with expectedStateKeys[0..moves.length]            │
 │                                                                                        │
 │  [Expected-Prefix State Guard]                                                         │
-│  Before move k: currentState must equal expectedStateKeys[k]                           │
-│  After move k:  currentState must equal expectedStateKeys[k+1] -> advance index        │
+│  Before move k: currentState key must equal expectedStateKeys[k]                       │
+│  After move k:  currentState key must equal expectedStateKeys[k+1]                     │
+│                 -> playbackIndex++ and completedMoveCount++                            │
 │                                                                                        │
 │  [Action-Origin Distinction]                                                           │
 │  - Internal Playback Moves: advance solution through startPlayMove WITHOUT cancelling   │
@@ -329,15 +337,22 @@ The lifecycle of an active search is strictly distinct from the lifecycle of an 
 - **Settle Guard:** After canonical move $k$ settles to `IDLE`, `serializeLogicalState(session.currentState)` must equal `expectedStateKeys[k+1]`. Then `playbackIndex++` and `completedMoveCount++`.
 - **Mismatch Policy:** Any unexpected mismatch immediately cancels remaining playback without mutating puzzle state.
 
-### 8.3. Playback Authority & Interaction Rules
+### 8.3. Playback Authority & Step-Backward State Machine
 1. **`PLAYBACK_MUST_NOT_CALL_stepPlayAnimation_DIRECTLY`:** The R3F frame loop in `GearCubeViewport` / `AnimatedGearCubeScene` remains the sole animation stepping driver.
 2. **Move Dispatch Orchestration:**
    - **In `DIRECT_180` mode:** Dispatches move once via `startPlayMove` -> frame loop animates -> settles to IDLE -> commits 1 history entry.
    - **In `TWO_STEP` mode:** Dispatches move once -> waits for `HALF_TURN_LOCKED` -> dispatches same move again -> frame loop animates second half -> settles to IDLE -> commits 1 history entry.
    - **Invariant:** Exactly one committed canonical 180° move is appended to the timeline per solver move regardless of UI mode.
 3. **Atomic Unit & Pause:** The canonical 180° move is the atomic unit of playback. A pause request during an active animation takes effect after the move completes and settles to IDLE (never pauses at `HALF_TURN_LOCKED`).
-4. **Step Backward:** Internal playback action; invokes `undoPlay` once and decrements `completedMoveCount`. Blocked from traversing earlier than `playbackStartHistoryCursor`.
-5. **External Interaction Invalidation:** External manual moves, toolbar Undo/Redo, timeline scrub, reset baseline, or starting a new Solve job immediately cancel remaining playback.
+4. **Step Backward State Machine:**
+   - Preconditions: `completedMoveCount > 0`, `playbackIndex > 0`, `history.cursorIndex > playbackStartHistoryCursor`, session is `IDLE`.
+   - Action: Invokes `undoPlay(app)` once.
+   - Verification: After undo settles, verifies `serializeLogicalState(session.currentState) === expectedStateKeys[playbackIndex - 1]`.
+   - Update: Updates BOTH `completedMoveCount--` and `playbackIndex--`.
+   - Invariant: Step Backward is strictly bounded by `playbackStartHistoryCursor`.
+   - Guard failure: If the state does not match `expectedStateKeys[playbackIndex - 1]`, cancels playback metadata without repairing state.
+5. **Step Forward after Step Backward:** Dispatches `moves[playbackIndex]` (replaying the undone solver move) through canonical move orchestration.
+6. **External Interaction Invalidation:** External manual moves, toolbar Undo/Redo, timeline scrub, reset baseline, or starting a new Solve job immediately cancel remaining playback.
 
 ---
 
@@ -364,7 +379,12 @@ Phase 4 is structured into 5 strictly sequential subphases:
   - `docs/development/PHASE_4_IMPLEMENTATION_PLAN.md` (optional doc sync)
   - `docs/development/ROADMAP.md` (optional doc sync)
   - `docs/development/TEST_STRATEGY.md` (optional doc sync)
-- **Acceptance Gate:** 100% passing Vitest unit tests in `packages/solvers`; 41,472/41,472 rank bijection verified; root architectural boundary test passes.
+- **Acceptance Gates:**
+  - `EXACT_DISTANCE_ORACLE_STATE_COUNT`: 41,472 states discovered.
+  - `EXACT_DISTANCE_ORACLE_SOLVED_DEPTH`: 0 for solved state.
+  - `EXACT_DISTANCE_ORACLE_DIAMETER`: 8.
+  - `EXACT_DISTANCE_FIXTURES`: At least one deterministic serialized fixture for every exact depth $d \in [1 \dots 8]$.
+  - `SOLVER_BOUNDARY_TEST`: `tests/boundary.test.ts` verifies `packages/solvers` imports only `@gearcube/core` and relative modules, and manifest/tsconfig match frozen purity specs.
 
 ### 9.2. Phase 4B: BFS & Bidirectional BFS Exact Solvers
 - **Objective:** Implement pure BFS and Bidirectional BFS solvers with complete-layer expansion, provable lower-bound stopping rule, deterministic tie-breaking, and exact depth 1..8 optimality tests.
@@ -407,7 +427,7 @@ Phase 4 is structured into 5 strictly sequential subphases:
   - `docs/development/PHASE_4_IMPLEMENTATION_PLAN.md` (optional doc sync)
   - `docs/development/ROADMAP.md` (optional doc sync)
   - `docs/development/TEST_STRATEGY.md` (optional doc sync)
-- **Acceptance Gate:** Pure worker controller tests pass in Node Vitest; Worker starts, emits telemetry, returns results, and disposes cleanly upon completion or cancellation.
+- **Acceptance Gate:** Pure worker controller tests pass in Node Vitest; `@gearcube/web` builds cleanly with Worker entry; Worker starts, emits telemetry, returns results, and disposes cleanly upon completion or cancellation. (Real browser Worker execution is proven by Playwright in Phase 4E).
 
 ### 9.5. Phase 4E: Solve Mode UI, Playback & Playwright Browser Acceptance
 - **Objective:** Implement SolvePanel UI, pure playback controller (`playback-controller.ts`) with unit tests, solution playback orchestration in `GearCubeViewport`, and automated Playwright E2E tests validating real Worker isolation, main-thread actionability, and solution playback.
@@ -481,7 +501,7 @@ Implementation must STOP and request independent contract review if any of the f
 - **`BIBFS_COMPLETE_LAYER_EXPANSION`:** `YES`.
 - **`BIBFS_OPTIMAL_STOP_RULE`:** `nextForwardDepth + nextBackwardDepth >= bestDepth`.
 - **`BIBFS_MEETING_TIE_RULE`:** Lowest dense meeting rank `min(rankState(m))`.
-- **`MAX_NODES_SEMANTICS`:** `FROZEN` (Stop before expanding if `nodesExpanded === maxNodes`).
+- **`MAX_NODES_SEMANTICS`:** `FROZEN` (Stop before expanding non-goal node if `nodesExpanded === maxNodes`).
 - **`MAX_DEPTH_ZERO_ALLOWED`:** `YES` (Solved returns 0, non-solved returns `LIMIT_REACHED`).
 - **`BFS_MAX_DEPTH_SEMANTICS`:** `FROZEN` (Depth $== \text{maxDepth}$ goal-tested only, no child generation).
 - **`BIBFS_MAX_DEPTH_SEMANTICS`:** `FROZEN` (Total solution length bound).

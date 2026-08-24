@@ -150,4 +150,4 @@ Communication between the UI main thread and the Solver Web Worker occurs exclus
 ### 4.2. Error Handling & Invariant Violations
 - Core operations throw strongly typed domain errors (e.g., `IllegalMoveError`, `InvalidStateError`).
 - UI layer catches and translates domain errors into user-facing alerts without crashing the 3D viewport.
-- Solver Worker catches out-of-memory or timeout conditions and gracefully reports failure states (`SEARCH_ERROR` or `SEARCH_LIMIT_REACHED`) to the main thread.
+- Solver Worker catches catchable runtime exceptions and reports deterministic limit states (`SEARCH_LIMIT_REACHED`) or execution errors (`SEARCH_ERROR`) to the main thread, while user cancellation is handled via host-driven `worker.terminate()`.
