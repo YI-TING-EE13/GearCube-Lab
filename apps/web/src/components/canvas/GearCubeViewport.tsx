@@ -1,6 +1,6 @@
 /**
  * @file GearCubeViewport.tsx
- * @description React Three Fiber canvas viewport hosting the interactive Phase 2E staged Gear Cube session, lighting, OrbitControls, and MoveControls overlay with turn interaction mode switching.
+ * @description React Three Fiber canvas viewport hosting the interactive Gear Cube session, MoveControls, HistoryControls, TimelineScrubber, and ScramblePanel overlays.
  */
 
 import React, { useState, useCallback } from 'react';
@@ -12,13 +12,25 @@ import { MoveControls } from '../controls/MoveControls';
 import {
   type GearCubeSessionState,
   type TurnInteractionMode,
-  createInitialSessionState,
-  startMove,
-  stepAnimation,
   isSessionAnimating,
   isSessionIdle,
-  setTurnInteractionMode,
 } from '../cube/animation';
+import {
+  type PlayApplicationState,
+  createInitialPlayApplicationState,
+  startPlayMove,
+  stepPlayAnimation,
+  setPlayInteractionMode,
+  undoPlay,
+  redoPlay,
+  scrubPlay,
+  backToBaselinePlay,
+  applyScrambleToPlay,
+} from '../history/play-session';
+import { canUndo, canRedo } from '../history/history';
+import { HistoryControls } from '../history/HistoryControls';
+import { TimelineScrubber } from '../history/TimelineScrubber';
+import { ScramblePanel } from '../history/ScramblePanel';
 
 interface AnimatedGearCubeSceneProps {
   readonly session: GearCubeSessionState;
@@ -42,22 +54,49 @@ const AnimatedGearCubeScene: React.FC<AnimatedGearCubeSceneProps> = ({
 };
 
 export const GearCubeViewport: React.FC = () => {
-  const [session, setSession] = useState<GearCubeSessionState>(createInitialSessionState);
+  const [app, setApp] = useState<PlayApplicationState>(createInitialPlayApplicationState);
+  const [seed, setSeed] = useState<string>('GearCube-Lab');
 
   const handleTriggerMove = useCallback((move: Move) => {
-    setSession((prev) => startMove(prev, move, performance.now()));
+    setApp((prev) => startPlayMove(prev, move, performance.now()));
   }, []);
 
   const handleStepAnimation = useCallback((nowMs: number) => {
-    setSession((prev) => stepAnimation(prev, nowMs));
+    setApp((prev) => stepPlayAnimation(prev, nowMs));
   }, []);
 
   const handleChangeInteractionMode = useCallback((mode: TurnInteractionMode) => {
-    setSession((prev) => setTurnInteractionMode(prev, mode));
+    setApp((prev) => setPlayInteractionMode(prev, mode));
   }, []);
 
+  const handleUndo = useCallback(() => {
+    setApp((prev) => undoPlay(prev));
+  }, []);
+
+  const handleRedo = useCallback(() => {
+    setApp((prev) => redoPlay(prev));
+  }, []);
+
+  const handleResetBaseline = useCallback(() => {
+    setApp((prev) => backToBaselinePlay(prev));
+  }, []);
+
+  const handleScrub = useCallback((index: number) => {
+    setApp((prev) => scrubPlay(prev, index));
+  }, []);
+
+  const handleScramble = useCallback(() => {
+    setApp((prev) => applyScrambleToPlay(prev, seed));
+  }, [seed]);
+
+  const { session, history } = app;
   const isAnimating = isSessionAnimating(session);
   const isIdle = isSessionIdle(session);
+  const isBusy = !isIdle;
+
+  const hasUndo = canUndo(history);
+  const hasRedo = canRedo(history);
+  const canReset = history.cursorIndex !== -1;
 
   return (
     <div className="canvas-container" style={{ width: '100vw', height: '100vh', position: 'relative' }}>
@@ -88,6 +127,34 @@ export const GearCubeViewport: React.FC = () => {
           onStepAnimation={handleStepAnimation}
         />
       </Canvas>
+
+      {/* Top Bar: History Navigation & Scramble Controls */}
+      <div className="top-overlay-bar">
+        <HistoryControls
+          canUndo={hasUndo}
+          canRedo={hasRedo}
+          canResetBaseline={canReset}
+          isBusy={isBusy}
+          onUndo={handleUndo}
+          onRedo={handleRedo}
+          onResetBaseline={handleResetBaseline}
+        />
+
+        <ScramblePanel
+          seed={seed}
+          isBusy={isBusy}
+          onSeedChange={setSeed}
+          onScramble={handleScramble}
+        />
+      </div>
+
+      {/* Left/Bottom-Left: Timeline Scrubber */}
+      <TimelineScrubber
+        entries={history.entries}
+        cursorIndex={history.cursorIndex}
+        isBusy={isBusy}
+        onScrub={handleScrub}
+      />
 
       {/* 12-Move Control Overlay with Phase 2E Turn Interaction Mode Support */}
       <MoveControls

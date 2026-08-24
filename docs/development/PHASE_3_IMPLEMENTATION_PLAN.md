@@ -2,7 +2,7 @@
 
 > **Phase Status:** `PLANNING / ACCEPTED`
 > **Phase 3A Status:** `COMPLETED / ACCEPTED`
-> **Phase 3B Status:** `PLANNED / UNBLOCKED`
+> **Phase 3B Status:** `IMPLEMENTED / READY_FOR_INDEPENDENT_ACCEPTANCE`
 > **Phase 3 Preflight Status:** `ACCEPTED`
 > **Authoritative Baseline Provenance:**
 > - Phase 3 Plan Accepted Head: `7b409066905cf3bb81da1eee1f5bcb7e3af85204`
@@ -314,18 +314,22 @@ Phase 3 is decomposed into four dependency-ordered, independently verifiable sub
 - **Preconditions:** Phase 3 Preflight accepted (`SATISFIED`) and promoted to `main` (`SATISFIED`).
 
 ### 8.3. Phase 3B: Interactive Play Store, Undo/Redo & Scrubber UI
-- **Objective:** Interactive UI components and session history wiring.
-- **Status:** `PLANNED / UNBLOCKED`
+- **Objective:** Interactive UI components and session history wiring via pure application orchestration.
+- **Status:** `IMPLEMENTED / READY_FOR_INDEPENDENT_ACCEPTANCE` (Pure application orchestration module `play-session.ts`, `HistoryControls`, `TimelineScrubber`, `ScramblePanel`, `GearCubeViewport` integration, and unit/static UI component tests created and passing).
 - **Deliverables:**
-  - Wire history state into `GearCubeViewport.tsx` / `animation.ts`.
-  - `HistoryControls.tsx`: Undo, Redo, and "Back to baseline" buttons with dynamic disablement.
-  - `TimelineScrubber.tsx`: Scrollable move list with clickable chips for arbitrary scrub.
-  - `ScramblePanel.tsx`: Seed input and scramble trigger.
-  - Unit and component tests for UI interactions.
-- **Preconditions:** Phase 3A accepted & committed.
+  - `apps/web/src/components/history/play-session.ts`: Pure application orchestration connecting `GearCubeSessionState` and `PlayHistoryState`.
+  - `apps/web/src/components/history/play-session.test.ts`: 100% pure unit & integration test coverage for session/history state transitions.
+  - `apps/web/src/components/history/HistoryControls.tsx`: Undo, Redo, and "Back to baseline" buttons with dynamic disablement.
+  - `apps/web/src/components/history/TimelineScrubber.tsx`: Scrollable move list with clickable chips for arbitrary scrub.
+  - `apps/web/src/components/history/ScramblePanel.tsx`: Seed input and scramble trigger with deterministic preview.
+  - `apps/web/src/components/history/history-ui.test.tsx`: Structural server-rendered component tests.
+  - `apps/web/src/components/canvas/GearCubeViewport.tsx`: Viewport state orchestration integration.
+  - `apps/web/src/App.css`: Desktop layout overlay styles.
+- **Preconditions:** Phase 3A accepted & committed (`SATISFIED`).
 
 ### 8.4. Phase 3C: Keyboard Controls, Responsive Layout & Playwright Browser E2E
 - **Objective:** Keyboard shortcuts, responsive CSS layout, and automated browser E2E verification.
+- **Status:** `PLANNED / BLOCKED_PENDING_PHASE3B_ACCEPTANCE`
 - **Deliverables:**
   - `useKeyboardControls.ts`: Keyboard event listener with focus detection and modifier parsing.
   - `App.css`: Responsive styling for desktop sidebars and mobile stacked drawers.
@@ -395,6 +399,8 @@ Phase 3 is decomposed into four dependency-ordered, independently verifiable sub
 - **`PHASE3_PREFLIGHT_STATUS`:** `ACCEPTED`
 - **`PHASE3A_STATUS`:** `COMPLETED / ACCEPTED`
 - **`PHASE3A_ACCEPTED`:** `YES`
-- **`PHASE3B_STATUS`:** `PLANNED / UNBLOCKED`
-- **`PHASE3B_STARTED`:** `NO`
+- **`PHASE3B_STATUS`:** `IMPLEMENTED / READY_FOR_INDEPENDENT_ACCEPTANCE`
+- **`PHASE3B_ACCEPTED`:** `NO`
+- **`PHASE3C_STATUS`:** `PLANNED / BLOCKED_PENDING_PHASE3B_ACCEPTANCE`
+- **`PHASE3C_STARTED`:** `NO`
 - **`SCOPE_FROZEN`:** `YES`

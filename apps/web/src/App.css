@@ -249,3 +249,226 @@ body,
   opacity: 0.25;
   cursor: not-allowed;
 }
+
+/* Phase 3B: Top Overlay Bar (History Controls & Scramble Panel) */
+.top-overlay-bar {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  right: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  pointer-events: none;
+  z-index: 10;
+  gap: 16px;
+}
+
+/* History Controls Panel */
+.history-controls-panel {
+  pointer-events: auto;
+  background: rgba(22, 22, 26, 0.88);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  padding: 8px 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
+  user-select: none;
+}
+
+.history-button-group {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.history-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 6px;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 12px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.history-btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.22);
+  border-color: rgba(255, 255, 255, 0.35);
+}
+
+.history-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* Scramble Panel */
+.scramble-panel {
+  pointer-events: auto;
+  background: rgba(22, 22, 26, 0.88);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  padding: 10px 14px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
+  user-select: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 320px;
+}
+
+.scramble-header {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: #a0a0aa;
+}
+
+.scramble-input-row {
+  display: flex;
+  gap: 8px;
+}
+
+.scramble-seed-input {
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 6px;
+  color: #ffffff;
+  padding: 5px 10px;
+  font-size: 12px;
+  width: 140px;
+  outline: none;
+}
+
+.scramble-seed-input:focus {
+  border-color: rgba(99, 102, 241, 0.8);
+  box-shadow: 0 0 8px rgba(99, 102, 241, 0.3);
+}
+
+.scramble-btn {
+  background: rgba(99, 102, 241, 0.25);
+  border: 1px solid rgba(99, 102, 241, 0.5);
+  border-radius: 6px;
+  color: #a5b4fc;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 5px 12px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.scramble-btn:hover:not(:disabled) {
+  background: rgba(99, 102, 241, 0.4);
+  border-color: rgba(99, 102, 241, 0.7);
+  color: #ffffff;
+}
+
+.scramble-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.scramble-preview {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  font-size: 11px;
+  color: #71717a;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.preview-code {
+  font-family: monospace;
+  color: #a1a1aa;
+  font-size: 10px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Timeline Scrubber Panel */
+.timeline-scrubber-panel {
+  position: absolute;
+  left: 16px;
+  bottom: 24px;
+  max-width: 320px;
+  max-height: 220px;
+  padding: 10px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 10;
+  pointer-events: auto;
+  background: rgba(22, 22, 26, 0.88);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
+  user-select: none;
+}
+
+.timeline-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: #a0a0aa;
+}
+
+.timeline-count {
+  font-size: 11px;
+  color: #71717a;
+  font-family: monospace;
+}
+
+.timeline-scroll-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  max-height: 160px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.timeline-chip {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 6px;
+  color: #d4d4d8;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 7px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.timeline-chip:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.16);
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+.timeline-chip-active {
+  background: rgba(99, 102, 241, 0.3) !important;
+  border-color: rgba(99, 102, 241, 0.7) !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 10px rgba(99, 102, 241, 0.35);
+}
+
+.timeline-chip:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
