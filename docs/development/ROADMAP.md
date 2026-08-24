@@ -1,6 +1,6 @@
 # ROADMAP.md — Project Lifecycle & Dependency-Ordered Milestones
 
-> **Current Milestone:** `Phase 3 — Interactive UI, History, Undo/Redo, and Scramble (Planning / Ready for Independent Acceptance)`
+> **Current Milestone:** `Phase 3 — Interactive UI, History, Undo/Redo, and Scramble (Implementation Complete / Ready for Independent Acceptance)`
 > **Previous Milestone:** `Phase 2 — 3D Graphics & Kinematic Animation (Completed & Accepted)`
 
 ---
@@ -35,11 +35,11 @@
       └─ 2E: Turn Interaction Mode Toggle (Completed & Accepted)
       │
       ▼
-[ Phase 3: Interactive UI, History & Scramble ] (Active Planning)
+[ Phase 3: Interactive UI, History & Scramble ] (Implementation Complete / Ready for Independent Acceptance)
       ├─ 3 Preflight: Architecture & Test Documentation Sync (Completed & Accepted)
       ├─ 3A: Application History & Deterministic Scramble Engine (Completed & Accepted)
       ├─ 3B: Interactive Play Store, Undo/Redo & Timeline Scrubber UI (Completed & Accepted)
-      └─ 3C: Keyboard Controls, Responsive Layout & Playwright Browser E2E (Preflight Accepted / Implementation Unblocked)
+      └─ 3C: Keyboard Controls, Responsive Layout & Playwright Browser E2E (Implemented / Ready for Independent Acceptance)
       │
       ▼
 [ Phase 4: Classical Solver Infrastructure ]
@@ -241,14 +241,14 @@ Phase 0B is partitioned into four dependency-ordered subphases:
   - **Phase 3 Preflight:** Architecture & Test Documentation Sync (`docs/architecture/SYSTEM_ARCHITECTURE.md`, `docs/development/TEST_STRATEGY.md`, `docs/project/PROJECT_BLUEPRINT.md`, `docs/development/DEVELOPMENT_GUIDE.md`) — **Status:** `COMPLETED & ACCEPTED`.
   - **Phase 3A:** Application History & Deterministic Scramble Engine (`apps/web/src/components/history/history.ts`, `scramble.ts`, Vitest unit test suites) — **Status:** `COMPLETED & ACCEPTED`.
   - **Phase 3B:** Interactive Play Store, Undo/Redo & Timeline Scrubber UI (`play-session.ts`, `HistoryControls.tsx`, `TimelineScrubber.tsx`, `ScramblePanel.tsx`, `GearCubeViewport.tsx`) — **Status:** `COMPLETED & ACCEPTED`.
-  - **Phase 3C:** Keyboard Controls, Responsive Layout & Playwright Browser E2E (`useKeyboardControls.ts`, responsive CSS, `playwright.config.ts`, `tests/e2e/**`, human browser acceptance) — **Status:** `PLANNED / PREFLIGHT_ACCEPTED / IMPLEMENTATION_UNBLOCKED` (Not Started).
+  - **Phase 3C:** Keyboard Controls, Responsive Layout & Playwright Browser E2E (`useKeyboardControls.ts`, responsive CSS, `playwright.config.ts`, `tests/e2e/**`, interactive browser acceptance) — **Status:** `IMPLEMENTED & READY FOR INDEPENDENT ACCEPTANCE`.
 - **Acceptance Gate Criteria (`PHASE_3_PASS`):**
-  - [ ] Architecture documentation synchronized with accepted single-app topology prior to code implementation.
-  - [ ] Undo/Redo traverses arbitrary move histories without state desynchronization.
-  - [ ] Scramble generator deterministically reproduces sequences from seeds without consecutive same-face moves.
-  - [ ] Keyboard shortcuts and button clicks reliably trigger moves while guarding focus and animation states.
-  - [ ] Root Playwright browser E2E test suite validates all primary user interaction workflows.
-  - [ ] Full Phase 2 regression suite (14 test files, 168 tests) remains 100% passing.
+  - [x] Architecture documentation synchronized with accepted single-app topology prior to code implementation.
+  - [x] Undo/Redo traverses arbitrary move histories without state desynchronization.
+  - [x] Scramble generator deterministically reproduces sequences from seeds without consecutive same-face moves.
+  - [x] Keyboard shortcuts and button clicks reliably trigger moves while guarding focus and animation states.
+  - [x] Root Playwright browser E2E test suite validates all primary user interaction workflows.
+  - [x] Full Phase 2 regression suite (14 test files, 168 tests) remains 100% passing.
 
 ---
 

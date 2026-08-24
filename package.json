@@ -16,9 +16,11 @@
     "test": "vitest run",
     "typecheck": "npm run typecheck --workspaces --if-present",
     "check:core-deps": "node scripts/check-core-deps.mjs",
-    "verify": "npm run typecheck && npm run check:core-deps && npm test && npm run build"
+    "verify": "npm run typecheck && npm run check:core-deps && npm test && npm run build",
+    "test:e2e": "playwright test"
   },
   "devDependencies": {
+    "@playwright/test": "1.62.1",
     "@types/node": "22.17.2",
     "typescript": "5.8.3",
     "vitest": "4.1.11"

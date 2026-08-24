@@ -9,6 +9,7 @@ import { OrbitControls } from '@react-three/drei';
 import type { Move } from '@gearcube/core';
 import { GearCubeModel } from '../cube/GearCubeModel';
 import { MoveControls } from '../controls/MoveControls';
+import { useKeyboardControls } from '../controls/useKeyboardControls';
 import {
   type GearCubeSessionState,
   type TurnInteractionMode,
@@ -97,6 +98,17 @@ export const GearCubeViewport: React.FC = () => {
   const hasUndo = canUndo(history);
   const hasRedo = canRedo(history);
   const canReset = history.cursorIndex !== -1;
+
+  useKeyboardControls({
+    isIdle,
+    isAnimating,
+    stagedMove: session.stagedMove,
+    canUndo: hasUndo,
+    canRedo: hasRedo,
+    onTriggerMove: handleTriggerMove,
+    onUndo: handleUndo,
+    onRedo: handleRedo,
+  });
 
   return (
     <div className="canvas-container" style={{ width: '100vw', height: '100vh', position: 'relative' }}>

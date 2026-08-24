@@ -1,9 +1,9 @@
 # Phase 3 Implementation Plan — Interactive UI, History, Undo/Redo, and Scramble
 
-> **Phase Status:** `PLANNING / ACCEPTED`
+> **Phase Status:** `IMPLEMENTED / READY_FOR_INDEPENDENT_ACCEPTANCE`
 > **Phase 3A Status:** `COMPLETED / ACCEPTED`
 > **Phase 3B Status:** `COMPLETED / ACCEPTED`
-> **Phase 3C Status:** `PLANNED / PREFLIGHT_ACCEPTED / IMPLEMENTATION_UNBLOCKED`
+> **Phase 3C Status:** `IMPLEMENTED / READY_FOR_INDEPENDENT_ACCEPTANCE`
 > **Phase 3 Preflight Status:** `ACCEPTED`
 > **Authoritative Baseline Provenance:**
 > - Phase 3 Plan Accepted Head: `7b409066905cf3bb81da1eee1f5bcb7e3af85204`
@@ -482,9 +482,10 @@ Phase 3 is decomposed into four dependency-ordered, independently verifiable sub
 - **`PHASE3C_PREFLIGHT_STATUS`:** `ACCEPTED`
 - **`PHASE3C_PREFLIGHT_ACCEPTED`:** `YES`
 - **`PHASE3C_PREFLIGHT_ACCEPTED_HEAD`:** `58299ffb9c105da2d14eee1fb4985e2c854b8c1c`
-- **`PHASE3C_STATUS`:** `PLANNED / PREFLIGHT_ACCEPTED / IMPLEMENTATION_UNBLOCKED`
-- **`PHASE3C_IMPLEMENTATION_STATUS`:** `UNBLOCKED / NOT STARTED`
-- **`PHASE3C_STARTED`:** `NO`
+- **`PHASE3C_STATUS`:** `IMPLEMENTED / READY_FOR_INDEPENDENT_ACCEPTANCE`
+- **`PHASE3C_IMPLEMENTATION_STATUS`:** `IMPLEMENTED / READY_FOR_INDEPENDENT_ACCEPTANCE`
+- **`PHASE3C_STARTED`:** `YES`
+- **`PHASE3C_ACCEPTED`:** `NO` (Candidate for independent review)
 - **`PHASE3_OVERALL_COMPLETE`:** `NO`
 - **`SCOPE_FROZEN`:** `YES`
 - **`PROPOSED_FUTURE_IMPLEMENTATION_FILES`:**

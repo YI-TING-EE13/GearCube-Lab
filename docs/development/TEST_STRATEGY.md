@@ -178,7 +178,7 @@
 - **Invariants Tested:**
   - Running a benchmark suite twice with seed `1337` produces bit-for-bit identical node expansion counts and solution paths.
 
-### Level 9: Browser End-to-End Tests (Playwright — Planned for Phase 3C)
+### Level 9: Browser End-to-End Tests (Playwright — Available / Implemented)
 - **Scope:** Whole Web Application (`playwright.config.ts`, `tests/e2e/play-mode.spec.ts`)
 - **Focus:** User interaction flows and state validation in real headless browser environments.
 - **Infrastructure Architecture:**
@@ -238,7 +238,7 @@
 | **Kinematics Math Tests** | Vitest | `npx vitest run packages/kinematics` | Available |
 | **Renderer & Animation Tests** | Vitest | `npx vitest run apps/web` | Available |
 | **History & Scramble Tests** | Vitest | `npx vitest run apps/web/src/components/history` | Available (Accepted in Phase 3A/3B) |
-| **Browser E2E Tests** | Playwright | `npm run test:e2e` | Planned (Phase 3C) |
+| **Browser E2E Tests** | Playwright | `npm run test:e2e` | Available (Implemented in Phase 3C) |
 | **Solver & Worker Tests** | Vitest | `npm run test:solvers` | Planned (Phase 4) |
 | **Performance Profiling** | Vitest / Custom | `npm run test:perf` | Planned (Phase 5) |
 | **ML Training & Heuristics** | pytest (uv) | `uv run pytest ml/tests/` | Planned (Phase 6) |
