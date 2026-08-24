@@ -169,7 +169,7 @@
 
 ### Level 7: Deterministic Solver Search Correctness & Exact Distance Oracles
 - **Scope:** `packages/solvers` (Phase 4)
-- **Status:** `AVAILABLE (Phase 4A Accepted / BFS & BiBFS Implemented in Phase 4B Candidate) / IDA* PLANNED (Phase 4C)`
+- **Status:** `AVAILABLE (Phase 4A & Phase 4B Accepted) / IDA* PLANNED (Phase 4C after accepted heuristic preflight)`
 - **Focus:** Algorithm verification on independently verified exact canonical distance fixtures ($d \in [1 \dots 8]$).
 - **Available / Implemented & Accepted in Phase 4A:**
   - `DENSE_RANK_BIJECTION`: Exhaustive 41,472/41,472 Cartesian bijection and round-trip consistency in `state-index.test.ts`.
@@ -177,7 +177,7 @@
   - `EXACT_DISTANCE_ORACLE`: Independent Core-only BFS distance oracle discovering 41,472 states and canonical diameter 8 in `exact-distance-oracle.test.ts`.
   - `EXACT_DISTANCE_FIXTURES`: Deterministic serialized fixtures for depths $1 \dots 8$ in `fixtures.ts`.
   - `SOLVER_BOUNDARY_TEST`: Solver package boundary, TSConfig lib ES2022 / types [], and pure type export verification in `tests/boundary.test.ts`.
-- **Implemented in Phase 4B Candidate:**
+- **Available / Implemented & Accepted in Phase 4B:**
   - `BFS_OPTIMALITY`: Shortest-path solutions of exact length $d \in [1 \dots 8]$ in `bfs.test.ts` and `optimality.test.ts`.
   - `BIBFS_OPTIMALITY`: Optimal solutions matching BFS length $d \in [1 \dots 8]$ under complete-layer expansion and provable lower-bound stopping rule in `bidirectional-bfs.test.ts` and `optimality.test.ts`.
   - `SEARCH_LIMIT_GATES`: Exact `MAX_NODES` and `MAX_DEPTH` limit enforcement across both BFS and BiBFS.
@@ -258,7 +258,7 @@
 | **Renderer & Animation Tests** | Vitest | `npx vitest run apps/web` | Available |
 | **History & Scramble Tests** | Vitest | `npx vitest run apps/web/src/components/history` | Available (Accepted in Phase 3A/3B) |
 | **Browser E2E Tests** | Playwright | `npm run test:e2e` | Available (Implemented in Phase 3C) |
-| **Solver Foundation, Oracle & BFS Solvers** | Vitest | `npx vitest run packages/solvers` | Available (Phase 4A Accepted / Phase 4B Implemented in Candidate) |
+| **Solver Foundation, Oracle & BFS Solvers** | Vitest | `npx vitest run packages/solvers` | Available (Phase 4A & Phase 4B Accepted) |
 | **Worker Controller / Browser Worker Tests** | Vitest + Playwright | `npx vitest run apps/web/src/components/solver` / `npm run test:e2e` | Planned (Phase 4D / 4E) |
 | **Performance Profiling** | Vitest / Custom | `npm run test:perf` | Planned (Phase 5) |
 | **ML Training & Heuristics** | pytest (uv) | `uv run pytest ml/tests/` | Planned (Phase 6) |
