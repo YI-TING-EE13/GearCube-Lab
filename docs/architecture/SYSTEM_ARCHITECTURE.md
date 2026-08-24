@@ -101,7 +101,7 @@ graph TD
 - **Responsibilities:**
   - Orchestrates interactive application UI, controls, and presentation lifecycle.
   - Manages single authoritative session state (`GearCubeSessionState` in `apps/web/src/components/cube/animation.ts`) via React local state / pure transition functions.
-  - Hosts planned Phase 3 extensions (canonical move history timeline, undo/redo stacks, and deterministic seeded scramble generator under `apps/web/src/components/history/**` — Planned Phase 3A) which wrap and reference canonical session snapshots without becoming a second puzzle authority.
+  - Hosts implemented and accepted Phase 3 features (canonical move history timeline, undo/redo stacks, deterministic seeded scramble generator, keyboard controls, and responsive layout under `apps/web/src/components/**`) which wrap and reference canonical session snapshots without becoming a second puzzle authority.
   - Dispatches move requests to the Domain Core and initiates solver worker tasks.
   - Renders minimalist controls, solution playback bars, and telemetry metrics.
 - **Topology Note:** Implemented directly within `apps/web` rather than as a separate `packages/ui` package; uses standard React presentation tools without external state-management libraries (no Zustand requirement for Phase 3). Project-internal workspace dependencies are limited to `@gearcube/core` and `@gearcube/kinematics`.

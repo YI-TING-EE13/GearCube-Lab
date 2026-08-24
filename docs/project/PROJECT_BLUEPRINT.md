@@ -304,15 +304,15 @@ Refer to [`docs/development/TEST_STRATEGY.md`](../development/TEST_STRATEGY.md) 
 
 The project roadmap is structured into 9 sequential phases (detailed in [`docs/development/ROADMAP.md`](../development/ROADMAP.md)):
 - **Phase 0A:** Project Governance & Canonical Design Baseline *(Accepted)*
-- **Phase 0B:** Physical Mechanism Characterization & Puzzle Contract Synthesis *(Active)*
-- **Phase 1:** Discrete Gear Cube Core & State Engine
-- **Phase 2:** 3D Model, Visual Assets, and Kinematic Animation Engine
-- **Phase 3:** Interactive UI, History, Undo/Redo, and Scramble
-- **Phase 4:** Classical Solver Infrastructure (Web Worker, BFS / Bidirectional BFS / IDA*)
-- **Phase 5:** Research Benchmark Framework & Empirical Evaluation
-- **Phase 6:** Neural Heuristic & AI-Guided Search
-- **Phase 7:** Camera-Based Physical State Reconstruction & Guided Solver
-- **Phase 8:** Integration, Polish, Reproducibility, and v1.0 Release
+- **Phase 0B:** Physical Mechanism Characterization & Puzzle Contract Synthesis *(Accepted)*
+- **Phase 1:** Discrete Gear Cube Core & State Engine *(Accepted)*
+- **Phase 2:** 3D Model, Visual Assets, and Kinematic Animation Engine *(Accepted)*
+- **Phase 3:** Interactive UI, History, Undo/Redo, Keyboard Controls, and Responsive Layout *(Accepted)*
+- **Phase 4:** Classical Solver Infrastructure (Web Worker, BFS / Bidirectional BFS / IDA*) *(Planned / Not Started)*
+- **Phase 5:** Research Benchmark Framework & Empirical Evaluation *(Planned)*
+- **Phase 6:** Neural Heuristic & AI-Guided Search *(Planned)*
+- **Phase 7:** Camera-Based Physical State Reconstruction & Guided Solver *(Planned)*
+- **Phase 8:** Integration, Polish, Reproducibility, and v1.0 Release *(Planned)*
 
 ---
 

@@ -208,12 +208,13 @@
   - **Playwright E2E (`npm run test:e2e`):** Repeatable, repository-owned deterministic regression suite covering automated DOM interaction flows and error-free execution.
   - **Chrome DevTools MCP:** Interactive live browser acceptance covering 3D WebGL rendering, orbit controls, zoom gestures, pointer overlay isolation, and visual layout checks.
 
-### Level 10: Performance & Responsiveness Regression
+### Level 10: Performance & Responsiveness Regression (Future Phase 5)
 - **Scope:** Production Web Bundle
-- **Focus:** Frame budget and compute latency against proposed targets.
+- **Focus:** Quantitative frame budget and compute latency benchmarking against proposed performance targets.
 - **Invariants Tested:**
   - 3D rendering responsiveness targets $\ge 55 \text{ FPS}$ during continuous rotation animations on reference testing profiles.
   - UI main thread responsiveness stays $< 16 \text{ ms}$ during active solver worker execution.
+- **Phase 4 Preflight Note:** Quantitative FPS and $< 16 \text{ ms}$ latency measurements belong to Phase 5 performance and benchmark testing. Phase 4 correctness acceptance proves Web Worker thread isolation, main-thread actionability during active search, and stale-result protection.
 
 ### Level 11: ML Model Evaluation & Reproducibility (Python / PyTorch — Future Phase 6)
 - **Scope:** `ml/`
@@ -241,7 +242,7 @@
 | **Renderer & Animation Tests** | Vitest | `npx vitest run apps/web` | Available |
 | **History & Scramble Tests** | Vitest | `npx vitest run apps/web/src/components/history` | Available (Accepted in Phase 3A/3B) |
 | **Browser E2E Tests** | Playwright | `npm run test:e2e` | Available (Implemented in Phase 3C) |
-| **Solver & Worker Tests** | Vitest | `npm run test:solvers` | Planned (Phase 4) |
+| **Solver & Worker Tests** | Vitest | `npx vitest run packages/solvers` | Planned (Phase 4) |
 | **Performance Profiling** | Vitest / Custom | `npm run test:perf` | Planned (Phase 5) |
 | **ML Training & Heuristics** | pytest (uv) | `uv run pytest ml/tests/` | Planned (Phase 6) |
 | **Full Continuous Integration Suite** | All | `npm run verify` | Available |
