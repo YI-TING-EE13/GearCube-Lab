@@ -15,3 +15,4 @@ export type {
 
 export { solveBfs } from './bfs.js';
 export { solveBidirectionalBfs } from './bidirectional-bfs.js';
+export { solveIdaStar } from './ida-star.js';
