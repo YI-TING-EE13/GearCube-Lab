@@ -2,7 +2,7 @@
 
 > **Phase Status:** `PLANNING / ACCEPTED`
 > **Phase 3A Status:** `COMPLETED / ACCEPTED`
-> **Phase 3B Status:** `IMPLEMENTED / READY_FOR_INDEPENDENT_ACCEPTANCE`
+> **Phase 3B Status:** `COMPLETED / ACCEPTED`
 > **Phase 3 Preflight Status:** `ACCEPTED`
 > **Authoritative Baseline Provenance:**
 > - Phase 3 Plan Accepted Head: `7b409066905cf3bb81da1eee1f5bcb7e3af85204`
@@ -315,7 +315,7 @@ Phase 3 is decomposed into four dependency-ordered, independently verifiable sub
 
 ### 8.3. Phase 3B: Interactive Play Store, Undo/Redo & Scrubber UI
 - **Objective:** Interactive UI components and session history wiring via pure application orchestration.
-- **Status:** `IMPLEMENTED / READY_FOR_INDEPENDENT_ACCEPTANCE` (Pure application orchestration module `play-session.ts`, `HistoryControls`, `TimelineScrubber`, `ScramblePanel`, `GearCubeViewport` integration, and unit/static UI component tests created and passing).
+- **Status:** `COMPLETED / ACCEPTED` (Pure application orchestration module `play-session.ts`, `HistoryControls`, `TimelineScrubber`, `ScramblePanel`, `GearCubeViewport` integration, 70 targeted tests PASS, 17 files / 210 tests root verify PASS, web typecheck PASS, real interactive Chrome DevTools MCP browser acceptance PASS with zero runtime errors; accepted candidate head `1d2dc0982eed1cdb52a7a4b65884d9bdd495ede2`).
 - **Deliverables:**
   - `apps/web/src/components/history/play-session.ts`: Pure application orchestration connecting `GearCubeSessionState` and `PlayHistoryState`.
   - `apps/web/src/components/history/play-session.test.ts`: Pure unit and integration tests covering session/history state transitions.
@@ -329,14 +329,14 @@ Phase 3 is decomposed into four dependency-ordered, independently verifiable sub
 
 ### 8.4. Phase 3C: Keyboard Controls, Responsive Layout & Playwright Browser E2E
 - **Objective:** Keyboard shortcuts, responsive CSS layout, and automated browser E2E verification.
-- **Status:** `PLANNED / BLOCKED_PENDING_PHASE3B_ACCEPTANCE`
+- **Status:** `PLANNED / UNBLOCKED`
 - **Deliverables:**
   - `useKeyboardControls.ts`: Keyboard event listener with focus detection and modifier parsing.
   - `App.css`: Responsive styling for desktop sidebars and mobile stacked drawers.
   - `playwright.config.ts`: Root Playwright E2E configuration (devDependency).
   - `tests/e2e/play-mode.spec.ts`: Automated browser E2E test suite covering all interaction workflows.
   - Human Browser Acceptance: Full verification of moves, undo/redo, scrub, scramble, keyboard, and orbit controls.
-- **Preconditions:** Phase 3B accepted & committed.
+- **Preconditions:** Phase 3B accepted & committed (`SATISFIED`).
 
 ---
 
@@ -399,8 +399,9 @@ Phase 3 is decomposed into four dependency-ordered, independently verifiable sub
 - **`PHASE3_PREFLIGHT_STATUS`:** `ACCEPTED`
 - **`PHASE3A_STATUS`:** `COMPLETED / ACCEPTED`
 - **`PHASE3A_ACCEPTED`:** `YES`
-- **`PHASE3B_STATUS`:** `IMPLEMENTED / READY_FOR_INDEPENDENT_ACCEPTANCE`
-- **`PHASE3B_ACCEPTED`:** `NO`
-- **`PHASE3C_STATUS`:** `PLANNED / BLOCKED_PENDING_PHASE3B_ACCEPTANCE`
+- **`PHASE3B_STATUS`:** `COMPLETED / ACCEPTED`
+- **`PHASE3B_ACCEPTED`:** `YES`
+- **`PHASE3B_ACCEPTED_HEAD`:** `1d2dc0982eed1cdb52a7a4b65884d9bdd495ede2`
+- **`PHASE3C_STATUS`:** `PLANNED / UNBLOCKED`
 - **`PHASE3C_STARTED`:** `NO`
 - **`SCOPE_FROZEN`:** `YES`
