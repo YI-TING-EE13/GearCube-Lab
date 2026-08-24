@@ -249,3 +249,75 @@ describe('Phase 4A Solvers Package Boundary & Architectural Invariants', () => {
     expect(forbiddenImports).toEqual([]);
   });
 });
+
+describe('Phase 4D Web Worker Infrastructure & Package Boundary Gate', () => {
+  const webRoot = path.resolve(process.cwd(), 'apps/web');
+  const webSrc = path.join(webRoot, 'src');
+
+  function collectWebTsFiles(dir: string): string[] {
+    const results: string[] = [];
+    if (!fs.existsSync(dir)) return results;
+    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+      const fullPath = path.join(dir, entry.name);
+      if (entry.isDirectory()) {
+        results.push(...collectWebTsFiles(fullPath));
+      } else if (entry.isFile() && (entry.name.endsWith('.ts') || entry.name.endsWith('.tsx'))) {
+        results.push(fullPath);
+      }
+    }
+    return results;
+  }
+
+  it('verifies @gearcube/web manifest dependency on exact @gearcube/solvers version', () => {
+    const webPkgPath = path.join(webRoot, 'package.json');
+    expect(fs.existsSync(webPkgPath)).toBe(true);
+
+    const pkg = JSON.parse(fs.readFileSync(webPkgPath, 'utf8'));
+    expect(pkg.dependencies['@gearcube/solvers']).toBe('0.0.0');
+  });
+
+  it('verifies browser Worker entry adapter exists at apps/web/src/workers/solver.worker.ts', () => {
+    const workerPath = path.join(webSrc, 'workers', 'solver.worker.ts');
+    expect(fs.existsSync(workerPath)).toBe(true);
+  });
+
+  it('verifies Worker construction occurs ONLY in useSolverWorker.ts', () => {
+    const files = collectWebTsFiles(webSrc);
+    const workerConstructionSites: string[] = [];
+
+    for (const filePath of files) {
+      const content = fs.readFileSync(filePath, 'utf8');
+      if (content.includes('new Worker(')) {
+        workerConstructionSites.push(path.relative(process.cwd(), filePath).replace(/\\/g, '/'));
+      }
+    }
+
+    expect(workerConstructionSites).toEqual(['apps/web/src/hooks/useSolverWorker.ts']);
+  });
+
+  it('verifies solver runtime functions (solveBfs, solveBidirectionalBfs, solveIdaStar) are imported ONLY by solver.worker.ts', () => {
+    const files = collectWebTsFiles(webSrc);
+    const solverRuntimeImportSites: string[] = [];
+    const forbiddenSolverFunctions = ['solveBfs', 'solveBidirectionalBfs', 'solveIdaStar'];
+
+    for (const filePath of files) {
+      const relPath = path.relative(process.cwd(), filePath).replace(/\\/g, '/');
+      if (relPath === 'apps/web/src/workers/solver.worker.ts') {
+        continue;
+      }
+
+      const content = fs.readFileSync(filePath, 'utf8');
+      for (const fn of forbiddenSolverFunctions) {
+        // Match import of the function as a value or direct invocation
+        const importRegex = new RegExp(`\\bimport\\s+[^;]*\\b${fn}\\b[^;]*from\\s+['"]@gearcube/solvers['"]`, 'g');
+        const callRegex = new RegExp(`\\b${fn}\\s*\\(`, 'g');
+
+        if (importRegex.test(content) || callRegex.test(content)) {
+          solverRuntimeImportSites.push(`${relPath}: ${fn}`);
+        }
+      }
+    }
+
+    expect(solverRuntimeImportSites).toEqual([]);
+  });
+});
