@@ -1,14 +1,15 @@
 # Phase 4 Implementation Plan — Classical Solver Infrastructure
 
-> **Phase Status:** `IMPLEMENTATION_STARTED / PHASE4A_CANDIDATE_READY_FOR_INDEPENDENT_ACCEPTANCE`
+> **Phase Status:** `IMPLEMENTATION_STARTED / PHASE4A_ACCEPTED / PHASE4B_IMPLEMENTATION_UNBLOCKED`
 > **Preflight Status:** `ACCEPTED`
 > **Preflight Accepted Head:** `996825befc021d322bf353f06347a7e09375af40`
 > **Phase 4 Started:** `YES`
 > **Phase 4 Accepted:** `NO`
 > **Phase 4 Overall Complete:** `NO`
-> **Phase 4A Status:** `IMPLEMENTED / READY_FOR_INDEPENDENT_ACCEPTANCE`
-> **Phase 4A Accepted:** `NO`
-> **Phase 4B Status:** `PLANNED / BLOCKED_BY_PHASE4A_ACCEPTANCE`
+> **Phase 4A Status:** `COMPLETED / ACCEPTED`
+> **Phase 4A Accepted:** `YES`
+> **Phase 4A Accepted Head:** `392bd80c48ff79b5777076371dfd54f693d57941`
+> **Phase 4B Status:** `PLANNED / IMPLEMENTATION_UNBLOCKED / NOT STARTED`
 > **Phase 4C Heuristic Preflight:** `REQUIRED BEFORE PHASE4C IMPLEMENTATION`
 > **Authoritative Main Baseline:** `852a401a4f67526d6c8263312be177c6146832e6` (Commit `Record Phase 4 preflight acceptance` on `main`)
 > **Applicability:** Solvers Package (`packages/solvers`), Web Application (`apps/web`), Web Worker Infrastructure (`apps/web/src/workers`), Solve Mode UI, Solution Playback, Playwright Browser E2E Automation
@@ -538,13 +539,14 @@ Implementation must STOP and request independent contract review if any of the f
 - **`PHASE4_PREFLIGHT_STATUS`:** `ACCEPTED`.
 - **`PHASE4_PREFLIGHT_ACCEPTED`:** `YES`.
 - **`PHASE4_PREFLIGHT_ACCEPTED_HEAD`:** `996825befc021d322bf353f06347a7e09375af40`.
-- **`PHASE4_STATUS`:** `IMPLEMENTATION_STARTED / PHASE4A_CANDIDATE_READY_FOR_INDEPENDENT_ACCEPTANCE`.
+- **`PHASE4_STATUS`:** `IMPLEMENTATION_STARTED / PHASE4A_ACCEPTED / PHASE4B_IMPLEMENTATION_UNBLOCKED`.
 - **`PHASE4_STARTED`:** `YES`.
 - **`PHASE4_ACCEPTED`:** `NO`.
 - **`PHASE4_OVERALL_COMPLETE`:** `NO`.
-- **`PHASE4A_STATUS`:** `IMPLEMENTED / READY_FOR_INDEPENDENT_ACCEPTANCE`.
-- **`PHASE4A_ACCEPTED`:** `NO`.
-- **`PHASE4B_STATUS`:** `PLANNED / BLOCKED_BY_PHASE4A_ACCEPTANCE`.
+- **`PHASE4A_STATUS`:** `COMPLETED / ACCEPTED`.
+- **`PHASE4A_ACCEPTED`:** `YES`.
+- **`PHASE4A_ACCEPTED_HEAD`:** `392bd80c48ff79b5777076371dfd54f693d57941`.
+- **`PHASE4B_STATUS`:** `PLANNED / IMPLEMENTATION_UNBLOCKED / NOT STARTED`.
 - **`PHASE4C_STATUS`:** `PLANNED / BLOCKED_BY_PHASE4B_AND_DEDICATED_HEURISTIC_PREFLIGHT`.
 - **`PHASE4D_STATUS`:** `PLANNED / BLOCKED_BY_PRIOR_SUBPHASES`.
 - **`PHASE4E_STATUS`:** `PLANNED / BLOCKED_BY_PRIOR_SUBPHASES`.

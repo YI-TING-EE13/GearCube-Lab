@@ -169,9 +169,9 @@
 
 ### Level 7: Deterministic Solver Search Correctness & Exact Distance Oracles
 - **Scope:** `packages/solvers` (Phase 4)
-- **Status:** `FOUNDATION AVAILABLE (Phase 4A Candidate) / SEARCH ALGORITHMS PLANNED (Phase 4B/4C)`
+- **Status:** `AVAILABLE / IMPLEMENTED & ACCEPTED IN PHASE 4A (Foundations & Oracles) / SEARCH ALGORITHMS PLANNED (Phase 4B/4C)`
 - **Focus:** Algorithm verification on independently verified exact canonical distance fixtures ($d \in [1 \dots 8]$).
-- **Available / Implemented in Phase 4A Candidate:**
+- **Available / Implemented & Accepted in Phase 4A:**
   - `DENSE_RANK_BIJECTION`: Exhaustive 41,472/41,472 Cartesian bijection and round-trip consistency in `state-index.test.ts`.
   - `INVERSE_MOVE_ALGEBRA`: Exhaustive 497,664 state-move transition recovery in `search-utils.test.ts`.
   - `EXACT_DISTANCE_ORACLE`: Independent Core-only BFS distance oracle discovering 41,472 states and canonical diameter 8 in `exact-distance-oracle.test.ts`.
@@ -255,7 +255,7 @@
 | **Renderer & Animation Tests** | Vitest | `npx vitest run apps/web` | Available |
 | **History & Scramble Tests** | Vitest | `npx vitest run apps/web/src/components/history` | Available (Accepted in Phase 3A/3B) |
 | **Browser E2E Tests** | Playwright | `npm run test:e2e` | Available (Implemented in Phase 3C) |
-| **Solver Foundation & Oracle Tests** | Vitest | `npx vitest run packages/solvers` | Available / Implemented in Phase 4A Candidate |
+| **Solver Foundation & Oracle Tests** | Vitest | `npx vitest run packages/solvers` | Available / Implemented & Accepted in Phase 4A |
 | **Worker Controller / Browser Worker Tests** | Vitest + Playwright | `npx vitest run apps/web/src/components/solver` / `npm run test:e2e` | Planned (Phase 4D / 4E) |
 | **Performance Profiling** | Vitest / Custom | `npm run test:perf` | Planned (Phase 5) |
 | **ML Training & Heuristics** | pytest (uv) | `uv run pytest ml/tests/` | Planned (Phase 6) |
