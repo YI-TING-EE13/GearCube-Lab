@@ -258,9 +258,9 @@ Phase 0B is partitioned into four dependency-ordered subphases:
 - **In-Scope:** `packages/solvers`, Web Worker message passing, heuristic evaluation functions, solution playback controls in UI.
 - **Out-of-Scope:** Python ML training, camera vision.
 - **Deliverables:**
-  - `packages/solvers/src/bfs.ts`, `bidirectionalBfs.ts`, `idaStar.ts` (primary baselines)
-  - Optional candidate modules (`iddfs.ts`, `aStar.ts`, `patternDatabase.ts`)
-  - Worker wrapper and UI solution playback controller.
+  - `packages/solvers/src/bfs.ts`, `packages/solvers/src/bidirectional-bfs.ts`, `packages/solvers/src/ida-star.ts` (primary baselines)
+  - Optional candidate modules (`iddfs.ts`, `aStar.ts`, `patternDatabase.ts` — deferred)
+  - Browser Worker adapter (`apps/web/src/workers/solver.worker.ts`) and UI solution playback controller.
 - **Verification:** Headless unit tests verifying optimal solutions for scramble depths $1 \dots 8$; search executes in background Web Worker without directly blocking the UI.
 - **Acceptance Gate Criteria (`PHASE_4_PASS`):**
   - [ ] Solvers find proven optimal solutions for test scramble suites.

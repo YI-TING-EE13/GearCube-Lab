@@ -223,13 +223,13 @@ All inter-module communication is governed by immutable TypeScript interfaces de
 - **Phase 4 (Classical Search):**
   - **Primary Baselines:**
     - Breadth-First Search (BFS) — uninformed exact-search baseline.
-    - Bidirectional BFS — meet-in-the-middle baseline where applicable.
-    - Iterative Deepening A* (IDA*) — memory-bounded heuristic search baseline.
+    - Bidirectional BFS — meet-in-the-middle baseline with exact move inverse predecessor expansion.
+    - Iterative Deepening A* (IDA*) — memory-bounded heuristic search baseline (conditional on accepted Phase 4C heuristic preflight).
   - **Optional / Later Candidates:**
     - Iterative Deepening Depth-First Search (IDDFS).
     - A* search.
     - Pattern Database (PDB) heuristics and other handcrafted estimators.
-- **Web Worker Architecture:** Expensive solver workloads execute outside the browser main thread in dedicated background Web Workers so that graph search does not directly block UI rendering or user interaction. Workers report periodic progress telemetry (expanded nodes, current depth) via `postMessage`.
+- **Web Worker Architecture:** Expensive solver workloads execute outside the browser main thread in dedicated background Web Workers (`apps/web/src/workers/solver.worker.ts`) so that graph search does not directly block UI rendering or user interaction. Workers report periodic algorithm-specific progress telemetry (expanded nodes, generated nodes, depth/bounds, and elapsed time) via serializable `postMessage`.
 
 ---
 
@@ -263,10 +263,10 @@ All inter-module communication is governed by immutable TypeScript interfaces de
 
 | Metric | Target Requirement | Verification Method |
 | :--- | :--- | :--- |
-| **3D Rendering Frame Rate** | Proposed Target: $60 \text{ FPS}$ ($\ge 55 \text{ FPS}$) on standard desktop hardware (pending implemented renderer, defined reference device, and benchmark evidence) | Chrome DevTools Performance Profiler |
+| **3D Rendering Frame Rate** | Proposed Target: $60 \text{ FPS}$ ($\ge 55 \text{ FPS}$) on standard desktop hardware (Future Phase 5 benchmark target) | Chrome DevTools Performance Profiler |
 | **Move Application Latency** | $< 1 \text{ ms}$ per discrete transition | Vitest benchmark test suite |
 | **State Hashing Throughput** | $\ge 500,000 \text{ states/sec}$ | Node.js micro-benchmarks |
-| **Worker UI Interactivity** | Main thread remains responsive during $10^7$ node search | Manual UI drag test during solve |
+| **Worker UI Interactivity** | Main thread remains responsive during solve (Future Phase 5 sustained benchmark target; Phase 4 verifies non-blocking actionability) | Playwright Chromium E2E / manual UI drag test |
 | **Initial Bundle Load Size** | $< 500 \text{ KB}$ gzipped (excluding 3D models) | Vite build analyzer |
 
 ---

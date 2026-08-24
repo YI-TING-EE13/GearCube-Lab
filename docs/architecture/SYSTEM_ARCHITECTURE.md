@@ -39,7 +39,8 @@ graph TD
     end
 
     subgraph ComputeSpace [Solver & Research Subsystems — Future]
-        SolverWorker[Solver Engine<br/>Web Worker Thread — packages/solvers]
+        WorkerAdapter[Browser Worker Adapter<br/>apps/web/src/workers/solver.worker.ts]
+        SolverEngine[Pure Solver Engine<br/>Pure TS Algorithms — packages/solvers]
         Benchmark[Research & Benchmark Harness<br/>Deterministic Seed Suites — packages/benchmark]
     end
 
@@ -55,28 +56,28 @@ graph TD
     Core -->|Generates Hashes| Encoding
     Kinematics -->|Evaluated Transforms| Renderer
 
-    UI -->|Initiates Solve / Config| SolverWorker
-    SolverWorker -->|Evaluates States & Legal Moves| Core
-    SolverWorker -->|Streams Solution & Progress Telemetry| UI
+    UI -->|Initiates Solve / Terminate| WorkerAdapter
+    WorkerAdapter -->|Imports & Runs Search| SolverEngine
+    SolverEngine -->|Evaluates States & Legal Moves| Core
+    WorkerAdapter -->|Streams Progress & Terminal Results| UI
 
-    Benchmark -->|Evaluates Search Algorithms| SolverWorker
+    Benchmark -->|Evaluates Search Algorithms| SolverEngine
     Benchmark -->|Collects Performance Metrics| UI
 
-    MLTraining -.->|Exports Weights / ONNX / JSON| SolverWorker
+    MLTraining -.->|Exports Weights / ONNX / JSON| SolverEngine
     VisionPipeline -.->|Validates & Ingests Reconstructed State| Core
 ```
 
 ---
 
-## 3. Layer Breakdown & Component Responsibilities
+## 3. Core Modules & Responsibilities
 
-### 3.1. Puzzle Domain Core (`packages/core`)
+### 3.1. Discrete Domain Core (`packages/core`)
 - **Responsibilities:**
-  - Defines the discrete representation of the Standard Gear Cube structured around natural orbit coordinates (corners in $S_4$, 3 edge slices in $V_4 \times \mathbb{Z}_3$; detailed in [`GEAR_CUBE_STATE_MODEL.md`](GEAR_CUBE_STATE_MODEL.md)).
-  - Validates move legality (strictly directed $180^\circ$ face flips).
-  - Applies discrete state transitions: $\text{State}_{t+1} = \text{applyMove}(\text{State}_t, \text{Move})$.
-  - Computes deterministic string serialization and exports derived materialized piece views via `materializeState()`.
-  - Checks solved-state criteria and group invariants.
+  - Holds the single source of puzzle truth (`GearCubeState`, `CornerConfiguration`, `EdgeSliceCoordinate`, `SpatialFrame`).
+  - Implements canonical discrete transitions `applyMove(state, move)` pursuant to [`GEAR_CUBE_STATE_MODEL.md`](GEAR_CUBE_STATE_MODEL.md) and [`PUZZLE_CONTRACTS.md`](PUZZLE_CONTRACTS.md).
+  - Materializes canonical piece placements and generates discrete permutation views.
+  - Produces deterministic serialized state keys (`serializeLogicalState`) and validates state structures.
 - **Prohibited Dependencies:** Zero runtime dependencies. No Three.js, React, DOM, or node-specific built-ins.
 
 ### 3.2. Kinematic Engine (`packages/kinematics`)
@@ -106,12 +107,13 @@ graph TD
   - Renders minimalist controls, solution playback bars, and telemetry metrics.
 - **Topology Note:** Implemented directly within `apps/web` rather than as a separate `packages/ui` package; uses standard React presentation tools without external state-management libraries (no Zustand requirement for Phase 3). Project-internal workspace dependencies are limited to `@gearcube/core` and `@gearcube/kinematics`.
 
-### 3.5. Solver Engine (`packages/solvers` — Future Phase 4)
+### 3.5. Pure Solver Engine (`packages/solvers` — Future Phase 4)
 - **Responsibilities:**
-  - Hosts classical graph search algorithms (primary baselines: BFS, Bidirectional BFS, IDA*; optional candidates: IDDFS, A*, Pattern Databases).
-  - Encapsulated within a Web Worker to run asynchronously off the main thread.
-  - Reports periodic search telemetry (nodes expanded, search depth, elapsed time) via message passing.
-- **Prohibited Dependencies:** Must not access DOM, window, or Three.js objects.
+  - Hosts pure classical graph search algorithms (primary baselines: BFS, Bidirectional BFS, IDA*; optional candidates: IDDFS, A*, Pattern Databases).
+  - Defines pure result contracts, search options, and serializable protocol schemas.
+  - Encapsulated within a Web Worker adapter hosted in `apps/web/src/workers/solver.worker.ts` to run asynchronously off the main thread.
+  - Reports periodic search telemetry (nodes expanded, nodes generated, algorithm-specific depth/bounds, elapsed time) via message passing.
+- **Prohibited Dependencies:** Must not access DOM, window, Three.js, React, or browser Worker global objects directly. Depends only on `@gearcube/core`.
 
 ### 3.6. Research & Benchmark Harness (`packages/benchmark` — Future Phase 5)
 - **Responsibilities:**
@@ -139,12 +141,13 @@ graph TD
 Communication between the UI main thread and the Solver Web Worker occurs exclusively via serializable JSON-compatible messages:
 
 ```
-[ UI Thread ]  --- { type: 'START_SEARCH', state: GearCubeState, algorithm: 'IDA_STAR' } ---> [ Worker ]
-[ UI Thread ]  <-- { type: 'SEARCH_PROGRESS', nodes: 14500, depth: 4, elapsedMs: 120 } <--- [ Worker ]
-[ UI Thread ]  <-- { type: 'SEARCH_COMPLETE', solution: Move[], metrics: BenchmarkMetrics } - [ Worker ]
+[ UI Thread ]  --- { type: 'START_SEARCH', requestId: '1', state: GearCubeState, algorithm: 'BFS' } ---> [ Worker Adapter ]
+[ UI Thread ]  <-- { type: 'SEARCH_STARTED', requestId: '1' } <---------------------------------------- [ Worker Adapter ]
+[ UI Thread ]  <-- { type: 'SEARCH_PROGRESS', requestId: '1', telemetry: SearchTelemetry } <---------- [ Worker Adapter ]
+[ UI Thread ]  <-- { type: 'SEARCH_COMPLETE', requestId: '1', result: SolveSuccess } <----------------- [ Worker Adapter ]
 ```
 
 ### 4.2. Error Handling & Invariant Violations
 - Core operations throw strongly typed domain errors (e.g., `IllegalMoveError`, `InvalidStateError`).
 - UI layer catches and translates domain errors into user-facing alerts without crashing the 3D viewport.
-- Solver Worker catches out-of-memory or timeout conditions and gracefully reports failure states to the main thread.
+- Solver Worker catches out-of-memory or timeout conditions and gracefully reports failure states (`SEARCH_ERROR` or `SEARCH_LIMIT_REACHED`) to the main thread.
