@@ -238,24 +238,42 @@ export interface PlayHistoryState {
 ## 6. Keyboard Interaction Contract
 
 ### 6.1. Key Mapping Table
-| Key | Modifier | Resolved Move / Action | Valid Conditions |
+| Key | Modifier Requirements | Resolved Move / Action | Valid Conditions |
 | :--- | :--- | :--- | :--- |
-| `u`, `d`, `f`, `b`, `r`, `l` | None | `U+`, `D+`, `F+`, `B+`, `R+`, `L+` (Clockwise) | `IDLE` (initiates move) OR `HALF_TURN_LOCKED` (direction-relative) |
-| `u`, `d`, `f`, `b`, `r`, `l` | `Shift` | `U-`, `D-`, `F-`, `B-`, `R-`, `L-` (Counter-Clockwise) | `IDLE` (initiates move) OR `HALF_TURN_LOCKED` (direction-relative) |
-| `z` | `Ctrl` / `Cmd` | `Undo` | `IDLE` & `canUndo(history)` |
-| `z` | `Ctrl+Shift` / `Cmd+Shift` | `Redo` | `IDLE` & `canRedo(history)` |
-| `y` | `Ctrl` / `Cmd` | `Redo` | `IDLE` & `canRedo(history)` |
+| `u`, `d`, `f`, `b`, `r`, `l` | None (`!ctrl && !meta && !alt && !shift`) | `U+`, `D+`, `F+`, `B+`, `R+`, `L+` (Clockwise) | `IDLE` (initiates move) OR `HALF_TURN_LOCKED` (direction-relative) |
+| `u`, `d`, `f`, `b`, `r`, `l` | `Shift` only (`!ctrl && !meta && !alt && shift`) | `U-`, `D-`, `F-`, `B-`, `R-`, `L-` (Counter-Clockwise) | `IDLE` (initiates move) OR `HALF_TURN_LOCKED` (direction-relative) |
+| `z` | `Ctrl` only (`ctrl && !meta && !alt && !shift`) | `Undo` | `IDLE` & `canUndo(history)` |
+| `z` | `Cmd` only (`meta && !ctrl && !alt && !shift`) | `Undo` | `IDLE` & `canUndo(history)` |
+| `z` | `Ctrl+Shift` (`ctrl && !meta && !alt && shift`) | `Redo` | `IDLE` & `canRedo(history)` |
+| `z` | `Cmd+Shift` (`meta && !ctrl && !alt && shift`) | `Redo` | `IDLE` & `canRedo(history)` |
+| `y` | `Ctrl` only (`ctrl && !meta && !alt && !shift`) | `Redo` | `IDLE` & `canRedo(history)` |
+| `y` | `Cmd` (`meta && !ctrl`) | **REJECTED** (Ignored without `preventDefault`) | — |
+| Any | `Alt` (`alt === true`) | **REJECTED** (Ignored without `preventDefault`) | — |
 
-### 6.2. Event Interpretation & Normalization
+### 6.2. Exact Event Interpretation & Modifier Normalization
 - **Key Normalization:** `event.key.toLowerCase()` extracts base character (`'u'`, `'d'`, `'f'`, `'b'`, `'r'`, `'l'`, `'z'`, `'y'`).
-- **Modifier Parsing:**
-  - Direction: `event.shiftKey === true` produces Counter-Clockwise (`-`); no Shift produces Clockwise (`+`).
-  - History Commands: `(event.ctrlKey || event.metaKey) === true` checks for Undo/Redo combinations.
+- **Exact Modifier Matching:**
+  - **Face Move Shortcuts (`u`, `d`, `f`, `b`, `r`, `l`):**
+    - Require `event.altKey === false && event.ctrlKey === false && event.metaKey === false`.
+    - `event.shiftKey === false` -> Clockwise (`+`).
+    - `event.shiftKey === true` -> Counter-Clockwise (`-`).
+    - Any shortcut contaminated with `Ctrl`, `Meta`, or `Alt` (e.g. `Ctrl+u`, `Cmd+u`, `Alt+u`, `Ctrl+Shift+u`, `Meta+Shift+u`) is strictly rejected as a puzzle face move.
+  - **Undo Shortcuts:**
+    - `Ctrl+Z` (`event.ctrlKey && !event.metaKey && !event.shiftKey && !event.altKey`).
+    - `Cmd+Z` (`event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey`).
+  - **Redo Shortcuts:**
+    - `Ctrl+Shift+Z` (`event.ctrlKey && !event.metaKey && event.shiftKey && !event.altKey`).
+    - `Cmd+Shift+Z` (`event.metaKey && !event.ctrlKey && event.shiftKey && !event.altKey`).
+    - `Ctrl+Y` (`event.ctrlKey && !event.metaKey && !event.shiftKey && !event.altKey`).
+    - `Cmd+Y` is explicitly REJECTED (avoids hijacking browser/system history shortcuts on macOS).
+  - **Alt Key Prohibition:** Any modifier combination containing `Alt` (`event.altKey === true`) is strictly rejected.
 - **Repeat Key Policy:** `if (event.repeat) return;` — key repeat is strictly dropped to prevent queueing rapid-fire actions.
 - **Focus Exclusion Policy:**
   - Target checking: `isEditableTarget(event.target)` verifies if the event target is an `<input>`, `<textarea>`, `<select>`, or has `isContentEditable === true`.
-  - When focus is in any editable target (e.g. Scramble seed input), all puzzle shortcuts are ignored, allowing text editing without triggering moves or history navigation.
-- **`preventDefault()` Policy:** `event.preventDefault()` is invoked ONLY when the shortcut is recognized, valid in the current state, and handled by GearCube. Keystrokes that are not accepted are not intercepted.
+  - When focus is in any editable target (e.g. Scramble seed input), all puzzle shortcuts are ignored, allowing text editing with full modifier support without triggering moves or history navigation.
+- **`preventDefault()` Policy:**
+  - `event.preventDefault()` is invoked ONLY when a keystroke matches a recognized, accepted shortcut AND is actionable in the current application state.
+  - Unrecognized, rejected, or blocked keystrokes NEVER call `preventDefault()`, preserving browser and operating system defaults.
 
 ### 6.3. Direction-Relative Midpoint & Busy State Delegation
 - **`HALF_TURN_LOCKED` State:**
@@ -274,6 +292,16 @@ export interface PlayHistoryState {
   - No reset-baseline shortcut or API callback is included.
 - **Node-Vitest Testability Contract:**
   - `useKeyboardControls.ts` structures pure, framework-independent resolution helpers (`resolveKeyboardAction`, `isEditableTarget`) that are exercised by `apps/web/src/components/controls/useKeyboardControls.test.ts` under the existing Node Vitest environment (`environment: node` in `vitest.config.ts`).
+  - Planned unit tests explicitly cover:
+    - Face shortcuts reject Ctrl/Meta/Alt contamination (`Ctrl+u`, `Cmd+u`, `Alt+u`, `Ctrl+Shift+u`, `Meta+Shift+u`).
+    - `Ctrl+Z` and `Cmd+Z` recognized as Undo.
+    - `Ctrl+Shift+Z`, `Cmd+Shift+Z`, and `Ctrl+Y` recognized as Redo.
+    - `Cmd+Y` explicitly rejected.
+    - Alt-modified shortcuts rejected.
+    - Repeat events ignored.
+    - Focus exclusion for `<input>`, `<textarea>`, `<select>`, and `isContentEditable`.
+    - Midpoint direction-relative acceptance and cancellation logic.
+    - `preventDefault` eligibility true only for recognized, accepted, actionable actions.
   - Zero DOM test dependencies: NO `jsdom`, NO `happy-dom`, NO `@testing-library/react`.
   - Actual window event listener registration, focus changes, and React lifecycle integration are verified via Playwright E2E.
 
@@ -365,8 +393,8 @@ Phase 3 is decomposed into four dependency-ordered, independently verifiable sub
 - **Objective:** Keyboard shortcuts, responsive CSS layout, root Playwright Chromium E2E infrastructure, and automated browser verification.
 - **Status:** `PLANNED / PREFLIGHT_READY_FOR_INDEPENDENT_ACCEPTANCE`
 - **Deliverables:**
-  - `apps/web/src/components/controls/useKeyboardControls.ts`: Keyboard event listener with focus detection, repeat guarding, and modifier normalization.
-  - `apps/web/src/components/controls/useKeyboardControls.test.ts`: Unit tests for keyboard event parsing, focus exclusion, and move triggering.
+  - `apps/web/src/components/controls/useKeyboardControls.ts`: Keyboard event listener with focus detection, repeat guarding, exact modifier normalization, and direction-relative midpoint delegation.
+  - `apps/web/src/components/controls/useKeyboardControls.test.ts`: Unit tests for keyboard event parsing, focus exclusion, modifier rejection, and move triggering.
   - `apps/web/src/components/canvas/GearCubeViewport.tsx`: Mount `useKeyboardControls` hook to active session state.
   - `apps/web/src/App.css`: Responsive media queries (`max-width: 900px`, `max-width: 640px`) for tablet and mobile portrait layouts.
   - `playwright.config.ts`: Root Playwright configuration pinning Chromium, dedicated webServer on port 4173 (`http://127.0.0.1:4173`), and zero headless pixel-matching dependencies.
@@ -407,7 +435,7 @@ Phase 3 is decomposed into four dependency-ordered, independently verifiable sub
 17. **`MODE_COMPATIBILITY_GATE`:** Mode switches do not alter history entries or cursor.
 18. **`BUSY_INPUT_BLOCK_GATE`:** History navigation and scramble rejected while puzzle is busy.
 19. **`IMMUTABILITY_GATE`:** State, frame, and history entries remain strictly unmutated.
-20. **`KEYBOARD_EVENT_NORMALIZATION_GATE`:** `useKeyboardControls` correctly normalizes base keys, shift modifiers, and ctrl/cmd combinations.
+20. **`KEYBOARD_EVENT_NORMALIZATION_GATE`:** `useKeyboardControls` correctly normalizes base keys, shift modifiers, and exact Ctrl/Meta/Shift combinations while rejecting Alt and unauthorized modifier combinations.
 21. **`KEYBOARD_FOCUS_EXCLUSION_GATE`:** Key events targeting `<input>`, `<textarea>`, `<select>`, or contenteditable elements produce zero move calls.
 22. **`KEYBOARD_REPEAT_IGNORING_GATE`:** Key repeat events (`event.repeat === true`) are strictly dropped.
 
@@ -424,11 +452,11 @@ Phase 3 is decomposed into four dependency-ordered, independently verifiable sub
 10. **`E2E_ARBITRARY_SCRUB_FLOW`:** Clicking any chip in timeline scrubber navigates directly to that exact historical step.
 11. **`E2E_RESET_BASELINE_FLOW`:** Clicking "Back to baseline" navigates to cursor -1 while preserving future redo chips.
 12. **`E2E_SEEDED_SCRAMBLE_FLOW`:** Entering seed `"abc"` and clicking Scramble applies deterministic sequence and establishes new baseline with 0 history entries.
-13. **`E2E_KEYBOARD_MOVE_FLOW`:** Pressing `u` triggers `U+` move; `Shift+u` triggers `U-`.
+13. **`E2E_KEYBOARD_MOVE_FLOW`:** Pressing `u` triggers `U+` move; `Shift+u` triggers `U-`; shortcuts with unsupported modifiers (e.g. `Ctrl+u`, `Alt+u`) are ignored without hijacking (`KEYBOARD_BROWSER_SHORTCUT_NON_HIJACK`).
 14. **`E2E_KEYBOARD_UNDO_FLOW`:** Pressing `Ctrl+Z` / `Cmd+Z` executes Undo.
-15. **`E2E_KEYBOARD_REDO_FLOW`:** Pressing `Ctrl+Shift+Z` / `Ctrl+Y` executes Redo.
+15. **`E2E_KEYBOARD_REDO_FLOW`:** Pressing `Ctrl+Shift+Z` / `Ctrl+Y` executes Redo; `Cmd+Y` is ignored.
 16. **`E2E_INPUT_FOCUS_EXCLUSION_FLOW`:** Focusing Scramble seed input and typing `u`, `r`, `z` changes input value without triggering puzzle moves or undo.
-17. **`E2E_BUSY_STATE_BLOCKING_FLOW`:** Move buttons, mode toggle, undo, redo, and scramble button are disabled during animation or at midpoint lock.
+17. **`E2E_BUSY_STATE_BLOCKING_FLOW`:** During active animation, all move buttons, mode toggle, undo, redo, and scramble button are disabled. At `HALF_TURN_LOCKED` midpoint (`MIDPOINT_SELECTIVE_MOVE_ENABLEMENT`), only the staged face controls remain actionable (same direction finishes, opposite direction cancels); all unrelated face buttons, mode toggle, undo, redo, timeline navigation, Back to baseline, and scramble button are disabled; scramble seed text input remains editable.
 18. **`E2E_RESPONSIVE_LAYOUT_FLOW`:** At viewports `1440x900`, `768x1024`, and `375x667`, all primary controls remain visible, non-overlapping, and clickable without document horizontal overflow.
 19. **`E2E_CONSOLE_ERROR_GATE`:** Zero unhandled JavaScript exceptions, React runtime errors, or WebGL errors during entire test run.
 
