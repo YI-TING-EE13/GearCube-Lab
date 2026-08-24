@@ -251,11 +251,23 @@ export interface SolverOptions {
 
 ## 7. Phase 4C Dedicated Heuristic Preflight & IDA* Search Contract
 
-### 7.1. Empirical Candidate Evaluation & Mathematical Abstraction
+### 7.1. Empirical Candidate Evaluation, Index Layout & Decoding
 For heuristic evaluation, define the canonical slice coordinate index mapping:
 $$\text{sliceIndex}(\text{slice}) = \text{slice.permutationClass} \cdot 3 + \text{slice.phase} \quad \in [0 \dots 11]$$
 Let canonical state coordinates be $C \in [0 \dots 23]$ (corner configuration), and $X, Y, Z \in [0 \dots 11]$ (slice coordinates for $X, Y, Z$ edge rings).
 
+#### Abstract Slice Coordinate Decoding
+Given an abstract slice coordinate index $q \in [0 \dots 11]$, the exact canonical slice properties are uniquely reconstructed by:
+$$\text{permutationClass} = \lfloor q / 3 \rfloor \in [0 \dots 3], \quad \text{phase} = (q \bmod 3) \in [0 \dots 2]$$
+
+#### Frozen Dense PDB Table Index Mappings
+The exact dense integer table indices for the two-slice abstract projection tables are frozen as:
+$$\text{indexCXY}(C, X, Y) = (C \cdot 12 + X) \cdot 12 + Y \quad \in [0 \dots 3455]$$
+$$\text{indexCXZ}(C, X, Z) = (C \cdot 12 + X) \cdot 12 + Z \quad \in [0 \dots 3455]$$
+$$\text{indexCYZ}(C, Y, Z) = (C \cdot 12 + Y) \cdot 12 + Z \quad \in [0 \dots 3455]$$
+Each table index maps bijectively to the contiguous range $[0 \dots 3455]$ ($3 \times 3,456 = 10,368$ total raw entries). Full-state rank ($[0 \dots 41471]$) is strictly prohibited as a PDB table index.
+
+#### Evaluated Heuristic Candidates
 Four candidate configurations were empirically evaluated across the entire 41,472-state canonical domain:
 1. **$H_0$ (Blind Baseline):** $h_0(S) = 0$.
 2. **$H_1$ (Single-Slice Projection Max PDB):** Computes exact abstract shortest distances over 3 single-slice abstract spaces:
@@ -270,10 +282,10 @@ Four candidate configurations were empirically evaluated across the entire 41,47
    $$H_2(S) = \max\left(d_{CXY}(C, X, Y), \; d_{CXZ}(C, X, Z), \; d_{CYZ}(C, Y, Z)\right)$$
 4. **$H_{\text{EXACT}}$ (Test-Only Exact Oracle):** $d^*(S)$ from `packages/solvers/tests/exact-distance-oracle.ts` (analysis truth only; strictly forbidden in production).
 
-### 7.2. Abstract Transition Closure Proof
+### 7.2. Abstract Transition Closure & Concrete Representative Construction
 For each projection $P \in \{CX, CY, CZ, CXY, CXZ, CYZ\}$, every canonical transition $(S, M)$ across all 41,472 states and all 12 directed moves in `ALL_MOVES` (497,664 directed edges) was evaluated to verify whether $P(\text{applyMove}(S, M))$ is uniquely determined solely by $(P(S), M)$.
 
-| Abstract Projection | State Space | Directed Transitions Checked | Closure Mismatches | Transition-Closed? |
+| Abstract Projection | State Space | Directed Transitions Checked | Closure Mismatches | Quotient Transition-Closed? |
 | :--- | :--- | :--- | :--- | :--- |
 | **$CX$** | 288 | 497,664 | **0** | **YES** |
 | **$CY$** | 288 | 497,664 | **0** | **YES** |
@@ -282,9 +294,54 @@ For each projection $P \in \{CX, CY, CZ, CXY, CXZ, CYZ\}$, every canonical trans
 | **$CXZ$** | 3,456 | 497,664 | **0** | **YES** |
 | **$CYZ$** | 3,456 | 497,664 | **0** | **YES** |
 
-Because closure mismatches are strictly **0** for all projections, representative-state quotient-graph successor generation is mathematically exact and deterministic.
+#### Frozen Concrete Representative State Construction
+Because exhaustive projection closure is proven across all 497,664 transitions, omitted coordinates do not affect the projected successor. Representative states are frozen deterministically:
+- **For $CXY(C, X, Y)$:**
+  - `cornerConfiguration = C`
+  - `sliceX = decode(X)`
+  - `sliceY = decode(Y)`
+  - `sliceZ = { permutationClass: 0, phase: 0 }` (solved slice)
+- **For $CXZ(C, X, Z)$:**
+  - `cornerConfiguration = C`
+  - `sliceX = decode(X)`
+  - `sliceY = { permutationClass: 0, phase: 0 }` (solved slice)
+  - `sliceZ = decode(Z)`
+- **For $CYZ(C, Y, Z)$:**
+  - `cornerConfiguration = C`
+  - `sliceX = { permutationClass: 0, phase: 0 }` (solved slice)
+  - `sliceY = decode(Y)`
+  - `sliceZ = decode(Z)`
 
-### 7.3. Empirical Results & Dominance Analysis
+For any abstract state $A$ and directed move $M \in \text{ALL\_MOVES}$:
+$$\text{abstractSuccessor}(A, M) = \text{project}(\text{applyMove}(\text{representative}(A), M))$$
+*Validity Proof:* This construction is mathematically valid because exhaustive projection closure proved that the projected successor is strictly independent of the omitted coordinates. Representative choices are not left implementation-defined.
+
+### 7.3. Quotient Reversibility & Forward BFS Distance-to-Goal Proof
+In classical pattern databases, the goal is to compute the heuristic shortest-path distance from an arbitrary abstract state $A$ to the projected solved state $\text{projectedSolved}$.
+
+1. **Move Invertibility:** Every canonical directed move $M = (F, D)$ in `ALL_MOVES` has an exact inverse move $\text{inverseMove}(M) = (F, \text{opposite}(D))$ that also belongs to `ALL_MOVES`.
+2. **Edge Symmetry:** For every concrete state transition $s \xrightarrow{M} t$, the reverse transition $t \xrightarrow{\text{inverseMove}(M)} s$ is a valid directed edge with identical unit cost ($1$).
+3. **Quotient Graph Reversibility:** Because projection closure preserves concrete transition algebra, for every abstract edge $u \xrightarrow{M} v$ in the quotient graph, there exists the reverse abstract edge $v \xrightarrow{\text{inverseMove}(M)} u$. Thus, the $CXY, CXZ, CYZ$ quotient transition graphs are reversible.
+4. **Distance Equivalence:**
+   $$\text{distance}(\text{projectedSolved}, A) = \text{distance}(A, \text{projectedSolved})$$
+5. **Conclusion:** A deterministic forward BFS rooted at $\text{projectedSolved}$ (with distance initialized to $0$) computes the exact shortest distance to the goal for all reachable abstract states without double-inversion ambiguity or unstated symmetry assumptions.
+
+### 7.4. PDB Storage, Sentinel & Complete Reachability
+- **Storage Type:** Three typed arrays `new Int8Array(3456)` corresponding to tables $CXY, CXZ, CYZ$.
+- **Initialization:** `table.fill(-1)`.
+- **Sentinel Value:** `-1` strictly represents an unvisited / undiscovered abstract state. (Int8 default `0` must NOT be used as an unvisited sentinel, as distance `0` is reserved for $\text{projectedSolved}$).
+- **BFS Seed:** `table[index(projectedSolved)] = 0`.
+- **Value Range:** All reachable entries contain distances in $[0 \dots 7]$.
+- **Post-Construction Verification Invariants:**
+  - `CXY_REACHABLE`: Exactly $3,456 / 3,456$ ($100\%$).
+  - `CXZ_REACHABLE`: Exactly $3,456 / 3,456$ ($100\%$).
+  - `CYZ_REACHABLE`: Exactly $3,456 / 3,456$ ($100\%$).
+  - `UNINITIALIZED_ENTRIES`: Exactly $0$.
+  - `TABLE_MIN`: $0$.
+  - `TABLE_MAX`: $7$.
+- **Full Reachability Rationale:** The accepted canonical domain is the complete reachable Cartesian domain ($24 \times 12 \times 12 \times 12 = 41,472$), and every abstract tuple is the projection of at least one reachable canonical state. Therefore, all $3,456$ abstract states in each table are reachable.
+
+### 7.5. Empirical Results & Dominance Analysis
 The empirical evaluation over all 41,472 canonical states and 497,664 directed transitions yielded the following verified deterministic metrics:
 
 | Metric | $H_0$ (Blind) | $H_1$ (1-Slice Max) | $H_2$ (2-Slice Max) [SELECTED] | $H_{\text{EXACT}}$ [REFERENCE ONLY] |
@@ -293,6 +350,7 @@ The empirical evaluation over all 41,472 canonical states and 497,664 directed t
 | **Raw Entry Count** | 0 | 864 | **10,368** | 41,472 |
 | **Raw Memory Footprint** | 0 B | 864 B | **10,368 B ($\approx 10.1\text{ KB}$)** | 41,472 B ($\approx 41.5\text{ KB}$) |
 | **Projection Closure Mismatches** | 0 | 0 / 497,664 | **0 / 497,664** | N/A |
+| **Abstract Table Reachable Count** | N/A | $CX: 288/288, CY: 288/288, CZ: 288/288$ | **$CXY: 3456/3456, CXZ: 3456/3456, CYZ: 3456/3456$** | 41,472 / 41,472 |
 | **Abstract Table Diameters** | 0 | $CX: 6, CY: 6, CZ: 6$ | **$CXY: 7, CXZ: 7, CYZ: 7$** | 8 |
 | **Admissibility Gate ($0 \le h \le d^*$)** | 41,472 / 41,472 | 41,472 / 41,472 (0 over) | **41,472 / 41,472 (0 over)** | 41,472 / 41,472 |
 | **Consistency Gate ($h(u) \le 1 + h(v)$)** | 497,664 / 497,664 | 497,664 / 497,664 | **497,664 / 497,664** | 497,664 / 497,664 |
@@ -332,16 +390,16 @@ The empirical evaluation over all 41,472 canonical states and 497,664 directed t
 | **$d = 7$** | 72 | **8** | $9.0\times$ |
 | **$d = 8$** | 209 | **21** | **$10.0\times$** |
 
-### 7.4. Selected Production Heuristic Architecture & PDB Initialization
+### 7.6. Selected Production Heuristic Architecture & PDB Initialization
 - **Selected Candidate:** **$H_2$ (Two-Slice Projection Max PDB)**.
 - **Production Source File:** `packages/solvers/src/heuristics.ts`.
 - **Function Signature:** `estimateIdaStarHeuristic(state: GearCubeState): number`.
 - **Visibility:** PACKAGE-INTERNAL only. It is **NOT** exported from `packages/solvers/src/index.ts`.
 - **PDB Construction Strategy:** Module-load initialization builds three `Int8Array` tables of length 3,456 each via deterministic BFS over the closed quotient transitions using `@gearcube/core` transitions and `SOLVED_GEAR_CUBE_STATE`.
 - **PDB Isolation & Counter Ownership:** PDB construction occurs outside IDA* search execution. PDB preparation transitions must **NOT** increment `nodesExpanded` or `nodesGenerated`.
-- **Zero Runtime Dependencies:** Requires zero external dependencies, zero network requests, zero DOM APIs, and zero test oracle imports.
+- **PDB Caching & Lookup:** PDB tables are constructed and cached at module load. Heuristic lookup `estimateIdaStarHeuristic(state)` performs purely 3 array index lookups and a 3-way `Math.max` operation with zero oracle, network, or external runtime dependencies.
 
-### 7.5. IDA* Algorithm & Search Execution Contract
+### 7.7. IDA* Algorithm & Search Execution Contract
 - **Function Signature:** `solveIdaStar(state: GearCubeState, options?: SolverOptions): SolveResult`.
 - **Public Export:** Exported from `packages/solvers/src/index.ts` alongside `solveBfs` and `solveBidirectionalBfs`.
 - **Canonical Move Cost:** 1 per directed move in `ALL_MOVES`.
@@ -359,7 +417,7 @@ The empirical evaluation over all 41,472 canonical states and 497,664 directed t
 - **Progress Telemetry:** Emits `SearchTelemetry` variant `algorithm: 'IDA_STAR'` on exact multiples of `progressIntervalNodes` expanded nodes with fields: `nodesExpanded`, `nodesGenerated`, `elapsedMs`, `threshold`, and `currentDepth`.
 - **Optimality Invariant:** For all start states, returned solution depth matches the proven optimal shortest-path distance ($d \in [1 \dots 8]$).
 
-### 7.6. Explicit Prohibitions for Phase 4C
+### 7.8. Explicit Prohibitions for Phase 4C
 1. **No Exact Distance Oracle Import:** `heuristics.ts` and `ida-star.ts` must NOT import `buildExactDistanceOracle()` or test fixtures.
 2. **No Full 41,472-State PDB:** Production code must NOT embed or construct a full 41,472-entry exact distance table.
 3. **No BFS/BiBFS Fallback:** IDA* must NOT invoke BFS or BiBFS to compute heuristic values or fall back on search failure.
@@ -620,6 +678,16 @@ Implementation must STOP and request independent contract review if any of the f
 - **`PHASE4C_SELECTED_HEURISTIC`:** `H2_TWO_SLICE_PDB_MAX` ($\max(d_{CXY}, d_{CXZ}, d_{CYZ})$).
 - **`PHASE4C_PDB_RAW_ENTRIES`:** `10368` ($3 \times 3456$).
 - **`PHASE4C_PDB_MEMORY_BYTES`:** `10368` ($\approx 10.1\text{ KB}$).
+- **`PHASE4C_PDB_SENTINEL`:** `-1` (undiscovered marker; `0` reserved for projected solved).
+- **`PHASE4C_PDB_UNINITIALIZED_ENTRIES`:** `0`.
+- **`PHASE4C_PDB_CXY_INDEX_RANGE`:** `0..3455`.
+- **`PHASE4C_PDB_CXZ_INDEX_RANGE`:** `0..3455`.
+- **`PHASE4C_PDB_CYZ_INDEX_RANGE`:** `0..3455`.
+- **`PHASE4C_PDB_CXY_REACHABLE`:** `3456 / 3456`.
+- **`PHASE4C_PDB_CXZ_REACHABLE`:** `3456 / 3456`.
+- **`PHASE4C_PDB_CYZ_REACHABLE`:** `3456 / 3456`.
+- **`PHASE4C_QUOTIENT_REVERSIBILITY`:** `FROZEN` (Move invertibility and edge symmetry prove forward BFS computes distance-to-goal).
+- **`PHASE4C_REPRESENTATIVE_CONSTRUCTION`:** `FROZEN` (Deterministic solved-slice padding for omitted coordinates).
 - **`PHASE4C_PROJECTION_CLOSURE_MISMATCHES`:** `0 / 497664` across all 6 projections.
 - **`PHASE4C_EXHAUSTIVE_ADMISSIBILITY`:** `41472 / 41472` ($0 \le h(s) \le d^*(s)$, 0 over-estimates).
 - **`PHASE4C_EXHAUSTIVE_CONSISTENCY`:** `497664 / 497664` ($h(u) \le 1 + h(v)$).

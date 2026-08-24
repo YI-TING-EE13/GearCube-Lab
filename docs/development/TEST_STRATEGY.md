@@ -184,9 +184,14 @@
   - `SEARCH_TELEMETRY_GATES`: Interval-based telemetry emission matching algorithm contracts.
   - `SOLVER_DETERMINISM_GATE`: Bit-for-bit identical solution paths across repeat runs for identical input.
 - **Phase 4C Heuristic Preflight Contracts & Planned Test Gates:**
+  - `H2_TABLE_INDEX_RANGE`: All three tables ($CXY, CXZ, CYZ$) index over exact contiguous range $0 \dots 3455$.
+  - `H2_TABLE_REACHABILITY`: Exactly $3 \times 3,456 / 3,456$ reachable entries ($100\%$) across all three tables.
+  - `H2_UNINITIALIZED_ENTRIES`: Exactly $0$ uninitialized/sentinel entries remaining after PDB BFS construction.
+  - `H2_TABLE_DIAMETERS`: Table diameters strictly match abstract diameters ($CXY = 7, CXZ = 7, CYZ = 7$).
+  - `H2_REPRESENTATIVE_SUCCESSOR_EQUIVALENCE`: $\text{project}(\text{applyMove}(\text{representative}(A), M))$ matches the quotient transition contract.
   - `HEURISTICS_EXHAUSTIVE_ADMISSIBILITY`: All 41,472 canonical states verify $0 \le h_2(s) \le d^*(s)$ with 0 over-estimates in `heuristics.test.ts`.
   - `HEURISTICS_EXHAUSTIVE_CONSISTENCY`: All 497,664 canonical directed transitions verify $h_2(u) \le 1 + h_2(v)$ in `heuristics.test.ts`.
-  - `HEURISTICS_PDB_STRUCTURE`: 3 two-slice abstract tables ($CXY, CXZ, CYZ$) of 3,456 entries each ($10,368\text{ B}$ raw footprint), 0 closure mismatches, diameters $\le 7$.
+  - `HEURISTICS_PDB_STRUCTURE`: 3 two-slice abstract tables ($CXY, CXZ, CYZ$) of 3,456 entries each ($10,368\text{ B}$ raw `Int8Array` footprint), 0 closure mismatches, diameters $\le 7$.
   - `IDA_STAR_OPTIMALITY_1_TO_8`: Exact optimal solution depth matching BFS/BiBFS for all deterministic depth 1..8 fixtures in `ida-star.test.ts`.
   - `IDA_STAR_SEARCH_LIMITS`: Cumulative `maxNodes` expansion limit across threshold iterations, total solution length `maxDepth` limit, and $h(\text{start}) > \text{maxDepth}$ zero-expansion abort in `ida-star.test.ts`.
   - `IDA_STAR_SEARCH_TELEMETRY`: Telemetry emissions reporting `algorithm: 'IDA_STAR'`, cumulative counters, `threshold`, and `currentDepth` on `progressIntervalNodes` intervals.
