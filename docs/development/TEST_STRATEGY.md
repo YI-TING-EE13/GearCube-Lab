@@ -200,8 +200,17 @@
   - `PURE_WORKER_CONTROLLER`: State machine, `requestId` tracking, and stale-message rejection verified in `solver-worker-controller.test.ts`.
   - `WORKER_LIFECYCLE_ISOLATION`: Worker construction/termination owned exclusively by `useSolverWorker.ts`.
   - `WORKER_BOUNDARY_GATES`: Manifest dependency, Worker location, sole construction site, and main-thread solver call prohibition in `tests/boundary.test.ts`.
-- **Planned / Future Subphase Tests:**
-  - Real browser Worker execution, UI solution playback, and Playwright browser acceptance (Phase 4E).
+- **Implemented in Phase 4E Candidate:**
+  - `SOLVE_MODE_UI`: Accessible SolvePanel with algorithm selector (IDA*, BiBFS, BFS), solve/cancel controls, progress telemetry, and solution summary.
+  - `PURE_PLAYBACK_CONTROLLER`: Immutable metadata, expected state prefix chain, dispatch/settle guards, step forward/backward navigation in `playback-controller.test.ts`.
+  - `DIRECT_180_PLAYBACK`: Continuous playback committing exactly 1 canonical history entry per move.
+  - `TWO_STEP_PLAYBACK`: Automatic midpoint continuation committing exactly 1 canonical history entry per move.
+  - `REAL_BROWSER_WORKER_GATE`: Real Chromium Worker creation and off-main-thread search in `solve-mode.spec.ts`.
+  - `MAIN_THREAD_ACTIONABILITY_GATE`: Verified responsive UI interactions (mode toggle) during active search in `solve-mode.spec.ts`.
+  - `STALE_RESULT_GATE`: Verified external action cancels active search and rejects stale solution in `solve-mode.spec.ts`.
+  - `PAUSE_AT_CANONICAL_BOUNDARY_GATE`: Move finishes to IDLE before pause takes effect in `solve-mode.spec.ts`.
+  - `STEP_BACK_FORWARD_GATE`: Step back/forward history navigation within baseline bounds in `solve-mode.spec.ts`.
+  - `RESPONSIVE_SOLVER_UI_GATE`: Verified layout bounds across desktop, tablet, and mobile in `solve-mode.spec.ts`.
 
 ### Level 8: Seeded Benchmark Determinism & Metrics
 - **Scope:** `packages/benchmark` (Future Phase 5)
