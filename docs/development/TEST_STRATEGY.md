@@ -169,7 +169,7 @@
 
 ### Level 7: Deterministic Solver Search Correctness & Exact Distance Oracles
 - **Scope:** `packages/solvers` (Phase 4)
-- **Status:** `AVAILABLE (Phase 4A & Phase 4B Accepted / Phase 4C Implemented in Candidate) / WORKER & PLAYBACK PLANNED (Phase 4D/4E)`
+- **Status:** `AVAILABLE (Phase 4A, Phase 4B & Phase 4C Accepted) / WORKER & PLAYBACK PLANNED (Phase 4D/4E)`
 - **Focus:** Algorithm verification on independently verified exact canonical distance fixtures ($d \in [1 \dots 8]$).
 - **Available / Implemented & Accepted in Phase 4A:**
   - `DENSE_RANK_BIJECTION`: Exhaustive 41,472/41,472 Cartesian bijection and round-trip consistency in `state-index.test.ts`.
@@ -183,7 +183,7 @@
   - `SEARCH_LIMIT_GATES`: Exact `MAX_NODES` and `MAX_DEPTH` limit enforcement across both BFS and BiBFS.
   - `SEARCH_TELEMETRY_GATES`: Interval-based telemetry emission matching algorithm contracts.
   - `SOLVER_DETERMINISM_GATE`: Bit-for-bit identical solution paths across repeat runs for identical input.
-- **Available / Implemented in Phase 4C Candidate:**
+- **Available / Implemented & Accepted in Phase 4C:**
   - `H2_TABLE_INDEX_RANGE`: All three tables ($CXY, CXZ, CYZ$) index over exact contiguous range $0 \dots 3455$.
   - `H2_TABLE_REACHABILITY`: Exactly $3 \times 3,456 / 3,456$ reachable entries ($100\%$) across all three tables.
   - `H2_UNINITIALIZED_ENTRIES`: Exactly $0$ uninitialized/sentinel entries remaining after PDB BFS construction.
