@@ -455,7 +455,7 @@ Phase 3 is decomposed into four dependency-ordered, independently verifiable sub
 12. **`E2E_SEEDED_SCRAMBLE_FLOW`:** Entering seed `"abc"` and clicking Scramble applies deterministic sequence and establishes new baseline with 0 history entries.
 13. **`E2E_KEYBOARD_MOVE_FLOW`:** Pressing `u` triggers `U+` move; `Shift+u` triggers `U-`; shortcuts with unsupported modifiers (e.g. `Ctrl+u`, `Alt+u`) are ignored without hijacking (`KEYBOARD_BROWSER_SHORTCUT_NON_HIJACK`).
 14. **`E2E_KEYBOARD_UNDO_FLOW`:** Pressing `Ctrl+Z` / `Cmd+Z` executes Undo.
-15. **`E2E_KEYBOARD_REDO_FLOW`:** Pressing `Ctrl+Shift+Z` / `Ctrl+Y` executes Redo; `Cmd+Y` is ignored.
+15. **`E2E_KEYBOARD_REDO_FLOW`:** Pressing `Ctrl+Shift+Z`, `Cmd+Shift+Z`, or `Ctrl+Y` executes Redo; `Cmd+Y` is rejected.
 16. **`E2E_INPUT_FOCUS_EXCLUSION_FLOW`:** Focusing Scramble seed input and typing `u`, `r`, `z` changes input value without triggering puzzle moves or undo.
 17. **`E2E_BUSY_STATE_BLOCKING_FLOW`:** During active animation, all move buttons, mode toggle, undo, redo, and scramble button are disabled. At `HALF_TURN_LOCKED` midpoint (`MIDPOINT_SELECTIVE_MOVE_ENABLEMENT`), only the staged face controls remain actionable (same direction finishes, opposite direction cancels); all unrelated face buttons, mode toggle, undo, redo, timeline navigation, Back to baseline, and scramble button are disabled; scramble seed text input remains editable.
 18. **`E2E_RESPONSIVE_LAYOUT_FLOW`:** At viewports `1440x900`, `768x1024`, and `375x667`, all primary controls remain visible, non-overlapping, and clickable without document horizontal overflow.
@@ -471,7 +471,7 @@ Phase 3 is decomposed into four dependency-ordered, independently verifiable sub
 
 - **`PHASE3_NEW_ADR_REQUIRED`:** `NO` (All Phase 3 features operate within existing contracts under ADR-0004, ADR-0005, and ADR-0006).
 - **`NEW_RUNTIME_DEPENDENCIES`:** `NONE`
-- **`DEV_DEPENDENCY_PLANNED`:** `@playwright/test@1.62.1` (Root devDependency, Chromium project only)
+- **`PLAYWRIGHT_DEV_DEPENDENCY`:** `@playwright/test@1.62.1 / IMPLEMENTED IN CANDIDATE` (Root devDependency, Chromium project only)
 - **`PHASE3_PLAN_STATUS`:** `PLANNING / ACCEPTED`
 - **`PHASE3_PREFLIGHT_STATUS`:** `ACCEPTED`
 - **`PHASE3A_STATUS`:** `COMPLETED / ACCEPTED`

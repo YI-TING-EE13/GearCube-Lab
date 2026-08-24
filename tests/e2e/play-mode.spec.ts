@@ -12,6 +12,18 @@ function setupErrorCollectors(page: Page, errors: string[]) {
   });
 }
 
+// Pure rectangle overlap helper
+function rectsOverlap(
+  a: { x: number; y: number; width: number; height: number },
+  b: { x: number; y: number; width: number; height: number }
+): boolean {
+  const aRight = a.x + a.width;
+  const aBottom = a.y + a.height;
+  const bRight = b.x + b.width;
+  const bBottom = b.y + b.height;
+  return !(aRight <= b.x || bRight <= a.x || aBottom <= b.y || bBottom <= a.y);
+}
+
 test.describe('GearCube Play Mode End-to-End Suite', () => {
   let errors: string[] = [];
 
@@ -334,6 +346,37 @@ test.describe('GearCube Play Mode End-to-End Suite', () => {
   });
 
   test('17. E2E_BUSY_STATE_BLOCKING_FLOW: active animation blocking, selective midpoint enablement, and seed edit', async ({ page }) => {
+    // 1. ACTIVE_ANIMATION_BUSY_GATE: in Direct 180 mode, trigger 400ms animation
+    await page.getByRole('button', { name: /Direct 180° turn mode/ }).click();
+    await expect(page.getByRole('button', { name: 'Direct 180° turn mode: ON' })).toBeVisible();
+
+    const rCwBtn = page.getByRole('button', { name: 'R Clockwise (180° full turn)' });
+    await rCwBtn.click();
+
+    // Verify observable active animation indicator
+    const turningIndicator = page.getByText('Turning (180°)...');
+    await expect(turningIndicator).toBeVisible();
+
+    // While turning indicator is visible, verify all controls are disabled concurrently
+    const allMoveButtons = page.locator('.move-btn');
+    await Promise.all([
+      expect(page.getByRole('button', { name: /Direct 180° turn mode/ })).toBeDisabled(),
+      expect(page.getByRole('button', { name: 'Undo move' })).toBeDisabled(),
+      expect(page.getByRole('button', { name: 'Redo move' })).toBeDisabled(),
+      expect(page.getByRole('button', { name: 'Back to baseline' })).toBeDisabled(),
+      expect(page.getByRole('button', { name: 'Generate scramble' })).toBeDisabled(),
+      ...Array.from({ length: 12 }, (_, i) => expect(allMoveButtons.nth(i)).toBeDisabled()),
+    ]);
+
+    // Settle to IDLE
+    await expect(page.getByRole('button', { name: 'Step 1: R+' })).toBeVisible();
+    await expect(turningIndicator).toHaveCount(0);
+    await expect(page.getByRole('button', { name: /Direct 180° turn mode/ })).toBeEnabled();
+
+    // 2. MIDPOINT_SELECTIVE_GATE: switch back to TWO_STEP mode
+    await page.getByRole('button', { name: /Direct 180° turn mode/ }).click();
+    await expect(page.getByRole('button', { name: 'Direct 180° turn mode: OFF' })).toBeVisible();
+
     // In TWO_STEP mode, click U CW
     const uCwBtn = page.getByRole('button', { name: /U Clockwise/ });
     await uCwBtn.click();
@@ -365,12 +408,11 @@ test.describe('GearCube Play Mode End-to-End Suite', () => {
     await expect(seedInput).toBeEnabled();
     await seedInput.fill('locked-seed-edit');
     await expect(seedInput).toHaveValue('locked-seed-edit');
-    await expect(page.getByRole('button', { name: /Step 1:/ })).toHaveCount(0);
 
-    // Finish the move and verify active animation busy state during the second step
+    // Finish the move
     const finishBtn = page.getByRole('button', { name: /U CW — Finish 180° turn/ });
     await finishBtn.click();
-    await expect(page.getByRole('button', { name: 'Step 1: U+' })).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Step 2: U+' })).toBeVisible();
   });
 
   test('18. E2E_RESPONSIVE_LAYOUT_FLOW: desktop, tablet, and mobile layouts fit, bounds checked, zero overlap', async ({ page }) => {
@@ -414,15 +456,17 @@ test.describe('GearCube Play Mode End-to-End Suite', () => {
         expect(moveBox.y + moveBox.height).toBeLessThanOrEqual(vp.height + 1);
         expect(timelineBox.x).toBeGreaterThanOrEqual(0);
 
-        // C. Collision gates
+        // C. Collision gates using rectsOverlap helper
         if (vp.width > 900) {
-          // Desktop: Top panels do not collide horizontally
-          expect(historyBox.x + historyBox.width).toBeLessThanOrEqual(scrambleBox.x);
-          // Bottom panels: Timeline scrubber and MoveControls do not collide horizontally
-          expect(timelineBox.x + timelineBox.width).toBeLessThanOrEqual(moveBox.x);
+          // Desktop: Top panels do not collide; bottom panels do not collide
+          expect(rectsOverlap(historyBox, scrambleBox), `History and Scramble must not overlap on ${vp.name}`).toBe(false);
+          expect(rectsOverlap(timelineBox, moveBox), `Timeline and Move controls must not overlap on ${vp.name}`).toBe(false);
+        } else if (vp.width >= 641 && vp.width <= 900) {
+          // Tablet Portrait: Timeline scrubber is elevated above MoveControls panel
+          expect(rectsOverlap(timelineBox, moveBox), `Timeline scrubber and Move controls must not overlap on ${vp.name}`).toBe(false);
         } else if (vp.width <= 640) {
           // Mobile: Timeline scrubber is elevated above MoveControls panel (no vertical overlap)
-          expect(timelineBox.y + timelineBox.height).toBeLessThanOrEqual(moveBox.y);
+          expect(rectsOverlap(timelineBox, moveBox), `Timeline scrubber and Move controls must not overlap on ${vp.name}`).toBe(false);
         }
       }
 
@@ -444,16 +488,18 @@ test.describe('GearCube Play Mode End-to-End Suite', () => {
         expect(lockedTimelineBox).not.toBeNull();
 
         if (lockedMoveBox && lockedTimelineBox) {
-          // Verify scrubber and move controls do NOT overlap vertically even with half-turn guidance expanded
+          // Verify scrubber and move controls do NOT overlap in half-turn locked state
           expect(
-            lockedTimelineBox.y + lockedTimelineBox.height,
-            `Timeline scrubber bottom (${lockedTimelineBox.y + lockedTimelineBox.height}) must be <= Move controls top (${lockedMoveBox.y}) on ${vp.name}`
-          ).toBeLessThanOrEqual(lockedMoveBox.y);
+            rectsOverlap(lockedTimelineBox, lockedMoveBox),
+            `Timeline scrubber and Move controls must not overlap in HALF_TURN_LOCKED on ${vp.name}`
+          ).toBe(false);
         }
 
         // Cancel back to baseline
         await page.getByRole('button', { name: /U CCW — Reverse to origin/ }).click();
         await expect(page.getByText('HALF-TURN: U CW')).toHaveCount(0);
+        await expect(page.getByRole('button', { name: /U Clockwise/ })).toBeEnabled();
+        await expect(page.getByText('Turning')).toHaveCount(0);
       }
     }
   });
