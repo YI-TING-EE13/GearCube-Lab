@@ -137,11 +137,11 @@
   - `PIECE_ROUTING_GATE`: 8 corners, 12 edges, 6 centers accurately routed.
   - Easing mathematics, 12-move staging, half-turn lock, continuation, cancellation, and direct 180° execution tested in pure headless environment.
 
-### Level 5B: Application History & Deterministic Scramble Tests (Planned Phase 3A Pure Tests)
-- **Scope:** `apps/web/src/components/history/` (`history.test.ts`, `scramble.test.ts` — Planned Phase 3A)
-- **Status:** `PLANNED (Phase 3A)`
-- **Focus:** Pure history state transitions, timeline navigation, FNV-1a UTF-16 seed hashing, and Mulberry32 scramble generation.
-- **Planned Invariants & Gates:**
+### Level 5B: Application History, Deterministic Scramble & Session State Tests (Accepted in Phase 3A/3B)
+- **Scope:** `apps/web/src/components/history/` (`history.test.ts`, `scramble.test.ts`, `play-session.test.ts`, `history-ui.test.tsx`)
+- **Status:** `AVAILABLE / ACCEPTED (Phase 3A & 3B)`
+- **Focus:** Pure history state transitions, timeline navigation, FNV-1a UTF-16 seed hashing, Mulberry32 scramble generation, session orchestration, and presentational UI components.
+- **Invariants Tested & Gates:**
   - `HISTORY_INITIAL_GATE` & `HISTORY_COMMIT_GATE`: History starts empty at `cursorIndex === -1`; completed moves append entries.
   - `NO_HISTORY_AT_HALF_GATE` & `NO_HISTORY_ON_CANCEL_GATE`: Midpoint lock and cancel operations create zero history entries.
   - `DIRECT_HISTORY_COMMIT_GATE`: Direct 180° moves create exactly one canonical entry.

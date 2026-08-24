@@ -82,8 +82,8 @@ Phase 3 builds the complete user-facing interactive puzzle experience on top of 
 - **`PLAYWRIGHT_PIXEL_PERFECT_ASSERTIONS`:** `NO`
 - **`RENDERER_PIXELS_USED_AS_STATE_ORACLE`:** `NO` (Assertions verify DOM interactions, disabled states, focus exclusion, and text/attribute state indicators; not WebGL canvas pixels).
 - **Agent Browser vs Playwright Distinction:**
-  - **`INTERACTIVE_AGENT_BROWSER_TOOL`:** `UNAVAILABLE` (Agent UI lacks interactive WebGL browser driver).
-  - **`REPOSITORY_BROWSER_AUTOMATION`:** `PLANNED_VIA_PLAYWRIGHT` (CLI-driven automated E2E test runner).
+  - **`INTERACTIVE_AGENT_BROWSER_TOOL`:** `AVAILABLE` (Utilizing `chrome-devtools-mcp` for interactive browser-in-the-loop acceptance and reconnaissance, including WebGL rendering, orbit/zoom gestures, overlay pointer isolation, and live console inspection).
+  - **`REPOSITORY_BROWSER_AUTOMATION`:** `PLANNED_VIA_PLAYWRIGHT` (Repository-owned, repeatable, deterministic Chromium CLI-driven E2E regression test runner in Phase 3C).
 
 ---
 
@@ -238,34 +238,44 @@ export interface PlayHistoryState {
 ## 6. Keyboard Interaction Contract
 
 ### 6.1. Key Mapping Table
-| Key | Modifier | Action / Move | Valid Condition |
+| Key | Modifier | Resolved Move / Action | Valid Conditions |
 | :--- | :--- | :--- | :--- |
-| `u`, `d`, `f`, `b`, `r`, `l` | None | `U+`, `D+`, `F+`, `B+`, `R+`, `L+` | IDLE (or valid matching TWO_STEP midpoint continuation) |
-| `u`, `d`, `f`, `b`, `r`, `l` | `Shift` | `U-`, `D-`, `F-`, `B-`, `R-`, `L-` | IDLE (or valid matching TWO_STEP midpoint cancellation) |
-| `z` | `Ctrl` / `Cmd` | `Undo` | IDLE & `canUndo(history)` |
-| `z` | `Ctrl+Shift` / `Cmd+Shift` | `Redo` | IDLE & `canRedo(history)` |
-| `y` | `Ctrl` / `Cmd` | `Redo` | IDLE & `canRedo(history)` |
+| `u`, `d`, `f`, `b`, `r`, `l` | None | `U+`, `D+`, `F+`, `B+`, `R+`, `L+` (Clockwise) | `IDLE` (initiates move) OR `HALF_TURN_LOCKED` (direction-relative) |
+| `u`, `d`, `f`, `b`, `r`, `l` | `Shift` | `U-`, `D-`, `F-`, `B-`, `R-`, `L-` (Counter-Clockwise) | `IDLE` (initiates move) OR `HALF_TURN_LOCKED` (direction-relative) |
+| `z` | `Ctrl` / `Cmd` | `Undo` | `IDLE` & `canUndo(history)` |
+| `z` | `Ctrl+Shift` / `Cmd+Shift` | `Redo` | `IDLE` & `canRedo(history)` |
+| `y` | `Ctrl` / `Cmd` | `Redo` | `IDLE` & `canRedo(history)` |
 
 ### 6.2. Event Interpretation & Normalization
-- **Key Normalization:** `event.key.toLowerCase()` for base letter extraction (`'u'`, `'d'`, `'f'`, `'b'`, `'r'`, `'l'`, `'z'`, `'y'`).
-- **Modifier Detection:**
-  - Direction inversion: `event.shiftKey === true` maps to Counter-Clockwise (`-`), while no Shift maps to Clockwise (`+`).
-  - History command: `(event.ctrlKey || event.metaKey) === true` for Undo/Redo shortcuts.
-- **Repeat Key Policy:** `if (event.repeat) return;` — auto-repeat is strictly ignored to prevent uncontrolled rapid-fire moves.
+- **Key Normalization:** `event.key.toLowerCase()` extracts base character (`'u'`, `'d'`, `'f'`, `'b'`, `'r'`, `'l'`, `'z'`, `'y'`).
+- **Modifier Parsing:**
+  - Direction: `event.shiftKey === true` produces Counter-Clockwise (`-`); no Shift produces Clockwise (`+`).
+  - History Commands: `(event.ctrlKey || event.metaKey) === true` checks for Undo/Redo combinations.
+- **Repeat Key Policy:** `if (event.repeat) return;` — key repeat is strictly dropped to prevent queueing rapid-fire actions.
 - **Focus Exclusion Policy:**
-  - Target inspection: `isEditableElement(event.target)` checks whether `target` is an `<input>`, `<textarea>`, `<select>`, or has `isContentEditable === true`.
-  - When focus is in any editable element (e.g. Scramble seed input), ALL keyboard shortcuts are ignored, allowing normal text entry with full modifier support without triggering cube moves or undo/redo.
-- **`preventDefault()` Policy:** `event.preventDefault()` is invoked ONLY when the shortcut is recognized, accepted, and handled by GearCube. Unrecognized or blocked keystrokes are never intercepted, preserving browser defaults.
+  - Target checking: `isEditableTarget(event.target)` verifies if the event target is an `<input>`, `<textarea>`, `<select>`, or has `isContentEditable === true`.
+  - When focus is in any editable target (e.g. Scramble seed input), all puzzle shortcuts are ignored, allowing text editing without triggering moves or history navigation.
+- **`preventDefault()` Policy:** `event.preventDefault()` is invoked ONLY when the shortcut is recognized, valid in the current state, and handled by GearCube. Keystrokes that are not accepted are not intercepted.
 
-### 6.3. Midpoint & Busy State Delegation
+### 6.3. Direction-Relative Midpoint & Busy State Delegation
 - **`HALF_TURN_LOCKED` State:**
-  - Same staged face + same direction: Completes the 180° turn (e.g. pressing `u` when staged with U CW completes the move).
-  - Same staged face + opposite direction: Cancels back to origin (e.g. pressing `Shift+U` when staged with U CW reverses to baseline/origin).
-  - Unrelated face keys: Ignored.
-  - Undo / Redo / Scramble / Mode toggle: Ignored.
-  - Seed text input: Remains fully editable.
-- **Active Animation State:** While `isSessionAnimating(session)` is `true`, all action keystrokes are ignored to prevent race conditions or duplicate transitions.
-- **Module Ownership:** `apps/web/src/components/controls/useKeyboardControls.ts` (pure UI React hook mounted in `GearCubeViewport.tsx`). Delegates directly to `onTriggerMove`, `onUndo`, `onRedo`, `onResetBaseline` without duplicating application state machines.
+  - Keystroke resolves to standard `(face, direction)`: no Shift -> CW (`+`), Shift -> CCW (`-`).
+  - **Face Matching:** If `resolved.face !== stagedMove.move.face`, the keystroke is rejected/ignored.
+  - **Continuation:** If `resolved.face === stagedMove.move.face` AND `resolved.direction === stagedMove.move.direction`, completes the second half-turn to finish the 180° move.
+  - **Cancellation:** If `resolved.face === stagedMove.move.face` AND `resolved.direction !== stagedMove.move.direction`, cancels and reverses to the origin state.
+  - **Concrete Examples:**
+    - Staged `U CW (+)`: pressing `u` (CW) finishes the turn; pressing `Shift+u` (CCW) cancels to origin.
+    - Staged `U CCW (-)`: pressing `Shift+u` (CCW) finishes the turn; pressing `u` (CW) cancels to origin.
+  - Unrelated face keys, Undo, Redo, Mode toggle, and Scramble are rejected.
+  - Seed text input remains focused and editable.
+- **Active Animation State:** When `isSessionAnimating(session)` is `true`, all action keystrokes are ignored.
+- **Minimal Hook API:**
+  - `useKeyboardControls({ isIdle, isAnimating, stagedMove, onTriggerMove, onUndo, onRedo })`
+  - No reset-baseline shortcut or API callback is included.
+- **Node-Vitest Testability Contract:**
+  - `useKeyboardControls.ts` structures pure, framework-independent resolution helpers (`resolveKeyboardAction`, `isEditableTarget`) that are exercised by `apps/web/src/components/controls/useKeyboardControls.test.ts` under the existing Node Vitest environment (`environment: node` in `vitest.config.ts`).
+  - Zero DOM test dependencies: NO `jsdom`, NO `happy-dom`, NO `@testing-library/react`.
+  - Actual window event listener registration, focus changes, and React lifecycle integration are verified via Playwright E2E.
 
 ---
 
@@ -403,7 +413,7 @@ Phase 3 is decomposed into four dependency-ordered, independently verifiable sub
 
 ### 9.2. Playwright Browser E2E Verification Flows (`tests/e2e/play-mode.spec.ts`)
 1. **`E2E_APP_LOAD_FLOW`:** Viewport, controls, canvas, and overlays render cleanly on initial page load (`http://127.0.0.1:4173`).
-2. **`E2E_MOVE_HISTORY_FLOW`:** Clicking a face move button in TWO_STEP mode commits one entry in the timeline upon completion.
+2. **`E2E_MOVE_HISTORY_FLOW`:** In TWO_STEP mode, clicking a face move button (e.g. U CW) stops at midpoint without committing history; clicking continuation (U CW) completes the 180° turn and commits exactly one entry (`Step 1: U+`) in the timeline.
 3. **`E2E_TWO_STEP_MIDPOINT_FLOW`:** In TWO_STEP mode, clicking U CW stops at midpoint lock; timeline remains at 0 entries.
 4. **`E2E_TWO_STEP_CANCEL_FLOW`:** In TWO_STEP midpoint lock, clicking U CCW cancels back to origin; timeline remains at 0 entries.
 5. **`E2E_TWO_STEP_COMPLETE_FLOW`:** In TWO_STEP midpoint lock, clicking U CW finishes 180° turn; exactly 1 entry (`Step 1: U+`) appears.
@@ -453,7 +463,8 @@ Phase 3 is decomposed into four dependency-ordered, independently verifiable sub
   7. `package.json`
   8. `package-lock.json`
   9. `docs/development/PHASE_3_IMPLEMENTATION_PLAN.md`
-  10. `docs/development/ROADMAP.md`
+  10. `docs/development/TEST_STRATEGY.md`
+  11. `docs/development/ROADMAP.md`
 - **`EXPLICITLY_FORBIDDEN_FILES`:**
   - `packages/core/**`
   - `packages/kinematics/**`
