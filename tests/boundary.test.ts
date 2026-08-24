@@ -146,3 +146,106 @@ describe('Phase 1A Infrastructure & Package Boundary Gate', () => {
     });
   });
 });
+
+describe('Phase 4A Solvers Package Boundary & Architectural Invariants', () => {
+  const solversRoot = path.resolve(process.cwd(), 'packages/solvers');
+  const solversSrc = path.join(solversRoot, 'src');
+
+  function collectTsFiles(dir: string): string[] {
+    const results: string[] = [];
+    if (!fs.existsSync(dir)) return results;
+    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+      const fullPath = path.join(dir, entry.name);
+      if (entry.isDirectory()) {
+        results.push(...collectTsFiles(fullPath));
+      } else if (entry.isFile() && entry.name.endsWith('.ts')) {
+        results.push(fullPath);
+      }
+    }
+    return results;
+  }
+
+  it('resolves @gearcube/solvers via package-name import without alias', async () => {
+    const solvers = await import('@gearcube/solvers');
+    expect(solvers).toBeDefined();
+  });
+
+  it('verifies @gearcube/solvers manifest identity and dependencies contract', () => {
+    const pkgPath = path.join(solversRoot, 'package.json');
+    expect(fs.existsSync(pkgPath)).toBe(true);
+
+    const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
+    expect(pkg.name).toBe('@gearcube/solvers');
+    expect(pkg.version).toBe('0.0.0');
+    expect(pkg.private).toBe(true);
+    expect(pkg.type).toBe('module');
+    expect(pkg.exports).toEqual({ '.': './src/index.ts' });
+
+    // Dependencies must be exactly @gearcube/core@0.0.0
+    expect(pkg.dependencies).toEqual({ '@gearcube/core': '0.0.0' });
+    expect(pkg.optionalDependencies).toBeUndefined();
+    expect(pkg.peerDependencies).toBeUndefined();
+  });
+
+  it('verifies solvers tsconfig strictly excludes DOM and ambient Node types', () => {
+    const tsconfigPath = path.join(solversRoot, 'tsconfig.json');
+    expect(fs.existsSync(tsconfigPath)).toBe(true);
+
+    const tsconfig = JSON.parse(fs.readFileSync(tsconfigPath, 'utf8'));
+    expect(tsconfig.extends).toBe('../../tsconfig.base.json');
+    const lib = tsconfig.compilerOptions?.lib || [];
+    expect(lib).toEqual(['ES2022']);
+    expect(lib.some((l: string) => l.toUpperCase().includes('DOM'))).toBe(false);
+    expect(tsconfig.compilerOptions?.types).toEqual([]);
+    expect(tsconfig.include).toEqual(['src/**/*']);
+  });
+
+  it('verifies public barrel does NOT export rankState or unrankState (solver-internal only)', async () => {
+    const solvers = (await import('@gearcube/solvers')) as Record<string, unknown>;
+    expect(solvers['rankState']).toBeUndefined();
+    expect(solvers['unrankState']).toBeUndefined();
+    expect(typeof solvers['inverseMove']).toBe('function');
+  });
+
+  it('verifies all packages/solvers/src modules import ONLY @gearcube/core and package-internal relative paths', () => {
+    const files = collectTsFiles(solversSrc);
+    expect(files.length).toBeGreaterThan(0);
+
+    const forbiddenImports: Array<{ file: string; spec: string; reason: string }> = [];
+
+    for (const filePath of files) {
+      const content = fs.readFileSync(filePath, 'utf8');
+      const specs = extractModuleSpecifiers(content);
+
+      for (const spec of specs) {
+        if (spec === '@gearcube/core') {
+          // Allowed external dependency
+          continue;
+        }
+
+        if (spec.startsWith('./') || spec.startsWith('../')) {
+          // Verify relative import resolves strictly within packages/solvers
+          const resolvedPath = path.resolve(path.dirname(filePath), spec);
+          const relativeToSolvers = path.relative(solversRoot, resolvedPath);
+          if (relativeToSolvers.startsWith('..') || path.isAbsolute(relativeToSolvers)) {
+            forbiddenImports.push({
+              file: path.relative(process.cwd(), filePath),
+              spec,
+              reason: 'Relative import escapes packages/solvers directory boundary',
+            });
+          }
+          continue;
+        }
+
+        // Any other external specifier is forbidden
+        forbiddenImports.push({
+          file: path.relative(process.cwd(), filePath),
+          spec,
+          reason: 'External import other than @gearcube/core is strictly forbidden in packages/solvers',
+        });
+      }
+    }
+
+    expect(forbiddenImports).toEqual([]);
+  });
+});
