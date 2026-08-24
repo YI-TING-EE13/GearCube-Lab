@@ -1,6 +1,6 @@
 # ROADMAP.md — Project Lifecycle & Dependency-Ordered Milestones
 
-> **Current Milestone:** `Phase 4 — Classical Solver Infrastructure (Phase 4D Candidate Ready / Phase 4E Blocked)`
+> **Current Milestone:** `Phase 4 — Classical Solver Infrastructure (Phase 4D Accepted / Phase 4E Implementation Unblocked)`
 > **Previous Milestone:** `Phase 3 — Interactive UI, History, Undo/Redo, and Scramble (Completed & Accepted)`
 
 ---
@@ -42,13 +42,13 @@
       └─ 3C: Keyboard Controls, Responsive Layout & Playwright Browser E2E (Completed & Accepted)
       │
       ▼
-[ Phase 4: Classical Solver Infrastructure ] (Phase 4D Candidate Ready / Phase 4E Blocked)
+[ Phase 4: Classical Solver Infrastructure ] (Phase 4D Accepted / Phase 4E Implementation Unblocked)
       ├─ 4 Preflight: Architecture & Contract Freeze (Completed & Accepted)
       ├─ 4A: Solver Package Bootstrap & Common Contracts (Completed & Accepted)
       ├─ 4B: BFS & Bidirectional BFS Exact Solvers (Completed & Accepted)
       ├─ 4C: IDA* Search & Admissible Heuristic (Completed & Accepted)
-      ├─ 4D: Web Worker Infrastructure & Protocol (Implementation Candidate Implemented & Ready for Acceptance)
-      └─ 4E: Solve Mode UI, Playback & Playwright Browser Acceptance (Planned / Blocked by Phase 4D Acceptance)
+      ├─ 4D: Web Worker Infrastructure & Protocol (Completed & Accepted)
+      └─ 4E: Solve Mode UI, Playback & Playwright Browser Acceptance (Implementation Unblocked / Not Started)
       │
       ▼
 [ Phase 5: Research & Benchmarking Harness ]
@@ -259,7 +259,7 @@ Phase 0B is partitioned into four dependency-ordered subphases:
 ---
 
 ### Phase 4: Classical Solver Infrastructure
-- **Status:** `Implementation Started / Phase 4A Accepted / Phase 4B Accepted / Phase 4C Accepted / Phase 4D Candidate Ready for Acceptance`
+- **Status:** `Implementation Started / Phase 4A Accepted / Phase 4B Accepted / Phase 4C Accepted / Phase 4D Accepted / Phase 4E Implementation Unblocked`
 - **Accepted Preflight Head:** `996825befc021d322bf353f06347a7e09375af40`
 - **Phase 4 Started:** `YES`
 - **Phase 4 Accepted:** `NO`
@@ -269,8 +269,8 @@ Phase 0B is partitioned into four dependency-ordered subphases:
   - **4B (BFS & BiBFS Exact Solvers):** `Completed & Accepted`
   - **4C Heuristic Preflight:** `Completed & Accepted`
   - **4C Implementation:** `Completed & Accepted`
-  - **4D (Web Worker Infrastructure):** `Implemented / Candidate Ready for Independent Acceptance`
-  - **4E (Solve Mode UI & Playback):** `Planned / Blocked by Phase 4D Acceptance`
+  - **4D (Web Worker Infrastructure):** `Completed & Accepted`
+  - **4E (Solve Mode UI & Playback):** `Planned / Implementation Unblocked / Not Started`
 - **Objective:** Implement Web Worker-isolated graph search algorithms (primary baselines: BFS, Bidirectional BFS, IDA*; optional candidates: IDDFS, A*, Pattern Databases).
 - **Prerequisites:** Completion of Phase 3.
 - **In-Scope:** `packages/solvers`, Web Worker message passing, heuristic evaluation functions, solution playback controls in UI.

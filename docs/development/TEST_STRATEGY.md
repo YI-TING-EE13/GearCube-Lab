@@ -169,7 +169,7 @@
 
 ### Level 7: Deterministic Solver Search Correctness & Exact Distance Oracles
 - **Scope:** `packages/solvers`, `apps/web` (Phase 4)
-- **Status:** `AVAILABLE (Phase 4A, Phase 4B & Phase 4C Accepted / Phase 4D Implemented in Candidate) / PLAYBACK & BROWSER WORKER PLANNED (Phase 4E)`
+- **Status:** `AVAILABLE (Phase 4A, Phase 4B, Phase 4C & Phase 4D Accepted) / PLAYBACK & BROWSER WORKER PLANNED (Phase 4E)`
 - **Focus:** Algorithm verification on independently verified exact canonical distance fixtures ($d \in [1 \dots 8]$) and Web Worker lifecycle.
 - **Available / Implemented & Accepted in Phase 4A:**
   - `DENSE_RANK_BIJECTION`: Exhaustive 41,472/41,472 Cartesian bijection and round-trip consistency in `state-index.test.ts`.
@@ -195,7 +195,7 @@
   - `IDA_STAR_OPTIMALITY_1_TO_8`: Exact optimal solution depth matching BFS/BiBFS for all deterministic depth 1..8 fixtures in `ida-star.test.ts`.
   - `IDA_STAR_SEARCH_LIMITS`: Cumulative `maxNodes` expansion limit across threshold iterations, total solution length `maxDepth` limit, and $h(\text{start}) > \text{maxDepth}$ zero-expansion abort in `ida-star.test.ts`.
   - `IDA_STAR_SEARCH_TELEMETRY`: Telemetry emissions reporting `algorithm: 'IDA_STAR'`, cumulative counters, `threshold`, and `currentDepth` on `progressIntervalNodes` intervals.
-- **Available / Implemented in Phase 4D Candidate:**
+- **Available / Implemented & Accepted in Phase 4D:**
   - `WORKER_ADAPTER_DISPATCH`: Dedicated browser Worker entry adapter dispatching to `solveBfs`, `solveBidirectionalBfs`, and `solveIdaStar` in `solver.worker.ts`.
   - `PURE_WORKER_CONTROLLER`: State machine, `requestId` tracking, and stale-message rejection verified in `solver-worker-controller.test.ts`.
   - `WORKER_LIFECYCLE_ISOLATION`: Worker construction/termination owned exclusively by `useSolverWorker.ts`.
