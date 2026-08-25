@@ -169,7 +169,7 @@
 
 ### Level 7: Deterministic Solver Search Correctness & Exact Distance Oracles
 - **Scope:** `packages/solvers`, `apps/web` (Phase 4)
-- **Status:** `AVAILABLE (Phase 4A, Phase 4B, Phase 4C & Phase 4D Accepted) / PLAYBACK & BROWSER WORKER PLANNED (Phase 4E)`
+- **Status:** `AVAILABLE (Phase 4A, Phase 4B, Phase 4C, Phase 4D & Phase 4E Accepted)`
 - **Focus:** Algorithm verification on independently verified exact canonical distance fixtures ($d \in [1 \dots 8]$) and Web Worker lifecycle.
 - **Available / Implemented & Accepted in Phase 4A:**
   - `DENSE_RANK_BIJECTION`: Exhaustive 41,472/41,472 Cartesian bijection and round-trip consistency in `state-index.test.ts`.
@@ -200,7 +200,7 @@
   - `PURE_WORKER_CONTROLLER`: State machine, `requestId` tracking, and stale-message rejection verified in `solver-worker-controller.test.ts`.
   - `WORKER_LIFECYCLE_ISOLATION`: Worker construction/termination owned exclusively by `useSolverWorker.ts`.
   - `WORKER_BOUNDARY_GATES`: Manifest dependency, Worker location, sole construction site, and main-thread solver call prohibition in `tests/boundary.test.ts`.
-- **Implemented in Phase 4E Candidate:**
+- **Available / Implemented & Accepted in Phase 4E:**
   - `SOLVE_MODE_UI`: Accessible SolvePanel with algorithm selector (IDA*, BiBFS, BFS), solve/cancel controls, progress telemetry, and solution summary.
   - `PURE_PLAYBACK_CONTROLLER`: Immutable metadata, expected state prefix chain, dispatch/settle guards, step forward/backward navigation in `playback-controller.test.ts`.
   - `DIRECT_180_PLAYBACK`: Continuous playback committing exactly 1 canonical history entry per move.
@@ -283,7 +283,7 @@
 | **History & Scramble Tests** | Vitest | `npx vitest run apps/web/src/components/history` | Available (Accepted in Phase 3A/3B) |
 | **Browser E2E Tests** | Playwright | `npm run test:e2e` | Available (Implemented in Phase 3C) |
 | **Solver Foundation, Oracle & BFS Solvers** | Vitest | `npx vitest run packages/solvers` | Available (Phase 4A & Phase 4B Accepted) |
-| **Worker Controller / Browser Worker Tests** | Vitest + Playwright | `npx vitest run apps/web/src/components/solver` / `npm run test:e2e` | Planned (Phase 4D / 4E) |
+| **Worker Controller / Browser Worker Tests** | Vitest + Playwright | `npx vitest run apps/web/src/components/solver` / `npm run test:e2e` | Available (Accepted in Phase 4D/4E) |
 | **Performance Profiling** | Vitest / Custom | `npm run test:perf` | Planned (Phase 5) |
 | **ML Training & Heuristics** | pytest (uv) | `uv run pytest ml/tests/` | Planned (Phase 6) |
 | **Full Continuous Integration Suite** | All | `npm run verify` | Available |
