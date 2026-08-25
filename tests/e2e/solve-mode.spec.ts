@@ -12,6 +12,19 @@ function setupErrorCollectors(page: Page, errors: string[]) {
   });
 }
 
+// Bounding rectangle overlap detection
+function rectsOverlap(
+  r1: { x: number; y: number; width: number; height: number },
+  r2: { x: number; y: number; width: number; height: number }
+): boolean {
+  return !(
+    r1.x + r1.width <= r2.x ||
+    r2.x + r2.width <= r1.x ||
+    r1.y + r1.height <= r2.y ||
+    r2.y + r2.height <= r1.y
+  );
+}
+
 test.describe('GearCube Solve Mode & Playback End-to-End Suite', () => {
   let errors: string[] = [];
 
@@ -76,8 +89,24 @@ test.describe('GearCube Solve Mode & Playback End-to-End Suite', () => {
   });
 
   test('3. MAIN_THREAD_ACTIONABILITY_GATE: main-thread UI interactions remain responsive while solver search is active', async ({ page }) => {
-    // Scramble cube
-    await page.getByRole('button', { name: 'Generate scramble' }).click();
+    // 1. Create a non-trivial distance state in DIRECT_180 mode with 6 alternating moves
+    await page.getByRole('button', { name: /Direct 180° turn mode/ }).click();
+    await page.getByRole('button', { name: /^U Clockwise/ }).click();
+    await page.waitForTimeout(300);
+    await page.getByRole('button', { name: /^R Clockwise/ }).click();
+    await page.waitForTimeout(300);
+    await page.getByRole('button', { name: /^F Clockwise/ }).click();
+    await page.waitForTimeout(300);
+    await page.getByRole('button', { name: /^D Clockwise/ }).click();
+    await page.waitForTimeout(300);
+    await page.getByRole('button', { name: /^L Clockwise/ }).click();
+    await page.waitForTimeout(300);
+    await page.getByRole('button', { name: /^B Clockwise/ }).click();
+    await page.waitForTimeout(300);
+
+    // Switch mode back to TWO_STEP (OFF)
+    await page.getByRole('button', { name: /Direct 180° turn mode/ }).click();
+    await expect(page.getByRole('button', { name: 'Direct 180° turn mode: OFF' })).toBeVisible();
 
     // Select BFS algorithm
     await page.getByLabel('Solver Algorithm').selectOption('BFS');
@@ -85,33 +114,46 @@ test.describe('GearCube Solve Mode & Playback End-to-End Suite', () => {
     // Start search
     await page.getByRole('button', { name: 'Solve current state' }).click();
 
-    // Toggle turn interaction mode while search runs (main thread UI action)
+    // REQUIRE solver status is Searching... BEFORE performing UI interaction
+    await expect(page.getByTestId('solver-status')).toContainText('Searching...');
+    await expect(page.getByRole('button', { name: 'Cancel Search' })).toBeVisible();
+
+    // Toggle turn interaction mode while search is ACTIVE
     const modeBtn = page.getByRole('button', { name: /Direct 180° turn mode/ });
     await modeBtn.click();
     await expect(page.getByRole('button', { name: 'Direct 180° turn mode: ON' })).toBeVisible();
 
-    // Toggle back
-    await modeBtn.click();
-    await expect(page.getByRole('button', { name: 'Direct 180° turn mode: OFF' })).toBeVisible();
-
     // Wait for search to finish
-    await expect(page.getByTestId('solver-status')).toContainText('Solved', { timeout: 15000 });
+    await expect(page.getByTestId('solver-status')).toContainText('Solved', { timeout: 25000 });
   });
 
   test('4. STALE_RESULT_GATE: external canonical user action cancels active search and rejects stale solution', async ({ page }) => {
-    // Scramble cube
+    // 1. Create deterministic non-solved state
+    await page.getByLabel('Scramble seed').fill('abc');
     await page.getByRole('button', { name: 'Generate scramble' }).click();
+    await expect(page.getByTestId('cube-status')).toHaveText('Cube: Unsolved');
 
-    // Select BFS algorithm
+    // 2. Select BFS algorithm
     await page.getByLabel('Solver Algorithm').selectOption('BFS');
 
-    // Start solve
+    // 3. Start solve
     await page.getByRole('button', { name: 'Solve current state' }).click();
 
-    // While searching, perform external scramble action which cancels search
+    // 4. REQUIRE solver status Searching... / ACTIVE
+    await expect(page.getByTestId('solver-status')).toContainText('Searching...');
+    await expect(page.getByRole('button', { name: 'Cancel Search' })).toBeVisible();
+
+    // 5. While ACTIVE, perform external canonical action which cancels search
     await page.getByRole('button', { name: 'Generate scramble' }).click();
 
-    // Verify solver returns to Idle / does not install old playback
+    // 8. Verify solver returns to Idle
+    await expect(page.getByTestId('solver-status')).toContainText('Idle');
+
+    // 9. Verify no Solution Playback is installed
+    await expect(page.getByTestId('playback-controls')).toBeHidden();
+
+    // 10. Allow event-loop settling and confirm no stale playback appears
+    await page.waitForTimeout(1000);
     await expect(page.getByTestId('solver-status')).toContainText('Idle');
     await expect(page.getByTestId('playback-controls')).toBeHidden();
   });
@@ -182,66 +224,113 @@ test.describe('GearCube Solve Mode & Playback End-to-End Suite', () => {
     await expect(timelineButtons).toHaveCount(1 + solutionDepth);
   });
 
-  test('7. PLAYBACK_PAUSE_BOUNDARY_GATE: pausing during playback allows current move to settle cleanly at IDLE', async ({ page }) => {
-    // Switch to DIRECT_180 for quick turn execution
+  test('7. PLAYBACK_PAUSE_BOUNDARY_GATE: pausing during TWO_STEP playback finishes in-flight canonical move to IDLE and stops before next move', async ({ page }) => {
+    // 1. Ensure TWO_STEP mode
+    await expect(page.getByRole('button', { name: 'Direct 180° turn mode: OFF' })).toBeVisible();
+
+    // 2. Create solution with >= 2 moves
+    await page.getByLabel('Scramble seed').fill('test_pause');
+    await page.getByRole('button', { name: 'Generate scramble' }).click();
+
+    // 3. Accept solution via IDA*
+    await page.getByRole('button', { name: 'Solve current state' }).click();
+    await expect(page.getByTestId('solver-status')).toContainText('Solved', { timeout: 15000 });
+
+    const summaryText = await page.getByTestId('solver-solution-summary').textContent();
+    const match = summaryText?.match(/Solution Depth:\s*(\d+)/);
+    const solutionDepth = parseInt(match![1]!, 10);
+    expect(solutionDepth).toBeGreaterThanOrEqual(2);
+
+    // 4. Click Play
+    await page.getByRole('button', { name: 'Play solution' }).click();
+
+    // 5 & 6. REQUIRE Pause solution button is visible
+    const pauseBtn = page.getByRole('button', { name: 'Pause solution' });
+    await expect(pauseBtn).toBeVisible({ timeout: 5000 });
+
+    // 7. Click Pause unconditionally
+    await pauseBtn.click();
+
+    // 8, 9, 10, 14. Verify current move finishes completely and settles to IDLE (Play solution re-appears)
+    await expect(page.getByRole('button', { name: 'Play solution' })).toBeVisible({ timeout: 10000 });
+    await expect(page.getByText(/HALF-TURN:/)).toHaveCount(0);
+    await expect(page.getByText('Turning')).toHaveCount(0);
+
+    // 11. Playback progress must advance exactly one move
+    await expect(page.getByTestId('playback-progress')).toHaveText(`1 / ${solutionDepth}`);
+
+    // 12. History must gain exactly one canonical entry (1 baseline + 1 step)
+    const timelineButtons = page.getByRole('region', { name: 'Move History Timeline' }).getByRole('button');
+    await expect(timelineButtons).toHaveCount(2);
+
+    // 13. Verify no second solver move begins automatically while paused
+    await page.waitForTimeout(500);
+    await expect(page.getByTestId('playback-progress')).toHaveText(`1 / ${solutionDepth}`);
+  });
+
+  test('8. PLAYBACK_STEP_BACK_FORWARD_GATE: Step Backward and Step Forward navigate solution step-by-step with strict start bound', async ({ page }) => {
+    // Switch to DIRECT_180 mode
     await page.getByRole('button', { name: /Direct 180° turn mode/ }).click();
 
-    // Scramble cube
+    // Scramble cube with deterministic seed (resets history to baseline)
+    await page.getByLabel('Scramble seed').fill('abc');
     await page.getByRole('button', { name: 'Generate scramble' }).click();
 
     // Solve with IDA*
     await page.getByRole('button', { name: 'Solve current state' }).click();
     await expect(page.getByTestId('solver-status')).toContainText('Solved', { timeout: 15000 });
 
-    // Start play then pause
-    await page.getByRole('button', { name: 'Play solution' }).click();
-    await page.waitForTimeout(100);
-    const pauseBtn = page.getByRole('button', { name: 'Pause solution' });
-    if (await pauseBtn.isVisible()) {
-      await pauseBtn.click();
-    }
-
-    // Wait for the move in flight to settle and verify playback is paused
-    await expect(page.getByRole('button', { name: 'Play solution' })).toBeVisible({ timeout: 10000 });
-  });
-
-  test('8. PLAYBACK_STEP_BACK_FORWARD_GATE: Step Backward and Step Forward navigate solution step-by-step', async ({ page }) => {
-    // Switch to DIRECT_180 mode
-    await page.getByRole('button', { name: /Direct 180° turn mode/ }).click();
-
-    // Perform two manual moves to have a known 2-move distance
-    const uBtn = page.getByRole('button', { name: /^U Clockwise/ });
-    await uBtn.click();
-    await page.waitForTimeout(500);
-    const rBtn = page.getByRole('button', { name: /^R Clockwise/ });
-    await rBtn.click();
-    await page.waitForTimeout(500);
-
-    // Solve
-    await page.getByRole('button', { name: 'Solve current state' }).click();
-    await expect(page.getByTestId('solver-status')).toContainText('Solved', { timeout: 15000 });
+    const summaryText = await page.getByTestId('solver-solution-summary').textContent();
+    const match = summaryText?.match(/Solution Depth:\s*(\d+)/);
+    const solutionDepth = parseInt(match![1]!, 10);
+    expect(solutionDepth).toBeGreaterThanOrEqual(2);
 
     const stepFwdBtn = page.getByRole('button', { name: 'Step solution forward' });
     const stepBackBtn = page.getByRole('button', { name: 'Step solution backward' });
+    const timelineRegion = page.getByRole('region', { name: 'Move History Timeline' });
 
     // Step backward is disabled at index 0
     await expect(stepBackBtn).toBeDisabled();
 
     // Step Forward 1
     await stepFwdBtn.click();
-    await expect(page.getByTestId('playback-progress')).toContainText('1 /');
+    await expect(page.getByTestId('playback-progress')).toHaveText(`1 / ${solutionDepth}`);
+    await expect(timelineRegion.getByRole('button')).toHaveCount(2); // baseline + 1 step
 
-    // Step Backward 1
+    // Step Forward 2
+    await stepFwdBtn.click();
+    await expect(page.getByTestId('playback-progress')).toHaveText(`2 / ${solutionDepth}`);
+    await expect(timelineRegion.getByRole('button')).toHaveCount(3); // baseline + 2 steps
+    await expect(timelineRegion.getByRole('button', { name: /Step 2:/ })).toHaveAttribute('aria-current', 'step');
+
+    // Step Backward 1 -> index 1
     await expect(stepBackBtn).toBeEnabled();
     await stepBackBtn.click();
-    await expect(page.getByTestId('playback-progress')).toContainText('0 /');
+    await expect(page.getByTestId('playback-progress')).toHaveText(`1 / ${solutionDepth}`);
+    await expect(timelineRegion.getByRole('button', { name: /Step 1:/ })).toHaveAttribute('aria-current', 'step');
 
-    // Step Forward again
+    // Step Backward 2 -> index 0 (playback start baseline)
+    await stepBackBtn.click();
+    await expect(page.getByTestId('playback-progress')).toHaveText(`0 / ${solutionDepth}`);
+    await expect(timelineRegion.getByRole('button', { name: 'Timeline start baseline' })).toHaveAttribute('aria-current', 'step');
+
+    // Step backward must be DISABLED and cannot cross playbackStartHistoryCursor
+    await expect(stepBackBtn).toBeDisabled();
+
+    // Step Forward again -> restores expected canonical prefix (index 1)
     await stepFwdBtn.click();
-    await expect(page.getByTestId('playback-progress')).toContainText('1 /');
+    await expect(page.getByTestId('playback-progress')).toHaveText(`1 / ${solutionDepth}`);
+    await expect(timelineRegion.getByRole('button', { name: /Step 1:/ })).toHaveAttribute('aria-current', 'step');
   });
 
-  test('9. RESPONSIVE_SOLVER_UI_GATE: responsive layouts fit without horizontal overflow across desktop, tablet, and mobile', async ({ page }) => {
+  test('9. RESPONSIVE_SOLVER_UI_GATE: all panels accessible, visible, and zero overlap across desktop, tablet, and mobile', async ({ page }) => {
+    // Generate scramble and solve so both Solver Controls and Solution Playback exist
+    await page.getByLabel('Scramble seed').fill('responsive_test');
+    await page.getByRole('button', { name: 'Generate scramble' }).click();
+    await page.getByRole('button', { name: 'Solve current state' }).click();
+    await expect(page.getByTestId('solver-status')).toContainText('Solved', { timeout: 15000 });
+    await expect(page.getByTestId('playback-controls')).toBeVisible();
+
     const viewports = [
       { name: 'desktop', width: 1280, height: 800 },
       { name: 'tablet', width: 768, height: 1024 },
@@ -250,16 +339,60 @@ test.describe('GearCube Solve Mode & Playback End-to-End Suite', () => {
 
     for (const vp of viewports) {
       await page.setViewportSize({ width: vp.width, height: vp.height });
-      await page.waitForTimeout(200);
+      await page.waitForTimeout(300);
 
-      await expect(page.getByRole('region', { name: 'Solver Controls' })).toBeVisible();
-      await expect(page.getByText('Face Controls')).toBeVisible();
+      // Verify all 6 regions are visible
+      const solverRegion = page.getByRole('region', { name: 'Solver Controls' });
+      const playbackRegion = page.getByRole('region', { name: 'Solution Playback' });
+      const historyGroup = page.getByRole('group', { name: 'History Controls' });
+      const scrambleRegion = page.getByRole('region', { name: 'Scramble Controls' });
+      const timelineRegion = page.getByRole('region', { name: 'Move History Timeline' });
+      const moveControlsPanel = page.locator('.move-controls-panel');
+
+      await expect(solverRegion).toBeVisible();
+      await expect(playbackRegion).toBeVisible();
+      await expect(historyGroup).toBeVisible();
+      await expect(scrambleRegion).toBeVisible();
+      await expect(timelineRegion).toBeVisible();
+      await expect(moveControlsPanel).toBeVisible();
 
       // Check no horizontal scrollbar / overflow
       const hasHorizontalOverflow = await page.evaluate(() => {
         return document.documentElement.scrollWidth > window.innerWidth;
       });
       expect(hasHorizontalOverflow, `Horizontal overflow detected at viewport ${vp.name}`).toBe(false);
+
+      // Check bounding box overlaps
+      const solverBox = await solverRegion.boundingBox();
+      const playbackBox = await playbackRegion.boundingBox();
+      const historyBox = await historyGroup.boundingBox();
+      const scrambleBox = await scrambleRegion.boundingBox();
+      const timelineBox = await timelineRegion.boundingBox();
+      const moveBox = await moveControlsPanel.boundingBox();
+
+      expect(solverBox, `solverBox missing at ${vp.name}`).not.toBeNull();
+      expect(playbackBox, `playbackBox missing at ${vp.name}`).not.toBeNull();
+      expect(historyBox, `historyBox missing at ${vp.name}`).not.toBeNull();
+      expect(scrambleBox, `scrambleBox missing at ${vp.name}`).not.toBeNull();
+      expect(timelineBox, `timelineBox missing at ${vp.name}`).not.toBeNull();
+      expect(moveBox, `moveBox missing at ${vp.name}`).not.toBeNull();
+
+      if (solverBox && playbackBox && historyBox && scrambleBox && timelineBox && moveBox) {
+        // Solver and Playback do not overlap each other
+        expect(rectsOverlap(solverBox, playbackBox), `Solver overlaps Playback at ${vp.name}`).toBe(false);
+
+        // Solver does not overlap existing panels
+        expect(rectsOverlap(solverBox, historyBox), `Solver overlaps History at ${vp.name}`).toBe(false);
+        expect(rectsOverlap(solverBox, scrambleBox), `Solver overlaps Scramble at ${vp.name}`).toBe(false);
+        expect(rectsOverlap(solverBox, timelineBox), `Solver overlaps Timeline at ${vp.name}`).toBe(false);
+        expect(rectsOverlap(solverBox, moveBox), `Solver overlaps MoveControls at ${vp.name}`).toBe(false);
+
+        // Playback does not overlap existing panels
+        expect(rectsOverlap(playbackBox, historyBox), `Playback overlaps History at ${vp.name}`).toBe(false);
+        expect(rectsOverlap(playbackBox, scrambleBox), `Playback overlaps Scramble at ${vp.name}`).toBe(false);
+        expect(rectsOverlap(playbackBox, timelineBox), `Playback overlaps Timeline at ${vp.name}`).toBe(false);
+        expect(rectsOverlap(playbackBox, moveBox), `Playback overlaps MoveControls at ${vp.name}`).toBe(false);
+      }
     }
   });
 });
