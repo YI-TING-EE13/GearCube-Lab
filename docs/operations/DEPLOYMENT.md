@@ -57,7 +57,7 @@ dist/
 ├── index.html                  # Main entry point HTML
 ├── favicon.ico
 ├── assets/
-│   ├── index-[hash].js         # Main application bundle (React / Three.js / Zustand)
+│   ├── index-[hash].js         # Main application bundle (React / Three.js / R3F)
 │   ├── index-[hash].css        # Core application styles
 │   ├── solver-worker-[hash].js # Dedicated Web Worker bundle
 │   └── models/                 # Optimized 3D GLTF / GLB assets

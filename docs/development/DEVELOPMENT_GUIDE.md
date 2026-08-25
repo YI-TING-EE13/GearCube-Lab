@@ -47,18 +47,18 @@ All TypeScript configuration files must enforce maximum compiler strictness:
 - **Puzzle Domain Truth:** Discrete representation, state transitions, move legality, and canonical validation live strictly in `packages/core` with zero framework or runtime dependencies.
 - **Kinematic Mathematics:** Continuous trajectory planning, gear ratios, and rigid-body transform projection live in `packages/kinematics`, depending solely on `@gearcube/core`.
 - **Presentation & Framework Code:** Framework-specific presentation code (React components, Three.js shaders, R3F viewports, DOM listeners) lives in `apps/web`.
-- **Application-Level Pure Logic:** Pure TypeScript logic governing application interaction, session orchestration, and history state transitions (such as planned Phase 3 `apps/web/src/components/history/history.ts` and `scramble.ts`) lives in `apps/web`. These modules must consume Core contracts (`Move`, `GearCubeState`, `SpatialFrame`) without redefining puzzle mechanics or becoming a second canonical domain authority.
+- **Application-Level Pure Logic:** Pure TypeScript logic governing application interaction, session orchestration, and history state transitions (such as `apps/web/src/components/history/history.ts` and `scramble.ts`) lives in `apps/web`. These modules must consume Core contracts (`Move`, `GearCubeState`, `SpatialFrame`) without redefining puzzle mechanics or becoming a second canonical domain authority.
 - Within `apps/web`:
   - UI and interaction code must never become puzzle state truth.
   - 3D renderer and mesh components consume canonical state and materialized transforms from `@gearcube/kinematics`.
-  - Application orchestration maintains a single authoritative `GearCubeSessionState` (`apps/web/src/components/cube/animation.ts`), with planned Phase 3 history navigation referencing canonical session snapshots.
-- Never import React, Three.js, or DOM APIs inside `packages/core`, `packages/kinematics`, or future `packages/solvers`.
+  - Application orchestration maintains a single authoritative `GearCubeSessionState` (`apps/web/src/components/cube/animation.ts`), with Phase 3 history navigation referencing canonical session snapshots and Phase 4 playback controller consuming the same authoritative state without becoming a second puzzle authority.
+- Never import React, Three.js, or DOM APIs inside `packages/core`, `packages/kinematics`, or `packages/solvers`.
 
 ### 2.3. Dependency Management Rules
 - **Domain Core (`packages/core`):** Exactly zero external runtime dependencies.
 - **Kinematics Engine (`packages/kinematics`):** Pure mathematical module depending solely on `@gearcube/core`.
-- **Solvers (`packages/solvers` — Future Phase 4):** Pure combinatorial search algorithms with zero UI/rendering dependencies.
-- **Web Application (`apps/web`):** Project-internal workspace dependencies are limited to `@gearcube/core` and `@gearcube/kinematics`. External dependencies are kept minimal, focused on React 19 and Three.js/R3F presentation stack with zero external state management libraries (no Zustand requirement for Phase 3).
+- **Solvers (`packages/solvers` — Implemented & Accepted in Phase 4):** Pure combinatorial search algorithms with zero UI/rendering dependencies. Depends only on `@gearcube/core`.
+- **Web Application (`apps/web`):** Project-internal workspace dependencies are `@gearcube/core`, `@gearcube/kinematics`, and `@gearcube/solvers`. External dependencies are kept minimal, focused on React 19 and Three.js/R3F presentation stack with zero external state management libraries (no Zustand requirement).
 - Always commit lockfiles (`package-lock.json`, `uv.lock`) once dependencies are modified.
 
 ---
@@ -104,8 +104,8 @@ npm run test             # Run full Vitest test suite
 npm run typecheck        # Run tsc --noEmit across workspaces
 npm run verify           # Full CI validation: typecheck + core purity + tests + build
 
-# Planned Browser E2E workflow (Introduced in Phase 3C)
-npm run test:e2e         # Run Playwright browser interaction tests (Planned Phase 3C)
+# Browser E2E workflow (Available — implemented in Phase 3C, extended in Phase 4E)
+npm run test:e2e         # Run Playwright browser interaction tests (play-mode + solve-mode)
 
 # Python ML workflows (Phase 6+)
 uv venv                  # Create isolated Python virtual environment

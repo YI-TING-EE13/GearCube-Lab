@@ -6,25 +6,26 @@
 
 ## Project Status
 
-**Current Status:** `Phase 0B.4 — Final Cross-Contract Audit`
+**Current Status:** `Phase 4 Complete — Classical Solver Infrastructure Implemented & Accepted`
 
 > [!IMPORTANT]
-> **This repository is currently in its architectural design and governance specification phase.**
-> Application source code, 3D assets, dependencies, and solver algorithms are **not yet implemented**. All implementation must strictly adhere to the canonical architecture contracts defined in [`docs/`](docs/README.md).
+> **Phases 0–4 are implemented and accepted.** The discrete core, 3D kinematics, Play Mode UI (Phase 3), and full Classical Solver infrastructure with Solve Mode (Phase 4) are all complete. Phase 5 (Research & Benchmarking Harness) has not yet started. All implementation adheres to the canonical architecture contracts defined in [`docs/`](docs/README.md).
 
 ---
 
-## Project Vision & Capabilities (Planned)
+## Implemented Capabilities
 
-GearCube Lab is a personal software and AI research platform dedicated to the deep study of mechanical gear puzzles, focusing on the standard 3D Gear Cube (canonical MVP reference model: Oskar van Deventer / Meffert's design; physical inspiration: Daiso Rotating 3D Gear Puzzle, SKU `4550480834955`).
+- **Interactive 3D Simulation (Implemented & Accepted):** WebGL/Three.js-based rendering featuring visibly coupled gear kinematics, responsive camera controls, and modular visual skins.
+- **Pure Combinatorial Domain Core (Implemented & Accepted):** Framework-independent discrete puzzle state engine enforcing strict move legality ($180^\circ$ face turns) and canonical state representation.
+- **Play Mode UI (Implemented & Accepted):** Interactive face controls, move history timeline with undo/redo, deterministic seeded scramble generator, keyboard shortcuts, and responsive layout.
+- **Classical Search Solvers (Implemented & Accepted — Phase 4):** Web Worker-isolated search algorithms (BFS, Bidirectional BFS, IDA* with H2 two-slice PDB heuristic) providing optimal solution paths without blocking the UI.
+- **Solve Mode UI & Playback (Implemented & Accepted — Phase 4E):** Algorithm selection, search progress telemetry, solution playback with play/pause/step-forward/step-backward, stale-result protection, and responsive browser layout.
 
-Planned capabilities include:
-- **Interactive 3D Simulation:** WebGL/Three.js-based rendering featuring visibly coupled gear kinematics, responsive camera controls, and modular visual skins.
-- **Pure Combinatorial Domain Core:** Framework-independent discrete puzzle state engine enforcing strict move legality ($180^\circ$ face turns) and canonical state representation.
-- **Classical Search Solvers:** Web Worker-isolated search algorithms (primary baselines: BFS, Bidirectional BFS, IDA*; optional candidates: IDDFS, A*, Pattern Databases) providing optimal and near-optimal solution paths without blocking the UI.
-- **Empirical Research & Benchmark Harness:** Deterministic, headless comparative evaluation framework to measure search node expansions, branch pruning efficiency, and execution time.
-- **AI-Guided Search (Future Phase):** Offline PyTorch-trained neural heuristics and value networks integrated into guided tree search.
-- **Computer Vision State Ingestion (Future Phase):** Local-first camera capture to recognize physical cube faces, reconstruct a candidate discrete state, validate consistency/reachability, allow user corrections, and generate step-by-step 3D visual solving guidance.
+## Planned Capabilities (Future Phases)
+
+- **Empirical Research & Benchmark Harness (Phase 5 — Not Started):** Deterministic, headless comparative evaluation framework to measure search node expansions, branch pruning efficiency, and execution time.
+- **AI-Guided Search (Phase 6 — Not Started):** Offline PyTorch-trained neural heuristics and value networks integrated into guided tree search.
+- **Computer Vision State Ingestion (Phase 7 — Not Started):** Local-first camera capture to recognize physical cube faces, reconstruct a candidate discrete state, validate consistency/reachability, allow user corrections, and generate step-by-step 3D visual solving guidance.
 
 ---
 
@@ -37,7 +38,7 @@ $$\text{UI / Renderer / Solvers / Research} \longrightarrow \text{Core Contracts
 ```
                 +---------------------------------------+
                 |      User Interface & Controls        |
-                |          (React / Zustand)            |
+                |      (React / Local Orchestration)    |
                 +-------------------+-------------------+
                                     |
           +-------------------------+-------------------------+

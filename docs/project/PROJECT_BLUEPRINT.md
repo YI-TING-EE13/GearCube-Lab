@@ -122,11 +122,11 @@
 |  [ Puzzle Domain Core (Pure TypeScript Engine — packages/core) ]                  |
 |        ^           |                                                              |
 |        |           v (Discrete State & Legal Moves)                               |
-|  [ Solver Engine (Web Worker: Classical Search / AI Inference) - Future ]         |
+|  [ Solver Engine (Web Worker: Classical Search / AI Inference) - Implemented (Phase 4) ]         |
 |                                                                                   |
-|  [ Research & Benchmark Harness (Headless Runner & Telemetry Exporter) - Future ] |
+|  [ Research & Benchmark Harness (Headless Runner & Telemetry Exporter) - Phase 5 Not Started ] |
 |                                                                                   |
-|  [ Vision State Ingestion (Webcam Stream & Face Recognition) - Future ]           |
+|  [ Vision State Ingestion (Webcam Stream & Face Recognition) - Phase 7 Not Started ]           |
 +-----------------------------------------------------------------------------------+
 ```
 
@@ -141,8 +141,8 @@ $$\text{Presentation Layer (UI/3D)} \longrightarrow \text{Domain Core Contracts}
 - **Core Layer:** Pure mathematical models and permutation contracts (`packages/core`).
 - **Kinematic Layer:** Translates discrete moves into continuous rotational transforms (`packages/kinematics`).
 - **Presentation Layer:** R3F/Three.js rendering and React UI state management (`apps/web`).
-- **Computation Layer:** Web Worker hosting search algorithms and heuristic evaluators (Future `packages/solvers`).
-- **Research Pipeline:** Python/PyTorch offline training environment generating lightweight heuristic weights (`ml/`).
+- **Computation Layer:** Web Worker hosting search algorithms and heuristic evaluators (`packages/solvers` — Implemented & Accepted; `apps/web/src/workers/solver.worker.ts` Worker adapter).
+- **Research Pipeline (Future):** Python/PyTorch offline training environment generating lightweight heuristic weights (`ml/`).
 
 ---
 
@@ -152,9 +152,9 @@ $$\text{Presentation Layer (UI/3D)} \longrightarrow \text{Domain Core Contracts}
 | :--- | :--- | :--- | :--- |
 | `packages/core` | Discrete state models, move definitions, legality checks, canonical serialization, and materialized piece views | Zero external dependencies (no React, no Three.js, no DOM) | Implemented & Accepted |
 | `packages/kinematics` | Continuous trajectory generation, coupled gear angles, static piece placement projection | Depends only on `@gearcube/core` | Implemented & Accepted |
-| `apps/web` | Web application container hosting React UI components, R3F/Three.js 3D viewport, procedural piece geometries, MoveControls, and single authoritative `GearCubeSessionState` (Phase 2 foundation accepted; Phase 3 history timeline, undo/redo, deterministic scramble, and keyboard controls planned) | Internal: `@gearcube/core`, `@gearcube/kinematics`; External: React, R3F, Three.js presentation stack (no Zustand requirement for Phase 3) | Foundation Implemented & Accepted (Phase 2); Extensions Planned (Phase 3) |
-| `packages/solvers` | Classical graph search (primary: BFS, Bidirectional BFS, IDA*; optional: IDDFS, A*, Pattern Databases), heuristic estimators | Depends only on `@gearcube/core` | Planned (Phase 4) |
-| `packages/benchmark` | Deterministic benchmark harness, seed generation, statistical metric export | Depends on `@gearcube/core` and `@gearcube/solvers` | Planned (Phase 5) |
+| `apps/web` | Web application container hosting React UI components, R3F/Three.js 3D viewport, procedural piece geometries, MoveControls, single authoritative `GearCubeSessionState`, Play Mode history/undo/redo/scramble/keyboard (Phase 3), Solve Mode UI/playback/Worker adapter (Phase 4) | Internal: `@gearcube/core`, `@gearcube/kinematics`, `@gearcube/solvers`; External: React, R3F, Three.js presentation stack (no Zustand requirement) | Implemented & Accepted (Phases 1–4) |
+| `packages/solvers` | Classical graph search (primary: BFS, Bidirectional BFS, IDA* with H2 two-slice PDB heuristic; optional/deferred: IDDFS, A*, Pattern Databases), heuristic estimators | Depends only on `@gearcube/core` | Implemented & Accepted (Phase 4) |
+| `packages/benchmark` | Deterministic benchmark harness, seed generation, statistical metric export | Depends on `@gearcube/core` and `@gearcube/solvers` — `PHASE5_PREFLIGHT_DECISION_REQUIRED` | Not Started (Phase 5) |
 | `ml/` (Python) | PyTorch model architectures, offline self-play/dataset generation, heuristic export | Python (version selected based on ML dependency compatibility) managed exclusively via `uv` | Planned (Phase 6) |
 | `packages/vision` | Webcam video capture, color segmentation, state consistency validation, and correction | Browser WebRTC / Canvas APIs; depends on `@gearcube/core` | Planned (Phase 7) |
 
@@ -177,9 +177,9 @@ $$\text{Presentation Layer (UI/3D)} \longrightarrow \text{Domain Core Contracts}
 - **Language:** TypeScript 5.x with strict type checking enabled (`strict: true`, `noImplicitAny: true`).
 - **Build System & Dev Server:** Vite for rapid development and optimized tree-shaking builds.
 - **Frontend Framework:** React 18 / 19.
-- **UI State Management:** React local application state / pure transition functions (Zustand not currently required / used for Phase 3).
-- **Unit & Integration Testing:** Vitest for rapid, in-memory core, kinematics, and renderer tests.
-- **E2E & Browser Testing:** Playwright for automated browser interactions and state validation (Planned for Phase 3C).
+- **UI State Management:** React local application state / pure transition functions (Zustand not used or required).
+- **Unit & Integration Testing:** Vitest for rapid, in-memory core, kinematics, renderer, solver, and playback controller tests.
+- **E2E & Browser Testing:** Playwright for automated browser interactions and state validation (Available — implemented in Phase 3C; extended with Solve Mode tests in Phase 4E).
 - **Package Management:** `npm` as initial low-complexity default.
 - **Python ML Pipeline:** Python (version selected based on ML/PyTorch dependency compatibility), PyTorch, managed exclusively via `uv`.
 
@@ -308,8 +308,8 @@ The project roadmap is structured into 9 sequential phases (detailed in [`docs/d
 - **Phase 1:** Discrete Gear Cube Core & State Engine *(Accepted)*
 - **Phase 2:** 3D Model, Visual Assets, and Kinematic Animation Engine *(Accepted)*
 - **Phase 3:** Interactive UI, History, Undo/Redo, Keyboard Controls, and Responsive Layout *(Accepted)*
-- **Phase 4:** Classical Solver Infrastructure (Web Worker, BFS / Bidirectional BFS / IDA*) *(Planned / Not Started)*
-- **Phase 5:** Research Benchmark Framework & Empirical Evaluation *(Planned)*
+- **Phase 4:** Classical Solver Infrastructure (Web Worker, BFS / Bidirectional BFS / IDA*, Solve Mode UI & Playback) *(Implemented & Accepted)*
+- **Phase 5:** Research Benchmark Framework & Empirical Evaluation *(Not Started)*
 - **Phase 6:** Neural Heuristic & AI-Guided Search *(Planned)*
 - **Phase 7:** Camera-Based Physical State Reconstruction & Guided Solver *(Planned)*
 - **Phase 8:** Integration, Polish, Reproducibility, and v1.0 Release *(Planned)*

@@ -38,10 +38,10 @@ graph TD
         Encoding[State Encoding & Serialization<br/>Deterministic Hashes / Canonical Keys]
     end
 
-    subgraph ComputeSpace [Solver & Research Subsystems — Future]
+    subgraph ComputeSpace [Solver Subsystem (Implemented) & Research Subsystems (Future)]
         WorkerAdapter[Browser Worker Adapter<br/>apps/web/src/workers/solver.worker.ts]
         SolverEngine[Pure Solver Engine<br/>Pure TS Algorithms — packages/solvers]
-        Benchmark[Research & Benchmark Harness<br/>Deterministic Seed Suites — packages/benchmark]
+        Benchmark[Research & Benchmark Harness<br/>Deterministic Seed Suites — packages/benchmark — Phase 5]
     end
 
     subgraph FutureSubsystems [Offline Research & Vision Ingestion — Future]
@@ -99,26 +99,24 @@ graph TD
 - **Topology Note:** Implemented directly within `apps/web/src/components/` rather than as an isolated `packages/renderer` package; maintains strict layer separation by consuming domain projections internally from `@gearcube/core` and `@gearcube/kinematics` alongside presentation framework dependencies (React, React Three Fiber, Three.js).
 
 ### 3.4. Application & UI State (`apps/web` — Conceptual Presentation Layer)
-- **Responsibilities (Current Implemented Features):**
+- **Responsibilities (Implemented & Accepted Features):**
   - Orchestrates interactive application UI, controls, and presentation lifecycle.
   - Manages single authoritative session state (`GearCubeSessionState` in `apps/web/src/components/cube/animation.ts`) via React local state / pure transition functions.
   - Hosts implemented and accepted Phase 3 features (canonical move history timeline, undo/redo stacks, deterministic seeded scramble generator, keyboard controls, and responsive layout under `apps/web/src/components/**`) which wrap and reference canonical session snapshots without becoming a second puzzle authority.
   - Dispatches canonical move requests to the Domain Core.
-- **Responsibilities (Planned Future Phase 4 Features):**
-  - Initiates background solver Worker tasks (`apps/web/src/workers/solver.worker.ts`).
-  - Renders Solve Mode controls, algorithm selection, and progress telemetry.
-  - Orchestrates solution playback with expected-prefix state guarding.
-- **Topology Note:** Implemented directly within `apps/web` rather than as a separate `packages/ui` package; uses standard React presentation tools without external state-management libraries (no Zustand requirement for Phase 3). Project-internal workspace dependencies are limited to `@gearcube/core` and `@gearcube/kinematics`.
+  - Hosts implemented and accepted Phase 4 features: initiates background solver Worker tasks (`apps/web/src/workers/solver.worker.ts`), renders Solve Mode controls (SolvePanel, PlaybackControls), algorithm selection, search progress telemetry, and solution playback controller with expected-prefix state guarding.
+- **Topology Note:** Implemented directly within `apps/web` rather than as a separate `packages/ui` package; uses standard React presentation tools without external state-management libraries (no Zustand requirement). Project-internal workspace dependencies: `@gearcube/core`, `@gearcube/kinematics`, and `@gearcube/solvers`.
 
-### 3.5. Pure Solver Engine (`packages/solvers` — Future Phase 4)
+### 3.5. Pure Solver Engine (`packages/solvers` — Implemented & Accepted — Phase 4)
 - **Responsibilities:**
-  - Hosts pure classical graph search algorithms (primary baselines: BFS, Bidirectional BFS, IDA*; optional candidates: IDDFS, A*, Pattern Databases).
+  - Hosts pure classical graph search algorithms (primary baselines: BFS, Bidirectional BFS, IDA* with H2 two-slice PDB admissible heuristic; optional candidates: IDDFS, A*, Pattern Databases — deferred).
   - Defines pure result contracts, search options, and serializable protocol schemas.
   - Encapsulated within a Web Worker adapter hosted in `apps/web/src/workers/solver.worker.ts` to run asynchronously off the main thread.
   - Reports periodic search telemetry (nodes expanded, nodes generated, algorithm-specific depth/bounds, elapsed time) via message passing.
+  - User cancellation is handled by host-driven `worker.terminate()` (no in-band CANCEL_SOLVE protocol message required).
 - **Prohibited Dependencies:** Must not access DOM, window, Three.js, React, or browser Worker global objects directly. Depends only on `@gearcube/core`.
 
-### 3.6. Research & Benchmark Harness (`packages/benchmark` — Future Phase 5)
+### 3.6. Research & Benchmark Harness (`packages/benchmark` — Phase 5 — Not Started)
 - **Responsibilities:**
   - Executes batch automated search runs across predefined scramble seed suites.
   - Gathers statistical telemetry: time-to-solution, memory footprint, branch pruning factor, solution optimality.

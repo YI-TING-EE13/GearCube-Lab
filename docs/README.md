@@ -31,7 +31,9 @@ docs/
 │   ├── PHASE_1C_IMPLEMENTATION_PLAN.md # Phase 1C direct canonical move-transition engine plan
 │   ├── PHASE_1D_IMPLEMENTATION_PLAN.md # Phase 1D SpatialFrame, Materialization & Serialization plan
 │   ├── PHASE_1E_IMPLEMENTATION_PLAN.md # Phase 1E Group Invariants & Exhaustive Reachable State Closure plan
-│   ├── PHASE_2_IMPLEMENTATION_PLAN.md # Phase 2 3D Graphics & Kinematic Animation plan
+│   ├── PHASE_2_IMPLEMENTATION_PLAN.md  # Phase 2 3D Graphics & Kinematic Animation plan
+│   ├── PHASE_3_IMPLEMENTATION_PLAN.md  # Phase 3 Interactive UI, History & Scramble plan (Accepted)
+│   ├── PHASE_4_IMPLEMENTATION_PLAN.md  # Phase 4 Classical Solver Infrastructure plan (Accepted)
 │   ├── ADR_0004_CENTER_ORIENTATION_PLAN.md # ADR-0004 Center orientation semantics plan
 │   └── ADR_0005_TRANSITION_REPAIR_PLAN.md # ADR-0005 Canonical transition repair plan
 ├── operations/
@@ -85,6 +87,8 @@ Throughout all documents in `docs/`, technical specifications and mechanical ass
 - **Phase 1D Materialization & Serialization Plan:** [`docs/development/PHASE_1D_IMPLEMENTATION_PLAN.md`](development/PHASE_1D_IMPLEMENTATION_PLAN.md)
 - **Phase 1E Exhaustive Reachability Plan:** [`docs/development/PHASE_1E_IMPLEMENTATION_PLAN.md`](development/PHASE_1E_IMPLEMENTATION_PLAN.md)
 - **Phase 2 Graphics & Kinematics Plan:** [`docs/development/PHASE_2_IMPLEMENTATION_PLAN.md`](development/PHASE_2_IMPLEMENTATION_PLAN.md)
+- **Phase 3 Interactive UI, History & Scramble Plan (Accepted):** [`docs/development/PHASE_3_IMPLEMENTATION_PLAN.md`](development/PHASE_3_IMPLEMENTATION_PLAN.md)
+- **Phase 4 Classical Solver Infrastructure Plan (Accepted):** [`docs/development/PHASE_4_IMPLEMENTATION_PLAN.md`](development/PHASE_4_IMPLEMENTATION_PLAN.md)
 - **ADR-0004 Center Orientation Plan:** [`docs/development/ADR_0004_CENTER_ORIENTATION_PLAN.md`](development/ADR_0004_CENTER_ORIENTATION_PLAN.md)
 - **ADR-0005 Transition Repair Plan:** [`docs/development/ADR_0005_TRANSITION_REPAIR_PLAN.md`](development/ADR_0005_TRANSITION_REPAIR_PLAN.md)
 - **Developer Guidelines & Tooling:** [`docs/development/DEVELOPMENT_GUIDE.md`](development/DEVELOPMENT_GUIDE.md)
