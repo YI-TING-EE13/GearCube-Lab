@@ -1,28 +1,70 @@
 # PHASE_5D_IMPLEMENTATION_PLAN.md — Browser Research Mode Architecture & Implementation Plan
 
-> **Document Status:** `PHASE5D_IMPLEMENTATION_PLAN_ACCEPTED`
-> **Authoritative Main Baseline:** `6505f41101d716207b39a242ac5a837c4681ebdb`
-> **Branch:** `phase/5d-research-mode-plan`
+> **Document Status:** `PHASE5D_IMPLEMENTATION_ACCEPTED_CANDIDATE`
+> **Authoritative Main Baseline:** `717f2b89a425b2da6437e75adf4c4245aee8dc08`
+> **Accepted Technical Head:** `8bc1d51d74e3b047872598f3439755361cd91fb6`
+> **Implementation Branch:** `phase/5d-research-mode-implementation`
 > **Phase 5 Preflight Status:** `COMPLETED / ACCEPTED ON MAIN`
 > **Phase 5A Status:** `COMPLETED / ACCEPTED ON MAIN`
 > **Phase 5B Status:** `COMPLETED / ACCEPTED ON MAIN`
 > **Phase 5C Status:** `COMPLETED / ACCEPTED ON MAIN`
 > **Phase 5D Planning:** `COMPLETED / ACCEPTED`
-> **Phase 5D Implementation:** `NOT STARTED`
-> **Phase 5 Overall Status:** `IN PROGRESS`
-> **Phase 5D Accepted:** `NO`
+> **Phase 5D Implementation:** `COMPLETED & TECHNICALLY ACCEPTED`
+> **Phase 5 Overall Status:** `TECHNICALLY COMPLETE (Phase 5 Formal Acceptance Candidate)`
+> **Phase 5D Accepted:** `TECHNICALLY ACCEPTED (Formal Acceptance Candidate Pending Independent Review)`
 
 ---
 
 ## Acceptance Record
 
-- **Authoritative Main Baseline:** `6505f41101d716207b39a242ac5a837c4681ebdb`
+### Planning Acceptance Record (Historical)
+- **Authoritative Main Baseline (Planning):** `6505f41101d716207b39a242ac5a837c4681ebdb`
 - **Initial Plan Candidate:** `0680b5355bf95e2e9028098516324917469dbf24`
 - **Accepted Technical Plan:** `0920e12765db446eedc657af6bd2901e189e37fc`
 - **Independent Final Plan Review:** `PASS`
 - **Benchmark Engine API Change Required:** `NO`
-- **Phase 5D Implementation:** `NOT STARTED`
-- **Phase 5D Overall Accepted:** `NO`
+- **Phase 5D Planning Status:** `COMPLETED / ACCEPTED`
+
+### Final Implementation Acceptance Record
+- **PLANNING_ACCEPTANCE_MAIN:** `717f2b89a425b2da6437e75adf4c4245aee8dc08`
+- **IMPLEMENTATION_BRANCH:** `phase/5d-research-mode-implementation`
+- **ACCEPTED_TECHNICAL_IMPLEMENTATION_HEAD:** `8bc1d51d74e3b047872598f3439755361cd91fb6`
+- **PROPOSED_FORMAL_STATUS:** `COMPLETED / ACCEPTED`
+- **IMPLEMENTATION_LINEAGE:**
+  1. `1250e3c1f136eca6e7a548032301fbb1e5e000db` — Implement Phase 5D benchmark controller contracts
+  2. `f1c0f9cb94bd9fbe98b78931959ffc7a6697923d` — Repair Phase 5D filename sanitizer test
+  3. `4935a6f4d651dee48d15dcb6f554c74cbb5025f8` — Implement Phase 5D benchmark worker lifecycle
+  4. `9479e7a029e5be3cf5370715cc2f0bbca48f0135` — Implement Phase 5D research mode panel
+  5. `694e0c218fd7599717424f359e58e1749d8347f3` — Integrate Phase 5D research workspace mode
+  6. `ce5ea29f6629702ef9bcfd1854a3d262e03a05dc` — Repair Phase 5D workspace lifecycle and mobile layout
+  7. `26a3b8cc548b226b7fb0d9c154663fd221b2ab7f` — Enforce Phase 5D browser research boundaries
+  8. `9a1ce67fb9d4538b261e19ead6a468399a26dbfe` — Repair Phase 5D boundary gate precision
+  9. `4d5deb57bdacaa86efba49f1a983a077edaf6e72` — Add Phase 5D research mode browser acceptance
+  10. `f7b2e580b7520e3b454887bb63ffd5f20f17a0ec` — Harden Phase 5D research browser acceptance
+  11. `8bc1d51d74e3b047872598f3439755361cd91fb6` — Repair Phase 5D research benchmark cancellation
+- **AUTOMATED_REAL_BROWSER_ACCEPTANCE:** `PASS`
+  - Research Playwright Suite (`tests/e2e/research-mode.spec.ts`): `12 / 12 PASS`
+  - Full Playwright E2E Suite (`npm run test:e2e`): `40 / 40 PASS`
+  - Architecture Boundary Suite (`tests/boundary.test.ts`): `52 / 52 PASS`
+  - Benchmark Controller Focused Unit Suite (`tests/unit/benchmark-worker-controller.test.ts`): `32 / 32 PASS`
+  - Full Workspace Verification (`npm run verify`): `PASS` (35 / 35 test files, 444 tests, clean TypeScript & Vite production build)
+- **INTERACTIVE_BROWSER_ACCEPTANCE (Chrome DevTools MCP):** `PASS`
+  - Desktop 1280x800: `PASS`
+  - Tablet 768x1024: `PASS`
+  - Mobile 375x667: `PASS`
+  - Console Runtime Errors: `0`
+  - Visual Blockers: `NONE`
+- **REAL_CANCEL_REPAIR_RECORD:**
+  - Root cause established via non-mutating passive DOM event diagnostic: Cancel button nested inside the benchmark configuration `<form>` triggered form submission upon native click, leading to unintended benchmark restart.
+  - Structural repair in `apps/web/src/components/research/ResearchPanel.tsx`: Separated Cancel button outside `<form className="research-form">` when `isBusy === true`, retaining native `<button type="submit">` for Run Benchmark when `!isBusy`.
+  - Zero `stopPropagation()` or `preventDefault()` event hacks used.
+  - Permanent Playwright Gate 4 assertion (`totalBenchmarkWorkersCreated === 1`) permanently guards against cancellation restart regressions.
+- **RAW_WEBGL_ORACLE_RECORD:**
+  - Gate 10 verified exact visual state preservation across the full Research Mode lifecycle using raw WebGL `gl.readPixels()` decoded RGBA bitmap comparison (`differingPixels: 0`, `maxChannelDelta: 0`, `diffBoundingBox: null`).
+- **BENCHMARK_ENGINE_API_CHANGE:** `NO`
+- **PHASE5C_EVIDENCE_MUTATION:** `NO`
+- **PHASE5D_TECHNICAL_ACCEPTANCE:** `PASS`
+- **FORMAL_ACCEPTANCE_STATUS:** `RECORD CANDIDATE (Pending Independent Review & Main Promotion)`
 
 ---
 
@@ -513,7 +555,7 @@ export const LONG_CANCEL_CONFIG: BenchmarkSuiteConfig = {
 
 ## 14. Dependency-Ordered Implementation Sequence
 
-Future implementation must execute in strict dependency order:
+Implementation executed and verified in strict dependency order (Steps A–G Completed & Accepted; Step H Documentation Candidate):
 ```text
 Step A: Workspace Dependency & Pure Protocol/Controller Contracts
         ├─ Update apps/web/package.json + package-lock.json ("@gearcube/benchmark": "0.0.0")

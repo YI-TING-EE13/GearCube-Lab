@@ -1,6 +1,6 @@
 # SYSTEM_ARCHITECTURE.md — System Architecture & Component Contracts
 
-> **Document Status:** `DECIDED (Accepted architecture through Phase 4; Phase 5 preflight architecture accepted); Phase 5 implementation: IN PROGRESS (Phases 5A, 5B & 5C Implemented & Accepted; Phase 5D Not Started)`
+> **Document Status:** `DECIDED (Accepted architecture through Phase 5; Phase 5 Implementation Completed & Accepted; Candidate for Main Promotion)`
 > **Target System:** GearCube Lab Web Application & Research Framework
 
 ---
@@ -39,11 +39,11 @@ graph TD
         Encoding[State Encoding & Serialization<br/>Deterministic Hashes / Canonical Keys]
     end
 
-    subgraph ComputeSpace [Solver Subsystem (Implemented) & Research Subsystems (Phase 5 In Progress)]
+    subgraph ComputeSpace [Solver Subsystem (Phase 4) & Research Subsystems (Phase 5 Implemented & Accepted)]
         WorkerAdapter[Browser Solver Worker Adapter<br/>apps/web/src/workers/solver.worker.ts]
         SolverEngine[Pure Solver Engine<br/>Pure TS Algorithms — packages/solvers]
-        BenchmarkWorker[Browser Benchmark Worker Adapter<br/>apps/web/src/workers/benchmark.worker.ts — Future Phase 5D]
-        BenchmarkEngine[Pure Benchmark Engine<br/>packages/benchmark — Phases 5A, 5B & 5C Implemented & Accepted]
+        BenchmarkWorker[Browser Benchmark Worker Adapter<br/>apps/web/src/workers/benchmark.worker.ts — Phase 5D Implemented & Accepted]
+        BenchmarkEngine[Pure Benchmark Engine<br/>packages/benchmark — Phase 5 Implemented & Accepted]
         NodeCLI[Node CLI Runner<br/>packages/benchmark/src/cli.ts — Phase 5B Implemented & Accepted]
     end
 
@@ -110,7 +110,7 @@ graph TD
   - Hosts implemented and accepted Phase 3 features (canonical move history timeline, undo/redo stacks, deterministic seeded scramble generator, keyboard controls, and responsive layout under `apps/web/src/components/**`) which wrap and reference canonical session snapshots without becoming a second puzzle authority.
   - Dispatches canonical move requests to the Domain Core.
   - Hosts implemented and accepted Phase 4 features: initiates background solver Worker tasks (`apps/web/src/workers/solver.worker.ts`), renders Solve Mode controls (SolvePanel, PlaybackControls), algorithm selection, search progress telemetry, and solution playback controller with expected-prefix state guarding.
-- **Topology Note:** Implemented directly within `apps/web` rather than as a separate `packages/ui` package; uses standard React presentation tools without external state-management libraries (no Zustand requirement). Project-internal workspace dependencies: `@gearcube/core`, `@gearcube/kinematics`, and `@gearcube/solvers`.
+- **Topology Note:** Implemented directly within `apps/web` rather than as a separate `packages/ui` package; uses standard React presentation tools without external state-management libraries (no Zustand requirement). Project-internal workspace dependencies: `@gearcube/core`, `@gearcube/kinematics`, `@gearcube/solvers`, and `@gearcube/benchmark`.
 
 ### 3.5. Pure Solver Engine (`packages/solvers` — Implemented & Accepted — Phase 4)
 - **Responsibilities:**
@@ -121,15 +121,19 @@ graph TD
   - User cancellation is handled by host-driven `worker.terminate()` (no in-band CANCEL_SOLVE protocol message required).
 - **Prohibited Dependencies:** Must not access DOM, window, Three.js, React, or browser Worker global objects directly. Depends only on `@gearcube/core`.
 
-### 3.6. Research & Benchmark Harness (`packages/benchmark` — Phase 5 In Progress)
-- **Status & Scope:** `PHASE5_PREFLIGHT_ACCEPTED` (Phases 5A, 5B & 5C implemented & accepted; Phase 5D pending; [`docs/development/PHASE_5_IMPLEMENTATION_PLAN.md`](../development/PHASE_5_IMPLEMENTATION_PLAN.md)).
+### 3.6. Research & Benchmark Harness (`packages/benchmark` & Browser Research Mode — Implemented & Accepted — Phase 5)
+- **Status & Scope:** `PHASE5_IMPLEMENTED_AND_ACCEPTED` (Phases 5A, 5B, 5C, and 5D implemented & accepted; [`docs/development/PHASE_5_IMPLEMENTATION_PLAN.md`](../development/PHASE_5_IMPLEMENTATION_PLAN.md)).
 - **Core Responsibilities:**
-  - **Implemented (Phases 5A, 5B & 5C):** Pure `@gearcube/benchmark` package, materialized v1 benchmark schemas, typed `BenchmarkConfigError` runtime validation, stable state-derived case identity (`d${exactDepth}:${stateKey}`), independent Core-only exact-distance corpus builder (discovering 41,472 canonical states and diameter 8 without calling production solvers), deterministic seed hashing (`FNV1A_UTF16_CODE_UNITS_32`), PRNG (`MULBERRY32_EXACT`), stratified sampling, headless batch runner evaluating solvers (`solveBfs`, `solveBidirectionalBfs`, `solveIdaStar`), warm-up/measured execution separation, cyclic algorithm rotation, lossless JSON export, flat 14-column RFC-4180 CSV export, isolated Node CLI runner (`packages/benchmark/src/cli.ts`), and empirical comparative research evaluation datasets and report ([`docs/research/PHASE_5_CLASSICAL_SOLVER_BENCHMARK_REPORT.md`](../research/PHASE_5_CLASSICAL_SOLVER_BENCHMARK_REPORT.md)).
-  - **Pending (Phase 5D):** Dedicated browser Web Worker (`apps/web/src/workers/benchmark.worker.ts`) and Research Mode UI.
+  - **Pure Benchmark Engine (Phases 5A & 5B):** Materialized v1 benchmark schemas, typed `BenchmarkConfigError` runtime validation, stable state-derived case identity (`d${exactDepth}:${stateKey}`), independent Core-only exact-distance corpus builder (discovering 41,472 canonical states and diameter 8 without calling production solvers), deterministic seed hashing (`FNV1A_UTF16_CODE_UNITS_32`), PRNG (`MULBERRY32_EXACT`), stratified sampling, headless batch runner evaluating solvers (`solveBfs`, `solveBidirectionalBfs`, `solveIdaStar`), warm-up/measured execution separation, cyclic algorithm rotation, lossless JSON export, flat 14-column RFC-4180 CSV export, and isolated Node CLI runner (`packages/benchmark/src/cli.ts`).
+  - **Empirical Research Dataset & Analysis (Phase 5C):** Empirical comparative evaluation across exact distance strata 1..8 with 100% optimal solutions and reproducible deterministic projections ([`docs/research/PHASE_5_CLASSICAL_SOLVER_BENCHMARK_REPORT.md`](../research/PHASE_5_CLASSICAL_SOLVER_BENCHMARK_REPORT.md)).
+  - **Browser Research Mode (Phase 5D):** Dedicated browser Web Worker (`apps/web/src/workers/benchmark.worker.ts`), pure reactive controller (`benchmark-worker-controller.ts`), hook (`useBenchmarkWorker.ts`), presentation panel (`ResearchPanel.tsx`), workspace mode orchestration (`GearCubeViewport.tsx`), and client-side JSON/CSV export downloads.
 - **Execution & Import Boundaries:**
   - **Shared Engine (`packages/benchmark`):** Pure TypeScript, browser-safe root entry with zero UI/DOM, zero 3rd-party runtime dependencies, and zero `node:fs` / `node:path` / CLI imports.
-  - **Node CLI Adapter (`packages/benchmark/src/cli.ts` — Phase 5B Implemented & Accepted):** Isolated Node-only terminal runner with filesystem output (`node:fs`); unreachable from the browser-safe root engine entry.
-  - **Browser Research Mode (`apps/web` — Future Phase 5D):** Dedicated Web Worker (`apps/web/src/workers/benchmark.worker.ts`) importing the browser-safe engine and preventing heavy benchmark workloads from blocking the UI thread.
+  - **Node CLI Adapter (`packages/benchmark/src/cli.ts` — Phase 5B):** Isolated Node-only terminal runner with filesystem output (`node:fs`); unreachable from the browser-safe root engine entry.
+  - **Browser Research Mode (`apps/web` — Phase 5D):** Dedicated background Web Worker (`apps/web/src/workers/benchmark.worker.ts`) importing the browser-safe engine and preventing heavy benchmark workloads from blocking the UI thread.
+  - **Solver Worker vs. Benchmark Worker Protocol Distinctions:**
+    - *Solver Worker (`solver.worker.ts`):* Reports incremental search telemetry (nodes expanded, depth bounds) for long-running single-case searches.
+    - *Benchmark Worker (`benchmark.worker.ts`):* Executes atomic multi-case benchmark suites off-main-thread; emits no fabricated progress telemetry; performs Worker-side JSON/CSV serialization; lifecycle managed via monotonic `requestId` and host-side `worker.terminate()`.
 - **Prohibited Dependencies:** Zero dependencies on React, Three.js, R3F, DOM, or Worker global objects in shared engine entry.
 
 ### 3.7. Offline ML Research Pipeline (`ml/` — Future Phase 6)

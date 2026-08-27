@@ -1,16 +1,16 @@
 # PHASE_5_IMPLEMENTATION_PLAN.md — Research & Benchmarking Harness
 
-> **Document Status:** `PHASE5C_ACCEPTED`
-> **Authoritative Main Baseline:** `fac6ecf74a06ccfeeb81cb6bf39247a09fcf3369`
-> **Accepted Technical Head:** `7552e61ffd79766b66d34ace0e510776aa8b9cb6`
-> **Branch:** `phase/5c-execution`
+> **Document Status:** `PHASE5_ACCEPTANCE_RECORD_CANDIDATE`
+> **Authoritative Main Baseline:** `717f2b89a425b2da6437e75adf4c4245aee8dc08`
+> **Accepted Technical Head:** `8bc1d51d74e3b047872598f3439755361cd91fb6`
+> **Implementation Branch:** `phase/5d-research-mode-implementation`
 > **Implementation Started:** `YES`
-> **Phase 5 Accepted:** `NO`
+> **Phase 5 Accepted:** `TECHNICALLY COMPLETE (Formal Acceptance Record Candidate)`
 > **Phase 5 Preflight Accepted:** `YES`
 > **Phase 5A Status:** `COMPLETED & ACCEPTED`
 > **Phase 5B Status:** `COMPLETED & ACCEPTED`
 > **Phase 5C Status:** `COMPLETED & ACCEPTED`
-> **Phase 5D Status:** `NOT STARTED`
+> **Phase 5D Status:** `TECHNICALLY COMPLETED & ACCEPTED`
 
 ---
 
@@ -35,6 +35,20 @@
 - **PHASE5B_INDEPENDENT_REVIEW:** `PASS`
 - **PHASE5B_ACCEPTED:** `YES`
 
+### Phase 5D Browser Research Mode Implementation Acceptance
+- **PHASE5D_ACCEPTED_TECHNICAL_HEAD:** `8bc1d51d74e3b047872598f3439755361cd91fb6`
+- **AUTOMATED_RESEARCH_E2E:** `12 / 12 PASS`
+- **FULL_PLAYWRIGHT_E2E:** `40 / 40 PASS`
+- **BOUNDARY_ISOLATION_SUITE:** `52 / 52 PASS`
+- **CONTROLLER_UNIT_SUITE:** `32 / 32 PASS`
+- **FULL_WORKSPACE_VERIFY:** `PASS` (35 / 35 test files, 444 tests)
+- **GATE4_REPEAT_CANCELLATION:** `2 / 2 PASS` (zero replacement workers)
+- **INTERACTIVE_DEVTOOLS_ACCEPTANCE:** `PASS` (desktop, tablet, mobile viewports; zero console errors)
+- **RAW_WEBGL_ORACLE:** `PASS` (exact decoded RGBA bitmap equality)
+- **INDEPENDENT_TECHNICAL_REVIEW:** `PASS`
+- **PHASE5D_TECHNICAL_STATUS:** `COMPLETED & ACCEPTED`
+- **PROPOSED_PHASE5_FORMAL_STATUS:** `COMPLETED & ACCEPTED (Pending Record Review & Main Promotion)`
+
 ### Phase 5C Research & Benchmark Report Acceptance
 - **PHASE5C_EXECUTION_BASELINE_COMMIT:** `1fcc48dffcc10a59dbb9fe1eb1e5d7e2ce123ba6`
 - **PHASE5C_RESEARCH_EVIDENCE_COMMIT:** `4cf4efb47841c7d0fa206991734736a751ac1fd2`
@@ -48,7 +62,7 @@
 - **ALL_TEN_PHASE5C_GATES:** `PASS`
 - **INDEPENDENT_REVIEW:** `PASS`
 - **PHASE5C_ACCEPTED:** `YES`
-- **PHASE5D_STATUS:** `NOT STARTED`
+- **PHASE5D_STATUS:** `TECHNICALLY COMPLETED & ACCEPTED`
 - **REPORT_REFERENCE:** [`docs/research/PHASE_5_CLASSICAL_SOLVER_BENCHMARK_REPORT.md`](../research/PHASE_5_CLASSICAL_SOLVER_BENCHMARK_REPORT.md)
 
 ---

@@ -81,11 +81,9 @@
 - Solution playback controls (implemented & accepted: Play, Pause, Step Forward, Step Backward; Auto-Step Speed slider is DEFERRED / FUTURE).
 - 3D visual move annotations (directional rotation arrows, highlighted face slices are DEFERRED / FUTURE presentation enhancements).
 
-### Mode 3: Research & Benchmarking Mode (Phase 5 In Progress — Phases 5A & 5B Implemented & Accepted; Phases 5C–5D Pending)
+### Mode 3: Research & Benchmarking Mode (Implemented & Accepted — Phase 5)
 - Empirical research harness defined in [`docs/development/PHASE_5_IMPLEMENTATION_PLAN.md`](../development/PHASE_5_IMPLEMENTATION_PLAN.md):
-  - **Implemented & Accepted (Phases 5A & 5B):** Pure `@gearcube/benchmark` package, materialized v1 benchmark schemas, typed `BenchmarkConfigError` runtime validation, stable state-derived case identity (`d${exactDepth}:${stateKey}`), independent Core-only exact-distance corpus builder (discovering 41,472 canonical states and diameter 8), deterministic stratified sampling (`FNV1A_UTF16_CODE_UNITS_32` + `MULBERRY32_EXACT`), headless solver comparison runner (`runBenchmarkSuite` evaluating BFS, BiBFS, and IDA* across identical cases and resource limits), lossless JSON exporter, flat 14-column RFC-4180 CSV exporter, and headless Node CLI (`npm run benchmark`).
-  - **Pending (Phase 5C):** Empirical comparative research datasets and classical solver benchmark report.
-  - **Pending (Phase 5D):** Dedicated background Web Worker execution (`benchmark.worker.ts`) and Research Mode UI panel in `apps/web` ensuring UI remains interactive during browser-based benchmarking.
+  - **Implemented & Accepted (Phases 5A–5D):** Pure `@gearcube/benchmark` package, materialized v1 benchmark schemas, typed `BenchmarkConfigError` runtime validation, stable state-derived case identity (`d${exactDepth}:${stateKey}`), independent Core-only exact-distance corpus builder (discovering 41,472 canonical states and diameter 8), deterministic stratified sampling (`FNV1A_UTF16_CODE_UNITS_32` + `MULBERRY32_EXACT`), headless solver comparison runner (`runBenchmarkSuite` evaluating BFS, BiBFS, and IDA* across identical cases and resource limits), lossless JSON exporter, flat 14-column RFC-4180 CSV exporter, headless Node CLI (`npm run benchmark`), empirical comparative research dataset and classical solver benchmark report ([`docs/research/PHASE_5_CLASSICAL_SOLVER_BENCHMARK_REPORT.md`](../research/PHASE_5_CLASSICAL_SOLVER_BENCHMARK_REPORT.md)), and browser Research Mode with dedicated background Web Worker execution (`benchmark.worker.ts`), pure reactive controller, and client-side JSON/CSV export downloads.
 
 ---
 
@@ -125,7 +123,7 @@
 |        |           v (Discrete State & Legal Moves)                               |
 |  [ Classical Solver Worker (BFS / BiBFS / IDA*) — Implemented & Accepted (Phase 4) ]              |
 |                                                                                   |
-|  [ Research & Benchmark Harness (Headless Runner & Telemetry Exporter) — Phase 5 In Progress (Phase 5A Implemented & Accepted) ] |
+|  [ Research & Benchmark Harness (Headless Runner, Worker & Browser Panel) — Implemented & Accepted (Phase 5) ] |
 |                                                                                   |
 |  [ AI / Neural Search (Web Worker Inference) — Future (Phase 6) ]                                 |
 |                                                                                   |
@@ -157,7 +155,7 @@ $$\text{Presentation Layer (UI/3D)} \longrightarrow \text{Domain Core Contracts}
 | `packages/kinematics` | Continuous trajectory generation, coupled gear angles, static piece placement projection | Depends only on `@gearcube/core` | Implemented & Accepted |
 | `apps/web` | Web application container hosting React UI components, R3F/Three.js 3D viewport, procedural piece geometries, MoveControls, single authoritative `GearCubeSessionState`, Play Mode history/undo/redo/scramble/keyboard (Phase 3), Solve Mode UI/playback/Worker adapter (Phase 4) | Internal: `@gearcube/core`, `@gearcube/kinematics`, `@gearcube/solvers`; External: React, R3F, Three.js presentation stack (no Zustand requirement) | Implemented & Accepted (Phases 1–4) |
 | `packages/solvers` | Classical graph search (primary: BFS, Bidirectional BFS, IDA* with H2 two-slice PDB heuristic; optional/deferred: IDDFS, A*, Pattern Databases), heuristic estimators | Depends only on `@gearcube/core` | Implemented & Accepted (Phase 4) |
-| `packages/benchmark` | Pure benchmark engine, independent Core-only exact-distance corpus builder, deterministic stratified sampling, comparative solver runner, JSON/CSV exports, and Node CLI adapter | Depends directly on `@gearcube/core` and `@gearcube/solvers`; zero UI/DOM runtime dependencies | In Progress (Phases 5A & 5B Implemented & Accepted; Phases 5C–5D Pending) |
+| `packages/benchmark` | Pure benchmark engine, independent Core-only exact-distance corpus builder, deterministic stratified sampling, comparative solver runner, JSON/CSV exports, and Node CLI adapter | Depends directly on `@gearcube/core` and `@gearcube/solvers`; zero UI/DOM runtime dependencies | Implemented & Accepted — Phase 5 |
 | `ml/` (Python) | PyTorch model architectures, offline self-play/dataset generation, heuristic export | Python (version selected based on ML dependency compatibility) managed exclusively via `uv` | Planned (Phase 6) |
 | `packages/vision` | Webcam video capture, color segmentation, state consistency validation, and correction | Browser WebRTC / Canvas APIs; depends on `@gearcube/core` | Planned (Phase 7) |
 
@@ -312,7 +310,7 @@ The project roadmap is structured into 9 sequential phases (detailed in [`docs/d
 - **Phase 2:** 3D Model, Visual Assets, and Kinematic Animation Engine *(Accepted)*
 - **Phase 3:** Interactive UI, History, Undo/Redo, Keyboard Controls, and Responsive Layout *(Accepted)*
 - **Phase 4:** Classical Solver Infrastructure (Web Worker, BFS / Bidirectional BFS / IDA*, Solve Mode UI & Playback) *(Implemented & Accepted)*
-- **Phase 5:** Research Benchmark Framework & Empirical Evaluation *(In Progress — Preflight, Phase 5A, Phase 5B & Phase 5C Accepted; Phase 5D Not Started)*
+- **Phase 5:** Research Benchmark Framework & Empirical Evaluation *(Completed & Accepted Candidate — Phases 5A–5D Accepted)*
 - **Phase 6:** Neural Heuristic & AI-Guided Search *(Planned)*
 - **Phase 7:** Camera-Based Physical State Reconstruction & Guided Solver *(Planned)*
 - **Phase 8:** Integration, Polish, Reproducibility, and v1.0 Release *(Planned)*

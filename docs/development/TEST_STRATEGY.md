@@ -212,7 +212,7 @@
   - `STEP_BACK_FORWARD_GATE`: Step back/forward history navigation within baseline bounds in `solve-mode.spec.ts`.
   - `RESPONSIVE_SOLVER_UI_GATE`: Verified layout bounds across desktop, tablet, and mobile in `solve-mode.spec.ts`.
 
-### Level 8: Seeded Benchmark Determinism & Empirical Metrics (Phase 5 — In Progress)
+### Level 8: Seeded Benchmark Determinism & Empirical Metrics (Phase 5 — Implemented & Accepted)
 - **Scope:** `packages/benchmark` (Phase 5)
 - **Focus:** Empirical repeatability, deterministic metric verification, and algorithm search efficiency comparisons.
 - **Contract Principles:**
@@ -256,9 +256,21 @@
     - `TIMING_RESOLUTION_GATE`: Two-stage median with integer-ms quantization labeling (`TIMER_RESOLUTION_LIMITED`).
     - `METRIC_SEPARATION_GATE`: Deterministic search metrics strictly separated from observational execution times.
     - `REPORT_TRACEABILITY_GATE`: Complete bidirectional traceability to committed evidence in [`docs/research/PHASE_5_CLASSICAL_SOLVER_BENCHMARK_REPORT.md`](../research/PHASE_5_CLASSICAL_SOLVER_BENCHMARK_REPORT.md).
-  - **Phase 5D Browser Research Mode Gates (Pending):**
-    - `RESEARCH_WORKER_ISOLATION_GATE`: Benchmark compute executes off the UI thread in dedicated Web Worker (Phase 5D).
-    - `PLAYWRIGHT_RESEARCH_E2E_GATE`: Automated Playwright test passes across desktop, tablet, and mobile viewports (Phase 5D).
+  - **Phase 5D Browser Research Mode Gates (Implemented & Accepted):**
+    - `BENCHMARK_WORKER_ISOLATION_GATE`: Benchmark compute executes off the UI thread in dedicated Web Worker (`benchmark.worker.ts`) with zero DOM leakage (`typeof document === 'undefined'`).
+    - `PURE_BENCHMARK_CONTROLLER_GATE`: Deterministic state transitions, monotonic `requestId` tracking, and stale-message rejection verified across 32 focused unit tests in `tests/unit/benchmark-worker-controller.test.ts`.
+    - `BOUNDARY_ISOLATION_GATE`: Verification of browser-safe imports, Worker path isolation, and main-thread execution prohibition across 52 boundary tests in `tests/boundary.test.ts`.
+    - `MAIN_THREAD_ACTIONABILITY_GATE`: Verified responsive UI interactions while benchmark search is active in `tests/e2e/research-mode.spec.ts`.
+    - `BENCHMARK_CANCELLATION_GATE`: Host-side `worker.terminate()` closes Worker, produces terminal `CANCELLED` state, and spawns zero replacement workers (`totalBenchmarkWorkersCreated === 1`).
+    - `STATIC_CONFIG_VALIDATION_GATE`: Main-thread static validation triggers UI errors and spawns zero workers on invalid inputs.
+    - `WORKER_CONFIG_ERROR_GATE`: Worker-side corpus capacity validation handles resource overflow via structured `CONFIG_ERROR` message.
+    - `RESULT_SUMMARY_GATE`: Renders exact metadata cards (`Suite ID`, `Sampled Cases`, `Measured Trials`, `Platform: browser`), per-algorithm summary metrics, and by-depth table.
+    - `JSON_CSV_DOWNLOAD_GATES`: Client-side Blob generation triggers valid JSON and 14-column RFC-4180 CSV downloads with sanitized filenames.
+    - `PLAY_RESEARCH_ISOLATION_GATE`: Play session history, move state, and 3D cube visual state preserved without mutation across Research Mode entry and benchmark execution.
+    - `RAW_WEBGL_CANVAS_ORACLE_GATE`: Exact decoded RGBA bitmap equality (`gl.readPixels()`) proves identical WebGL canvas rendering pre- and post-Research Mode lifecycle (`differingPixels: 0`, `maxChannelDelta: 0`, `diffBoundingBox: null`).
+    - `MODE_SWITCH_CANCELLATION_GATE`: Switching to Play mode during an active benchmark terminates the background Worker and restores clean presentation.
+    - `RESPONSIVE_RESEARCH_LAYOUT_GATE`: Verified layout bounds and non-overflow across Desktop (1280x800), Tablet (768x1024), and Mobile (375x667) viewports in `tests/e2e/research-mode.spec.ts`.
+    - *Verification Snapshot (Technical Head `8bc1d51`):* 52 boundary tests, 32 controller unit tests, 12 Research Mode E2E tests, 40 total Playwright E2E tests, and 444 workspace tests passing.
 
 ### Level 9: Browser End-to-End Tests (Playwright — Available / Implemented)
 - **Scope:** Whole Web Application (`playwright.config.ts`, `tests/e2e/play-mode.spec.ts`)

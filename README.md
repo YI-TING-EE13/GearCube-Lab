@@ -6,10 +6,10 @@
 
 ## Project Status
 
-**Current Status:** `Phase 5 In Progress — Phases 5A, 5B & 5C Implemented & Accepted`
+**Current Status:** `Phase 5 Completed / Accepted Candidate (Pending Promotion to Main)`
 
 > [!IMPORTANT]
-> **Phases 0–4, Phase 5 Preflight, and Phases 5A, 5B & 5C are implemented and accepted.** The discrete core, 3D kinematics, Play Mode UI (Phase 3), full Classical Solver infrastructure with Solve Mode (Phase 4), Phase 5A/5B Headless Benchmark Infrastructure, and the Phase 5C Classical Solver Comparative Benchmark Research & Report ([`docs/research/PHASE_5_CLASSICAL_SOLVER_BENCHMARK_REPORT.md`](docs/research/PHASE_5_CLASSICAL_SOLVER_BENCHMARK_REPORT.md)) are complete. Phase 5D (browser Research Mode) is not yet started. All implementation adheres to the canonical architecture contracts defined in [`docs/`](docs/README.md).
+> **Phases 0–5 are technically implemented and accepted.** The discrete core, 3D kinematics, Play Mode UI (Phase 3), full Classical Solver infrastructure with Solve Mode (Phase 4), Phase 5A/5B Headless Benchmark Infrastructure, Phase 5C Classical Solver Comparative Benchmark Research & Report ([`docs/research/PHASE_5_CLASSICAL_SOLVER_BENCHMARK_REPORT.md`](docs/research/PHASE_5_CLASSICAL_SOLVER_BENCHMARK_REPORT.md)), and Phase 5D Browser Research Mode are complete and verified across unit, boundary, automated Playwright browser, and interactive Chrome DevTools acceptance suites. All implementation adheres to the canonical architecture contracts defined in [`docs/`](docs/README.md).
 
 ---
 
@@ -21,12 +21,12 @@
 - **Classical Search Solvers (Implemented & Accepted — Phase 4):** Web Worker-isolated search algorithms (BFS, Bidirectional BFS, IDA* with H2 two-slice PDB heuristic) providing optimal solution paths without blocking the UI.
 - **Solve Mode UI & Playback (Implemented & Accepted — Phase 4E):** Algorithm selection, search progress telemetry, solution playback with play/pause/step-forward/step-backward, stale-result protection, and responsive browser layout.
 - **Benchmark Foundation, Sampler, Runner & CLI (Implemented & Accepted — Phases 5A & 5B):** Pure `@gearcube/benchmark` package, materialized v1 benchmark schemas, typed `BenchmarkConfigError` runtime validation, 41,472-state exact-distance corpus, deterministic FNV-1a hash and Mulberry32 PRNG, stratified sampling, headless solver comparison runner (BFS, BiBFS, IDA*), warm-up/measured separation, deterministic search metric reporting, lossless JSON exporter, 14-column RFC-4180 CSV exporter, and headless Node CLI (`npm run benchmark -- --config <config.json> [--json <path>] [--csv <path>]`).
-- **Classical Solver Comparative Benchmark Research & Report (Implemented & Accepted — Phase 5C):** Empirical comparative evaluation across exact distance strata 1..8 (222 unique structural cases, 64 timing cases across 3 replicates; 3,546 measured rows, 4,698 solver invocations), verifying 100% optimal solutions ($d^*(\sigma) = \text{exactDepth}$), deterministic pruning statistics (BiBFS: 21.84× reduction at depth 8; IDA* with $H_2$: 939.90× reduction at depth 8 vs. BFS), observational runtime scaling, and reproducible deterministic projections ([report](docs/research/PHASE_5_CLASSICAL_SOLVER_BENCHMARK_REPORT.md)).
+- **Classical Solver Comparative Benchmark Research & Report (Implemented & Accepted — Phase 5C):** Empirical comparative evaluation across exact distance strata 1..8 (222 unique structural cases, 64 timing cases across 3 replicates; 3,546 measured rows, 4,698 solver invocations), verifying 100% optimal solutions ($d^*(\\sigma) = \\text{exactDepth}$), deterministic pruning statistics (BiBFS: 21.84× reduction at depth 8; IDA* with $H_2$: 939.90× reduction at depth 8 vs. BFS), observational runtime scaling, and reproducible deterministic projections ([report](docs/research/PHASE_5_CLASSICAL_SOLVER_BENCHMARK_REPORT.md)).
+- **Browser Research Mode & Web Worker (Implemented & Accepted — Phase 5D):** Interactive browser Research Mode UI with workspace mode toggle (`PLAY` / `RESEARCH`), validated configuration form, dedicated background Web Worker (`benchmark.worker.ts`), BFS/BiBFS/IDA* search execution, tabular summary metrics, client-side JSON/CSV export downloads, host-side cancellation, and responsive layout across desktop, tablet, and mobile viewports.
 
 ## Planned Capabilities (Future Phases)
 
 - **Modular Visual Skins (Deferred / Future Presentation):** Support for interchangeable material schemes, wireframe views, or custom visual themes without altering puzzle mechanics.
-- **Browser Research Mode & Web Worker (Phase 5D — Not Started):** Interactive browser Research Mode UI and dedicated off-main-thread benchmark Web Worker in `apps/web`.
 - **AI-Guided Search (Phase 6 — Not Started):** Offline PyTorch-trained neural heuristics and value networks integrated into guided tree search.
 - **Computer Vision State Ingestion (Phase 7 — Not Started):** Local-first camera capture to recognize physical cube faces, reconstruct a candidate discrete state, validate consistency/reachability, allow user corrections, and generate step-by-step 3D visual solving guidance.
 
@@ -36,7 +36,7 @@
 
 GearCube Lab strictly enforces a unidirectional dependency hierarchy:
 
-$$\text{UI / Renderer / Solvers / Research} \longrightarrow \text{Core Contracts}$$
+$$\\text{UI / Renderer / Solvers / Research} \\longrightarrow \\text{Core Contracts}$$
 
 ```
                 +---------------------------------------+
@@ -63,7 +63,7 @@ $$\text{UI / Renderer / Solvers / Research} \longrightarrow \text{Core Contracts
 ```
 
 - **Domain Core is the Sole Source of Truth:** 3D rendering meshes and visual scene graphs reflect puzzle state; they never own or mutate state.
-- **Thread Boundary Isolation:** Compute-intensive graph search runs outside the main thread inside background Web Workers so that solving does not directly block rendering or interaction.
+- **Thread Boundary Isolation:** Compute-intensive graph search and benchmark runs execute outside the main thread inside background Web Workers so that solving and benchmarking do not directly block rendering or interaction.
 - **Kinematic & Presentation Decoupling:** Gear meshes and physical animations are computed via kinematic mappings derived from discrete state transitions, allowing future visual presentation themes without altering puzzle semantics.
 
 ---
