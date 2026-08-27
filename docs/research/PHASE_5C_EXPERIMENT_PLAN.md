@@ -21,7 +21,7 @@ Phase 5C establishes the empirical comparative evaluation of classical search al
 2. **Bidirectional BFS (BiBFS)** — Meet-in-the-middle bidirectional shortest-path baseline with algebraic move inverse predecessor generation.
 3. **Iterative Deepening A\* (IDA\*)** — Memory-bounded heuristic search guided by the admissible, consistent H2 two-slice pattern database (PDB) heuristic ($10.37\text{ KB}$ footprint).
 
-This document formalizes the complete Phase 5C experiment design, statistical analysis units, deterministic matrices, timing interpretation constraints, execution environment protocols, quartile algorithms, raw/derived artifact layouts, reproducibility gates, and pilot calibration evidence **prior to** executing any final research benchmark runs.
+This document formalizes the complete Phase 5C experiment design, statistical analysis units, deterministic matrices, timing interpretation constraints, pre-run execution baseline commit protocols, quartile algorithms, raw/derived artifact schemas, reproducibility gates, and pilot calibration evidence **prior to** executing any final research benchmark runs.
 
 ---
 
@@ -56,7 +56,7 @@ This document formalizes the complete Phase 5C experiment design, statistical an
 - **Sampling Scope:** For depth 1, the sample is exhaustive ($12/12$ cases). For depths 2–8, the sample is a fixed-seed, deterministic subset sampled without replacement ($30$ cases per depth). It is descriptive of the sampled strata and must not be characterized as a statistically certified population representation.
 
 ### 4.2. Quartile & Spread Algorithm
-To ensure deterministic analysis without ambiguity across tooling, all quartiles ($Q_1, Q_3$) and interquartile ranges ($\text{IQR} = Q_3 - Q_1$) across structural counters and timing medians are calculated via the following convention:
+To ensure deterministic analysis without ambiguity across tooling, all quartiles ($Q_1, Q_3$) and interquartile ranges ($\text{IQR} = Q_3 - Q_1$) across structural counters, timing medians, and paired reduction factors are calculated via the following convention:
 1. Sort values in ascending numerical order: $x_1 \le x_2 \le \dots \le x_n$.
 2. Compute median $M = \text{median}(X)$.
 3. **If $n$ is even:**
@@ -87,15 +87,19 @@ To ensure deterministic analysis without ambiguity across tooling, all quartiles
   - `timerResolutionStatus`: If cell `medianElapsedMs == 0`, mark as `TIMER_RESOLUTION_LIMITED`.
 - **Constraint:** Speedup ratios involving a `TIMER_RESOLUTION_LIMITED` timing cell must not be computed or published.
 
-### 4.4. Paired Case Comparison Rules
+### 4.4. Paired Case Comparison & Reduction Factors
 - Comparisons between algorithms are paired strictly on identical `caseId` instances.
+- **Reference Algorithm:** BFS serves as the baseline reference algorithm for all paired comparisons.
 - **Normalized Node Metrics:**
   - $\text{normalizedExpanded} = \frac{\text{algorithm.nodesExpanded}}{\text{BFS.nodesExpanded}}$ (defined only when $\text{BFS.nodesExpanded} > 0$)
   - $\text{normalizedGenerated} = \frac{\text{algorithm.nodesGenerated}}{\text{BFS.nodesGenerated}}$ (defined only when $\text{BFS.nodesGenerated} > 0$)
-- **Reduction Factors:**
-  - $\text{reductionFactorExpanded} = \frac{\text{BFS.nodesExpanded}}{\text{algorithm.nodesExpanded}}$ (defined only when both values $> 0$)
-  - $\text{reductionFactorGenerated} = \frac{\text{BFS.nodesGenerated}}{\text{algorithm.nodesGenerated}}$ (defined only when both values $> 0$)
-- **Reporting Rule:** The report must clearly distinguish between the *median of per-case paired ratios* and the *ratio of aggregate group means*. They must never be conflated.
+- **Paired Reduction Factors:**
+  - $\text{reductionFactorExpanded} = \frac{\text{BFS.nodesExpanded}}{\text{algorithm.nodesExpanded}}$ (defined only when both $\text{BFS.nodesExpanded} > 0$ and $\text{algorithm.nodesExpanded} > 0$)
+  - $\text{reductionFactorGenerated} = \frac{\text{BFS.nodesGenerated}}{\text{algorithm.nodesGenerated}}$ (defined only when both $\text{BFS.nodesGenerated} > 0$ and $\text{algorithm.nodesGenerated} > 0$)
+- **Reporting & Derivation Rule:**
+  - The derived structural summary table (`structural-by-depth.csv`) must directly emit the case count, median, $Q_1$, $Q_3$, and $\text{IQR}$ of these per-case paired reduction factors for each non-BFS algorithm.
+  - For BFS rows, paired reduction fields are empty / `N/A` (neutral baseline; never reported as self-improvement).
+  - If a ratio of aggregate group means is displayed separately in the report, it must use a distinct, unambiguous label (e.g., `aggregateMeanRatioExpanded`) and must never replace or be conflated with the *median of per-case paired ratios*.
 
 ### 4.5. Prohibition on Inferential Significance Claims
 - `PHASE5C_V1_ANALYSIS: DESCRIPTIVE`.
@@ -212,26 +216,39 @@ The pilot recorded $21 / 48$ trials ($43.75\%$) with `elapsedMs == 0`:
 
 ## 7. Execution Environment & Worktree Protocol
 
-### 7.1. Execution Conditions
-All five final Phase 5C CLI executions (`structural-depth1`, `structural-depth2-8`, `timing-r1`, `timing-r2`, `timing-r3`) must be executed under the following strict protocol:
+### 7.1. Execution Baseline Commit Lifecycle
+To guarantee scientific traceability and prevent data collection from uncommitted or drifting configurations:
+1. **Branch & Worktree Setup:** Create the dedicated Phase 5C execution worktree from the accepted main baseline.
+2. **Config Materialization:** Author the exact, accepted configuration files:
+   - `docs/research/phase5c/configs/structural-depth1.json`
+   - `docs/research/phase5c/configs/structural-depth2-8.json`
+   - `docs/research/phase5c/configs/timing.json`
+3. **Pre-Run Baseline Commit:** Commit these configuration files in a dedicated pre-run execution baseline commit (subject: `Prepare Phase 5C benchmark execution`). No raw data or report files may exist in this commit.
+4. **Execution SHA Freezing:** Record `PHASE5C_EXECUTION_BASELINE_COMMIT = <40-char SHA>`.
+5. **Pre-Execution Gate:** Immediately prior to running benchmarks, verify:
+   `git rev-parse HEAD == PHASE5C_EXECUTION_BASELINE_COMMIT` and the worktree is completely clean.
+
+### 7.2. Execution Conditions
+All five final Phase 5C CLI executions (`structural-depth1`, `structural-depth2-8`, `timing-r1`, `timing-r2`, `timing-r3`) must run strictly under:
+- `HEAD_COMMIT: PHASE5C_EXECUTION_BASELINE_COMMIT` (identical HEAD across all five runs).
 - `SERIAL_EXECUTION: YES` (runs executed sequentially one after another; never concurrently).
 - `CONCURRENT_BENCHMARKS: NO`.
 - `PHYSICAL_MACHINE: SAME`.
-- `REPOSITORY_COMMIT: SAME EXACT COMMIT`.
 - `NODE_VERSION: SAME`.
 - `TOOLCHAIN / LOCKFILE: SAME`.
 - `PRODUCTION_SOURCE_CHANGE_BETWEEN_RUNS: NO`.
 - `CONFIG_MUTATION_BETWEEN_TIMING_REPLICATES: NO`.
+- `TRACKED_DIFF_DURING_RUNS: NONE` (only the designated raw output files may be generated).
 
-### 7.2. Dependency & Worktree Preparation
-- Final research execution must occur in its own clean dedicated execution worktree.
-- Dependencies must be prepared via standard `npm ci` using the committed `package-lock.json`.
+### 7.3. Dependency Preparation
+- Dependencies must be prepared in the clean execution worktree via `npm ci` using the committed `package-lock.json` after fixing the execution baseline commit.
+- `node_modules` remains untracked. `npm ci` must produce zero diff in tracked files.
 - Copied `node_modules` trees, ad-hoc symlinks, or cross-worktree package junction hacks are strictly prohibited for final data collection.
 - *Note:* The planning pilot used local temporary dependency scaffolding solely for pre-flight calibration; pilot numbers are not part of the final research dataset.
 
-### 7.3. Environment Metadata Logging
+### 7.4. Environment Metadata Logging
 The research report and reproducibility record must log:
-- Git repository commit SHA
+- `executionBaselineCommit` (40-character Git SHA)
 - Node.js runtime version
 - Host operating system and platform
 - System architecture
@@ -241,7 +258,7 @@ The research report and reproducibility record must log:
 
 ---
 
-## 8. Artifact & Directory Layout (To Freeze)
+## 8. Artifact Layout & Raw Data Immutability
 
 The future Phase 5C execution task will populate the following frozen tracked directory structure:
 
@@ -266,20 +283,22 @@ docs/research/
     │   ├── timing-r3.json                          # Replicate 3 JSON report (960 trials)
     │   └── timing-r3.csv                           # Replicate 3 CSV (960 trials)
     └── derived/
-        ├── structural-by-depth.csv                 # Script-generated structural summary
+        ├── structural-by-depth.csv                 # Script-generated structural summary & paired reduction factors
         ├── timing-by-depth.csv                     # Script-generated timing summary
         └── reproducibility-check.json              # Script-verified bit-for-bit check
 scripts/
 └── analyze-phase5c.mjs                             # Node-standard-library deterministic analysis script
 ```
 
-### 8.1. Raw Data Immutability
-- Once generated and verified, all raw JSON and CSV files in `docs/research/phase5c/raw/` are immutable scientific records.
-- If an execution fails any verification gate, the entire run attempt is invalid and must be discarded according to the stop policy; individual rows must never be hand-edited or selectively overwritten.
+### 8.1. Raw Data Pre-Commit Validation & Immutability Lifecycle
+- Raw JSON and CSV files are generated into `docs/research/phase5c/raw/` from the fixed `PHASE5C_EXECUTION_BASELINE_COMMIT`.
+- **Validation Before Commit:** The analysis script consumes the five final raw JSON reports generated from the fixed execution baseline; these files are committed unchanged only after all research-data integrity gates pass.
+- **Immutability:** Once accepted and committed, all raw files are immutable scientific evidence.
+- **Invalid Data Policy:** If any data quality gate fails, the invalid execution is discarded as a whole. Raw rows must never be hand-edited or selectively patched. Rerunning with altered configs or code requires authoring a new execution baseline commit.
 
 ### 8.2. Analysis Script Contract (`scripts/analyze-phase5c.mjs`)
-- Uses strictly Node.js standard library modules (`node:fs`, `node:path`). No external npm dependencies.
-- **Inputs:** Strictly the five committed raw JSON files in `docs/research/phase5c/raw/` (CSV files serve as tabular cross-checks).
+- Uses strictly Node.js standard library modules (`node:fs`, `node:path`, `node:crypto`). No external npm dependencies.
+- **Inputs:** Strictly the five raw JSON files in `docs/research/phase5c/raw/` (CSV files serve as tabular cross-checks).
 - **Behavior:** Deterministic, pure data extraction and statistical reduction. Performs zero solver calls, zero corpus rebuilds, zero resampling, zero configuration mutations, zero row mutations, zero network requests, and zero silent data filtering.
 - **Error Behavior:** Exits with non-zero exit code on missing inputs, schema errors, unexpected trial counts, `LIMIT_REACHED` presence, optimality mismatches, or deterministic timing replicate discrepancies.
 
@@ -288,7 +307,7 @@ The analysis script will emit `reproducibility-check.json` documenting:
 ```json
 {
   "schemaVersion": "1",
-  "repositoryCommit": "<commit-sha>",
+  "executionBaselineCommit": "<40-char SHA>",
   "suiteId": "phase5c-timing-v1",
   "seed": "phase5c-timing-v1",
   "replicates": [
@@ -296,6 +315,12 @@ The analysis script will emit `reproducibility-check.json` documenting:
     "docs/research/phase5c/raw/timing-r2.json",
     "docs/research/phase5c/raw/timing-r3.json"
   ],
+  "configContractMatched": true,
+  "configSha256": {
+    "structural-depth1.json": "<hex>",
+    "structural-depth2-8.json": "<hex>",
+    "timing.json": "<hex>"
+  },
   "caseSequenceIdentical": true,
   "deterministicProjectionIdentical": true,
   "expectedCases": 64,
@@ -318,6 +343,12 @@ For each `algorithm × exactDepth`, the derived structural table contains:
 - `coverageFraction` ($\frac{\text{caseCount}}{\text{canonicalBucketSize}}$)
 - `meanNodesExpanded`, `medianNodesExpanded`, `minNodesExpanded`, `maxNodesExpanded`, `Q1NodesExpanded`, `Q3NodesExpanded`, `iqrNodesExpanded`
 - `meanNodesGenerated`, `medianNodesGenerated`, `minNodesGenerated`, `maxNodesGenerated`, `Q1NodesGenerated`, `Q3NodesGenerated`, `iqrNodesGenerated`
+- `pairedExpandedRatioCaseCount` (empty / `N/A` for BFS; valid case count for non-BFS where $\text{BFS} > 0$ and $\text{alg} > 0$)
+- `medianReductionFactorExpanded` (empty / `N/A` for BFS; median of per-case $\frac{\text{BFS.nodesExpanded}}{\text{algorithm.nodesExpanded}}$)
+- `Q1ReductionFactorExpanded`, `Q3ReductionFactorExpanded`, `iqrReductionFactorExpanded`
+- `pairedGeneratedRatioCaseCount` (empty / `N/A` for BFS; valid case count for non-BFS where $\text{BFS} > 0$ and $\text{alg} > 0$)
+- `medianReductionFactorGenerated` (empty / `N/A` for BFS; median of per-case $\frac{\text{BFS.nodesGenerated}}{\text{algorithm.nodesGenerated}}$)
+- `Q1ReductionFactorGenerated`, `Q3ReductionFactorGenerated`, `iqrReductionFactorGenerated`
 
 ### 9.2. Timing Summary Table Schema (`timing-by-depth.csv`)
 For each `algorithm × exactDepth`, the derived timing table contains:
@@ -335,19 +366,20 @@ For each `algorithm × exactDepth`, the derived timing table contains:
 
 ## 10. Future Phase 5C Acceptance Criteria & Quality Stop Policy
 
-The final Phase 5C execution task must satisfy all nine explicit acceptance gates:
+The final Phase 5C execution task must satisfy all ten explicit acceptance gates:
 
 | Gate Identifier | Pass Requirement |
 | :--- | :--- |
+| **`EXECUTION_BASELINE_GATE`** | All exact configs committed before data collection; all five runs executed on identical `PHASE5C_EXECUTION_BASELINE_COMMIT`; zero tracked file changes during runs; config contract verification passes. |
 | **`RESEARCH_DATASET_GATE`** | All five raw JSON/CSV reports exist with exact expected trial counts (36, 630, 960, 960, 960). |
 | **`ALL_SOLVED_GATE`** | Exactly 0 trials reach `LIMIT_REACHED`; 100% of trials finish with status `SOLVED`. |
 | **`OPTIMALITY_GATE`** | Every solved trial satisfies $\text{solutionDepth} \equiv \text{exactDepth}$ without exception. |
 | **`REPRODUCIBILITY_GATE`** | `reproducibility-check.json` confirms bit-for-bit identity of deterministic projections across `timing-r1`, `timing-r2`, `timing-r3`. |
 | **`RAW_ARTIFACT_INTEGRITY_GATE`** | Raw files are present, valid, conform to RFC-4180 / JSON v1 schemas, and are left unmutated by analysis. |
-| **`STRUCTURAL_ANALYSIS_GATE`** | `structural-by-depth.csv` correctly aggregates all 222 structural cases across all 8 exact depths. |
+| **`STRUCTURAL_ANALYSIS_GATE`** | `structural-by-depth.csv` correctly aggregates all 222 structural cases across all 8 exact depths, including script-generated per-case paired reduction factors. |
 | **`TIMING_RESOLUTION_GATE`** | `timing-by-depth.csv` reports two-stage case medians, zero-ms counts/fractions, and `TIMER_RESOLUTION_LIMITED` classifications. |
 | **`METRIC_SEPARATION_GATE`** | Final research report uses deterministic node counters as primary evidence and labels `elapsedMs` as observational. |
-| **`REPORT_TRACEABILITY_GATE`** | Every table, figure, and quantitative claim in `PHASE_5_CLASSICAL_SOLVER_BENCHMARK_REPORT.md` is strictly traceable to committed raw/derived CSVs. |
+| **`REPORT_TRACEABILITY_GATE`** | Every table, figure, quantitative claim, and paired reduction factor in `PHASE_5_CLASSICAL_SOLVER_BENCHMARK_REPORT.md` is strictly traceable to committed raw/derived CSVs and raw JSON trials. No hand calculations. |
 
 ### Quality Stop Policy
 If any final research trial produces a `LIMIT_REACHED` outcome, an optimality violation, a CLI runtime crash, or a discrepancy across deterministic timing replicate fields, **the research execution is immediately declared INVALID and execution must STOP**. No ad-hoc parameter tweaks or source fixes may be made during a data collection task.
