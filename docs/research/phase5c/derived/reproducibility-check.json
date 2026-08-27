@@ -1,0 +1,23 @@
+{
+  "schemaVersion": "1",
+  "executionBaselineCommit": "1fcc48dffcc10a59dbb9fe1eb1e5d7e2ce123ba6",
+  "suiteId": "phase5c-timing-v1",
+  "seed": "phase5c-timing-v1",
+  "replicates": [
+    "docs/research/phase5c/raw/timing-r1.json",
+    "docs/research/phase5c/raw/timing-r2.json",
+    "docs/research/phase5c/raw/timing-r3.json"
+  ],
+  "configContractMatched": true,
+  "configSha256": {
+    "structural-depth1.json": "cf88e2f5607a81b008ed5133ef08b8c74d0ad0a83ed87b9fb7c85d427cbafffe",
+    "structural-depth2-8.json": "dfc1d2c00e65fdadb4c81cc034d9e9cf15b63b4167e739fd03bef541da4364fd",
+    "timing.json": "583fbd0f966941af6695d4925a993c5c697bf7be05010de5c37b5fa664bb4b44"
+  },
+  "caseSequenceIdentical": true,
+  "deterministicProjectionIdentical": true,
+  "expectedCases": 64,
+  "expectedTrialsPerReplicate": 960,
+  "deterministicMismatches": 0,
+  "reproducibilityPassed": true
+}

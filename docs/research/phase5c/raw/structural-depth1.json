@@ -1,0 +1,773 @@
+{
+  "schemaVersion": "1",
+  "config": {
+    "schemaVersion": "1",
+    "suiteId": "phase5c-structural-depth1-v1",
+    "seed": "phase5c-structural-d1-v1",
+    "exactDepths": [
+      1
+    ],
+    "casesPerDepth": 12,
+    "algorithms": [
+      "BFS",
+      "BIDIRECTIONAL_BFS",
+      "IDA_STAR"
+    ],
+    "warmupRuns": 0,
+    "measuredRuns": 1
+  },
+  "environment": {
+    "platform": "node",
+    "executionTimestamp": "2026-08-27T08:42:10.667Z",
+    "os": "win32",
+    "architecture": "x64",
+    "nodeVersion": "v22.17.1",
+    "cpuModel": "13th Gen Intel(R) Core(TM) i5-13600K",
+    "logicalCores": 20
+  },
+  "cases": [
+    {
+      "caseId": "d1:C:6|X:1.0|Y:3.2|Z:1.0",
+      "stateKey": "C:6|X:1.0|Y:3.2|Z:1.0",
+      "exactDepth": 1
+    },
+    {
+      "caseId": "d1:C:6|X:1.0|Y:1.2|Z:1.0",
+      "stateKey": "C:6|X:1.0|Y:1.2|Z:1.0",
+      "exactDepth": 1
+    },
+    {
+      "caseId": "d1:C:21|X:1.1|Y:0.0|Z:3.0",
+      "stateKey": "C:21|X:1.1|Y:0.0|Z:3.0",
+      "exactDepth": 1
+    },
+    {
+      "caseId": "d1:C:14|X:0.0|Y:1.0|Z:1.2",
+      "stateKey": "C:14|X:0.0|Y:1.0|Z:1.2",
+      "exactDepth": 1
+    },
+    {
+      "caseId": "d1:C:14|X:0.0|Y:1.0|Z:3.1",
+      "stateKey": "C:14|X:0.0|Y:1.0|Z:3.1",
+      "exactDepth": 1
+    },
+    {
+      "caseId": "d1:C:6|X:1.0|Y:1.1|Z:1.0",
+      "stateKey": "C:6|X:1.0|Y:1.1|Z:1.0",
+      "exactDepth": 1
+    },
+    {
+      "caseId": "d1:C:21|X:3.1|Y:0.0|Z:3.0",
+      "stateKey": "C:21|X:3.1|Y:0.0|Z:3.0",
+      "exactDepth": 1
+    },
+    {
+      "caseId": "d1:C:21|X:1.2|Y:0.0|Z:3.0",
+      "stateKey": "C:21|X:1.2|Y:0.0|Z:3.0",
+      "exactDepth": 1
+    },
+    {
+      "caseId": "d1:C:21|X:3.2|Y:0.0|Z:3.0",
+      "stateKey": "C:21|X:3.2|Y:0.0|Z:3.0",
+      "exactDepth": 1
+    },
+    {
+      "caseId": "d1:C:6|X:1.0|Y:3.1|Z:1.0",
+      "stateKey": "C:6|X:1.0|Y:3.1|Z:1.0",
+      "exactDepth": 1
+    },
+    {
+      "caseId": "d1:C:14|X:0.0|Y:1.0|Z:3.2",
+      "stateKey": "C:14|X:0.0|Y:1.0|Z:3.2",
+      "exactDepth": 1
+    },
+    {
+      "caseId": "d1:C:14|X:0.0|Y:1.0|Z:1.1",
+      "stateKey": "C:14|X:0.0|Y:1.0|Z:1.1",
+      "exactDepth": 1
+    }
+  ],
+  "trials": [
+    {
+      "caseId": "d1:C:6|X:1.0|Y:3.2|Z:1.0",
+      "exactDepth": 1,
+      "algorithm": "BFS",
+      "repetitionIndex": 0,
+      "status": "SOLVED",
+      "solutionDepth": 1,
+      "solutionMoves": [
+        {
+          "face": "D",
+          "direction": "CCW"
+        }
+      ],
+      "nodesExpanded": 4,
+      "nodesGenerated": 48,
+      "elapsedMs": 0
+    },
+    {
+      "caseId": "d1:C:6|X:1.0|Y:3.2|Z:1.0",
+      "exactDepth": 1,
+      "algorithm": "BIDIRECTIONAL_BFS",
+      "repetitionIndex": 0,
+      "status": "SOLVED",
+      "solutionDepth": 1,
+      "solutionMoves": [
+        {
+          "face": "D",
+          "direction": "CCW"
+        }
+      ],
+      "nodesExpanded": 1,
+      "nodesGenerated": 12,
+      "elapsedMs": 0
+    },
+    {
+      "caseId": "d1:C:6|X:1.0|Y:3.2|Z:1.0",
+      "exactDepth": 1,
+      "algorithm": "IDA_STAR",
+      "repetitionIndex": 0,
+      "status": "SOLVED",
+      "solutionDepth": 1,
+      "solutionMoves": [
+        {
+          "face": "D",
+          "direction": "CCW"
+        }
+      ],
+      "nodesExpanded": 1,
+      "nodesGenerated": 12,
+      "elapsedMs": 0
+    },
+    {
+      "caseId": "d1:C:6|X:1.0|Y:1.2|Z:1.0",
+      "exactDepth": 1,
+      "algorithm": "BIDIRECTIONAL_BFS",
+      "repetitionIndex": 0,
+      "status": "SOLVED",
+      "solutionDepth": 1,
+      "solutionMoves": [
+        {
+          "face": "U",
+          "direction": "CW"
+        }
+      ],
+      "nodesExpanded": 1,
+      "nodesGenerated": 12,
+      "elapsedMs": 0
+    },
+    {
+      "caseId": "d1:C:6|X:1.0|Y:1.2|Z:1.0",
+      "exactDepth": 1,
+      "algorithm": "IDA_STAR",
+      "repetitionIndex": 0,
+      "status": "SOLVED",
+      "solutionDepth": 1,
+      "solutionMoves": [
+        {
+          "face": "U",
+          "direction": "CW"
+        }
+      ],
+      "nodesExpanded": 1,
+      "nodesGenerated": 12,
+      "elapsedMs": 0
+    },
+    {
+      "caseId": "d1:C:6|X:1.0|Y:1.2|Z:1.0",
+      "exactDepth": 1,
+      "algorithm": "BFS",
+      "repetitionIndex": 0,
+      "status": "SOLVED",
+      "solutionDepth": 1,
+      "solutionMoves": [
+        {
+          "face": "U",
+          "direction": "CW"
+        }
+      ],
+      "nodesExpanded": 1,
+      "nodesGenerated": 12,
+      "elapsedMs": 0
+    },
+    {
+      "caseId": "d1:C:21|X:1.1|Y:0.0|Z:3.0",
+      "exactDepth": 1,
+      "algorithm": "IDA_STAR",
+      "repetitionIndex": 0,
+      "status": "SOLVED",
+      "solutionDepth": 1,
+      "solutionMoves": [
+        {
+          "face": "L",
+          "direction": "CW"
+        }
+      ],
+      "nodesExpanded": 1,
+      "nodesGenerated": 12,
+      "elapsedMs": 0
+    },
+    {
+      "caseId": "d1:C:21|X:1.1|Y:0.0|Z:3.0",
+      "exactDepth": 1,
+      "algorithm": "BFS",
+      "repetitionIndex": 0,
+      "status": "SOLVED",
+      "solutionDepth": 1,
+      "solutionMoves": [
+        {
+          "face": "L",
+          "direction": "CW"
+        }
+      ],
+      "nodesExpanded": 11,
+      "nodesGenerated": 132,
+      "elapsedMs": 1
+    },
+    {
+      "caseId": "d1:C:21|X:1.1|Y:0.0|Z:3.0",
+      "exactDepth": 1,
+      "algorithm": "BIDIRECTIONAL_BFS",
+      "repetitionIndex": 0,
+      "status": "SOLVED",
+      "solutionDepth": 1,
+      "solutionMoves": [
+        {
+          "face": "L",
+          "direction": "CW"
+        }
+      ],
+      "nodesExpanded": 1,
+      "nodesGenerated": 12,
+      "elapsedMs": 0
+    },
+    {
+      "caseId": "d1:C:14|X:0.0|Y:1.0|Z:1.2",
+      "exactDepth": 1,
+      "algorithm": "BFS",
+      "repetitionIndex": 0,
+      "status": "SOLVED",
+      "solutionDepth": 1,
+      "solutionMoves": [
+        {
+          "face": "F",
+          "direction": "CW"
+        }
+      ],
+      "nodesExpanded": 5,
+      "nodesGenerated": 60,
+      "elapsedMs": 0
+    },
+    {
+      "caseId": "d1:C:14|X:0.0|Y:1.0|Z:1.2",
+      "exactDepth": 1,
+      "algorithm": "BIDIRECTIONAL_BFS",
+      "repetitionIndex": 0,
+      "status": "SOLVED",
+      "solutionDepth": 1,
+      "solutionMoves": [
+        {
+          "face": "F",
+          "direction": "CW"
+        }
+      ],
+      "nodesExpanded": 1,
+      "nodesGenerated": 12,
+      "elapsedMs": 0
+    },
+    {
+      "caseId": "d1:C:14|X:0.0|Y:1.0|Z:1.2",
+      "exactDepth": 1,
+      "algorithm": "IDA_STAR",
+      "repetitionIndex": 0,
+      "status": "SOLVED",
+      "solutionDepth": 1,
+      "solutionMoves": [
+        {
+          "face": "F",
+          "direction": "CW"
+        }
+      ],
+      "nodesExpanded": 1,
+      "nodesGenerated": 12,
+      "elapsedMs": 0
+    },
+    {
+      "caseId": "d1:C:14|X:0.0|Y:1.0|Z:3.1",
+      "exactDepth": 1,
+      "algorithm": "BIDIRECTIONAL_BFS",
+      "repetitionIndex": 0,
+      "status": "SOLVED",
+      "solutionDepth": 1,
+      "solutionMoves": [
+        {
+          "face": "F",
+          "direction": "CCW"
+        }
+      ],
+      "nodesExpanded": 1,
+      "nodesGenerated": 12,
+      "elapsedMs": 0
+    },
+    {
+      "caseId": "d1:C:14|X:0.0|Y:1.0|Z:3.1",
+      "exactDepth": 1,
+      "algorithm": "IDA_STAR",
+      "repetitionIndex": 0,
+      "status": "SOLVED",
+      "solutionDepth": 1,
+      "solutionMoves": [
+        {
+          "face": "F",
+          "direction": "CCW"
+        }
+      ],
+      "nodesExpanded": 1,
+      "nodesGenerated": 12,
+      "elapsedMs": 1
+    },
+    {
+      "caseId": "d1:C:14|X:0.0|Y:1.0|Z:3.1",
+      "exactDepth": 1,
+      "algorithm": "BFS",
+      "repetitionIndex": 0,
+      "status": "SOLVED",
+      "solutionDepth": 1,
+      "solutionMoves": [
+        {
+          "face": "F",
+          "direction": "CCW"
+        }
+      ],
+      "nodesExpanded": 6,
+      "nodesGenerated": 72,
+      "elapsedMs": 0
+    },
+    {
+      "caseId": "d1:C:6|X:1.0|Y:1.1|Z:1.0",
+      "exactDepth": 1,
+      "algorithm": "IDA_STAR",
+      "repetitionIndex": 0,
+      "status": "SOLVED",
+      "solutionDepth": 1,
+      "solutionMoves": [
+        {
+          "face": "D",
+          "direction": "CW"
+        }
+      ],
+      "nodesExpanded": 1,
+      "nodesGenerated": 12,
+      "elapsedMs": 0
+    },
+    {
+      "caseId": "d1:C:6|X:1.0|Y:1.1|Z:1.0",
+      "exactDepth": 1,
+      "algorithm": "BFS",
+      "repetitionIndex": 0,
+      "status": "SOLVED",
+      "solutionDepth": 1,
+      "solutionMoves": [
+        {
+          "face": "D",
+          "direction": "CW"
+        }
+      ],
+      "nodesExpanded": 3,
+      "nodesGenerated": 36,
+      "elapsedMs": 0
+    },
+    {
+      "caseId": "d1:C:6|X:1.0|Y:1.1|Z:1.0",
+      "exactDepth": 1,
+      "algorithm": "BIDIRECTIONAL_BFS",
+      "repetitionIndex": 0,
+      "status": "SOLVED",
+      "solutionDepth": 1,
+      "solutionMoves": [
+        {
+          "face": "D",
+          "direction": "CW"
+        }
+      ],
+      "nodesExpanded": 1,
+      "nodesGenerated": 12,
+      "elapsedMs": 0
+    },
+    {
+      "caseId": "d1:C:21|X:3.1|Y:0.0|Z:3.0",
+      "exactDepth": 1,
+      "algorithm": "BFS",
+      "repetitionIndex": 0,
+      "status": "SOLVED",
+      "solutionDepth": 1,
+      "solutionMoves": [
+        {
+          "face": "R",
+          "direction": "CCW"
+        }
+      ],
+      "nodesExpanded": 10,
+      "nodesGenerated": 120,
+      "elapsedMs": 0
+    },
+    {
+      "caseId": "d1:C:21|X:3.1|Y:0.0|Z:3.0",
+      "exactDepth": 1,
+      "algorithm": "BIDIRECTIONAL_BFS",
+      "repetitionIndex": 0,
+      "status": "SOLVED",
+      "solutionDepth": 1,
+      "solutionMoves": [
+        {
+          "face": "R",
+          "direction": "CCW"
+        }
+      ],
+      "nodesExpanded": 1,
+      "nodesGenerated": 12,
+      "elapsedMs": 1
+    },
+    {
+      "caseId": "d1:C:21|X:3.1|Y:0.0|Z:3.0",
+      "exactDepth": 1,
+      "algorithm": "IDA_STAR",
+      "repetitionIndex": 0,
+      "status": "SOLVED",
+      "solutionDepth": 1,
+      "solutionMoves": [
+        {
+          "face": "R",
+          "direction": "CCW"
+        }
+      ],
+      "nodesExpanded": 1,
+      "nodesGenerated": 12,
+      "elapsedMs": 0
+    },
+    {
+      "caseId": "d1:C:21|X:1.2|Y:0.0|Z:3.0",
+      "exactDepth": 1,
+      "algorithm": "BIDIRECTIONAL_BFS",
+      "repetitionIndex": 0,
+      "status": "SOLVED",
+      "solutionDepth": 1,
+      "solutionMoves": [
+        {
+          "face": "R",
+          "direction": "CW"
+        }
+      ],
+      "nodesExpanded": 1,
+      "nodesGenerated": 12,
+      "elapsedMs": 0
+    },
+    {
+      "caseId": "d1:C:21|X:1.2|Y:0.0|Z:3.0",
+      "exactDepth": 1,
+      "algorithm": "IDA_STAR",
+      "repetitionIndex": 0,
+      "status": "SOLVED",
+      "solutionDepth": 1,
+      "solutionMoves": [
+        {
+          "face": "R",
+          "direction": "CW"
+        }
+      ],
+      "nodesExpanded": 1,
+      "nodesGenerated": 12,
+      "elapsedMs": 0
+    },
+    {
+      "caseId": "d1:C:21|X:1.2|Y:0.0|Z:3.0",
+      "exactDepth": 1,
+      "algorithm": "BFS",
+      "repetitionIndex": 0,
+      "status": "SOLVED",
+      "solutionDepth": 1,
+      "solutionMoves": [
+        {
+          "face": "R",
+          "direction": "CW"
+        }
+      ],
+      "nodesExpanded": 9,
+      "nodesGenerated": 108,
+      "elapsedMs": 0
+    },
+    {
+      "caseId": "d1:C:21|X:3.2|Y:0.0|Z:3.0",
+      "exactDepth": 1,
+      "algorithm": "IDA_STAR",
+      "repetitionIndex": 0,
+      "status": "SOLVED",
+      "solutionDepth": 1,
+      "solutionMoves": [
+        {
+          "face": "L",
+          "direction": "CCW"
+        }
+      ],
+      "nodesExpanded": 1,
+      "nodesGenerated": 12,
+      "elapsedMs": 0
+    },
+    {
+      "caseId": "d1:C:21|X:3.2|Y:0.0|Z:3.0",
+      "exactDepth": 1,
+      "algorithm": "BFS",
+      "repetitionIndex": 0,
+      "status": "SOLVED",
+      "solutionDepth": 1,
+      "solutionMoves": [
+        {
+          "face": "L",
+          "direction": "CCW"
+        }
+      ],
+      "nodesExpanded": 12,
+      "nodesGenerated": 144,
+      "elapsedMs": 0
+    },
+    {
+      "caseId": "d1:C:21|X:3.2|Y:0.0|Z:3.0",
+      "exactDepth": 1,
+      "algorithm": "BIDIRECTIONAL_BFS",
+      "repetitionIndex": 0,
+      "status": "SOLVED",
+      "solutionDepth": 1,
+      "solutionMoves": [
+        {
+          "face": "L",
+          "direction": "CCW"
+        }
+      ],
+      "nodesExpanded": 1,
+      "nodesGenerated": 12,
+      "elapsedMs": 1
+    },
+    {
+      "caseId": "d1:C:6|X:1.0|Y:3.1|Z:1.0",
+      "exactDepth": 1,
+      "algorithm": "BFS",
+      "repetitionIndex": 0,
+      "status": "SOLVED",
+      "solutionDepth": 1,
+      "solutionMoves": [
+        {
+          "face": "U",
+          "direction": "CCW"
+        }
+      ],
+      "nodesExpanded": 2,
+      "nodesGenerated": 24,
+      "elapsedMs": 0
+    },
+    {
+      "caseId": "d1:C:6|X:1.0|Y:3.1|Z:1.0",
+      "exactDepth": 1,
+      "algorithm": "BIDIRECTIONAL_BFS",
+      "repetitionIndex": 0,
+      "status": "SOLVED",
+      "solutionDepth": 1,
+      "solutionMoves": [
+        {
+          "face": "U",
+          "direction": "CCW"
+        }
+      ],
+      "nodesExpanded": 1,
+      "nodesGenerated": 12,
+      "elapsedMs": 0
+    },
+    {
+      "caseId": "d1:C:6|X:1.0|Y:3.1|Z:1.0",
+      "exactDepth": 1,
+      "algorithm": "IDA_STAR",
+      "repetitionIndex": 0,
+      "status": "SOLVED",
+      "solutionDepth": 1,
+      "solutionMoves": [
+        {
+          "face": "U",
+          "direction": "CCW"
+        }
+      ],
+      "nodesExpanded": 1,
+      "nodesGenerated": 12,
+      "elapsedMs": 0
+    },
+    {
+      "caseId": "d1:C:14|X:0.0|Y:1.0|Z:3.2",
+      "exactDepth": 1,
+      "algorithm": "BIDIRECTIONAL_BFS",
+      "repetitionIndex": 0,
+      "status": "SOLVED",
+      "solutionDepth": 1,
+      "solutionMoves": [
+        {
+          "face": "B",
+          "direction": "CCW"
+        }
+      ],
+      "nodesExpanded": 1,
+      "nodesGenerated": 12,
+      "elapsedMs": 0
+    },
+    {
+      "caseId": "d1:C:14|X:0.0|Y:1.0|Z:3.2",
+      "exactDepth": 1,
+      "algorithm": "IDA_STAR",
+      "repetitionIndex": 0,
+      "status": "SOLVED",
+      "solutionDepth": 1,
+      "solutionMoves": [
+        {
+          "face": "B",
+          "direction": "CCW"
+        }
+      ],
+      "nodesExpanded": 1,
+      "nodesGenerated": 12,
+      "elapsedMs": 0
+    },
+    {
+      "caseId": "d1:C:14|X:0.0|Y:1.0|Z:3.2",
+      "exactDepth": 1,
+      "algorithm": "BFS",
+      "repetitionIndex": 0,
+      "status": "SOLVED",
+      "solutionDepth": 1,
+      "solutionMoves": [
+        {
+          "face": "B",
+          "direction": "CCW"
+        }
+      ],
+      "nodesExpanded": 8,
+      "nodesGenerated": 96,
+      "elapsedMs": 0
+    },
+    {
+      "caseId": "d1:C:14|X:0.0|Y:1.0|Z:1.1",
+      "exactDepth": 1,
+      "algorithm": "IDA_STAR",
+      "repetitionIndex": 0,
+      "status": "SOLVED",
+      "solutionDepth": 1,
+      "solutionMoves": [
+        {
+          "face": "B",
+          "direction": "CW"
+        }
+      ],
+      "nodesExpanded": 1,
+      "nodesGenerated": 12,
+      "elapsedMs": 0
+    },
+    {
+      "caseId": "d1:C:14|X:0.0|Y:1.0|Z:1.1",
+      "exactDepth": 1,
+      "algorithm": "BFS",
+      "repetitionIndex": 0,
+      "status": "SOLVED",
+      "solutionDepth": 1,
+      "solutionMoves": [
+        {
+          "face": "B",
+          "direction": "CW"
+        }
+      ],
+      "nodesExpanded": 7,
+      "nodesGenerated": 84,
+      "elapsedMs": 1
+    },
+    {
+      "caseId": "d1:C:14|X:0.0|Y:1.0|Z:1.1",
+      "exactDepth": 1,
+      "algorithm": "BIDIRECTIONAL_BFS",
+      "repetitionIndex": 0,
+      "status": "SOLVED",
+      "solutionDepth": 1,
+      "solutionMoves": [
+        {
+          "face": "B",
+          "direction": "CW"
+        }
+      ],
+      "nodesExpanded": 1,
+      "nodesGenerated": 12,
+      "elapsedMs": 0
+    }
+  ],
+  "summary": {
+    "totalCases": 12,
+    "totalTrials": 36,
+    "algorithms": [
+      {
+        "algorithm": "BFS",
+        "byDepth": [
+          {
+            "exactDepth": 1,
+            "totalTrials": 12,
+            "solvedCount": 12,
+            "limitCount": 0,
+            "meanNodesExpanded": 6.5,
+            "medianNodesExpanded": 6.5,
+            "meanNodesGenerated": 78,
+            "medianNodesGenerated": 78,
+            "meanElapsedMs": 0.16666666666666666,
+            "medianElapsedMs": 0
+          }
+        ],
+        "totalSolved": 12,
+        "totalLimits": 0,
+        "overallMeanNodesExpanded": 6.5,
+        "overallMedianElapsedMs": 0
+      },
+      {
+        "algorithm": "BIDIRECTIONAL_BFS",
+        "byDepth": [
+          {
+            "exactDepth": 1,
+            "totalTrials": 12,
+            "solvedCount": 12,
+            "limitCount": 0,
+            "meanNodesExpanded": 1,
+            "medianNodesExpanded": 1,
+            "meanNodesGenerated": 12,
+            "medianNodesGenerated": 12,
+            "meanElapsedMs": 0.16666666666666666,
+            "medianElapsedMs": 0
+          }
+        ],
+        "totalSolved": 12,
+        "totalLimits": 0,
+        "overallMeanNodesExpanded": 1,
+        "overallMedianElapsedMs": 0
+      },
+      {
+        "algorithm": "IDA_STAR",
+        "byDepth": [
+          {
+            "exactDepth": 1,
+            "totalTrials": 12,
+            "solvedCount": 12,
+            "limitCount": 0,
+            "meanNodesExpanded": 1,
+            "medianNodesExpanded": 1,
+            "meanNodesGenerated": 12,
+            "medianNodesGenerated": 12,
+            "meanElapsedMs": 0.08333333333333333,
+            "medianElapsedMs": 0
+          }
+        ],
+        "totalSolved": 12,
+        "totalLimits": 0,
+        "overallMeanNodesExpanded": 1,
+        "overallMedianElapsedMs": 0
+      }
+    ]
+  }
+}

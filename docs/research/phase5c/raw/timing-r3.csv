@@ -1,0 +1,961 @@
+schemaVersion,suiteId,seed,caseId,exactDepth,algorithm,repetitionIndex,status,solutionDepth,solutionMoves,nodesExpanded,nodesGenerated,limitReason,elapsedMs
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:14|X:0.0|Y:1.0|Z:1.1,1,BFS,0,SOLVED,1,B_CW,7,84,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:14|X:0.0|Y:1.0|Z:1.1,1,BIDIRECTIONAL_BFS,0,SOLVED,1,B_CW,1,12,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:14|X:0.0|Y:1.0|Z:1.1,1,IDA_STAR,0,SOLVED,1,B_CW,1,12,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:14|X:0.0|Y:1.0|Z:1.1,1,BIDIRECTIONAL_BFS,1,SOLVED,1,B_CW,1,12,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:14|X:0.0|Y:1.0|Z:1.1,1,IDA_STAR,1,SOLVED,1,B_CW,1,12,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:14|X:0.0|Y:1.0|Z:1.1,1,BFS,1,SOLVED,1,B_CW,7,84,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:14|X:0.0|Y:1.0|Z:1.1,1,IDA_STAR,2,SOLVED,1,B_CW,1,12,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:14|X:0.0|Y:1.0|Z:1.1,1,BFS,2,SOLVED,1,B_CW,7,84,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:14|X:0.0|Y:1.0|Z:1.1,1,BIDIRECTIONAL_BFS,2,SOLVED,1,B_CW,1,12,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:14|X:0.0|Y:1.0|Z:1.1,1,BFS,3,SOLVED,1,B_CW,7,84,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:14|X:0.0|Y:1.0|Z:1.1,1,BIDIRECTIONAL_BFS,3,SOLVED,1,B_CW,1,12,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:14|X:0.0|Y:1.0|Z:1.1,1,IDA_STAR,3,SOLVED,1,B_CW,1,12,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:14|X:0.0|Y:1.0|Z:1.1,1,BIDIRECTIONAL_BFS,4,SOLVED,1,B_CW,1,12,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:14|X:0.0|Y:1.0|Z:1.1,1,IDA_STAR,4,SOLVED,1,B_CW,1,12,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:14|X:0.0|Y:1.0|Z:1.1,1,BFS,4,SOLVED,1,B_CW,7,84,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:14|X:0.0|Y:1.0|Z:1.2,1,BIDIRECTIONAL_BFS,0,SOLVED,1,F_CW,1,12,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:14|X:0.0|Y:1.0|Z:1.2,1,IDA_STAR,0,SOLVED,1,F_CW,1,12,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:14|X:0.0|Y:1.0|Z:1.2,1,BFS,0,SOLVED,1,F_CW,5,60,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:14|X:0.0|Y:1.0|Z:1.2,1,IDA_STAR,1,SOLVED,1,F_CW,1,12,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:14|X:0.0|Y:1.0|Z:1.2,1,BFS,1,SOLVED,1,F_CW,5,60,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:14|X:0.0|Y:1.0|Z:1.2,1,BIDIRECTIONAL_BFS,1,SOLVED,1,F_CW,1,12,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:14|X:0.0|Y:1.0|Z:1.2,1,BFS,2,SOLVED,1,F_CW,5,60,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:14|X:0.0|Y:1.0|Z:1.2,1,BIDIRECTIONAL_BFS,2,SOLVED,1,F_CW,1,12,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:14|X:0.0|Y:1.0|Z:1.2,1,IDA_STAR,2,SOLVED,1,F_CW,1,12,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:14|X:0.0|Y:1.0|Z:1.2,1,BIDIRECTIONAL_BFS,3,SOLVED,1,F_CW,1,12,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:14|X:0.0|Y:1.0|Z:1.2,1,IDA_STAR,3,SOLVED,1,F_CW,1,12,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:14|X:0.0|Y:1.0|Z:1.2,1,BFS,3,SOLVED,1,F_CW,5,60,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:14|X:0.0|Y:1.0|Z:1.2,1,IDA_STAR,4,SOLVED,1,F_CW,1,12,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:14|X:0.0|Y:1.0|Z:1.2,1,BFS,4,SOLVED,1,F_CW,5,60,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:14|X:0.0|Y:1.0|Z:1.2,1,BIDIRECTIONAL_BFS,4,SOLVED,1,F_CW,1,12,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:14|X:0.0|Y:1.0|Z:3.2,1,IDA_STAR,0,SOLVED,1,B_CCW,1,12,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:14|X:0.0|Y:1.0|Z:3.2,1,BFS,0,SOLVED,1,B_CCW,8,96,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:14|X:0.0|Y:1.0|Z:3.2,1,BIDIRECTIONAL_BFS,0,SOLVED,1,B_CCW,1,12,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:14|X:0.0|Y:1.0|Z:3.2,1,BFS,1,SOLVED,1,B_CCW,8,96,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:14|X:0.0|Y:1.0|Z:3.2,1,BIDIRECTIONAL_BFS,1,SOLVED,1,B_CCW,1,12,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:14|X:0.0|Y:1.0|Z:3.2,1,IDA_STAR,1,SOLVED,1,B_CCW,1,12,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:14|X:0.0|Y:1.0|Z:3.2,1,BIDIRECTIONAL_BFS,2,SOLVED,1,B_CCW,1,12,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:14|X:0.0|Y:1.0|Z:3.2,1,IDA_STAR,2,SOLVED,1,B_CCW,1,12,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:14|X:0.0|Y:1.0|Z:3.2,1,BFS,2,SOLVED,1,B_CCW,8,96,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:14|X:0.0|Y:1.0|Z:3.2,1,IDA_STAR,3,SOLVED,1,B_CCW,1,12,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:14|X:0.0|Y:1.0|Z:3.2,1,BFS,3,SOLVED,1,B_CCW,8,96,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:14|X:0.0|Y:1.0|Z:3.2,1,BIDIRECTIONAL_BFS,3,SOLVED,1,B_CCW,1,12,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:14|X:0.0|Y:1.0|Z:3.2,1,BFS,4,SOLVED,1,B_CCW,8,96,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:14|X:0.0|Y:1.0|Z:3.2,1,BIDIRECTIONAL_BFS,4,SOLVED,1,B_CCW,1,12,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:14|X:0.0|Y:1.0|Z:3.2,1,IDA_STAR,4,SOLVED,1,B_CCW,1,12,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:21|X:1.2|Y:0.0|Z:3.0,1,BFS,0,SOLVED,1,R_CW,9,108,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:21|X:1.2|Y:0.0|Z:3.0,1,BIDIRECTIONAL_BFS,0,SOLVED,1,R_CW,1,12,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:21|X:1.2|Y:0.0|Z:3.0,1,IDA_STAR,0,SOLVED,1,R_CW,1,12,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:21|X:1.2|Y:0.0|Z:3.0,1,BIDIRECTIONAL_BFS,1,SOLVED,1,R_CW,1,12,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:21|X:1.2|Y:0.0|Z:3.0,1,IDA_STAR,1,SOLVED,1,R_CW,1,12,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:21|X:1.2|Y:0.0|Z:3.0,1,BFS,1,SOLVED,1,R_CW,9,108,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:21|X:1.2|Y:0.0|Z:3.0,1,IDA_STAR,2,SOLVED,1,R_CW,1,12,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:21|X:1.2|Y:0.0|Z:3.0,1,BFS,2,SOLVED,1,R_CW,9,108,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:21|X:1.2|Y:0.0|Z:3.0,1,BIDIRECTIONAL_BFS,2,SOLVED,1,R_CW,1,12,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:21|X:1.2|Y:0.0|Z:3.0,1,BFS,3,SOLVED,1,R_CW,9,108,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:21|X:1.2|Y:0.0|Z:3.0,1,BIDIRECTIONAL_BFS,3,SOLVED,1,R_CW,1,12,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:21|X:1.2|Y:0.0|Z:3.0,1,IDA_STAR,3,SOLVED,1,R_CW,1,12,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:21|X:1.2|Y:0.0|Z:3.0,1,BIDIRECTIONAL_BFS,4,SOLVED,1,R_CW,1,12,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:21|X:1.2|Y:0.0|Z:3.0,1,IDA_STAR,4,SOLVED,1,R_CW,1,12,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:21|X:1.2|Y:0.0|Z:3.0,1,BFS,4,SOLVED,1,R_CW,9,108,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:21|X:3.2|Y:0.0|Z:3.0,1,BIDIRECTIONAL_BFS,0,SOLVED,1,L_CCW,1,12,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:21|X:3.2|Y:0.0|Z:3.0,1,IDA_STAR,0,SOLVED,1,L_CCW,1,12,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:21|X:3.2|Y:0.0|Z:3.0,1,BFS,0,SOLVED,1,L_CCW,12,144,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:21|X:3.2|Y:0.0|Z:3.0,1,IDA_STAR,1,SOLVED,1,L_CCW,1,12,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:21|X:3.2|Y:0.0|Z:3.0,1,BFS,1,SOLVED,1,L_CCW,12,144,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:21|X:3.2|Y:0.0|Z:3.0,1,BIDIRECTIONAL_BFS,1,SOLVED,1,L_CCW,1,12,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:21|X:3.2|Y:0.0|Z:3.0,1,BFS,2,SOLVED,1,L_CCW,12,144,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:21|X:3.2|Y:0.0|Z:3.0,1,BIDIRECTIONAL_BFS,2,SOLVED,1,L_CCW,1,12,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:21|X:3.2|Y:0.0|Z:3.0,1,IDA_STAR,2,SOLVED,1,L_CCW,1,12,,3
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:21|X:3.2|Y:0.0|Z:3.0,1,BIDIRECTIONAL_BFS,3,SOLVED,1,L_CCW,1,12,,6
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:21|X:3.2|Y:0.0|Z:3.0,1,IDA_STAR,3,SOLVED,1,L_CCW,1,12,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:21|X:3.2|Y:0.0|Z:3.0,1,BFS,3,SOLVED,1,L_CCW,12,144,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:21|X:3.2|Y:0.0|Z:3.0,1,IDA_STAR,4,SOLVED,1,L_CCW,1,12,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:21|X:3.2|Y:0.0|Z:3.0,1,BFS,4,SOLVED,1,L_CCW,12,144,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:21|X:3.2|Y:0.0|Z:3.0,1,BIDIRECTIONAL_BFS,4,SOLVED,1,L_CCW,1,12,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:6|X:1.0|Y:3.1|Z:1.0,1,IDA_STAR,0,SOLVED,1,U_CCW,1,12,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:6|X:1.0|Y:3.1|Z:1.0,1,BFS,0,SOLVED,1,U_CCW,2,24,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:6|X:1.0|Y:3.1|Z:1.0,1,BIDIRECTIONAL_BFS,0,SOLVED,1,U_CCW,1,12,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:6|X:1.0|Y:3.1|Z:1.0,1,BFS,1,SOLVED,1,U_CCW,2,24,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:6|X:1.0|Y:3.1|Z:1.0,1,BIDIRECTIONAL_BFS,1,SOLVED,1,U_CCW,1,12,,2
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:6|X:1.0|Y:3.1|Z:1.0,1,IDA_STAR,1,SOLVED,1,U_CCW,1,12,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:6|X:1.0|Y:3.1|Z:1.0,1,BIDIRECTIONAL_BFS,2,SOLVED,1,U_CCW,1,12,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:6|X:1.0|Y:3.1|Z:1.0,1,IDA_STAR,2,SOLVED,1,U_CCW,1,12,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:6|X:1.0|Y:3.1|Z:1.0,1,BFS,2,SOLVED,1,U_CCW,2,24,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:6|X:1.0|Y:3.1|Z:1.0,1,IDA_STAR,3,SOLVED,1,U_CCW,1,12,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:6|X:1.0|Y:3.1|Z:1.0,1,BFS,3,SOLVED,1,U_CCW,2,24,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:6|X:1.0|Y:3.1|Z:1.0,1,BIDIRECTIONAL_BFS,3,SOLVED,1,U_CCW,1,12,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:6|X:1.0|Y:3.1|Z:1.0,1,BFS,4,SOLVED,1,U_CCW,2,24,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:6|X:1.0|Y:3.1|Z:1.0,1,BIDIRECTIONAL_BFS,4,SOLVED,1,U_CCW,1,12,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:6|X:1.0|Y:3.1|Z:1.0,1,IDA_STAR,4,SOLVED,1,U_CCW,1,12,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:6|X:1.0|Y:1.1|Z:1.0,1,BFS,0,SOLVED,1,D_CW,3,36,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:6|X:1.0|Y:1.1|Z:1.0,1,BIDIRECTIONAL_BFS,0,SOLVED,1,D_CW,1,12,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:6|X:1.0|Y:1.1|Z:1.0,1,IDA_STAR,0,SOLVED,1,D_CW,1,12,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:6|X:1.0|Y:1.1|Z:1.0,1,BIDIRECTIONAL_BFS,1,SOLVED,1,D_CW,1,12,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:6|X:1.0|Y:1.1|Z:1.0,1,IDA_STAR,1,SOLVED,1,D_CW,1,12,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:6|X:1.0|Y:1.1|Z:1.0,1,BFS,1,SOLVED,1,D_CW,3,36,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:6|X:1.0|Y:1.1|Z:1.0,1,IDA_STAR,2,SOLVED,1,D_CW,1,12,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:6|X:1.0|Y:1.1|Z:1.0,1,BFS,2,SOLVED,1,D_CW,3,36,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:6|X:1.0|Y:1.1|Z:1.0,1,BIDIRECTIONAL_BFS,2,SOLVED,1,D_CW,1,12,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:6|X:1.0|Y:1.1|Z:1.0,1,BFS,3,SOLVED,1,D_CW,3,36,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:6|X:1.0|Y:1.1|Z:1.0,1,BIDIRECTIONAL_BFS,3,SOLVED,1,D_CW,1,12,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:6|X:1.0|Y:1.1|Z:1.0,1,IDA_STAR,3,SOLVED,1,D_CW,1,12,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:6|X:1.0|Y:1.1|Z:1.0,1,BIDIRECTIONAL_BFS,4,SOLVED,1,D_CW,1,12,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:6|X:1.0|Y:1.1|Z:1.0,1,IDA_STAR,4,SOLVED,1,D_CW,1,12,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:6|X:1.0|Y:1.1|Z:1.0,1,BFS,4,SOLVED,1,D_CW,3,36,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:14|X:0.0|Y:1.0|Z:3.1,1,BIDIRECTIONAL_BFS,0,SOLVED,1,F_CCW,1,12,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:14|X:0.0|Y:1.0|Z:3.1,1,IDA_STAR,0,SOLVED,1,F_CCW,1,12,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:14|X:0.0|Y:1.0|Z:3.1,1,BFS,0,SOLVED,1,F_CCW,6,72,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:14|X:0.0|Y:1.0|Z:3.1,1,IDA_STAR,1,SOLVED,1,F_CCW,1,12,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:14|X:0.0|Y:1.0|Z:3.1,1,BFS,1,SOLVED,1,F_CCW,6,72,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:14|X:0.0|Y:1.0|Z:3.1,1,BIDIRECTIONAL_BFS,1,SOLVED,1,F_CCW,1,12,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:14|X:0.0|Y:1.0|Z:3.1,1,BFS,2,SOLVED,1,F_CCW,6,72,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:14|X:0.0|Y:1.0|Z:3.1,1,BIDIRECTIONAL_BFS,2,SOLVED,1,F_CCW,1,12,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:14|X:0.0|Y:1.0|Z:3.1,1,IDA_STAR,2,SOLVED,1,F_CCW,1,12,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:14|X:0.0|Y:1.0|Z:3.1,1,BIDIRECTIONAL_BFS,3,SOLVED,1,F_CCW,1,12,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:14|X:0.0|Y:1.0|Z:3.1,1,IDA_STAR,3,SOLVED,1,F_CCW,1,12,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:14|X:0.0|Y:1.0|Z:3.1,1,BFS,3,SOLVED,1,F_CCW,6,72,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:14|X:0.0|Y:1.0|Z:3.1,1,IDA_STAR,4,SOLVED,1,F_CCW,1,12,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:14|X:0.0|Y:1.0|Z:3.1,1,BFS,4,SOLVED,1,F_CCW,6,72,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d1:C:14|X:0.0|Y:1.0|Z:3.1,1,BIDIRECTIONAL_BFS,4,SOLVED,1,F_CCW,1,12,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:0|X:0.0|Y:0.0|Z:2.1,2,IDA_STAR,0,SOLVED,2,F_CW F_CW,2,24,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:0|X:0.0|Y:0.0|Z:2.1,2,BFS,0,SOLVED,2,F_CW F_CW,54,648,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:0|X:0.0|Y:0.0|Z:2.1,2,BIDIRECTIONAL_BFS,0,SOLVED,2,F_CW F_CW,2,24,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:0|X:0.0|Y:0.0|Z:2.1,2,BFS,1,SOLVED,2,F_CW F_CW,54,648,,2
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:0|X:0.0|Y:0.0|Z:2.1,2,BIDIRECTIONAL_BFS,1,SOLVED,2,F_CW F_CW,2,24,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:0|X:0.0|Y:0.0|Z:2.1,2,IDA_STAR,1,SOLVED,2,F_CW F_CW,2,24,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:0|X:0.0|Y:0.0|Z:2.1,2,BIDIRECTIONAL_BFS,2,SOLVED,2,F_CW F_CW,2,24,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:0|X:0.0|Y:0.0|Z:2.1,2,IDA_STAR,2,SOLVED,2,F_CW F_CW,2,24,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:0|X:0.0|Y:0.0|Z:2.1,2,BFS,2,SOLVED,2,F_CW F_CW,54,648,,2
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:0|X:0.0|Y:0.0|Z:2.1,2,IDA_STAR,3,SOLVED,2,F_CW F_CW,2,24,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:0|X:0.0|Y:0.0|Z:2.1,2,BFS,3,SOLVED,2,F_CW F_CW,54,648,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:0|X:0.0|Y:0.0|Z:2.1,2,BIDIRECTIONAL_BFS,3,SOLVED,2,F_CW F_CW,2,24,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:0|X:0.0|Y:0.0|Z:2.1,2,BFS,4,SOLVED,2,F_CW F_CW,54,648,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:0|X:0.0|Y:0.0|Z:2.1,2,BIDIRECTIONAL_BFS,4,SOLVED,2,F_CW F_CW,2,24,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:0|X:0.0|Y:0.0|Z:2.1,2,IDA_STAR,4,SOLVED,2,F_CW F_CW,2,24,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:15|X:2.2|Y:1.0|Z:2.2,2,BFS,0,SOLVED,2,B_CCW R_CW,83,996,,2
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:15|X:2.2|Y:1.0|Z:2.2,2,BIDIRECTIONAL_BFS,0,SOLVED,2,B_CCW R_CW,2,24,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:15|X:2.2|Y:1.0|Z:2.2,2,IDA_STAR,0,SOLVED,2,B_CCW R_CW,2,24,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:15|X:2.2|Y:1.0|Z:2.2,2,BIDIRECTIONAL_BFS,1,SOLVED,2,B_CCW R_CW,2,24,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:15|X:2.2|Y:1.0|Z:2.2,2,IDA_STAR,1,SOLVED,2,B_CCW R_CW,2,24,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:15|X:2.2|Y:1.0|Z:2.2,2,BFS,1,SOLVED,2,B_CCW R_CW,83,996,,2
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:15|X:2.2|Y:1.0|Z:2.2,2,IDA_STAR,2,SOLVED,2,B_CCW R_CW,2,24,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:15|X:2.2|Y:1.0|Z:2.2,2,BFS,2,SOLVED,2,B_CCW R_CW,83,996,,2
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:15|X:2.2|Y:1.0|Z:2.2,2,BIDIRECTIONAL_BFS,2,SOLVED,2,B_CCW R_CW,2,24,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:15|X:2.2|Y:1.0|Z:2.2,2,BFS,3,SOLVED,2,B_CCW R_CW,83,996,,2
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:15|X:2.2|Y:1.0|Z:2.2,2,BIDIRECTIONAL_BFS,3,SOLVED,2,B_CCW R_CW,2,24,,2
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:15|X:2.2|Y:1.0|Z:2.2,2,IDA_STAR,3,SOLVED,2,B_CCW R_CW,2,24,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:15|X:2.2|Y:1.0|Z:2.2,2,BIDIRECTIONAL_BFS,4,SOLVED,2,B_CCW R_CW,2,24,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:15|X:2.2|Y:1.0|Z:2.2,2,IDA_STAR,4,SOLVED,2,B_CCW R_CW,2,24,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:15|X:2.2|Y:1.0|Z:2.2,2,BFS,4,SOLVED,2,B_CCW R_CW,83,996,,2
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:20|X:1.2|Y:2.0|Z:1.1,2,BIDIRECTIONAL_BFS,0,SOLVED,2,R_CW B_CW,2,24,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:20|X:1.2|Y:2.0|Z:1.1,2,IDA_STAR,0,SOLVED,2,R_CW B_CW,2,24,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:20|X:1.2|Y:2.0|Z:1.1,2,BFS,0,SOLVED,2,R_CW B_CW,93,1116,,2
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:20|X:1.2|Y:2.0|Z:1.1,2,IDA_STAR,1,SOLVED,2,R_CW B_CW,2,24,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:20|X:1.2|Y:2.0|Z:1.1,2,BFS,1,SOLVED,2,R_CW B_CW,93,1116,,2
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:20|X:1.2|Y:2.0|Z:1.1,2,BIDIRECTIONAL_BFS,1,SOLVED,2,R_CW B_CW,2,24,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:20|X:1.2|Y:2.0|Z:1.1,2,BFS,2,SOLVED,2,R_CW B_CW,93,1116,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:20|X:1.2|Y:2.0|Z:1.1,2,BIDIRECTIONAL_BFS,2,SOLVED,2,R_CW B_CW,2,24,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:20|X:1.2|Y:2.0|Z:1.1,2,IDA_STAR,2,SOLVED,2,R_CW B_CW,2,24,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:20|X:1.2|Y:2.0|Z:1.1,2,BIDIRECTIONAL_BFS,3,SOLVED,2,R_CW B_CW,2,24,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:20|X:1.2|Y:2.0|Z:1.1,2,IDA_STAR,3,SOLVED,2,R_CW B_CW,2,24,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:20|X:1.2|Y:2.0|Z:1.1,2,BFS,3,SOLVED,2,R_CW B_CW,93,1116,,2
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:20|X:1.2|Y:2.0|Z:1.1,2,IDA_STAR,4,SOLVED,2,R_CW B_CW,2,24,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:20|X:1.2|Y:2.0|Z:1.1,2,BFS,4,SOLVED,2,R_CW B_CW,93,1116,,2
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:20|X:1.2|Y:2.0|Z:1.1,2,BIDIRECTIONAL_BFS,4,SOLVED,2,R_CW B_CW,2,24,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:11|X:0.1|Y:3.1|Z:3.0,2,IDA_STAR,0,SOLVED,2,U_CCW L_CW,2,24,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:11|X:0.1|Y:3.1|Z:3.0,2,BFS,0,SOLVED,2,U_CCW L_CW,32,384,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:11|X:0.1|Y:3.1|Z:3.0,2,BIDIRECTIONAL_BFS,0,SOLVED,2,U_CCW L_CW,2,24,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:11|X:0.1|Y:3.1|Z:3.0,2,BFS,1,SOLVED,2,U_CCW L_CW,32,384,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:11|X:0.1|Y:3.1|Z:3.0,2,BIDIRECTIONAL_BFS,1,SOLVED,2,U_CCW L_CW,2,24,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:11|X:0.1|Y:3.1|Z:3.0,2,IDA_STAR,1,SOLVED,2,U_CCW L_CW,2,24,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:11|X:0.1|Y:3.1|Z:3.0,2,BIDIRECTIONAL_BFS,2,SOLVED,2,U_CCW L_CW,2,24,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:11|X:0.1|Y:3.1|Z:3.0,2,IDA_STAR,2,SOLVED,2,U_CCW L_CW,2,24,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:11|X:0.1|Y:3.1|Z:3.0,2,BFS,2,SOLVED,2,U_CCW L_CW,32,384,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:11|X:0.1|Y:3.1|Z:3.0,2,IDA_STAR,3,SOLVED,2,U_CCW L_CW,2,24,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:11|X:0.1|Y:3.1|Z:3.0,2,BFS,3,SOLVED,2,U_CCW L_CW,32,384,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:11|X:0.1|Y:3.1|Z:3.0,2,BIDIRECTIONAL_BFS,3,SOLVED,2,U_CCW L_CW,2,24,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:11|X:0.1|Y:3.1|Z:3.0,2,BFS,4,SOLVED,2,U_CCW L_CW,32,384,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:11|X:0.1|Y:3.1|Z:3.0,2,BIDIRECTIONAL_BFS,4,SOLVED,2,U_CCW L_CW,2,24,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:11|X:0.1|Y:3.1|Z:3.0,2,IDA_STAR,4,SOLVED,2,U_CCW L_CW,2,24,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:19|X:0.2|Y:2.1|Z:1.0,2,BFS,0,SOLVED,2,L_CCW D_CW,118,1416,,2
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:19|X:0.2|Y:2.1|Z:1.0,2,BIDIRECTIONAL_BFS,0,SOLVED,2,L_CCW D_CW,2,24,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:19|X:0.2|Y:2.1|Z:1.0,2,IDA_STAR,0,SOLVED,2,L_CCW D_CW,2,24,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:19|X:0.2|Y:2.1|Z:1.0,2,BIDIRECTIONAL_BFS,1,SOLVED,2,L_CCW D_CW,2,24,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:19|X:0.2|Y:2.1|Z:1.0,2,IDA_STAR,1,SOLVED,2,L_CCW D_CW,2,24,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:19|X:0.2|Y:2.1|Z:1.0,2,BFS,1,SOLVED,2,L_CCW D_CW,118,1416,,2
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:19|X:0.2|Y:2.1|Z:1.0,2,IDA_STAR,2,SOLVED,2,L_CCW D_CW,2,24,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:19|X:0.2|Y:2.1|Z:1.0,2,BFS,2,SOLVED,2,L_CCW D_CW,118,1416,,3
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:19|X:0.2|Y:2.1|Z:1.0,2,BIDIRECTIONAL_BFS,2,SOLVED,2,L_CCW D_CW,2,24,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:19|X:0.2|Y:2.1|Z:1.0,2,BFS,3,SOLVED,2,L_CCW D_CW,118,1416,,2
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:19|X:0.2|Y:2.1|Z:1.0,2,BIDIRECTIONAL_BFS,3,SOLVED,2,L_CCW D_CW,2,24,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:19|X:0.2|Y:2.1|Z:1.0,2,IDA_STAR,3,SOLVED,2,L_CCW D_CW,2,24,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:19|X:0.2|Y:2.1|Z:1.0,2,BIDIRECTIONAL_BFS,4,SOLVED,2,L_CCW D_CW,2,24,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:19|X:0.2|Y:2.1|Z:1.0,2,IDA_STAR,4,SOLVED,2,L_CCW D_CW,2,24,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:19|X:0.2|Y:2.1|Z:1.0,2,BFS,4,SOLVED,2,L_CCW D_CW,118,1416,,2
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:0|X:2.2|Y:0.0|Z:0.0,2,BIDIRECTIONAL_BFS,0,SOLVED,2,L_CW L_CW,2,24,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:0|X:2.2|Y:0.0|Z:0.0,2,IDA_STAR,0,SOLVED,2,R_CCW R_CCW,2,24,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:0|X:2.2|Y:0.0|Z:0.0,2,BFS,0,SOLVED,2,R_CCW R_CCW,106,1272,,2
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:0|X:2.2|Y:0.0|Z:0.0,2,IDA_STAR,1,SOLVED,2,R_CCW R_CCW,2,24,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:0|X:2.2|Y:0.0|Z:0.0,2,BFS,1,SOLVED,2,R_CCW R_CCW,106,1272,,2
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:0|X:2.2|Y:0.0|Z:0.0,2,BIDIRECTIONAL_BFS,1,SOLVED,2,L_CW L_CW,2,24,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:0|X:2.2|Y:0.0|Z:0.0,2,BFS,2,SOLVED,2,R_CCW R_CCW,106,1272,,2
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:0|X:2.2|Y:0.0|Z:0.0,2,BIDIRECTIONAL_BFS,2,SOLVED,2,L_CW L_CW,2,24,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:0|X:2.2|Y:0.0|Z:0.0,2,IDA_STAR,2,SOLVED,2,R_CCW R_CCW,2,24,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:0|X:2.2|Y:0.0|Z:0.0,2,BIDIRECTIONAL_BFS,3,SOLVED,2,L_CW L_CW,2,24,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:0|X:2.2|Y:0.0|Z:0.0,2,IDA_STAR,3,SOLVED,2,R_CCW R_CCW,2,24,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:0|X:2.2|Y:0.0|Z:0.0,2,BFS,3,SOLVED,2,R_CCW R_CCW,106,1272,,2
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:0|X:2.2|Y:0.0|Z:0.0,2,IDA_STAR,4,SOLVED,2,R_CCW R_CCW,2,24,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:0|X:2.2|Y:0.0|Z:0.0,2,BFS,4,SOLVED,2,R_CCW R_CCW,106,1272,,2
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:0|X:2.2|Y:0.0|Z:0.0,2,BIDIRECTIONAL_BFS,4,SOLVED,2,L_CW L_CW,2,24,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:19|X:0.1|Y:3.1|Z:1.0,2,IDA_STAR,0,SOLVED,2,R_CCW U_CCW,2,24,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:19|X:0.1|Y:3.1|Z:1.0,2,BFS,0,SOLVED,2,R_CCW U_CCW,99,1188,,2
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:19|X:0.1|Y:3.1|Z:1.0,2,BIDIRECTIONAL_BFS,0,SOLVED,2,R_CCW U_CCW,2,24,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:19|X:0.1|Y:3.1|Z:1.0,2,BFS,1,SOLVED,2,R_CCW U_CCW,99,1188,,2
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:19|X:0.1|Y:3.1|Z:1.0,2,BIDIRECTIONAL_BFS,1,SOLVED,2,R_CCW U_CCW,2,24,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:19|X:0.1|Y:3.1|Z:1.0,2,IDA_STAR,1,SOLVED,2,R_CCW U_CCW,2,24,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:19|X:0.1|Y:3.1|Z:1.0,2,BIDIRECTIONAL_BFS,2,SOLVED,2,R_CCW U_CCW,2,24,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:19|X:0.1|Y:3.1|Z:1.0,2,IDA_STAR,2,SOLVED,2,R_CCW U_CCW,2,24,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:19|X:0.1|Y:3.1|Z:1.0,2,BFS,2,SOLVED,2,R_CCW U_CCW,99,1188,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:19|X:0.1|Y:3.1|Z:1.0,2,IDA_STAR,3,SOLVED,2,R_CCW U_CCW,2,24,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:19|X:0.1|Y:3.1|Z:1.0,2,BFS,3,SOLVED,2,R_CCW U_CCW,99,1188,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:19|X:0.1|Y:3.1|Z:1.0,2,BIDIRECTIONAL_BFS,3,SOLVED,2,R_CCW U_CCW,2,24,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:19|X:0.1|Y:3.1|Z:1.0,2,BFS,4,SOLVED,2,R_CCW U_CCW,99,1188,,2
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:19|X:0.1|Y:3.1|Z:1.0,2,BIDIRECTIONAL_BFS,4,SOLVED,2,R_CCW U_CCW,2,24,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:19|X:0.1|Y:3.1|Z:1.0,2,IDA_STAR,4,SOLVED,2,R_CCW U_CCW,2,24,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:11|X:3.1|Y:3.2|Z:3.0,2,BFS,0,SOLVED,2,D_CCW R_CCW,47,564,,2
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:11|X:3.1|Y:3.2|Z:3.0,2,BIDIRECTIONAL_BFS,0,SOLVED,2,D_CCW R_CCW,2,24,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:11|X:3.1|Y:3.2|Z:3.0,2,IDA_STAR,0,SOLVED,2,D_CCW R_CCW,2,24,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:11|X:3.1|Y:3.2|Z:3.0,2,BIDIRECTIONAL_BFS,1,SOLVED,2,D_CCW R_CCW,2,24,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:11|X:3.1|Y:3.2|Z:3.0,2,IDA_STAR,1,SOLVED,2,D_CCW R_CCW,2,24,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:11|X:3.1|Y:3.2|Z:3.0,2,BFS,1,SOLVED,2,D_CCW R_CCW,47,564,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:11|X:3.1|Y:3.2|Z:3.0,2,IDA_STAR,2,SOLVED,2,D_CCW R_CCW,2,24,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:11|X:3.1|Y:3.2|Z:3.0,2,BFS,2,SOLVED,2,D_CCW R_CCW,47,564,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:11|X:3.1|Y:3.2|Z:3.0,2,BIDIRECTIONAL_BFS,2,SOLVED,2,D_CCW R_CCW,2,24,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:11|X:3.1|Y:3.2|Z:3.0,2,BFS,3,SOLVED,2,D_CCW R_CCW,47,564,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:11|X:3.1|Y:3.2|Z:3.0,2,BIDIRECTIONAL_BFS,3,SOLVED,2,D_CCW R_CCW,2,24,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:11|X:3.1|Y:3.2|Z:3.0,2,IDA_STAR,3,SOLVED,2,D_CCW R_CCW,2,24,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:11|X:3.1|Y:3.2|Z:3.0,2,BIDIRECTIONAL_BFS,4,SOLVED,2,D_CCW R_CCW,2,24,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:11|X:3.1|Y:3.2|Z:3.0,2,IDA_STAR,4,SOLVED,2,D_CCW R_CCW,2,24,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d2:C:11|X:3.1|Y:3.2|Z:3.0,2,BFS,4,SOLVED,2,D_CCW R_CCW,47,564,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:2|X:2.0|Y:0.2|Z:1.2,3,BIDIRECTIONAL_BFS,0,SOLVED,3,D_CW B_CCW U_CCW,14,168,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:2|X:2.0|Y:0.2|Z:1.2,3,IDA_STAR,0,SOLVED,3,D_CW B_CCW U_CCW,3,36,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:2|X:2.0|Y:0.2|Z:1.2,3,BFS,0,SOLVED,3,D_CW B_CCW U_CCW,337,4044,,7
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:2|X:2.0|Y:0.2|Z:1.2,3,IDA_STAR,1,SOLVED,3,D_CW B_CCW U_CCW,3,36,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:2|X:2.0|Y:0.2|Z:1.2,3,BFS,1,SOLVED,3,D_CW B_CCW U_CCW,337,4044,,6
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:2|X:2.0|Y:0.2|Z:1.2,3,BIDIRECTIONAL_BFS,1,SOLVED,3,D_CW B_CCW U_CCW,14,168,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:2|X:2.0|Y:0.2|Z:1.2,3,BFS,2,SOLVED,3,D_CW B_CCW U_CCW,337,4044,,7
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:2|X:2.0|Y:0.2|Z:1.2,3,BIDIRECTIONAL_BFS,2,SOLVED,3,D_CW B_CCW U_CCW,14,168,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:2|X:2.0|Y:0.2|Z:1.2,3,IDA_STAR,2,SOLVED,3,D_CW B_CCW U_CCW,3,36,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:2|X:2.0|Y:0.2|Z:1.2,3,BIDIRECTIONAL_BFS,3,SOLVED,3,D_CW B_CCW U_CCW,14,168,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:2|X:2.0|Y:0.2|Z:1.2,3,IDA_STAR,3,SOLVED,3,D_CW B_CCW U_CCW,3,36,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:2|X:2.0|Y:0.2|Z:1.2,3,BFS,3,SOLVED,3,D_CW B_CCW U_CCW,337,4044,,6
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:2|X:2.0|Y:0.2|Z:1.2,3,IDA_STAR,4,SOLVED,3,D_CW B_CCW U_CCW,3,36,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:2|X:2.0|Y:0.2|Z:1.2,3,BFS,4,SOLVED,3,D_CW B_CCW U_CCW,337,4044,,6
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:2|X:2.0|Y:0.2|Z:1.2,3,BIDIRECTIONAL_BFS,4,SOLVED,3,D_CW B_CCW U_CCW,14,168,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:2|X:2.0|Y:3.0|Z:1.2,3,IDA_STAR,0,SOLVED,3,U_CCW B_CCW U_CW,3,36,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:2|X:2.0|Y:3.0|Z:1.2,3,BFS,0,SOLVED,3,U_CCW B_CCW U_CW,269,3228,,5
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:2|X:2.0|Y:3.0|Z:1.2,3,BIDIRECTIONAL_BFS,0,SOLVED,3,D_CCW B_CCW D_CW,14,168,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:2|X:2.0|Y:3.0|Z:1.2,3,BFS,1,SOLVED,3,U_CCW B_CCW U_CW,269,3228,,5
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:2|X:2.0|Y:3.0|Z:1.2,3,BIDIRECTIONAL_BFS,1,SOLVED,3,D_CCW B_CCW D_CW,14,168,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:2|X:2.0|Y:3.0|Z:1.2,3,IDA_STAR,1,SOLVED,3,U_CCW B_CCW U_CW,3,36,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:2|X:2.0|Y:3.0|Z:1.2,3,BIDIRECTIONAL_BFS,2,SOLVED,3,D_CCW B_CCW D_CW,14,168,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:2|X:2.0|Y:3.0|Z:1.2,3,IDA_STAR,2,SOLVED,3,U_CCW B_CCW U_CW,3,36,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:2|X:2.0|Y:3.0|Z:1.2,3,BFS,2,SOLVED,3,U_CCW B_CCW U_CW,269,3228,,5
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:2|X:2.0|Y:3.0|Z:1.2,3,IDA_STAR,3,SOLVED,3,U_CCW B_CCW U_CW,3,36,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:2|X:2.0|Y:3.0|Z:1.2,3,BFS,3,SOLVED,3,U_CCW B_CCW U_CW,269,3228,,5
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:2|X:2.0|Y:3.0|Z:1.2,3,BIDIRECTIONAL_BFS,3,SOLVED,3,D_CCW B_CCW D_CW,14,168,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:2|X:2.0|Y:3.0|Z:1.2,3,BFS,4,SOLVED,3,U_CCW B_CCW U_CW,269,3228,,5
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:2|X:2.0|Y:3.0|Z:1.2,3,BIDIRECTIONAL_BFS,4,SOLVED,3,D_CCW B_CCW D_CW,14,168,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:2|X:2.0|Y:3.0|Z:1.2,3,IDA_STAR,4,SOLVED,3,U_CCW B_CCW U_CW,3,36,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:14|X:0.2|Y:1.0|Z:3.1,3,BFS,0,SOLVED,3,F_CCW R_CCW L_CW,583,6996,,11
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:14|X:0.2|Y:1.0|Z:3.1,3,BIDIRECTIONAL_BFS,0,SOLVED,3,R_CCW L_CW F_CCW,14,168,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:14|X:0.2|Y:1.0|Z:3.1,3,IDA_STAR,0,SOLVED,3,F_CCW R_CCW L_CW,3,36,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:14|X:0.2|Y:1.0|Z:3.1,3,BIDIRECTIONAL_BFS,1,SOLVED,3,R_CCW L_CW F_CCW,14,168,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:14|X:0.2|Y:1.0|Z:3.1,3,IDA_STAR,1,SOLVED,3,F_CCW R_CCW L_CW,3,36,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:14|X:0.2|Y:1.0|Z:3.1,3,BFS,1,SOLVED,3,F_CCW R_CCW L_CW,583,6996,,12
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:14|X:0.2|Y:1.0|Z:3.1,3,IDA_STAR,2,SOLVED,3,F_CCW R_CCW L_CW,3,36,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:14|X:0.2|Y:1.0|Z:3.1,3,BFS,2,SOLVED,3,F_CCW R_CCW L_CW,583,6996,,10
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:14|X:0.2|Y:1.0|Z:3.1,3,BIDIRECTIONAL_BFS,2,SOLVED,3,R_CCW L_CW F_CCW,14,168,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:14|X:0.2|Y:1.0|Z:3.1,3,BFS,3,SOLVED,3,F_CCW R_CCW L_CW,583,6996,,11
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:14|X:0.2|Y:1.0|Z:3.1,3,BIDIRECTIONAL_BFS,3,SOLVED,3,R_CCW L_CW F_CCW,14,168,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:14|X:0.2|Y:1.0|Z:3.1,3,IDA_STAR,3,SOLVED,3,F_CCW R_CCW L_CW,3,36,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:14|X:0.2|Y:1.0|Z:3.1,3,BIDIRECTIONAL_BFS,4,SOLVED,3,R_CCW L_CW F_CCW,14,168,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:14|X:0.2|Y:1.0|Z:3.1,3,IDA_STAR,4,SOLVED,3,F_CCW R_CCW L_CW,3,36,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:14|X:0.2|Y:1.0|Z:3.1,3,BFS,4,SOLVED,3,F_CCW R_CCW L_CW,583,6996,,10
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:9|X:2.2|Y:0.2|Z:1.2,3,BIDIRECTIONAL_BFS,0,SOLVED,3,D_CCW F_CW R_CW,14,168,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:9|X:2.2|Y:0.2|Z:1.2,3,IDA_STAR,0,SOLVED,3,D_CCW F_CW R_CW,3,36,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:9|X:2.2|Y:0.2|Z:1.2,3,BFS,0,SOLVED,3,D_CCW F_CW R_CW,377,4524,,7
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:9|X:2.2|Y:0.2|Z:1.2,3,IDA_STAR,1,SOLVED,3,D_CCW F_CW R_CW,3,36,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:9|X:2.2|Y:0.2|Z:1.2,3,BFS,1,SOLVED,3,D_CCW F_CW R_CW,377,4524,,7
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:9|X:2.2|Y:0.2|Z:1.2,3,BIDIRECTIONAL_BFS,1,SOLVED,3,D_CCW F_CW R_CW,14,168,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:9|X:2.2|Y:0.2|Z:1.2,3,BFS,2,SOLVED,3,D_CCW F_CW R_CW,377,4524,,7
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:9|X:2.2|Y:0.2|Z:1.2,3,BIDIRECTIONAL_BFS,2,SOLVED,3,D_CCW F_CW R_CW,14,168,,2
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:9|X:2.2|Y:0.2|Z:1.2,3,IDA_STAR,2,SOLVED,3,D_CCW F_CW R_CW,3,36,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:9|X:2.2|Y:0.2|Z:1.2,3,BIDIRECTIONAL_BFS,3,SOLVED,3,D_CCW F_CW R_CW,14,168,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:9|X:2.2|Y:0.2|Z:1.2,3,IDA_STAR,3,SOLVED,3,D_CCW F_CW R_CW,3,36,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:9|X:2.2|Y:0.2|Z:1.2,3,BFS,3,SOLVED,3,D_CCW F_CW R_CW,377,4524,,6
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:9|X:2.2|Y:0.2|Z:1.2,3,IDA_STAR,4,SOLVED,3,D_CCW F_CW R_CW,3,36,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:9|X:2.2|Y:0.2|Z:1.2,3,BFS,4,SOLVED,3,D_CCW F_CW R_CW,377,4524,,6
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:9|X:2.2|Y:0.2|Z:1.2,3,BIDIRECTIONAL_BFS,4,SOLVED,3,D_CCW F_CW R_CW,14,168,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:5|X:2.1|Y:1.0|Z:0.0,3,IDA_STAR,0,SOLVED,3,U_CCW L_CW U_CW,3,36,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:5|X:2.1|Y:1.0|Z:0.0,3,BFS,0,SOLVED,3,U_CCW L_CW U_CW,298,3576,,6
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:5|X:2.1|Y:1.0|Z:0.0,3,BIDIRECTIONAL_BFS,0,SOLVED,3,D_CCW L_CW D_CW,14,168,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:5|X:2.1|Y:1.0|Z:0.0,3,BFS,1,SOLVED,3,U_CCW L_CW U_CW,298,3576,,5
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:5|X:2.1|Y:1.0|Z:0.0,3,BIDIRECTIONAL_BFS,1,SOLVED,3,D_CCW L_CW D_CW,14,168,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:5|X:2.1|Y:1.0|Z:0.0,3,IDA_STAR,1,SOLVED,3,U_CCW L_CW U_CW,3,36,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:5|X:2.1|Y:1.0|Z:0.0,3,BIDIRECTIONAL_BFS,2,SOLVED,3,D_CCW L_CW D_CW,14,168,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:5|X:2.1|Y:1.0|Z:0.0,3,IDA_STAR,2,SOLVED,3,U_CCW L_CW U_CW,3,36,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:5|X:2.1|Y:1.0|Z:0.0,3,BFS,2,SOLVED,3,U_CCW L_CW U_CW,298,3576,,6
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:5|X:2.1|Y:1.0|Z:0.0,3,IDA_STAR,3,SOLVED,3,U_CCW L_CW U_CW,3,36,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:5|X:2.1|Y:1.0|Z:0.0,3,BFS,3,SOLVED,3,U_CCW L_CW U_CW,298,3576,,5
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:5|X:2.1|Y:1.0|Z:0.0,3,BIDIRECTIONAL_BFS,3,SOLVED,3,D_CCW L_CW D_CW,14,168,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:5|X:2.1|Y:1.0|Z:0.0,3,BFS,4,SOLVED,3,U_CCW L_CW U_CW,298,3576,,6
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:5|X:2.1|Y:1.0|Z:0.0,3,BIDIRECTIONAL_BFS,4,SOLVED,3,D_CCW L_CW D_CW,14,168,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:5|X:2.1|Y:1.0|Z:0.0,3,IDA_STAR,4,SOLVED,3,U_CCW L_CW U_CW,3,36,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:2|X:2.0|Y:2.2|Z:1.0,3,BFS,0,SOLVED,3,F_CW U_CW B_CW,433,5196,,8
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:2|X:2.0|Y:2.2|Z:1.0,3,BIDIRECTIONAL_BFS,0,SOLVED,3,F_CW U_CW B_CW,14,168,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:2|X:2.0|Y:2.2|Z:1.0,3,IDA_STAR,0,SOLVED,3,F_CW U_CW B_CW,3,36,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:2|X:2.0|Y:2.2|Z:1.0,3,BIDIRECTIONAL_BFS,1,SOLVED,3,F_CW U_CW B_CW,14,168,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:2|X:2.0|Y:2.2|Z:1.0,3,IDA_STAR,1,SOLVED,3,F_CW U_CW B_CW,3,36,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:2|X:2.0|Y:2.2|Z:1.0,3,BFS,1,SOLVED,3,F_CW U_CW B_CW,433,5196,,8
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:2|X:2.0|Y:2.2|Z:1.0,3,IDA_STAR,2,SOLVED,3,F_CW U_CW B_CW,3,36,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:2|X:2.0|Y:2.2|Z:1.0,3,BFS,2,SOLVED,3,F_CW U_CW B_CW,433,5196,,7
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:2|X:2.0|Y:2.2|Z:1.0,3,BIDIRECTIONAL_BFS,2,SOLVED,3,F_CW U_CW B_CW,14,168,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:2|X:2.0|Y:2.2|Z:1.0,3,BFS,3,SOLVED,3,F_CW U_CW B_CW,433,5196,,8
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:2|X:2.0|Y:2.2|Z:1.0,3,BIDIRECTIONAL_BFS,3,SOLVED,3,F_CW U_CW B_CW,14,168,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:2|X:2.0|Y:2.2|Z:1.0,3,IDA_STAR,3,SOLVED,3,F_CW U_CW B_CW,3,36,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:2|X:2.0|Y:2.2|Z:1.0,3,BIDIRECTIONAL_BFS,4,SOLVED,3,F_CW U_CW B_CW,14,168,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:2|X:2.0|Y:2.2|Z:1.0,3,IDA_STAR,4,SOLVED,3,F_CW U_CW B_CW,3,36,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:2|X:2.0|Y:2.2|Z:1.0,3,BFS,4,SOLVED,3,F_CW U_CW B_CW,433,5196,,8
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:21|X:3.1|Y:0.0|Z:2.2,3,BIDIRECTIONAL_BFS,0,SOLVED,3,R_CCW B_CW B_CW,14,168,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:21|X:3.1|Y:0.0|Z:2.2,3,IDA_STAR,0,SOLVED,3,R_CCW F_CCW F_CCW,3,36,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:21|X:3.1|Y:0.0|Z:2.2,3,BFS,0,SOLVED,3,R_CCW F_CCW F_CCW,828,9936,,14
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:21|X:3.1|Y:0.0|Z:2.2,3,IDA_STAR,1,SOLVED,3,R_CCW F_CCW F_CCW,3,36,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:21|X:3.1|Y:0.0|Z:2.2,3,BFS,1,SOLVED,3,R_CCW F_CCW F_CCW,828,9936,,15
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:21|X:3.1|Y:0.0|Z:2.2,3,BIDIRECTIONAL_BFS,1,SOLVED,3,R_CCW B_CW B_CW,14,168,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:21|X:3.1|Y:0.0|Z:2.2,3,BFS,2,SOLVED,3,R_CCW F_CCW F_CCW,828,9936,,15
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:21|X:3.1|Y:0.0|Z:2.2,3,BIDIRECTIONAL_BFS,2,SOLVED,3,R_CCW B_CW B_CW,14,168,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:21|X:3.1|Y:0.0|Z:2.2,3,IDA_STAR,2,SOLVED,3,R_CCW F_CCW F_CCW,3,36,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:21|X:3.1|Y:0.0|Z:2.2,3,BIDIRECTIONAL_BFS,3,SOLVED,3,R_CCW B_CW B_CW,14,168,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:21|X:3.1|Y:0.0|Z:2.2,3,IDA_STAR,3,SOLVED,3,R_CCW F_CCW F_CCW,3,36,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:21|X:3.1|Y:0.0|Z:2.2,3,BFS,3,SOLVED,3,R_CCW F_CCW F_CCW,828,9936,,15
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:21|X:3.1|Y:0.0|Z:2.2,3,IDA_STAR,4,SOLVED,3,R_CCW F_CCW F_CCW,3,36,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:21|X:3.1|Y:0.0|Z:2.2,3,BFS,4,SOLVED,3,R_CCW F_CCW F_CCW,828,9936,,15
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:21|X:3.1|Y:0.0|Z:2.2,3,BIDIRECTIONAL_BFS,4,SOLVED,3,R_CCW B_CW B_CW,14,168,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:14|X:0.1|Y:1.0|Z:3.1,3,IDA_STAR,0,SOLVED,3,F_CCW R_CW L_CCW,3,36,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:14|X:0.1|Y:1.0|Z:3.1,3,BFS,0,SOLVED,3,F_CCW R_CW L_CCW,573,6876,,11
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:14|X:0.1|Y:1.0|Z:3.1,3,BIDIRECTIONAL_BFS,0,SOLVED,3,R_CW L_CCW F_CCW,14,168,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:14|X:0.1|Y:1.0|Z:3.1,3,BFS,1,SOLVED,3,F_CCW R_CW L_CCW,573,6876,,11
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:14|X:0.1|Y:1.0|Z:3.1,3,BIDIRECTIONAL_BFS,1,SOLVED,3,R_CW L_CCW F_CCW,14,168,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:14|X:0.1|Y:1.0|Z:3.1,3,IDA_STAR,1,SOLVED,3,F_CCW R_CW L_CCW,3,36,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:14|X:0.1|Y:1.0|Z:3.1,3,BIDIRECTIONAL_BFS,2,SOLVED,3,R_CW L_CCW F_CCW,14,168,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:14|X:0.1|Y:1.0|Z:3.1,3,IDA_STAR,2,SOLVED,3,F_CCW R_CW L_CCW,3,36,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:14|X:0.1|Y:1.0|Z:3.1,3,BFS,2,SOLVED,3,F_CCW R_CW L_CCW,573,6876,,11
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:14|X:0.1|Y:1.0|Z:3.1,3,IDA_STAR,3,SOLVED,3,F_CCW R_CW L_CCW,3,36,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:14|X:0.1|Y:1.0|Z:3.1,3,BFS,3,SOLVED,3,F_CCW R_CW L_CCW,573,6876,,10
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:14|X:0.1|Y:1.0|Z:3.1,3,BIDIRECTIONAL_BFS,3,SOLVED,3,R_CW L_CCW F_CCW,14,168,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:14|X:0.1|Y:1.0|Z:3.1,3,BFS,4,SOLVED,3,F_CCW R_CW L_CCW,573,6876,,10
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:14|X:0.1|Y:1.0|Z:3.1,3,BIDIRECTIONAL_BFS,4,SOLVED,3,R_CW L_CCW F_CCW,14,168,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d3:C:14|X:0.1|Y:1.0|Z:3.1,3,IDA_STAR,4,SOLVED,3,F_CCW R_CW L_CCW,3,36,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:15|X:3.2|Y:2.0|Z:2.2,4,BFS,0,SOLVED,4,B_CCW U_CW D_CW L_CCW,3898,46776,,69
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:15|X:3.2|Y:2.0|Z:2.2,4,BIDIRECTIONAL_BFS,0,SOLVED,4,B_CCW U_CW D_CW L_CCW,26,312,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:15|X:3.2|Y:2.0|Z:2.2,4,IDA_STAR,0,SOLVED,4,B_CCW U_CW D_CW L_CCW,4,48,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:15|X:3.2|Y:2.0|Z:2.2,4,BIDIRECTIONAL_BFS,1,SOLVED,4,B_CCW U_CW D_CW L_CCW,26,312,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:15|X:3.2|Y:2.0|Z:2.2,4,IDA_STAR,1,SOLVED,4,B_CCW U_CW D_CW L_CCW,4,48,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:15|X:3.2|Y:2.0|Z:2.2,4,BFS,1,SOLVED,4,B_CCW U_CW D_CW L_CCW,3898,46776,,70
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:15|X:3.2|Y:2.0|Z:2.2,4,IDA_STAR,2,SOLVED,4,B_CCW U_CW D_CW L_CCW,4,48,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:15|X:3.2|Y:2.0|Z:2.2,4,BFS,2,SOLVED,4,B_CCW U_CW D_CW L_CCW,3898,46776,,69
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:15|X:3.2|Y:2.0|Z:2.2,4,BIDIRECTIONAL_BFS,2,SOLVED,4,B_CCW U_CW D_CW L_CCW,26,312,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:15|X:3.2|Y:2.0|Z:2.2,4,BFS,3,SOLVED,4,B_CCW U_CW D_CW L_CCW,3898,46776,,75
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:15|X:3.2|Y:2.0|Z:2.2,4,BIDIRECTIONAL_BFS,3,SOLVED,4,B_CCW U_CW D_CW L_CCW,26,312,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:15|X:3.2|Y:2.0|Z:2.2,4,IDA_STAR,3,SOLVED,4,B_CCW U_CW D_CW L_CCW,4,48,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:15|X:3.2|Y:2.0|Z:2.2,4,BIDIRECTIONAL_BFS,4,SOLVED,4,B_CCW U_CW D_CW L_CCW,26,312,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:15|X:3.2|Y:2.0|Z:2.2,4,IDA_STAR,4,SOLVED,4,B_CCW U_CW D_CW L_CCW,4,48,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:15|X:3.2|Y:2.0|Z:2.2,4,BFS,4,SOLVED,4,B_CCW U_CW D_CW L_CCW,3898,46776,,68
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:15|X:1.0|Y:1.0|Z:0.2,4,BIDIRECTIONAL_BFS,0,SOLVED,4,R_CCW R_CCW F_CW R_CCW,26,312,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:15|X:1.0|Y:1.0|Z:0.2,4,IDA_STAR,0,SOLVED,4,R_CW R_CW F_CW L_CCW,4,48,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:15|X:1.0|Y:1.0|Z:0.2,4,BFS,0,SOLVED,4,R_CW R_CW F_CW L_CCW,4319,51828,,76
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:15|X:1.0|Y:1.0|Z:0.2,4,IDA_STAR,1,SOLVED,4,R_CW R_CW F_CW L_CCW,4,48,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:15|X:1.0|Y:1.0|Z:0.2,4,BFS,1,SOLVED,4,R_CW R_CW F_CW L_CCW,4319,51828,,79
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:15|X:1.0|Y:1.0|Z:0.2,4,BIDIRECTIONAL_BFS,1,SOLVED,4,R_CCW R_CCW F_CW R_CCW,26,312,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:15|X:1.0|Y:1.0|Z:0.2,4,BFS,2,SOLVED,4,R_CW R_CW F_CW L_CCW,4319,51828,,75
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:15|X:1.0|Y:1.0|Z:0.2,4,BIDIRECTIONAL_BFS,2,SOLVED,4,R_CCW R_CCW F_CW R_CCW,26,312,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:15|X:1.0|Y:1.0|Z:0.2,4,IDA_STAR,2,SOLVED,4,R_CW R_CW F_CW L_CCW,4,48,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:15|X:1.0|Y:1.0|Z:0.2,4,BIDIRECTIONAL_BFS,3,SOLVED,4,R_CCW R_CCW F_CW R_CCW,26,312,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:15|X:1.0|Y:1.0|Z:0.2,4,IDA_STAR,3,SOLVED,4,R_CW R_CW F_CW L_CCW,4,48,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:15|X:1.0|Y:1.0|Z:0.2,4,BFS,3,SOLVED,4,R_CW R_CW F_CW L_CCW,4319,51828,,77
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:15|X:1.0|Y:1.0|Z:0.2,4,IDA_STAR,4,SOLVED,4,R_CW R_CW F_CW L_CCW,4,48,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:15|X:1.0|Y:1.0|Z:0.2,4,BFS,4,SOLVED,4,R_CW R_CW F_CW L_CCW,4319,51828,,78
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:15|X:1.0|Y:1.0|Z:0.2,4,BIDIRECTIONAL_BFS,4,SOLVED,4,R_CCW R_CCW F_CW R_CCW,26,312,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:11|X:0.1|Y:1.2|Z:1.1,4,IDA_STAR,0,SOLVED,4,F_CW F_CW U_CW L_CW,4,48,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:11|X:0.1|Y:1.2|Z:1.1,4,BFS,0,SOLVED,4,F_CW F_CW U_CW L_CW,3049,36588,,55
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:11|X:0.1|Y:1.2|Z:1.1,4,BIDIRECTIONAL_BFS,0,SOLVED,4,F_CW F_CW U_CW L_CW,26,312,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:11|X:0.1|Y:1.2|Z:1.1,4,BFS,1,SOLVED,4,F_CW F_CW U_CW L_CW,3049,36588,,54
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:11|X:0.1|Y:1.2|Z:1.1,4,BIDIRECTIONAL_BFS,1,SOLVED,4,F_CW F_CW U_CW L_CW,26,312,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:11|X:0.1|Y:1.2|Z:1.1,4,IDA_STAR,1,SOLVED,4,F_CW F_CW U_CW L_CW,4,48,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:11|X:0.1|Y:1.2|Z:1.1,4,BIDIRECTIONAL_BFS,2,SOLVED,4,F_CW F_CW U_CW L_CW,26,312,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:11|X:0.1|Y:1.2|Z:1.1,4,IDA_STAR,2,SOLVED,4,F_CW F_CW U_CW L_CW,4,48,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:11|X:0.1|Y:1.2|Z:1.1,4,BFS,2,SOLVED,4,F_CW F_CW U_CW L_CW,3049,36588,,56
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:11|X:0.1|Y:1.2|Z:1.1,4,IDA_STAR,3,SOLVED,4,F_CW F_CW U_CW L_CW,4,48,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:11|X:0.1|Y:1.2|Z:1.1,4,BFS,3,SOLVED,4,F_CW F_CW U_CW L_CW,3049,36588,,56
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:11|X:0.1|Y:1.2|Z:1.1,4,BIDIRECTIONAL_BFS,3,SOLVED,4,F_CW F_CW U_CW L_CW,26,312,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:11|X:0.1|Y:1.2|Z:1.1,4,BFS,4,SOLVED,4,F_CW F_CW U_CW L_CW,3049,36588,,57
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:11|X:0.1|Y:1.2|Z:1.1,4,BIDIRECTIONAL_BFS,4,SOLVED,4,F_CW F_CW U_CW L_CW,26,312,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:11|X:0.1|Y:1.2|Z:1.1,4,IDA_STAR,4,SOLVED,4,F_CW F_CW U_CW L_CW,4,48,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:8|X:1.0|Y:3.0|Z:1.1,4,BFS,0,SOLVED,4,B_CCW U_CCW F_CW U_CW,3919,47028,,69
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:8|X:1.0|Y:3.0|Z:1.1,4,BIDIRECTIONAL_BFS,0,SOLVED,4,B_CCW D_CCW F_CW D_CW,26,312,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:8|X:1.0|Y:3.0|Z:1.1,4,IDA_STAR,0,SOLVED,4,B_CCW U_CCW F_CW U_CW,4,48,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:8|X:1.0|Y:3.0|Z:1.1,4,BIDIRECTIONAL_BFS,1,SOLVED,4,B_CCW D_CCW F_CW D_CW,26,312,,2
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:8|X:1.0|Y:3.0|Z:1.1,4,IDA_STAR,1,SOLVED,4,B_CCW U_CCW F_CW U_CW,4,48,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:8|X:1.0|Y:3.0|Z:1.1,4,BFS,1,SOLVED,4,B_CCW U_CCW F_CW U_CW,3919,47028,,70
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:8|X:1.0|Y:3.0|Z:1.1,4,IDA_STAR,2,SOLVED,4,B_CCW U_CCW F_CW U_CW,4,48,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:8|X:1.0|Y:3.0|Z:1.1,4,BFS,2,SOLVED,4,B_CCW U_CCW F_CW U_CW,3919,47028,,69
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:8|X:1.0|Y:3.0|Z:1.1,4,BIDIRECTIONAL_BFS,2,SOLVED,4,B_CCW D_CCW F_CW D_CW,26,312,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:8|X:1.0|Y:3.0|Z:1.1,4,BFS,3,SOLVED,4,B_CCW U_CCW F_CW U_CW,3919,47028,,70
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:8|X:1.0|Y:3.0|Z:1.1,4,BIDIRECTIONAL_BFS,3,SOLVED,4,B_CCW D_CCW F_CW D_CW,26,312,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:8|X:1.0|Y:3.0|Z:1.1,4,IDA_STAR,3,SOLVED,4,B_CCW U_CCW F_CW U_CW,4,48,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:8|X:1.0|Y:3.0|Z:1.1,4,BIDIRECTIONAL_BFS,4,SOLVED,4,B_CCW D_CCW F_CW D_CW,26,312,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:8|X:1.0|Y:3.0|Z:1.1,4,IDA_STAR,4,SOLVED,4,B_CCW U_CCW F_CW U_CW,4,48,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:8|X:1.0|Y:3.0|Z:1.1,4,BFS,4,SOLVED,4,B_CCW U_CCW F_CW U_CW,3919,47028,,77
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:3|X:3.0|Y:1.2|Z:1.1,4,BIDIRECTIONAL_BFS,0,SOLVED,4,R_CW U_CW B_CW L_CW,26,312,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:3|X:3.0|Y:1.2|Z:1.1,4,IDA_STAR,0,SOLVED,4,R_CW U_CW B_CW L_CW,4,48,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:3|X:3.0|Y:1.2|Z:1.1,4,BFS,0,SOLVED,4,R_CW U_CW B_CW L_CW,4080,48960,,75
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:3|X:3.0|Y:1.2|Z:1.1,4,IDA_STAR,1,SOLVED,4,R_CW U_CW B_CW L_CW,4,48,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:3|X:3.0|Y:1.2|Z:1.1,4,BFS,1,SOLVED,4,R_CW U_CW B_CW L_CW,4080,48960,,78
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:3|X:3.0|Y:1.2|Z:1.1,4,BIDIRECTIONAL_BFS,1,SOLVED,4,R_CW U_CW B_CW L_CW,26,312,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:3|X:3.0|Y:1.2|Z:1.1,4,BFS,2,SOLVED,4,R_CW U_CW B_CW L_CW,4080,48960,,72
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:3|X:3.0|Y:1.2|Z:1.1,4,BIDIRECTIONAL_BFS,2,SOLVED,4,R_CW U_CW B_CW L_CW,26,312,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:3|X:3.0|Y:1.2|Z:1.1,4,IDA_STAR,2,SOLVED,4,R_CW U_CW B_CW L_CW,4,48,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:3|X:3.0|Y:1.2|Z:1.1,4,BIDIRECTIONAL_BFS,3,SOLVED,4,R_CW U_CW B_CW L_CW,26,312,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:3|X:3.0|Y:1.2|Z:1.1,4,IDA_STAR,3,SOLVED,4,R_CW U_CW B_CW L_CW,4,48,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:3|X:3.0|Y:1.2|Z:1.1,4,BFS,3,SOLVED,4,R_CW U_CW B_CW L_CW,4080,48960,,72
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:3|X:3.0|Y:1.2|Z:1.1,4,IDA_STAR,4,SOLVED,4,R_CW U_CW B_CW L_CW,4,48,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:3|X:3.0|Y:1.2|Z:1.1,4,BFS,4,SOLVED,4,R_CW U_CW B_CW L_CW,4080,48960,,72
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:3|X:3.0|Y:1.2|Z:1.1,4,BIDIRECTIONAL_BFS,4,SOLVED,4,R_CW U_CW B_CW L_CW,26,312,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:16|X:3.0|Y:2.2|Z:3.1,4,IDA_STAR,0,SOLVED,4,F_CCW R_CCW U_CW R_CW,4,48,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:16|X:3.0|Y:2.2|Z:3.1,4,BFS,0,SOLVED,4,F_CCW R_CCW U_CW R_CW,3634,43608,,64
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:16|X:3.0|Y:2.2|Z:3.1,4,BIDIRECTIONAL_BFS,0,SOLVED,4,F_CCW L_CCW U_CW L_CW,26,312,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:16|X:3.0|Y:2.2|Z:3.1,4,BFS,1,SOLVED,4,F_CCW R_CCW U_CW R_CW,3634,43608,,63
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:16|X:3.0|Y:2.2|Z:3.1,4,BIDIRECTIONAL_BFS,1,SOLVED,4,F_CCW L_CCW U_CW L_CW,26,312,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:16|X:3.0|Y:2.2|Z:3.1,4,IDA_STAR,1,SOLVED,4,F_CCW R_CCW U_CW R_CW,4,48,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:16|X:3.0|Y:2.2|Z:3.1,4,BIDIRECTIONAL_BFS,2,SOLVED,4,F_CCW L_CCW U_CW L_CW,26,312,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:16|X:3.0|Y:2.2|Z:3.1,4,IDA_STAR,2,SOLVED,4,F_CCW R_CCW U_CW R_CW,4,48,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:16|X:3.0|Y:2.2|Z:3.1,4,BFS,2,SOLVED,4,F_CCW R_CCW U_CW R_CW,3634,43608,,66
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:16|X:3.0|Y:2.2|Z:3.1,4,IDA_STAR,3,SOLVED,4,F_CCW R_CCW U_CW R_CW,4,48,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:16|X:3.0|Y:2.2|Z:3.1,4,BFS,3,SOLVED,4,F_CCW R_CCW U_CW R_CW,3634,43608,,64
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:16|X:3.0|Y:2.2|Z:3.1,4,BIDIRECTIONAL_BFS,3,SOLVED,4,F_CCW L_CCW U_CW L_CW,26,312,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:16|X:3.0|Y:2.2|Z:3.1,4,BFS,4,SOLVED,4,F_CCW R_CCW U_CW R_CW,3634,43608,,65
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:16|X:3.0|Y:2.2|Z:3.1,4,BIDIRECTIONAL_BFS,4,SOLVED,4,F_CCW L_CCW U_CW L_CW,26,312,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:16|X:3.0|Y:2.2|Z:3.1,4,IDA_STAR,4,SOLVED,4,F_CCW R_CCW U_CW R_CW,4,48,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:3|X:0.2|Y:3.0|Z:2.2,4,BFS,0,SOLVED,4,U_CW F_CW R_CW D_CW,1207,14484,,21
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:3|X:0.2|Y:3.0|Z:2.2,4,BIDIRECTIONAL_BFS,0,SOLVED,4,U_CW F_CW R_CW D_CW,26,312,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:3|X:0.2|Y:3.0|Z:2.2,4,IDA_STAR,0,SOLVED,4,U_CW F_CW R_CW D_CW,4,48,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:3|X:0.2|Y:3.0|Z:2.2,4,BIDIRECTIONAL_BFS,1,SOLVED,4,U_CW F_CW R_CW D_CW,26,312,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:3|X:0.2|Y:3.0|Z:2.2,4,IDA_STAR,1,SOLVED,4,U_CW F_CW R_CW D_CW,4,48,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:3|X:0.2|Y:3.0|Z:2.2,4,BFS,1,SOLVED,4,U_CW F_CW R_CW D_CW,1207,14484,,21
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:3|X:0.2|Y:3.0|Z:2.2,4,IDA_STAR,2,SOLVED,4,U_CW F_CW R_CW D_CW,4,48,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:3|X:0.2|Y:3.0|Z:2.2,4,BFS,2,SOLVED,4,U_CW F_CW R_CW D_CW,1207,14484,,21
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:3|X:0.2|Y:3.0|Z:2.2,4,BIDIRECTIONAL_BFS,2,SOLVED,4,U_CW F_CW R_CW D_CW,26,312,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:3|X:0.2|Y:3.0|Z:2.2,4,BFS,3,SOLVED,4,U_CW F_CW R_CW D_CW,1207,14484,,22
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:3|X:0.2|Y:3.0|Z:2.2,4,BIDIRECTIONAL_BFS,3,SOLVED,4,U_CW F_CW R_CW D_CW,26,312,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:3|X:0.2|Y:3.0|Z:2.2,4,IDA_STAR,3,SOLVED,4,U_CW F_CW R_CW D_CW,4,48,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:3|X:0.2|Y:3.0|Z:2.2,4,BIDIRECTIONAL_BFS,4,SOLVED,4,U_CW F_CW R_CW D_CW,26,312,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:3|X:0.2|Y:3.0|Z:2.2,4,IDA_STAR,4,SOLVED,4,U_CW F_CW R_CW D_CW,4,48,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:3|X:0.2|Y:3.0|Z:2.2,4,BFS,4,SOLVED,4,U_CW F_CW R_CW D_CW,1207,14484,,21
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:3|X:1.2|Y:3.2|Z:2.1,4,BIDIRECTIONAL_BFS,0,SOLVED,4,D_CW B_CW L_CCW D_CW,26,312,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:3|X:1.2|Y:3.2|Z:2.1,4,IDA_STAR,0,SOLVED,4,D_CW B_CW L_CCW D_CW,4,48,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:3|X:1.2|Y:3.2|Z:2.1,4,BFS,0,SOLVED,4,D_CW B_CW L_CCW D_CW,2392,28704,,43
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:3|X:1.2|Y:3.2|Z:2.1,4,IDA_STAR,1,SOLVED,4,D_CW B_CW L_CCW D_CW,4,48,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:3|X:1.2|Y:3.2|Z:2.1,4,BFS,1,SOLVED,4,D_CW B_CW L_CCW D_CW,2392,28704,,41
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:3|X:1.2|Y:3.2|Z:2.1,4,BIDIRECTIONAL_BFS,1,SOLVED,4,D_CW B_CW L_CCW D_CW,26,312,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:3|X:1.2|Y:3.2|Z:2.1,4,BFS,2,SOLVED,4,D_CW B_CW L_CCW D_CW,2392,28704,,43
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:3|X:1.2|Y:3.2|Z:2.1,4,BIDIRECTIONAL_BFS,2,SOLVED,4,D_CW B_CW L_CCW D_CW,26,312,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:3|X:1.2|Y:3.2|Z:2.1,4,IDA_STAR,2,SOLVED,4,D_CW B_CW L_CCW D_CW,4,48,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:3|X:1.2|Y:3.2|Z:2.1,4,BIDIRECTIONAL_BFS,3,SOLVED,4,D_CW B_CW L_CCW D_CW,26,312,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:3|X:1.2|Y:3.2|Z:2.1,4,IDA_STAR,3,SOLVED,4,D_CW B_CW L_CCW D_CW,4,48,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:3|X:1.2|Y:3.2|Z:2.1,4,BFS,3,SOLVED,4,D_CW B_CW L_CCW D_CW,2392,28704,,42
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:3|X:1.2|Y:3.2|Z:2.1,4,IDA_STAR,4,SOLVED,4,D_CW B_CW L_CCW D_CW,4,48,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:3|X:1.2|Y:3.2|Z:2.1,4,BFS,4,SOLVED,4,D_CW B_CW L_CCW D_CW,2392,28704,,43
+1,phase5c-timing-v1,phase5c-timing-v1,d4:C:3|X:1.2|Y:3.2|Z:2.1,4,BIDIRECTIONAL_BFS,4,SOLVED,4,D_CW B_CW L_CCW D_CW,26,312,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:1|X:0.2|Y:1.2|Z:2.2,5,IDA_STAR,0,SOLVED,5,L_CW B_CCW U_CCW U_CCW R_CCW,5,60,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:1|X:0.2|Y:1.2|Z:2.2,5,BFS,0,SOLVED,5,L_CW B_CCW U_CCW U_CCW R_CCW,16308,195696,,290
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:1|X:0.2|Y:1.2|Z:2.2,5,BIDIRECTIONAL_BFS,0,SOLVED,5,L_CW B_CCW D_CW D_CW R_CCW,137,1644,,2
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:1|X:0.2|Y:1.2|Z:2.2,5,BFS,1,SOLVED,5,L_CW B_CCW U_CCW U_CCW R_CCW,16308,195696,,290
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:1|X:0.2|Y:1.2|Z:2.2,5,BIDIRECTIONAL_BFS,1,SOLVED,5,L_CW B_CCW D_CW D_CW R_CCW,137,1644,,3
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:1|X:0.2|Y:1.2|Z:2.2,5,IDA_STAR,1,SOLVED,5,L_CW B_CCW U_CCW U_CCW R_CCW,5,60,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:1|X:0.2|Y:1.2|Z:2.2,5,BIDIRECTIONAL_BFS,2,SOLVED,5,L_CW B_CCW D_CW D_CW R_CCW,137,1644,,3
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:1|X:0.2|Y:1.2|Z:2.2,5,IDA_STAR,2,SOLVED,5,L_CW B_CCW U_CCW U_CCW R_CCW,5,60,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:1|X:0.2|Y:1.2|Z:2.2,5,BFS,2,SOLVED,5,L_CW B_CCW U_CCW U_CCW R_CCW,16308,195696,,294
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:1|X:0.2|Y:1.2|Z:2.2,5,IDA_STAR,3,SOLVED,5,L_CW B_CCW U_CCW U_CCW R_CCW,5,60,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:1|X:0.2|Y:1.2|Z:2.2,5,BFS,3,SOLVED,5,L_CW B_CCW U_CCW U_CCW R_CCW,16308,195696,,294
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:1|X:0.2|Y:1.2|Z:2.2,5,BIDIRECTIONAL_BFS,3,SOLVED,5,L_CW B_CCW D_CW D_CW R_CCW,137,1644,,2
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:1|X:0.2|Y:1.2|Z:2.2,5,BFS,4,SOLVED,5,L_CW B_CCW U_CCW U_CCW R_CCW,16308,195696,,294
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:1|X:0.2|Y:1.2|Z:2.2,5,BIDIRECTIONAL_BFS,4,SOLVED,5,L_CW B_CCW D_CW D_CW R_CCW,137,1644,,3
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:1|X:0.2|Y:1.2|Z:2.2,5,IDA_STAR,4,SOLVED,5,L_CW B_CCW U_CCW U_CCW R_CCW,5,60,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:21|X:1.2|Y:0.2|Z:3.2,5,BFS,0,SOLVED,5,U_CCW D_CW F_CCW B_CW R_CW,8131,97572,,146
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:21|X:1.2|Y:0.2|Z:3.2,5,BIDIRECTIONAL_BFS,0,SOLVED,5,U_CCW D_CW R_CW B_CW F_CCW,137,1644,,3
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:21|X:1.2|Y:0.2|Z:3.2,5,IDA_STAR,0,SOLVED,5,U_CCW D_CW F_CCW B_CW R_CW,5,60,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:21|X:1.2|Y:0.2|Z:3.2,5,BIDIRECTIONAL_BFS,1,SOLVED,5,U_CCW D_CW R_CW B_CW F_CCW,137,1644,,2
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:21|X:1.2|Y:0.2|Z:3.2,5,IDA_STAR,1,SOLVED,5,U_CCW D_CW F_CCW B_CW R_CW,5,60,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:21|X:1.2|Y:0.2|Z:3.2,5,BFS,1,SOLVED,5,U_CCW D_CW F_CCW B_CW R_CW,8131,97572,,146
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:21|X:1.2|Y:0.2|Z:3.2,5,IDA_STAR,2,SOLVED,5,U_CCW D_CW F_CCW B_CW R_CW,5,60,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:21|X:1.2|Y:0.2|Z:3.2,5,BFS,2,SOLVED,5,U_CCW D_CW F_CCW B_CW R_CW,8131,97572,,146
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:21|X:1.2|Y:0.2|Z:3.2,5,BIDIRECTIONAL_BFS,2,SOLVED,5,U_CCW D_CW R_CW B_CW F_CCW,137,1644,,3
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:21|X:1.2|Y:0.2|Z:3.2,5,BFS,3,SOLVED,5,U_CCW D_CW F_CCW B_CW R_CW,8131,97572,,144
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:21|X:1.2|Y:0.2|Z:3.2,5,BIDIRECTIONAL_BFS,3,SOLVED,5,U_CCW D_CW R_CW B_CW F_CCW,137,1644,,3
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:21|X:1.2|Y:0.2|Z:3.2,5,IDA_STAR,3,SOLVED,5,U_CCW D_CW F_CCW B_CW R_CW,5,60,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:21|X:1.2|Y:0.2|Z:3.2,5,BIDIRECTIONAL_BFS,4,SOLVED,5,U_CCW D_CW R_CW B_CW F_CCW,137,1644,,3
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:21|X:1.2|Y:0.2|Z:3.2,5,IDA_STAR,4,SOLVED,5,U_CCW D_CW F_CCW B_CW R_CW,5,60,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:21|X:1.2|Y:0.2|Z:3.2,5,BFS,4,SOLVED,5,U_CCW D_CW F_CCW B_CW R_CW,8131,97572,,146
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:10|X:2.1|Y:3.2|Z:1.1,5,BIDIRECTIONAL_BFS,0,SOLVED,5,U_CW L_CW F_CCW L_CW R_CW,137,1644,,2
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:10|X:2.1|Y:3.2|Z:1.1,5,IDA_STAR,0,SOLVED,5,U_CW F_CW L_CCW F_CW R_CW,5,60,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:10|X:2.1|Y:3.2|Z:1.1,5,BFS,0,SOLVED,5,U_CW F_CW L_CCW F_CW R_CW,6493,77916,,116
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:10|X:2.1|Y:3.2|Z:1.1,5,IDA_STAR,1,SOLVED,5,U_CW F_CW L_CCW F_CW R_CW,5,60,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:10|X:2.1|Y:3.2|Z:1.1,5,BFS,1,SOLVED,5,U_CW F_CW L_CCW F_CW R_CW,6493,77916,,115
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:10|X:2.1|Y:3.2|Z:1.1,5,BIDIRECTIONAL_BFS,1,SOLVED,5,U_CW L_CW F_CCW L_CW R_CW,137,1644,,3
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:10|X:2.1|Y:3.2|Z:1.1,5,BFS,2,SOLVED,5,U_CW F_CW L_CCW F_CW R_CW,6493,77916,,116
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:10|X:2.1|Y:3.2|Z:1.1,5,BIDIRECTIONAL_BFS,2,SOLVED,5,U_CW L_CW F_CCW L_CW R_CW,137,1644,,3
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:10|X:2.1|Y:3.2|Z:1.1,5,IDA_STAR,2,SOLVED,5,U_CW F_CW L_CCW F_CW R_CW,5,60,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:10|X:2.1|Y:3.2|Z:1.1,5,BIDIRECTIONAL_BFS,3,SOLVED,5,U_CW L_CW F_CCW L_CW R_CW,137,1644,,3
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:10|X:2.1|Y:3.2|Z:1.1,5,IDA_STAR,3,SOLVED,5,U_CW F_CW L_CCW F_CW R_CW,5,60,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:10|X:2.1|Y:3.2|Z:1.1,5,BFS,3,SOLVED,5,U_CW F_CW L_CCW F_CW R_CW,6493,77916,,115
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:10|X:2.1|Y:3.2|Z:1.1,5,IDA_STAR,4,SOLVED,5,U_CW F_CW L_CCW F_CW R_CW,5,60,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:10|X:2.1|Y:3.2|Z:1.1,5,BFS,4,SOLVED,5,U_CW F_CW L_CCW F_CW R_CW,6493,77916,,116
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:10|X:2.1|Y:3.2|Z:1.1,5,BIDIRECTIONAL_BFS,4,SOLVED,5,U_CW L_CW F_CCW L_CW R_CW,137,1644,,3
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:22|X:3.0|Y:0.2|Z:3.0,5,IDA_STAR,0,SOLVED,5,F_CW R_CW U_CW F_CCW L_CW,5,60,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:22|X:3.0|Y:0.2|Z:3.0,5,BFS,0,SOLVED,5,F_CW R_CW U_CW F_CCW L_CW,12586,151032,,225
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:22|X:3.0|Y:0.2|Z:3.0,5,BIDIRECTIONAL_BFS,0,SOLVED,5,F_CW R_CW U_CW F_CCW L_CW,137,1644,,3
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:22|X:3.0|Y:0.2|Z:3.0,5,BFS,1,SOLVED,5,F_CW R_CW U_CW F_CCW L_CW,12586,151032,,227
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:22|X:3.0|Y:0.2|Z:3.0,5,BIDIRECTIONAL_BFS,1,SOLVED,5,F_CW R_CW U_CW F_CCW L_CW,137,1644,,3
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:22|X:3.0|Y:0.2|Z:3.0,5,IDA_STAR,1,SOLVED,5,F_CW R_CW U_CW F_CCW L_CW,5,60,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:22|X:3.0|Y:0.2|Z:3.0,5,BIDIRECTIONAL_BFS,2,SOLVED,5,F_CW R_CW U_CW F_CCW L_CW,137,1644,,2
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:22|X:3.0|Y:0.2|Z:3.0,5,IDA_STAR,2,SOLVED,5,F_CW R_CW U_CW F_CCW L_CW,5,60,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:22|X:3.0|Y:0.2|Z:3.0,5,BFS,2,SOLVED,5,F_CW R_CW U_CW F_CCW L_CW,12586,151032,,223
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:22|X:3.0|Y:0.2|Z:3.0,5,IDA_STAR,3,SOLVED,5,F_CW R_CW U_CW F_CCW L_CW,5,60,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:22|X:3.0|Y:0.2|Z:3.0,5,BFS,3,SOLVED,5,F_CW R_CW U_CW F_CCW L_CW,12586,151032,,224
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:22|X:3.0|Y:0.2|Z:3.0,5,BIDIRECTIONAL_BFS,3,SOLVED,5,F_CW R_CW U_CW F_CCW L_CW,137,1644,,3
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:22|X:3.0|Y:0.2|Z:3.0,5,BFS,4,SOLVED,5,F_CW R_CW U_CW F_CCW L_CW,12586,151032,,223
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:22|X:3.0|Y:0.2|Z:3.0,5,BIDIRECTIONAL_BFS,4,SOLVED,5,F_CW R_CW U_CW F_CCW L_CW,137,1644,,2
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:22|X:3.0|Y:0.2|Z:3.0,5,IDA_STAR,4,SOLVED,5,F_CW R_CW U_CW F_CCW L_CW,5,60,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:1|X:0.0|Y:1.2|Z:3.2,5,BFS,0,SOLVED,5,R_CW F_CW U_CCW U_CCW R_CCW,15236,182832,,279
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:1|X:0.0|Y:1.2|Z:3.2,5,BIDIRECTIONAL_BFS,0,SOLVED,5,R_CW F_CW D_CW D_CW R_CCW,137,1644,,3
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:1|X:0.0|Y:1.2|Z:3.2,5,IDA_STAR,0,SOLVED,5,R_CW F_CW U_CCW U_CCW R_CCW,5,60,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:1|X:0.0|Y:1.2|Z:3.2,5,BIDIRECTIONAL_BFS,1,SOLVED,5,R_CW F_CW D_CW D_CW R_CCW,137,1644,,3
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:1|X:0.0|Y:1.2|Z:3.2,5,IDA_STAR,1,SOLVED,5,R_CW F_CW U_CCW U_CCW R_CCW,5,60,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:1|X:0.0|Y:1.2|Z:3.2,5,BFS,1,SOLVED,5,R_CW F_CW U_CCW U_CCW R_CCW,15236,182832,,268
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:1|X:0.0|Y:1.2|Z:3.2,5,IDA_STAR,2,SOLVED,5,R_CW F_CW U_CCW U_CCW R_CCW,5,60,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:1|X:0.0|Y:1.2|Z:3.2,5,BFS,2,SOLVED,5,R_CW F_CW U_CCW U_CCW R_CCW,15236,182832,,270
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:1|X:0.0|Y:1.2|Z:3.2,5,BIDIRECTIONAL_BFS,2,SOLVED,5,R_CW F_CW D_CW D_CW R_CCW,137,1644,,3
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:1|X:0.0|Y:1.2|Z:3.2,5,BFS,3,SOLVED,5,R_CW F_CW U_CCW U_CCW R_CCW,15236,182832,,273
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:1|X:0.0|Y:1.2|Z:3.2,5,BIDIRECTIONAL_BFS,3,SOLVED,5,R_CW F_CW D_CW D_CW R_CCW,137,1644,,3
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:1|X:0.0|Y:1.2|Z:3.2,5,IDA_STAR,3,SOLVED,5,R_CW F_CW U_CCW U_CCW R_CCW,5,60,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:1|X:0.0|Y:1.2|Z:3.2,5,BIDIRECTIONAL_BFS,4,SOLVED,5,R_CW F_CW D_CW D_CW R_CCW,137,1644,,2
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:1|X:0.0|Y:1.2|Z:3.2,5,IDA_STAR,4,SOLVED,5,R_CW F_CW U_CCW U_CCW R_CCW,5,60,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:1|X:0.0|Y:1.2|Z:3.2,5,BFS,4,SOLVED,5,R_CW F_CW U_CCW U_CCW R_CCW,15236,182832,,270
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:1|X:3.2|Y:0.2|Z:3.0,5,BIDIRECTIONAL_BFS,0,SOLVED,5,F_CCW L_CCW B_CCW U_CCW U_CCW,137,1644,,2
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:1|X:3.2|Y:0.2|Z:3.0,5,IDA_STAR,0,SOLVED,5,U_CCW U_CCW F_CCW L_CCW B_CCW,5,60,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:1|X:3.2|Y:0.2|Z:3.0,5,BFS,0,SOLVED,5,U_CCW U_CCW F_CCW L_CCW B_CCW,8011,96132,,143
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:1|X:3.2|Y:0.2|Z:3.0,5,IDA_STAR,1,SOLVED,5,U_CCW U_CCW F_CCW L_CCW B_CCW,5,60,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:1|X:3.2|Y:0.2|Z:3.0,5,BFS,1,SOLVED,5,U_CCW U_CCW F_CCW L_CCW B_CCW,8011,96132,,143
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:1|X:3.2|Y:0.2|Z:3.0,5,BIDIRECTIONAL_BFS,1,SOLVED,5,F_CCW L_CCW B_CCW U_CCW U_CCW,137,1644,,3
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:1|X:3.2|Y:0.2|Z:3.0,5,BFS,2,SOLVED,5,U_CCW U_CCW F_CCW L_CCW B_CCW,8011,96132,,142
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:1|X:3.2|Y:0.2|Z:3.0,5,BIDIRECTIONAL_BFS,2,SOLVED,5,F_CCW L_CCW B_CCW U_CCW U_CCW,137,1644,,3
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:1|X:3.2|Y:0.2|Z:3.0,5,IDA_STAR,2,SOLVED,5,U_CCW U_CCW F_CCW L_CCW B_CCW,5,60,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:1|X:3.2|Y:0.2|Z:3.0,5,BIDIRECTIONAL_BFS,3,SOLVED,5,F_CCW L_CCW B_CCW U_CCW U_CCW,137,1644,,3
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:1|X:3.2|Y:0.2|Z:3.0,5,IDA_STAR,3,SOLVED,5,U_CCW U_CCW F_CCW L_CCW B_CCW,5,60,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:1|X:3.2|Y:0.2|Z:3.0,5,BFS,3,SOLVED,5,U_CCW U_CCW F_CCW L_CCW B_CCW,8011,96132,,142
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:1|X:3.2|Y:0.2|Z:3.0,5,IDA_STAR,4,SOLVED,5,U_CCW U_CCW F_CCW L_CCW B_CCW,5,60,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:1|X:3.2|Y:0.2|Z:3.0,5,BFS,4,SOLVED,5,U_CCW U_CCW F_CCW L_CCW B_CCW,8011,96132,,143
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:1|X:3.2|Y:0.2|Z:3.0,5,BIDIRECTIONAL_BFS,4,SOLVED,5,F_CCW L_CCW B_CCW U_CCW U_CCW,137,1644,,3
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:17|X:2.0|Y:0.2|Z:2.1,5,IDA_STAR,0,SOLVED,5,F_CCW R_CW R_CW U_CW L_CCW,5,60,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:17|X:2.0|Y:0.2|Z:2.1,5,BFS,0,SOLVED,5,F_CCW R_CW R_CW U_CW L_CCW,13790,165480,,242
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:17|X:2.0|Y:0.2|Z:2.1,5,BIDIRECTIONAL_BFS,0,SOLVED,5,R_CCW R_CCW F_CCW U_CW L_CW,137,1644,,3
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:17|X:2.0|Y:0.2|Z:2.1,5,BFS,1,SOLVED,5,F_CCW R_CW R_CW U_CW L_CCW,13790,165480,,248
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:17|X:2.0|Y:0.2|Z:2.1,5,BIDIRECTIONAL_BFS,1,SOLVED,5,R_CCW R_CCW F_CCW U_CW L_CW,137,1644,,3
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:17|X:2.0|Y:0.2|Z:2.1,5,IDA_STAR,1,SOLVED,5,F_CCW R_CW R_CW U_CW L_CCW,5,60,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:17|X:2.0|Y:0.2|Z:2.1,5,BIDIRECTIONAL_BFS,2,SOLVED,5,R_CCW R_CCW F_CCW U_CW L_CW,137,1644,,3
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:17|X:2.0|Y:0.2|Z:2.1,5,IDA_STAR,2,SOLVED,5,F_CCW R_CW R_CW U_CW L_CCW,5,60,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:17|X:2.0|Y:0.2|Z:2.1,5,BFS,2,SOLVED,5,F_CCW R_CW R_CW U_CW L_CCW,13790,165480,,249
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:17|X:2.0|Y:0.2|Z:2.1,5,IDA_STAR,3,SOLVED,5,F_CCW R_CW R_CW U_CW L_CCW,5,60,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:17|X:2.0|Y:0.2|Z:2.1,5,BFS,3,SOLVED,5,F_CCW R_CW R_CW U_CW L_CCW,13790,165480,,248
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:17|X:2.0|Y:0.2|Z:2.1,5,BIDIRECTIONAL_BFS,3,SOLVED,5,R_CCW R_CCW F_CCW U_CW L_CW,137,1644,,3
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:17|X:2.0|Y:0.2|Z:2.1,5,BFS,4,SOLVED,5,F_CCW R_CW R_CW U_CW L_CCW,13790,165480,,247
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:17|X:2.0|Y:0.2|Z:2.1,5,BIDIRECTIONAL_BFS,4,SOLVED,5,R_CCW R_CCW F_CCW U_CW L_CW,137,1644,,3
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:17|X:2.0|Y:0.2|Z:2.1,5,IDA_STAR,4,SOLVED,5,F_CCW R_CW R_CW U_CW L_CCW,5,60,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:17|X:1.0|Y:3.2|Z:3.2,5,BFS,0,SOLVED,5,R_CW F_CCW U_CW L_CW F_CCW,15344,184128,,271
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:17|X:1.0|Y:3.2|Z:3.2,5,BIDIRECTIONAL_BFS,0,SOLVED,5,R_CW F_CCW U_CW L_CW F_CCW,137,1644,,3
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:17|X:1.0|Y:3.2|Z:3.2,5,IDA_STAR,0,SOLVED,5,R_CW F_CCW U_CW L_CW F_CCW,5,60,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:17|X:1.0|Y:3.2|Z:3.2,5,BIDIRECTIONAL_BFS,1,SOLVED,5,R_CW F_CCW U_CW L_CW F_CCW,137,1644,,3
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:17|X:1.0|Y:3.2|Z:3.2,5,IDA_STAR,1,SOLVED,5,R_CW F_CCW U_CW L_CW F_CCW,5,60,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:17|X:1.0|Y:3.2|Z:3.2,5,BFS,1,SOLVED,5,R_CW F_CCW U_CW L_CW F_CCW,15344,184128,,273
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:17|X:1.0|Y:3.2|Z:3.2,5,IDA_STAR,2,SOLVED,5,R_CW F_CCW U_CW L_CW F_CCW,5,60,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:17|X:1.0|Y:3.2|Z:3.2,5,BFS,2,SOLVED,5,R_CW F_CCW U_CW L_CW F_CCW,15344,184128,,279
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:17|X:1.0|Y:3.2|Z:3.2,5,BIDIRECTIONAL_BFS,2,SOLVED,5,R_CW F_CCW U_CW L_CW F_CCW,137,1644,,3
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:17|X:1.0|Y:3.2|Z:3.2,5,BFS,3,SOLVED,5,R_CW F_CCW U_CW L_CW F_CCW,15344,184128,,274
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:17|X:1.0|Y:3.2|Z:3.2,5,BIDIRECTIONAL_BFS,3,SOLVED,5,R_CW F_CCW U_CW L_CW F_CCW,137,1644,,2
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:17|X:1.0|Y:3.2|Z:3.2,5,IDA_STAR,3,SOLVED,5,R_CW F_CCW U_CW L_CW F_CCW,5,60,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:17|X:1.0|Y:3.2|Z:3.2,5,BIDIRECTIONAL_BFS,4,SOLVED,5,R_CW F_CCW U_CW L_CW F_CCW,137,1644,,2
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:17|X:1.0|Y:3.2|Z:3.2,5,IDA_STAR,4,SOLVED,5,R_CW F_CCW U_CW L_CW F_CCW,5,60,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d5:C:17|X:1.0|Y:3.2|Z:3.2,5,BFS,4,SOLVED,5,R_CW F_CCW U_CW L_CW F_CCW,15344,184128,,274
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:11|X:2.2|Y:0.2|Z:3.2,6,BIDIRECTIONAL_BFS,0,SOLVED,6,F_CCW B_CW L_CW D_CW R_CCW U_CCW,248,2976,,4
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:11|X:2.2|Y:0.2|Z:3.2,6,IDA_STAR,0,SOLVED,6,F_CCW B_CW L_CW D_CW R_CCW U_CCW,11,132,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:11|X:2.2|Y:0.2|Z:3.2,6,BFS,0,SOLVED,6,F_CCW B_CW L_CW D_CW R_CCW U_CCW,31522,378264,,564
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:11|X:2.2|Y:0.2|Z:3.2,6,IDA_STAR,1,SOLVED,6,F_CCW B_CW L_CW D_CW R_CCW U_CCW,11,132,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:11|X:2.2|Y:0.2|Z:3.2,6,BFS,1,SOLVED,6,F_CCW B_CW L_CW D_CW R_CCW U_CCW,31522,378264,,565
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:11|X:2.2|Y:0.2|Z:3.2,6,BIDIRECTIONAL_BFS,1,SOLVED,6,F_CCW B_CW L_CW D_CW R_CCW U_CCW,248,2976,,5
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:11|X:2.2|Y:0.2|Z:3.2,6,BFS,2,SOLVED,6,F_CCW B_CW L_CW D_CW R_CCW U_CCW,31522,378264,,574
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:11|X:2.2|Y:0.2|Z:3.2,6,BIDIRECTIONAL_BFS,2,SOLVED,6,F_CCW B_CW L_CW D_CW R_CCW U_CCW,248,2976,,4
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:11|X:2.2|Y:0.2|Z:3.2,6,IDA_STAR,2,SOLVED,6,F_CCW B_CW L_CW D_CW R_CCW U_CCW,11,132,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:11|X:2.2|Y:0.2|Z:3.2,6,BIDIRECTIONAL_BFS,3,SOLVED,6,F_CCW B_CW L_CW D_CW R_CCW U_CCW,248,2976,,5
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:11|X:2.2|Y:0.2|Z:3.2,6,IDA_STAR,3,SOLVED,6,F_CCW B_CW L_CW D_CW R_CCW U_CCW,11,132,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:11|X:2.2|Y:0.2|Z:3.2,6,BFS,3,SOLVED,6,F_CCW B_CW L_CW D_CW R_CCW U_CCW,31522,378264,,562
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:11|X:2.2|Y:0.2|Z:3.2,6,IDA_STAR,4,SOLVED,6,F_CCW B_CW L_CW D_CW R_CCW U_CCW,11,132,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:11|X:2.2|Y:0.2|Z:3.2,6,BFS,4,SOLVED,6,F_CCW B_CW L_CW D_CW R_CCW U_CCW,31522,378264,,557
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:11|X:2.2|Y:0.2|Z:3.2,6,BIDIRECTIONAL_BFS,4,SOLVED,6,F_CCW B_CW L_CW D_CW R_CCW U_CCW,248,2976,,4
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:3|X:1.1|Y:2.2|Z:2.0,6,IDA_STAR,0,SOLVED,6,U_CW U_CW F_CCW L_CW D_CW F_CW,6,72,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:3|X:1.1|Y:2.2|Z:2.0,6,BFS,0,SOLVED,6,U_CW U_CW F_CCW L_CW D_CW F_CW,17475,209700,,313
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:3|X:1.1|Y:2.2|Z:2.0,6,BIDIRECTIONAL_BFS,0,SOLVED,6,U_CCW R_CW D_CW B_CW L_CCW F_CW,248,2976,,5
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:3|X:1.1|Y:2.2|Z:2.0,6,BFS,1,SOLVED,6,U_CW U_CW F_CCW L_CW D_CW F_CW,17475,209700,,312
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:3|X:1.1|Y:2.2|Z:2.0,6,BIDIRECTIONAL_BFS,1,SOLVED,6,U_CCW R_CW D_CW B_CW L_CCW F_CW,248,2976,,5
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:3|X:1.1|Y:2.2|Z:2.0,6,IDA_STAR,1,SOLVED,6,U_CW U_CW F_CCW L_CW D_CW F_CW,6,72,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:3|X:1.1|Y:2.2|Z:2.0,6,BIDIRECTIONAL_BFS,2,SOLVED,6,U_CCW R_CW D_CW B_CW L_CCW F_CW,248,2976,,4
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:3|X:1.1|Y:2.2|Z:2.0,6,IDA_STAR,2,SOLVED,6,U_CW U_CW F_CCW L_CW D_CW F_CW,6,72,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:3|X:1.1|Y:2.2|Z:2.0,6,BFS,2,SOLVED,6,U_CW U_CW F_CCW L_CW D_CW F_CW,17475,209700,,311
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:3|X:1.1|Y:2.2|Z:2.0,6,IDA_STAR,3,SOLVED,6,U_CW U_CW F_CCW L_CW D_CW F_CW,6,72,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:3|X:1.1|Y:2.2|Z:2.0,6,BFS,3,SOLVED,6,U_CW U_CW F_CCW L_CW D_CW F_CW,17475,209700,,320
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:3|X:1.1|Y:2.2|Z:2.0,6,BIDIRECTIONAL_BFS,3,SOLVED,6,U_CCW R_CW D_CW B_CW L_CCW F_CW,248,2976,,5
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:3|X:1.1|Y:2.2|Z:2.0,6,BFS,4,SOLVED,6,U_CW U_CW F_CCW L_CW D_CW F_CW,17475,209700,,308
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:3|X:1.1|Y:2.2|Z:2.0,6,BIDIRECTIONAL_BFS,4,SOLVED,6,U_CCW R_CW D_CW B_CW L_CCW F_CW,248,2976,,4
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:3|X:1.1|Y:2.2|Z:2.0,6,IDA_STAR,4,SOLVED,6,U_CW U_CW F_CCW L_CW D_CW F_CW,6,72,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:23|X:1.0|Y:1.2|Z:1.1,6,BFS,0,SOLVED,6,U_CW B_CW R_CCW U_CCW L_CCW D_CCW,22896,274752,,417
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:23|X:1.0|Y:1.2|Z:1.1,6,BIDIRECTIONAL_BFS,0,SOLVED,6,B_CCW D_CCW R_CW L_CCW B_CCW R_CW,248,2976,,4
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:23|X:1.0|Y:1.2|Z:1.1,6,IDA_STAR,0,SOLVED,6,U_CW B_CW R_CCW U_CCW L_CCW D_CCW,6,72,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:23|X:1.0|Y:1.2|Z:1.1,6,BIDIRECTIONAL_BFS,1,SOLVED,6,B_CCW D_CCW R_CW L_CCW B_CCW R_CW,248,2976,,4
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:23|X:1.0|Y:1.2|Z:1.1,6,IDA_STAR,1,SOLVED,6,U_CW B_CW R_CCW U_CCW L_CCW D_CCW,6,72,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:23|X:1.0|Y:1.2|Z:1.1,6,BFS,1,SOLVED,6,U_CW B_CW R_CCW U_CCW L_CCW D_CCW,22896,274752,,416
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:23|X:1.0|Y:1.2|Z:1.1,6,IDA_STAR,2,SOLVED,6,U_CW B_CW R_CCW U_CCW L_CCW D_CCW,6,72,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:23|X:1.0|Y:1.2|Z:1.1,6,BFS,2,SOLVED,6,U_CW B_CW R_CCW U_CCW L_CCW D_CCW,22896,274752,,420
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:23|X:1.0|Y:1.2|Z:1.1,6,BIDIRECTIONAL_BFS,2,SOLVED,6,B_CCW D_CCW R_CW L_CCW B_CCW R_CW,248,2976,,5
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:23|X:1.0|Y:1.2|Z:1.1,6,BFS,3,SOLVED,6,U_CW B_CW R_CCW U_CCW L_CCW D_CCW,22896,274752,,428
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:23|X:1.0|Y:1.2|Z:1.1,6,BIDIRECTIONAL_BFS,3,SOLVED,6,B_CCW D_CCW R_CW L_CCW B_CCW R_CW,248,2976,,5
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:23|X:1.0|Y:1.2|Z:1.1,6,IDA_STAR,3,SOLVED,6,U_CW B_CW R_CCW U_CCW L_CCW D_CCW,6,72,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:23|X:1.0|Y:1.2|Z:1.1,6,BIDIRECTIONAL_BFS,4,SOLVED,6,B_CCW D_CCW R_CW L_CCW B_CCW R_CW,248,2976,,5
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:23|X:1.0|Y:1.2|Z:1.1,6,IDA_STAR,4,SOLVED,6,U_CW B_CW R_CCW U_CCW L_CCW D_CCW,6,72,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:23|X:1.0|Y:1.2|Z:1.1,6,BFS,4,SOLVED,6,U_CW B_CW R_CCW U_CCW L_CCW D_CCW,22896,274752,,411
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:8|X:1.2|Y:0.2|Z:1.2,6,BIDIRECTIONAL_BFS,0,SOLVED,6,D_CCW L_CCW B_CW L_CCW F_CCW R_CCW,248,2976,,4
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:8|X:1.2|Y:0.2|Z:1.2,6,IDA_STAR,0,SOLVED,6,D_CCW F_CCW R_CCW F_CW F_CW L_CW,9,108,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:8|X:1.2|Y:0.2|Z:1.2,6,BFS,0,SOLVED,6,D_CCW F_CCW R_CCW F_CW F_CW L_CW,29283,351396,,543
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:8|X:1.2|Y:0.2|Z:1.2,6,IDA_STAR,1,SOLVED,6,D_CCW F_CCW R_CCW F_CW F_CW L_CW,9,108,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:8|X:1.2|Y:0.2|Z:1.2,6,BFS,1,SOLVED,6,D_CCW F_CCW R_CCW F_CW F_CW L_CW,29283,351396,,535
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:8|X:1.2|Y:0.2|Z:1.2,6,BIDIRECTIONAL_BFS,1,SOLVED,6,D_CCW L_CCW B_CW L_CCW F_CCW R_CCW,248,2976,,5
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:8|X:1.2|Y:0.2|Z:1.2,6,BFS,2,SOLVED,6,D_CCW F_CCW R_CCW F_CW F_CW L_CW,29283,351396,,523
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:8|X:1.2|Y:0.2|Z:1.2,6,BIDIRECTIONAL_BFS,2,SOLVED,6,D_CCW L_CCW B_CW L_CCW F_CCW R_CCW,248,2976,,4
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:8|X:1.2|Y:0.2|Z:1.2,6,IDA_STAR,2,SOLVED,6,D_CCW F_CCW R_CCW F_CW F_CW L_CW,9,108,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:8|X:1.2|Y:0.2|Z:1.2,6,BIDIRECTIONAL_BFS,3,SOLVED,6,D_CCW L_CCW B_CW L_CCW F_CCW R_CCW,248,2976,,5
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:8|X:1.2|Y:0.2|Z:1.2,6,IDA_STAR,3,SOLVED,6,D_CCW F_CCW R_CCW F_CW F_CW L_CW,9,108,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:8|X:1.2|Y:0.2|Z:1.2,6,BFS,3,SOLVED,6,D_CCW F_CCW R_CCW F_CW F_CW L_CW,29283,351396,,528
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:8|X:1.2|Y:0.2|Z:1.2,6,IDA_STAR,4,SOLVED,6,D_CCW F_CCW R_CCW F_CW F_CW L_CW,9,108,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:8|X:1.2|Y:0.2|Z:1.2,6,BFS,4,SOLVED,6,D_CCW F_CCW R_CCW F_CW F_CW L_CW,29283,351396,,530
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:8|X:1.2|Y:0.2|Z:1.2,6,BIDIRECTIONAL_BFS,4,SOLVED,6,D_CCW L_CCW B_CW L_CCW F_CCW R_CCW,248,2976,,5
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:23|X:2.2|Y:1.2|Z:3.0,6,IDA_STAR,0,SOLVED,6,D_CW R_CCW F_CCW U_CCW R_CCW B_CCW,8,96,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:23|X:2.2|Y:1.2|Z:3.0,6,BFS,0,SOLVED,6,D_CW R_CCW F_CCW U_CCW R_CCW B_CCW,28585,343020,,520
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:23|X:2.2|Y:1.2|Z:3.0,6,BIDIRECTIONAL_BFS,0,SOLVED,6,F_CW D_CCW L_CCW R_CCW F_CCW R_CW,248,2976,,6
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:23|X:2.2|Y:1.2|Z:3.0,6,BFS,1,SOLVED,6,D_CW R_CCW F_CCW U_CCW R_CCW B_CCW,28585,343020,,519
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:23|X:2.2|Y:1.2|Z:3.0,6,BIDIRECTIONAL_BFS,1,SOLVED,6,F_CW D_CCW L_CCW R_CCW F_CCW R_CW,248,2976,,5
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:23|X:2.2|Y:1.2|Z:3.0,6,IDA_STAR,1,SOLVED,6,D_CW R_CCW F_CCW U_CCW R_CCW B_CCW,8,96,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:23|X:2.2|Y:1.2|Z:3.0,6,BIDIRECTIONAL_BFS,2,SOLVED,6,F_CW D_CCW L_CCW R_CCW F_CCW R_CW,248,2976,,5
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:23|X:2.2|Y:1.2|Z:3.0,6,IDA_STAR,2,SOLVED,6,D_CW R_CCW F_CCW U_CCW R_CCW B_CCW,8,96,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:23|X:2.2|Y:1.2|Z:3.0,6,BFS,2,SOLVED,6,D_CW R_CCW F_CCW U_CCW R_CCW B_CCW,28585,343020,,528
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:23|X:2.2|Y:1.2|Z:3.0,6,IDA_STAR,3,SOLVED,6,D_CW R_CCW F_CCW U_CCW R_CCW B_CCW,8,96,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:23|X:2.2|Y:1.2|Z:3.0,6,BFS,3,SOLVED,6,D_CW R_CCW F_CCW U_CCW R_CCW B_CCW,28585,343020,,514
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:23|X:2.2|Y:1.2|Z:3.0,6,BIDIRECTIONAL_BFS,3,SOLVED,6,F_CW D_CCW L_CCW R_CCW F_CCW R_CW,248,2976,,5
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:23|X:2.2|Y:1.2|Z:3.0,6,BFS,4,SOLVED,6,D_CW R_CCW F_CCW U_CCW R_CCW B_CCW,28585,343020,,515
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:23|X:2.2|Y:1.2|Z:3.0,6,BIDIRECTIONAL_BFS,4,SOLVED,6,F_CW D_CCW L_CCW R_CCW F_CCW R_CW,248,2976,,4
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:23|X:2.2|Y:1.2|Z:3.0,6,IDA_STAR,4,SOLVED,6,D_CW R_CCW F_CCW U_CCW R_CCW B_CCW,8,96,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:4|X:3.0|Y:2.0|Z:1.1,6,BFS,0,SOLVED,6,U_CCW F_CW U_CW R_CW F_CW L_CW,25462,305544,,456
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:4|X:3.0|Y:2.0|Z:1.1,6,BIDIRECTIONAL_BFS,0,SOLVED,6,U_CCW F_CW U_CW L_CW F_CW R_CW,248,2976,,5
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:4|X:3.0|Y:2.0|Z:1.1,6,IDA_STAR,0,SOLVED,6,U_CCW F_CW U_CW R_CW F_CW L_CW,7,84,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:4|X:3.0|Y:2.0|Z:1.1,6,BIDIRECTIONAL_BFS,1,SOLVED,6,U_CCW F_CW U_CW L_CW F_CW R_CW,248,2976,,5
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:4|X:3.0|Y:2.0|Z:1.1,6,IDA_STAR,1,SOLVED,6,U_CCW F_CW U_CW R_CW F_CW L_CW,7,84,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:4|X:3.0|Y:2.0|Z:1.1,6,BFS,1,SOLVED,6,U_CCW F_CW U_CW R_CW F_CW L_CW,25462,305544,,453
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:4|X:3.0|Y:2.0|Z:1.1,6,IDA_STAR,2,SOLVED,6,U_CCW F_CW U_CW R_CW F_CW L_CW,7,84,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:4|X:3.0|Y:2.0|Z:1.1,6,BFS,2,SOLVED,6,U_CCW F_CW U_CW R_CW F_CW L_CW,25462,305544,,450
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:4|X:3.0|Y:2.0|Z:1.1,6,BIDIRECTIONAL_BFS,2,SOLVED,6,U_CCW F_CW U_CW L_CW F_CW R_CW,248,2976,,5
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:4|X:3.0|Y:2.0|Z:1.1,6,BFS,3,SOLVED,6,U_CCW F_CW U_CW R_CW F_CW L_CW,25462,305544,,442
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:4|X:3.0|Y:2.0|Z:1.1,6,BIDIRECTIONAL_BFS,3,SOLVED,6,U_CCW F_CW U_CW L_CW F_CW R_CW,248,2976,,5
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:4|X:3.0|Y:2.0|Z:1.1,6,IDA_STAR,3,SOLVED,6,U_CCW F_CW U_CW R_CW F_CW L_CW,7,84,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:4|X:3.0|Y:2.0|Z:1.1,6,BIDIRECTIONAL_BFS,4,SOLVED,6,U_CCW F_CW U_CW L_CW F_CW R_CW,248,2976,,5
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:4|X:3.0|Y:2.0|Z:1.1,6,IDA_STAR,4,SOLVED,6,U_CCW F_CW U_CW R_CW F_CW L_CW,7,84,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:4|X:3.0|Y:2.0|Z:1.1,6,BFS,4,SOLVED,6,U_CCW F_CW U_CW R_CW F_CW L_CW,25462,305544,,477
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:15|X:1.2|Y:2.1|Z:0.0,6,BIDIRECTIONAL_BFS,0,SOLVED,6,R_CCW B_CCW D_CCW D_CCW L_CW F_CCW,248,2976,,4
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:15|X:1.2|Y:2.1|Z:0.0,6,IDA_STAR,0,SOLVED,6,R_CCW F_CCW U_CW U_CW L_CW B_CCW,15,180,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:15|X:1.2|Y:2.1|Z:0.0,6,BFS,0,SOLVED,6,R_CCW F_CCW U_CW U_CW L_CW B_CCW,32689,392268,,590
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:15|X:1.2|Y:2.1|Z:0.0,6,IDA_STAR,1,SOLVED,6,R_CCW F_CCW U_CW U_CW L_CW B_CCW,15,180,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:15|X:1.2|Y:2.1|Z:0.0,6,BFS,1,SOLVED,6,R_CCW F_CCW U_CW U_CW L_CW B_CCW,32689,392268,,592
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:15|X:1.2|Y:2.1|Z:0.0,6,BIDIRECTIONAL_BFS,1,SOLVED,6,R_CCW B_CCW D_CCW D_CCW L_CW F_CCW,248,2976,,5
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:15|X:1.2|Y:2.1|Z:0.0,6,BFS,2,SOLVED,6,R_CCW F_CCW U_CW U_CW L_CW B_CCW,32689,392268,,592
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:15|X:1.2|Y:2.1|Z:0.0,6,BIDIRECTIONAL_BFS,2,SOLVED,6,R_CCW B_CCW D_CCW D_CCW L_CW F_CCW,248,2976,,5
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:15|X:1.2|Y:2.1|Z:0.0,6,IDA_STAR,2,SOLVED,6,R_CCW F_CCW U_CW U_CW L_CW B_CCW,15,180,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:15|X:1.2|Y:2.1|Z:0.0,6,BIDIRECTIONAL_BFS,3,SOLVED,6,R_CCW B_CCW D_CCW D_CCW L_CW F_CCW,248,2976,,4
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:15|X:1.2|Y:2.1|Z:0.0,6,IDA_STAR,3,SOLVED,6,R_CCW F_CCW U_CW U_CW L_CW B_CCW,15,180,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:15|X:1.2|Y:2.1|Z:0.0,6,BFS,3,SOLVED,6,R_CCW F_CCW U_CW U_CW L_CW B_CCW,32689,392268,,591
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:15|X:1.2|Y:2.1|Z:0.0,6,IDA_STAR,4,SOLVED,6,R_CCW F_CCW U_CW U_CW L_CW B_CCW,15,180,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:15|X:1.2|Y:2.1|Z:0.0,6,BFS,4,SOLVED,6,R_CCW F_CCW U_CW U_CW L_CW B_CCW,32689,392268,,576
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:15|X:1.2|Y:2.1|Z:0.0,6,BIDIRECTIONAL_BFS,4,SOLVED,6,R_CCW B_CCW D_CCW D_CCW L_CW F_CCW,248,2976,,5
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:16|X:3.2|Y:0.2|Z:2.2,6,IDA_STAR,0,SOLVED,6,U_CCW B_CW L_CW U_CCW B_CW L_CW,7,84,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:16|X:3.2|Y:0.2|Z:2.2,6,BFS,0,SOLVED,6,U_CCW B_CW L_CW U_CCW B_CW L_CW,26658,319896,,472
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:16|X:3.2|Y:0.2|Z:2.2,6,BIDIRECTIONAL_BFS,0,SOLVED,6,U_CCW B_CW L_CW U_CCW B_CW L_CW,248,2976,,4
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:16|X:3.2|Y:0.2|Z:2.2,6,BFS,1,SOLVED,6,U_CCW B_CW L_CW U_CCW B_CW L_CW,26658,319896,,478
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:16|X:3.2|Y:0.2|Z:2.2,6,BIDIRECTIONAL_BFS,1,SOLVED,6,U_CCW B_CW L_CW U_CCW B_CW L_CW,248,2976,,4
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:16|X:3.2|Y:0.2|Z:2.2,6,IDA_STAR,1,SOLVED,6,U_CCW B_CW L_CW U_CCW B_CW L_CW,7,84,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:16|X:3.2|Y:0.2|Z:2.2,6,BIDIRECTIONAL_BFS,2,SOLVED,6,U_CCW B_CW L_CW U_CCW B_CW L_CW,248,2976,,5
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:16|X:3.2|Y:0.2|Z:2.2,6,IDA_STAR,2,SOLVED,6,U_CCW B_CW L_CW U_CCW B_CW L_CW,7,84,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:16|X:3.2|Y:0.2|Z:2.2,6,BFS,2,SOLVED,6,U_CCW B_CW L_CW U_CCW B_CW L_CW,26658,319896,,477
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:16|X:3.2|Y:0.2|Z:2.2,6,IDA_STAR,3,SOLVED,6,U_CCW B_CW L_CW U_CCW B_CW L_CW,7,84,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:16|X:3.2|Y:0.2|Z:2.2,6,BFS,3,SOLVED,6,U_CCW B_CW L_CW U_CCW B_CW L_CW,26658,319896,,483
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:16|X:3.2|Y:0.2|Z:2.2,6,BIDIRECTIONAL_BFS,3,SOLVED,6,U_CCW B_CW L_CW U_CCW B_CW L_CW,248,2976,,4
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:16|X:3.2|Y:0.2|Z:2.2,6,BFS,4,SOLVED,6,U_CCW B_CW L_CW U_CCW B_CW L_CW,26658,319896,,477
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:16|X:3.2|Y:0.2|Z:2.2,6,BIDIRECTIONAL_BFS,4,SOLVED,6,U_CCW B_CW L_CW U_CCW B_CW L_CW,248,2976,,5
+1,phase5c-timing-v1,phase5c-timing-v1,d6:C:16|X:3.2|Y:0.2|Z:2.2,6,IDA_STAR,4,SOLVED,6,U_CCW B_CW L_CW U_CCW B_CW L_CW,7,84,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:21|X:1.0|Y:0.1|Z:3.2,7,BFS,0,SOLVED,7,U_CW D_CCW F_CW R_CCW F_CW L_CCW B_CW,36889,442668,,668
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:21|X:1.0|Y:0.1|Z:3.2,7,BIDIRECTIONAL_BFS,0,SOLVED,7,U_CW D_CCW B_CW R_CW L_CCW F_CCW R_CW,1070,12840,,18
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:21|X:1.0|Y:0.1|Z:3.2,7,IDA_STAR,0,SOLVED,7,U_CW D_CCW F_CW R_CCW F_CW L_CCW B_CW,14,168,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:21|X:1.0|Y:0.1|Z:3.2,7,BIDIRECTIONAL_BFS,1,SOLVED,7,U_CW D_CCW B_CW R_CW L_CCW F_CCW R_CW,1070,12840,,19
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:21|X:1.0|Y:0.1|Z:3.2,7,IDA_STAR,1,SOLVED,7,U_CW D_CCW F_CW R_CCW F_CW L_CCW B_CW,14,168,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:21|X:1.0|Y:0.1|Z:3.2,7,BFS,1,SOLVED,7,U_CW D_CCW F_CW R_CCW F_CW L_CCW B_CW,36889,442668,,640
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:21|X:1.0|Y:0.1|Z:3.2,7,IDA_STAR,2,SOLVED,7,U_CW D_CCW F_CW R_CCW F_CW L_CCW B_CW,14,168,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:21|X:1.0|Y:0.1|Z:3.2,7,BFS,2,SOLVED,7,U_CW D_CCW F_CW R_CCW F_CW L_CCW B_CW,36889,442668,,663
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:21|X:1.0|Y:0.1|Z:3.2,7,BIDIRECTIONAL_BFS,2,SOLVED,7,U_CW D_CCW B_CW R_CW L_CCW F_CCW R_CW,1070,12840,,19
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:21|X:1.0|Y:0.1|Z:3.2,7,BFS,3,SOLVED,7,U_CW D_CCW F_CW R_CCW F_CW L_CCW B_CW,36889,442668,,662
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:21|X:1.0|Y:0.1|Z:3.2,7,BIDIRECTIONAL_BFS,3,SOLVED,7,U_CW D_CCW B_CW R_CW L_CCW F_CCW R_CW,1070,12840,,20
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:21|X:1.0|Y:0.1|Z:3.2,7,IDA_STAR,3,SOLVED,7,U_CW D_CCW F_CW R_CCW F_CW L_CCW B_CW,14,168,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:21|X:1.0|Y:0.1|Z:3.2,7,BIDIRECTIONAL_BFS,4,SOLVED,7,U_CW D_CCW B_CW R_CW L_CCW F_CCW R_CW,1070,12840,,20
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:21|X:1.0|Y:0.1|Z:3.2,7,IDA_STAR,4,SOLVED,7,U_CW D_CCW F_CW R_CCW F_CW L_CCW B_CW,14,168,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:21|X:1.0|Y:0.1|Z:3.2,7,BFS,4,SOLVED,7,U_CW D_CCW F_CW R_CCW F_CW L_CCW B_CW,36889,442668,,665
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:22|X:0.0|Y:0.0|Z:3.0,7,BIDIRECTIONAL_BFS,0,SOLVED,7,U_CW L_CCW D_CW B_CCW L_CCW F_CCW R_CW,1070,12840,,20
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:22|X:0.0|Y:0.0|Z:3.0,7,IDA_STAR,0,SOLVED,7,U_CW D_CCW F_CW R_CW U_CW F_CCW R_CCW,10,120,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:22|X:0.0|Y:0.0|Z:3.0,7,BFS,0,SOLVED,7,U_CW D_CCW F_CW R_CW U_CW F_CCW R_CCW,36783,441396,,664
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:22|X:0.0|Y:0.0|Z:3.0,7,IDA_STAR,1,SOLVED,7,U_CW D_CCW F_CW R_CW U_CW F_CCW R_CCW,10,120,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:22|X:0.0|Y:0.0|Z:3.0,7,BFS,1,SOLVED,7,U_CW D_CCW F_CW R_CW U_CW F_CCW R_CCW,36783,441396,,665
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:22|X:0.0|Y:0.0|Z:3.0,7,BIDIRECTIONAL_BFS,1,SOLVED,7,U_CW L_CCW D_CW B_CCW L_CCW F_CCW R_CW,1070,12840,,23
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:22|X:0.0|Y:0.0|Z:3.0,7,BFS,2,SOLVED,7,U_CW D_CCW F_CW R_CW U_CW F_CCW R_CCW,36783,441396,,658
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:22|X:0.0|Y:0.0|Z:3.0,7,BIDIRECTIONAL_BFS,2,SOLVED,7,U_CW L_CCW D_CW B_CCW L_CCW F_CCW R_CW,1070,12840,,19
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:22|X:0.0|Y:0.0|Z:3.0,7,IDA_STAR,2,SOLVED,7,U_CW D_CCW F_CW R_CW U_CW F_CCW R_CCW,10,120,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:22|X:0.0|Y:0.0|Z:3.0,7,BIDIRECTIONAL_BFS,3,SOLVED,7,U_CW L_CCW D_CW B_CCW L_CCW F_CCW R_CW,1070,12840,,19
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:22|X:0.0|Y:0.0|Z:3.0,7,IDA_STAR,3,SOLVED,7,U_CW D_CCW F_CW R_CW U_CW F_CCW R_CCW,10,120,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:22|X:0.0|Y:0.0|Z:3.0,7,BFS,3,SOLVED,7,U_CW D_CCW F_CW R_CW U_CW F_CCW R_CCW,36783,441396,,661
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:22|X:0.0|Y:0.0|Z:3.0,7,IDA_STAR,4,SOLVED,7,U_CW D_CCW F_CW R_CW U_CW F_CCW R_CCW,10,120,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:22|X:0.0|Y:0.0|Z:3.0,7,BFS,4,SOLVED,7,U_CW D_CCW F_CW R_CW U_CW F_CCW R_CCW,36783,441396,,650
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:22|X:0.0|Y:0.0|Z:3.0,7,BIDIRECTIONAL_BFS,4,SOLVED,7,U_CW L_CCW D_CW B_CCW L_CCW F_CCW R_CW,1070,12840,,21
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:22|X:3.0|Y:2.0|Z:2.2,7,IDA_STAR,0,SOLVED,7,U_CW U_CW B_CW R_CW U_CW B_CW L_CW,8,96,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:22|X:3.0|Y:2.0|Z:2.2,7,BFS,0,SOLVED,7,U_CW U_CW B_CW R_CW U_CW B_CW L_CW,34468,413616,,617
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:22|X:3.0|Y:2.0|Z:2.2,7,BIDIRECTIONAL_BFS,0,SOLVED,7,U_CCW R_CW U_CW F_CCW L_CCW B_CW R_CW,1070,12840,,19
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:22|X:3.0|Y:2.0|Z:2.2,7,BFS,1,SOLVED,7,U_CW U_CW B_CW R_CW U_CW B_CW L_CW,34468,413616,,628
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:22|X:3.0|Y:2.0|Z:2.2,7,BIDIRECTIONAL_BFS,1,SOLVED,7,U_CCW R_CW U_CW F_CCW L_CCW B_CW R_CW,1070,12840,,21
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:22|X:3.0|Y:2.0|Z:2.2,7,IDA_STAR,1,SOLVED,7,U_CW U_CW B_CW R_CW U_CW B_CW L_CW,8,96,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:22|X:3.0|Y:2.0|Z:2.2,7,BIDIRECTIONAL_BFS,2,SOLVED,7,U_CCW R_CW U_CW F_CCW L_CCW B_CW R_CW,1070,12840,,19
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:22|X:3.0|Y:2.0|Z:2.2,7,IDA_STAR,2,SOLVED,7,U_CW U_CW B_CW R_CW U_CW B_CW L_CW,8,96,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:22|X:3.0|Y:2.0|Z:2.2,7,BFS,2,SOLVED,7,U_CW U_CW B_CW R_CW U_CW B_CW L_CW,34468,413616,,634
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:22|X:3.0|Y:2.0|Z:2.2,7,IDA_STAR,3,SOLVED,7,U_CW U_CW B_CW R_CW U_CW B_CW L_CW,8,96,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:22|X:3.0|Y:2.0|Z:2.2,7,BFS,3,SOLVED,7,U_CW U_CW B_CW R_CW U_CW B_CW L_CW,34468,413616,,627
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:22|X:3.0|Y:2.0|Z:2.2,7,BIDIRECTIONAL_BFS,3,SOLVED,7,U_CCW R_CW U_CW F_CCW L_CCW B_CW R_CW,1070,12840,,20
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:22|X:3.0|Y:2.0|Z:2.2,7,BFS,4,SOLVED,7,U_CW U_CW B_CW R_CW U_CW B_CW L_CW,34468,413616,,634
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:22|X:3.0|Y:2.0|Z:2.2,7,BIDIRECTIONAL_BFS,4,SOLVED,7,U_CCW R_CW U_CW F_CCW L_CCW B_CW R_CW,1070,12840,,20
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:22|X:3.0|Y:2.0|Z:2.2,7,IDA_STAR,4,SOLVED,7,U_CW U_CW B_CW R_CW U_CW B_CW L_CW,8,96,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:2|X:3.0|Y:0.0|Z:3.2,7,BFS,0,SOLVED,7,U_CW U_CW F_CCW R_CW L_CW U_CW B_CW,34300,411600,,621
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:2|X:3.0|Y:0.0|Z:3.2,7,BIDIRECTIONAL_BFS,0,SOLVED,7,U_CW R_CW B_CW D_CW R_CW B_CW L_CCW,1070,12840,,21
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:2|X:3.0|Y:0.0|Z:3.2,7,IDA_STAR,0,SOLVED,7,U_CW U_CW F_CCW R_CW L_CW U_CW B_CW,8,96,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:2|X:3.0|Y:0.0|Z:3.2,7,BIDIRECTIONAL_BFS,1,SOLVED,7,U_CW R_CW B_CW D_CW R_CW B_CW L_CCW,1070,12840,,20
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:2|X:3.0|Y:0.0|Z:3.2,7,IDA_STAR,1,SOLVED,7,U_CW U_CW F_CCW R_CW L_CW U_CW B_CW,8,96,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:2|X:3.0|Y:0.0|Z:3.2,7,BFS,1,SOLVED,7,U_CW U_CW F_CCW R_CW L_CW U_CW B_CW,34300,411600,,614
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:2|X:3.0|Y:0.0|Z:3.2,7,IDA_STAR,2,SOLVED,7,U_CW U_CW F_CCW R_CW L_CW U_CW B_CW,8,96,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:2|X:3.0|Y:0.0|Z:3.2,7,BFS,2,SOLVED,7,U_CW U_CW F_CCW R_CW L_CW U_CW B_CW,34300,411600,,613
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:2|X:3.0|Y:0.0|Z:3.2,7,BIDIRECTIONAL_BFS,2,SOLVED,7,U_CW R_CW B_CW D_CW R_CW B_CW L_CCW,1070,12840,,20
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:2|X:3.0|Y:0.0|Z:3.2,7,BFS,3,SOLVED,7,U_CW U_CW F_CCW R_CW L_CW U_CW B_CW,34300,411600,,619
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:2|X:3.0|Y:0.0|Z:3.2,7,BIDIRECTIONAL_BFS,3,SOLVED,7,U_CW R_CW B_CW D_CW R_CW B_CW L_CCW,1070,12840,,21
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:2|X:3.0|Y:0.0|Z:3.2,7,IDA_STAR,3,SOLVED,7,U_CW U_CW F_CCW R_CW L_CW U_CW B_CW,8,96,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:2|X:3.0|Y:0.0|Z:3.2,7,BIDIRECTIONAL_BFS,4,SOLVED,7,U_CW R_CW B_CW D_CW R_CW B_CW L_CCW,1070,12840,,19
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:2|X:3.0|Y:0.0|Z:3.2,7,IDA_STAR,4,SOLVED,7,U_CW U_CW F_CCW R_CW L_CW U_CW B_CW,8,96,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:2|X:3.0|Y:0.0|Z:3.2,7,BFS,4,SOLVED,7,U_CW U_CW F_CCW R_CW L_CW U_CW B_CW,34300,411600,,628
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:9|X:2.0|Y:1.1|Z:3.2,7,BIDIRECTIONAL_BFS,0,SOLVED,7,R_CCW D_CCW L_CW U_CW F_CCW L_CW B_CW,1070,12840,,20
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:9|X:2.0|Y:1.1|Z:3.2,7,IDA_STAR,0,SOLVED,7,U_CW R_CCW U_CCW U_CCW F_CCW L_CCW B_CW,24,288,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:9|X:2.0|Y:1.1|Z:3.2,7,BFS,0,SOLVED,7,U_CW R_CCW U_CCW U_CCW F_CCW L_CCW B_CW,40384,484608,,736
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:9|X:2.0|Y:1.1|Z:3.2,7,IDA_STAR,1,SOLVED,7,U_CW R_CCW U_CCW U_CCW F_CCW L_CCW B_CW,24,288,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:9|X:2.0|Y:1.1|Z:3.2,7,BFS,1,SOLVED,7,U_CW R_CCW U_CCW U_CCW F_CCW L_CCW B_CW,40384,484608,,748
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:9|X:2.0|Y:1.1|Z:3.2,7,BIDIRECTIONAL_BFS,1,SOLVED,7,R_CCW D_CCW L_CW U_CW F_CCW L_CW B_CW,1070,12840,,20
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:9|X:2.0|Y:1.1|Z:3.2,7,BFS,2,SOLVED,7,U_CW R_CCW U_CCW U_CCW F_CCW L_CCW B_CW,40384,484608,,732
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:9|X:2.0|Y:1.1|Z:3.2,7,BIDIRECTIONAL_BFS,2,SOLVED,7,R_CCW D_CCW L_CW U_CW F_CCW L_CW B_CW,1070,12840,,21
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:9|X:2.0|Y:1.1|Z:3.2,7,IDA_STAR,2,SOLVED,7,U_CW R_CCW U_CCW U_CCW F_CCW L_CCW B_CW,24,288,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:9|X:2.0|Y:1.1|Z:3.2,7,BIDIRECTIONAL_BFS,3,SOLVED,7,R_CCW D_CCW L_CW U_CW F_CCW L_CW B_CW,1070,12840,,19
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:9|X:2.0|Y:1.1|Z:3.2,7,IDA_STAR,3,SOLVED,7,U_CW R_CCW U_CCW U_CCW F_CCW L_CCW B_CW,24,288,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:9|X:2.0|Y:1.1|Z:3.2,7,BFS,3,SOLVED,7,U_CW R_CCW U_CCW U_CCW F_CCW L_CCW B_CW,40384,484608,,732
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:9|X:2.0|Y:1.1|Z:3.2,7,IDA_STAR,4,SOLVED,7,U_CW R_CCW U_CCW U_CCW F_CCW L_CCW B_CW,24,288,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:9|X:2.0|Y:1.1|Z:3.2,7,BFS,4,SOLVED,7,U_CW R_CCW U_CCW U_CCW F_CCW L_CCW B_CW,40384,484608,,755
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:9|X:2.0|Y:1.1|Z:3.2,7,BIDIRECTIONAL_BFS,4,SOLVED,7,R_CCW D_CCW L_CW U_CW F_CCW L_CW B_CW,1070,12840,,21
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:6|X:1.1|Y:2.1|Z:3.0,7,IDA_STAR,0,SOLVED,7,U_CW R_CW U_CCW F_CW B_CW U_CCW L_CCW,15,180,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:6|X:1.1|Y:2.1|Z:3.0,7,BFS,0,SOLVED,7,U_CW R_CW U_CCW F_CW B_CW U_CCW L_CCW,40052,480624,,770
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:6|X:1.1|Y:2.1|Z:3.0,7,BIDIRECTIONAL_BFS,0,SOLVED,7,B_CCW D_CW R_CW L_CCW D_CW F_CCW U_CW,1070,12840,,20
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:6|X:1.1|Y:2.1|Z:3.0,7,BFS,1,SOLVED,7,U_CW R_CW U_CCW F_CW B_CW U_CCW L_CCW,40052,480624,,740
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:6|X:1.1|Y:2.1|Z:3.0,7,BIDIRECTIONAL_BFS,1,SOLVED,7,B_CCW D_CW R_CW L_CCW D_CW F_CCW U_CW,1070,12840,,20
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:6|X:1.1|Y:2.1|Z:3.0,7,IDA_STAR,1,SOLVED,7,U_CW R_CW U_CCW F_CW B_CW U_CCW L_CCW,15,180,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:6|X:1.1|Y:2.1|Z:3.0,7,BIDIRECTIONAL_BFS,2,SOLVED,7,B_CCW D_CW R_CW L_CCW D_CW F_CCW U_CW,1070,12840,,21
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:6|X:1.1|Y:2.1|Z:3.0,7,IDA_STAR,2,SOLVED,7,U_CW R_CW U_CCW F_CW B_CW U_CCW L_CCW,15,180,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:6|X:1.1|Y:2.1|Z:3.0,7,BFS,2,SOLVED,7,U_CW R_CW U_CCW F_CW B_CW U_CCW L_CCW,40052,480624,,730
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:6|X:1.1|Y:2.1|Z:3.0,7,IDA_STAR,3,SOLVED,7,U_CW R_CW U_CCW F_CW B_CW U_CCW L_CCW,15,180,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:6|X:1.1|Y:2.1|Z:3.0,7,BFS,3,SOLVED,7,U_CW R_CW U_CCW F_CW B_CW U_CCW L_CCW,40052,480624,,740
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:6|X:1.1|Y:2.1|Z:3.0,7,BIDIRECTIONAL_BFS,3,SOLVED,7,B_CCW D_CW R_CW L_CCW D_CW F_CCW U_CW,1070,12840,,21
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:6|X:1.1|Y:2.1|Z:3.0,7,BFS,4,SOLVED,7,U_CW R_CW U_CCW F_CW B_CW U_CCW L_CCW,40052,480624,,742
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:6|X:1.1|Y:2.1|Z:3.0,7,BIDIRECTIONAL_BFS,4,SOLVED,7,B_CCW D_CW R_CW L_CCW D_CW F_CCW U_CW,1070,12840,,20
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:6|X:1.1|Y:2.1|Z:3.0,7,IDA_STAR,4,SOLVED,7,U_CW R_CW U_CCW F_CW B_CW U_CCW L_CCW,15,180,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:5|X:3.2|Y:1.0|Z:0.2,7,BFS,0,SOLVED,7,U_CW U_CW F_CCW B_CW R_CCW D_CCW L_CW,34228,410736,,649
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:5|X:3.2|Y:1.0|Z:0.2,7,BIDIRECTIONAL_BFS,0,SOLVED,7,U_CCW F_CCW L_CCW D_CCW R_CCW F_CCW R_CW,1070,12840,,20
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:5|X:3.2|Y:1.0|Z:0.2,7,IDA_STAR,0,SOLVED,7,U_CW U_CW F_CCW B_CW R_CCW D_CCW L_CW,8,96,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:5|X:3.2|Y:1.0|Z:0.2,7,BIDIRECTIONAL_BFS,1,SOLVED,7,U_CCW F_CCW L_CCW D_CCW R_CCW F_CCW R_CW,1070,12840,,20
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:5|X:3.2|Y:1.0|Z:0.2,7,IDA_STAR,1,SOLVED,7,U_CW U_CW F_CCW B_CW R_CCW D_CCW L_CW,8,96,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:5|X:3.2|Y:1.0|Z:0.2,7,BFS,1,SOLVED,7,U_CW U_CW F_CCW B_CW R_CCW D_CCW L_CW,34228,410736,,624
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:5|X:3.2|Y:1.0|Z:0.2,7,IDA_STAR,2,SOLVED,7,U_CW U_CW F_CCW B_CW R_CCW D_CCW L_CW,8,96,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:5|X:3.2|Y:1.0|Z:0.2,7,BFS,2,SOLVED,7,U_CW U_CW F_CCW B_CW R_CCW D_CCW L_CW,34228,410736,,624
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:5|X:3.2|Y:1.0|Z:0.2,7,BIDIRECTIONAL_BFS,2,SOLVED,7,U_CCW F_CCW L_CCW D_CCW R_CCW F_CCW R_CW,1070,12840,,20
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:5|X:3.2|Y:1.0|Z:0.2,7,BFS,3,SOLVED,7,U_CW U_CW F_CCW B_CW R_CCW D_CCW L_CW,34228,410736,,640
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:5|X:3.2|Y:1.0|Z:0.2,7,BIDIRECTIONAL_BFS,3,SOLVED,7,U_CCW F_CCW L_CCW D_CCW R_CCW F_CCW R_CW,1070,12840,,20
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:5|X:3.2|Y:1.0|Z:0.2,7,IDA_STAR,3,SOLVED,7,U_CW U_CW F_CCW B_CW R_CCW D_CCW L_CW,8,96,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:5|X:3.2|Y:1.0|Z:0.2,7,BIDIRECTIONAL_BFS,4,SOLVED,7,U_CCW F_CCW L_CCW D_CCW R_CCW F_CCW R_CW,1070,12840,,22
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:5|X:3.2|Y:1.0|Z:0.2,7,IDA_STAR,4,SOLVED,7,U_CW U_CW F_CCW B_CW R_CCW D_CCW L_CW,8,96,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:5|X:3.2|Y:1.0|Z:0.2,7,BFS,4,SOLVED,7,U_CW U_CW F_CCW B_CW R_CCW D_CCW L_CW,34228,410736,,620
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:5|X:0.0|Y:1.2|Z:1.0,7,BIDIRECTIONAL_BFS,0,SOLVED,7,U_CCW B_CCW L_CCW U_CCW B_CCW R_CCW F_CW,1070,12840,,28
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:5|X:0.0|Y:1.2|Z:1.0,7,IDA_STAR,0,SOLVED,7,U_CW U_CW R_CW F_CW B_CW U_CCW R_CCW,8,96,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:5|X:0.0|Y:1.2|Z:1.0,7,BFS,0,SOLVED,7,U_CW U_CW R_CW F_CW B_CW U_CCW R_CCW,34831,417972,,625
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:5|X:0.0|Y:1.2|Z:1.0,7,IDA_STAR,1,SOLVED,7,U_CW U_CW R_CW F_CW B_CW U_CCW R_CCW,8,96,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:5|X:0.0|Y:1.2|Z:1.0,7,BFS,1,SOLVED,7,U_CW U_CW R_CW F_CW B_CW U_CCW R_CCW,34831,417972,,629
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:5|X:0.0|Y:1.2|Z:1.0,7,BIDIRECTIONAL_BFS,1,SOLVED,7,U_CCW B_CCW L_CCW U_CCW B_CCW R_CCW F_CW,1070,12840,,22
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:5|X:0.0|Y:1.2|Z:1.0,7,BFS,2,SOLVED,7,U_CW U_CW R_CW F_CW B_CW U_CCW R_CCW,34831,417972,,629
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:5|X:0.0|Y:1.2|Z:1.0,7,BIDIRECTIONAL_BFS,2,SOLVED,7,U_CCW B_CCW L_CCW U_CCW B_CCW R_CCW F_CW,1070,12840,,20
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:5|X:0.0|Y:1.2|Z:1.0,7,IDA_STAR,2,SOLVED,7,U_CW U_CW R_CW F_CW B_CW U_CCW R_CCW,8,96,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:5|X:0.0|Y:1.2|Z:1.0,7,BIDIRECTIONAL_BFS,3,SOLVED,7,U_CCW B_CCW L_CCW U_CCW B_CCW R_CCW F_CW,1070,12840,,20
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:5|X:0.0|Y:1.2|Z:1.0,7,IDA_STAR,3,SOLVED,7,U_CW U_CW R_CW F_CW B_CW U_CCW R_CCW,8,96,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:5|X:0.0|Y:1.2|Z:1.0,7,BFS,3,SOLVED,7,U_CW U_CW R_CW F_CW B_CW U_CCW R_CCW,34831,417972,,634
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:5|X:0.0|Y:1.2|Z:1.0,7,IDA_STAR,4,SOLVED,7,U_CW U_CW R_CW F_CW B_CW U_CCW R_CCW,8,96,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:5|X:0.0|Y:1.2|Z:1.0,7,BFS,4,SOLVED,7,U_CW U_CW R_CW F_CW B_CW U_CCW R_CCW,34831,417972,,634
+1,phase5c-timing-v1,phase5c-timing-v1,d7:C:5|X:0.0|Y:1.2|Z:1.0,7,BIDIRECTIONAL_BFS,4,SOLVED,7,U_CCW B_CCW L_CCW U_CCW B_CCW R_CCW F_CW,1070,12840,,20
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:3.1|Y:3.1|Z:3.1,8,IDA_STAR,0,SOLVED,8,U_CW F_CW U_CW U_CW F_CW R_CW R_CW D_CW,41,492,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:3.1|Y:3.1|Z:3.1,8,BFS,0,SOLVED,8,U_CW F_CW U_CW U_CW F_CW R_CW R_CW D_CW,41240,494880,,743
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:3.1|Y:3.1|Z:3.1,8,BIDIRECTIONAL_BFS,0,SOLVED,8,F_CW U_CW R_CCW B_CW R_CW D_CCW B_CW R_CCW,1892,22704,,36
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:3.1|Y:3.1|Z:3.1,8,BFS,1,SOLVED,8,U_CW F_CW U_CW U_CW F_CW R_CW R_CW D_CW,41240,494880,,739
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:3.1|Y:3.1|Z:3.1,8,BIDIRECTIONAL_BFS,1,SOLVED,8,F_CW U_CW R_CCW B_CW R_CW D_CCW B_CW R_CCW,1892,22704,,35
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:3.1|Y:3.1|Z:3.1,8,IDA_STAR,1,SOLVED,8,U_CW F_CW U_CW U_CW F_CW R_CW R_CW D_CW,41,492,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:3.1|Y:3.1|Z:3.1,8,BIDIRECTIONAL_BFS,2,SOLVED,8,F_CW U_CW R_CCW B_CW R_CW D_CCW B_CW R_CCW,1892,22704,,37
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:3.1|Y:3.1|Z:3.1,8,IDA_STAR,2,SOLVED,8,U_CW F_CW U_CW U_CW F_CW R_CW R_CW D_CW,41,492,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:3.1|Y:3.1|Z:3.1,8,BFS,2,SOLVED,8,U_CW F_CW U_CW U_CW F_CW R_CW R_CW D_CW,41240,494880,,740
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:3.1|Y:3.1|Z:3.1,8,IDA_STAR,3,SOLVED,8,U_CW F_CW U_CW U_CW F_CW R_CW R_CW D_CW,41,492,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:3.1|Y:3.1|Z:3.1,8,BFS,3,SOLVED,8,U_CW F_CW U_CW U_CW F_CW R_CW R_CW D_CW,41240,494880,,766
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:3.1|Y:3.1|Z:3.1,8,BIDIRECTIONAL_BFS,3,SOLVED,8,F_CW U_CW R_CCW B_CW R_CW D_CCW B_CW R_CCW,1892,22704,,37
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:3.1|Y:3.1|Z:3.1,8,BFS,4,SOLVED,8,U_CW F_CW U_CW U_CW F_CW R_CW R_CW D_CW,41240,494880,,752
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:3.1|Y:3.1|Z:3.1,8,BIDIRECTIONAL_BFS,4,SOLVED,8,F_CW U_CW R_CCW B_CW R_CW D_CCW B_CW R_CCW,1892,22704,,35
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:3.1|Y:3.1|Z:3.1,8,IDA_STAR,4,SOLVED,8,U_CW F_CW U_CW U_CW F_CW R_CW R_CW D_CW,41,492,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:1.0|Y:1.1|Z:1.1,8,BFS,0,SOLVED,8,U_CW F_CW U_CCW F_CCW D_CW R_CW L_CW B_CW,41380,496560,,756
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:1.0|Y:1.1|Z:1.1,8,BIDIRECTIONAL_BFS,0,SOLVED,8,L_CW F_CW D_CW L_CW D_CCW B_CCW L_CW U_CCW,1892,22704,,35
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:1.0|Y:1.1|Z:1.1,8,IDA_STAR,0,SOLVED,8,U_CW F_CW U_CCW F_CCW D_CW R_CW L_CW B_CW,45,540,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:1.0|Y:1.1|Z:1.1,8,BIDIRECTIONAL_BFS,1,SOLVED,8,L_CW F_CW D_CW L_CW D_CCW B_CCW L_CW U_CCW,1892,22704,,35
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:1.0|Y:1.1|Z:1.1,8,IDA_STAR,1,SOLVED,8,U_CW F_CW U_CCW F_CCW D_CW R_CW L_CW B_CW,45,540,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:1.0|Y:1.1|Z:1.1,8,BFS,1,SOLVED,8,U_CW F_CW U_CCW F_CCW D_CW R_CW L_CW B_CW,41380,496560,,743
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:1.0|Y:1.1|Z:1.1,8,IDA_STAR,2,SOLVED,8,U_CW F_CW U_CCW F_CCW D_CW R_CW L_CW B_CW,45,540,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:1.0|Y:1.1|Z:1.1,8,BFS,2,SOLVED,8,U_CW F_CW U_CCW F_CCW D_CW R_CW L_CW B_CW,41380,496560,,744
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:1.0|Y:1.1|Z:1.1,8,BIDIRECTIONAL_BFS,2,SOLVED,8,L_CW F_CW D_CW L_CW D_CCW B_CCW L_CW U_CCW,1892,22704,,36
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:1.0|Y:1.1|Z:1.1,8,BFS,3,SOLVED,8,U_CW F_CW U_CCW F_CCW D_CW R_CW L_CW B_CW,41380,496560,,749
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:1.0|Y:1.1|Z:1.1,8,BIDIRECTIONAL_BFS,3,SOLVED,8,L_CW F_CW D_CW L_CW D_CCW B_CCW L_CW U_CCW,1892,22704,,35
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:1.0|Y:1.1|Z:1.1,8,IDA_STAR,3,SOLVED,8,U_CW F_CW U_CCW F_CCW D_CW R_CW L_CW B_CW,45,540,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:1.0|Y:1.1|Z:1.1,8,BIDIRECTIONAL_BFS,4,SOLVED,8,L_CW F_CW D_CW L_CW D_CCW B_CCW L_CW U_CCW,1892,22704,,34
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:1.0|Y:1.1|Z:1.1,8,IDA_STAR,4,SOLVED,8,U_CW F_CW U_CCW F_CCW D_CW R_CW L_CW B_CW,45,540,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:1.0|Y:1.1|Z:1.1,8,BFS,4,SOLVED,8,U_CW F_CW U_CCW F_CCW D_CW R_CW L_CW B_CW,41380,496560,,753
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:1.0|Y:0.2|Z:1.0,8,BIDIRECTIONAL_BFS,0,SOLVED,8,F_CW R_CW L_CW B_CW D_CW B_CW F_CW U_CCW,1892,22704,,36
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:1.0|Y:0.2|Z:1.0,8,IDA_STAR,0,SOLVED,8,U_CW F_CW U_CW B_CCW D_CW R_CW L_CW F_CW,44,528,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:1.0|Y:0.2|Z:1.0,8,BFS,0,SOLVED,8,U_CW F_CW U_CW B_CCW D_CW R_CW L_CW F_CW,41356,496272,,747
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:1.0|Y:0.2|Z:1.0,8,IDA_STAR,1,SOLVED,8,U_CW F_CW U_CW B_CCW D_CW R_CW L_CW F_CW,44,528,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:1.0|Y:0.2|Z:1.0,8,BFS,1,SOLVED,8,U_CW F_CW U_CW B_CCW D_CW R_CW L_CW F_CW,41356,496272,,758
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:1.0|Y:0.2|Z:1.0,8,BIDIRECTIONAL_BFS,1,SOLVED,8,F_CW R_CW L_CW B_CW D_CW B_CW F_CW U_CCW,1892,22704,,37
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:1.0|Y:0.2|Z:1.0,8,BFS,2,SOLVED,8,U_CW F_CW U_CW B_CCW D_CW R_CW L_CW F_CW,41356,496272,,735
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:1.0|Y:0.2|Z:1.0,8,BIDIRECTIONAL_BFS,2,SOLVED,8,F_CW R_CW L_CW B_CW D_CW B_CW F_CW U_CCW,1892,22704,,35
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:1.0|Y:0.2|Z:1.0,8,IDA_STAR,2,SOLVED,8,U_CW F_CW U_CW B_CCW D_CW R_CW L_CW F_CW,44,528,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:1.0|Y:0.2|Z:1.0,8,BIDIRECTIONAL_BFS,3,SOLVED,8,F_CW R_CW L_CW B_CW D_CW B_CW F_CW U_CCW,1892,22704,,35
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:1.0|Y:0.2|Z:1.0,8,IDA_STAR,3,SOLVED,8,U_CW F_CW U_CW B_CCW D_CW R_CW L_CW F_CW,44,528,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:1.0|Y:0.2|Z:1.0,8,BFS,3,SOLVED,8,U_CW F_CW U_CW B_CCW D_CW R_CW L_CW F_CW,41356,496272,,739
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:1.0|Y:0.2|Z:1.0,8,IDA_STAR,4,SOLVED,8,U_CW F_CW U_CW B_CCW D_CW R_CW L_CW F_CW,44,528,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:1.0|Y:0.2|Z:1.0,8,BFS,4,SOLVED,8,U_CW F_CW U_CW B_CCW D_CW R_CW L_CW F_CW,41356,496272,,743
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:1.0|Y:0.2|Z:1.0,8,BIDIRECTIONAL_BFS,4,SOLVED,8,F_CW R_CW L_CW B_CW D_CW B_CW F_CW U_CCW,1892,22704,,35
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:1.1|Y:1.0|Z:3.2,8,IDA_STAR,0,SOLVED,8,U_CW F_CW D_CCW F_CCW U_CW R_CW R_CW B_CCW,52,624,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:1.1|Y:1.0|Z:3.2,8,BFS,0,SOLVED,8,U_CW F_CW D_CCW F_CCW U_CW R_CW R_CW B_CCW,41450,497400,,729
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:1.1|Y:1.0|Z:3.2,8,BIDIRECTIONAL_BFS,0,SOLVED,8,U_CCW B_CW R_CCW D_CW R_CW F_CCW D_CW R_CCW,1892,22704,,35
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:1.1|Y:1.0|Z:3.2,8,BFS,1,SOLVED,8,U_CW F_CW D_CCW F_CCW U_CW R_CW R_CW B_CCW,41450,497400,,739
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:1.1|Y:1.0|Z:3.2,8,BIDIRECTIONAL_BFS,1,SOLVED,8,U_CCW B_CW R_CCW D_CW R_CW F_CCW D_CW R_CCW,1892,22704,,34
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:1.1|Y:1.0|Z:3.2,8,IDA_STAR,1,SOLVED,8,U_CW F_CW D_CCW F_CCW U_CW R_CW R_CW B_CCW,52,624,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:1.1|Y:1.0|Z:3.2,8,BIDIRECTIONAL_BFS,2,SOLVED,8,U_CCW B_CW R_CCW D_CW R_CW F_CCW D_CW R_CCW,1892,22704,,34
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:1.1|Y:1.0|Z:3.2,8,IDA_STAR,2,SOLVED,8,U_CW F_CW D_CCW F_CCW U_CW R_CW R_CW B_CCW,52,624,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:1.1|Y:1.0|Z:3.2,8,BFS,2,SOLVED,8,U_CW F_CW D_CCW F_CCW U_CW R_CW R_CW B_CCW,41450,497400,,730
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:1.1|Y:1.0|Z:3.2,8,IDA_STAR,3,SOLVED,8,U_CW F_CW D_CCW F_CCW U_CW R_CW R_CW B_CCW,52,624,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:1.1|Y:1.0|Z:3.2,8,BFS,3,SOLVED,8,U_CW F_CW D_CCW F_CCW U_CW R_CW R_CW B_CCW,41450,497400,,753
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:1.1|Y:1.0|Z:3.2,8,BIDIRECTIONAL_BFS,3,SOLVED,8,U_CCW B_CW R_CCW D_CW R_CW F_CCW D_CW R_CCW,1892,22704,,35
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:1.1|Y:1.0|Z:3.2,8,BFS,4,SOLVED,8,U_CW F_CW D_CCW F_CCW U_CW R_CW R_CW B_CCW,41450,497400,,730
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:1.1|Y:1.0|Z:3.2,8,BIDIRECTIONAL_BFS,4,SOLVED,8,U_CCW B_CW R_CCW D_CW R_CW F_CCW D_CW R_CCW,1892,22704,,34
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:1.1|Y:1.0|Z:3.2,8,IDA_STAR,4,SOLVED,8,U_CW F_CW D_CCW F_CCW U_CW R_CW R_CW B_CCW,52,624,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:1.2|Y:3.0|Z:3.0,8,BFS,0,SOLVED,8,U_CW F_CW U_CW D_CW R_CCW R_CCW B_CW D_CW,41309,495708,,721
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:1.2|Y:3.0|Z:3.0,8,BIDIRECTIONAL_BFS,0,SOLVED,8,R_CW F_CW D_CCW R_CW F_CW R_CCW D_CW F_CW,1892,22704,,34
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:1.2|Y:3.0|Z:3.0,8,IDA_STAR,0,SOLVED,8,U_CW F_CW U_CW D_CW R_CCW R_CCW B_CW D_CW,49,588,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:1.2|Y:3.0|Z:3.0,8,BIDIRECTIONAL_BFS,1,SOLVED,8,R_CW F_CW D_CCW R_CW F_CW R_CCW D_CW F_CW,1892,22704,,34
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:1.2|Y:3.0|Z:3.0,8,IDA_STAR,1,SOLVED,8,U_CW F_CW U_CW D_CW R_CCW R_CCW B_CW D_CW,49,588,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:1.2|Y:3.0|Z:3.0,8,BFS,1,SOLVED,8,U_CW F_CW U_CW D_CW R_CCW R_CCW B_CW D_CW,41309,495708,,749
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:1.2|Y:3.0|Z:3.0,8,IDA_STAR,2,SOLVED,8,U_CW F_CW U_CW D_CW R_CCW R_CCW B_CW D_CW,49,588,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:1.2|Y:3.0|Z:3.0,8,BFS,2,SOLVED,8,U_CW F_CW U_CW D_CW R_CCW R_CCW B_CW D_CW,41309,495708,,746
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:1.2|Y:3.0|Z:3.0,8,BIDIRECTIONAL_BFS,2,SOLVED,8,R_CW F_CW D_CCW R_CW F_CW R_CCW D_CW F_CW,1892,22704,,34
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:1.2|Y:3.0|Z:3.0,8,BFS,3,SOLVED,8,U_CW F_CW U_CW D_CW R_CCW R_CCW B_CW D_CW,41309,495708,,721
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:1.2|Y:3.0|Z:3.0,8,BIDIRECTIONAL_BFS,3,SOLVED,8,R_CW F_CW D_CCW R_CW F_CW R_CCW D_CW F_CW,1892,22704,,27
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:1.2|Y:3.0|Z:3.0,8,IDA_STAR,3,SOLVED,8,U_CW F_CW U_CW D_CW R_CCW R_CCW B_CW D_CW,49,588,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:1.2|Y:3.0|Z:3.0,8,BIDIRECTIONAL_BFS,4,SOLVED,8,R_CW F_CW D_CCW R_CW F_CW R_CCW D_CW F_CW,1892,22704,,22
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:1.2|Y:3.0|Z:3.0,8,IDA_STAR,4,SOLVED,8,U_CW F_CW U_CW D_CW R_CCW R_CCW B_CW D_CW,49,588,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:1.2|Y:3.0|Z:3.0,8,BFS,4,SOLVED,8,U_CW F_CW U_CW D_CW R_CCW R_CCW B_CW D_CW,41309,495708,,474
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:1.0|Y:1.0|Z:1.2,8,BIDIRECTIONAL_BFS,0,SOLVED,8,L_CW B_CW U_CW L_CW D_CCW F_CCW L_CW D_CCW,1892,22704,,31
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:1.0|Y:1.0|Z:1.2,8,IDA_STAR,0,SOLVED,8,U_CW F_CW D_CCW F_CCW U_CW R_CW L_CW F_CW,47,564,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:1.0|Y:1.0|Z:1.2,8,BFS,0,SOLVED,8,U_CW F_CW D_CCW F_CCW U_CW R_CW L_CW F_CW,41451,497412,,524
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:1.0|Y:1.0|Z:1.2,8,IDA_STAR,1,SOLVED,8,U_CW F_CW D_CCW F_CCW U_CW R_CW L_CW F_CW,47,564,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:1.0|Y:1.0|Z:1.2,8,BFS,1,SOLVED,8,U_CW F_CW D_CCW F_CCW U_CW R_CW L_CW F_CW,41451,497412,,464
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:1.0|Y:1.0|Z:1.2,8,BIDIRECTIONAL_BFS,1,SOLVED,8,L_CW B_CW U_CW L_CW D_CCW F_CCW L_CW D_CCW,1892,22704,,21
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:1.0|Y:1.0|Z:1.2,8,BFS,2,SOLVED,8,U_CW F_CW D_CCW F_CCW U_CW R_CW L_CW F_CW,41451,497412,,449
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:1.0|Y:1.0|Z:1.2,8,BIDIRECTIONAL_BFS,2,SOLVED,8,L_CW B_CW U_CW L_CW D_CCW F_CCW L_CW D_CCW,1892,22704,,20
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:1.0|Y:1.0|Z:1.2,8,IDA_STAR,2,SOLVED,8,U_CW F_CW D_CCW F_CCW U_CW R_CW L_CW F_CW,47,564,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:1.0|Y:1.0|Z:1.2,8,BIDIRECTIONAL_BFS,3,SOLVED,8,L_CW B_CW U_CW L_CW D_CCW F_CCW L_CW D_CCW,1892,22704,,20
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:1.0|Y:1.0|Z:1.2,8,IDA_STAR,3,SOLVED,8,U_CW F_CW D_CCW F_CCW U_CW R_CW L_CW F_CW,47,564,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:1.0|Y:1.0|Z:1.2,8,BFS,3,SOLVED,8,U_CW F_CW D_CCW F_CCW U_CW R_CW L_CW F_CW,41451,497412,,438
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:1.0|Y:1.0|Z:1.2,8,IDA_STAR,4,SOLVED,8,U_CW F_CW D_CCW F_CCW U_CW R_CW L_CW F_CW,47,564,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:1.0|Y:1.0|Z:1.2,8,BFS,4,SOLVED,8,U_CW F_CW D_CCW F_CCW U_CW R_CW L_CW F_CW,41451,497412,,434
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:1.0|Y:1.0|Z:1.2,8,BIDIRECTIONAL_BFS,4,SOLVED,8,L_CW B_CW U_CW L_CW D_CCW F_CCW L_CW D_CCW,1892,22704,,21
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:3.0|Y:3.1|Z:1.2,8,IDA_STAR,0,SOLVED,8,U_CW F_CW D_CW F_CCW R_CW L_CW U_CCW F_CW,51,612,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:3.0|Y:3.1|Z:1.2,8,BFS,0,SOLVED,8,U_CW F_CW D_CW F_CCW R_CW L_CW U_CCW F_CW,41436,497232,,436
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:3.0|Y:3.1|Z:1.2,8,BIDIRECTIONAL_BFS,0,SOLVED,8,R_CCW B_CW D_CCW R_CW R_CW D_CCW B_CW R_CCW,1892,22704,,21
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:3.0|Y:3.1|Z:1.2,8,BFS,1,SOLVED,8,U_CW F_CW D_CW F_CCW R_CW L_CW U_CCW F_CW,41436,497232,,440
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:3.0|Y:3.1|Z:1.2,8,BIDIRECTIONAL_BFS,1,SOLVED,8,R_CCW B_CW D_CCW R_CW R_CW D_CCW B_CW R_CCW,1892,22704,,20
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:3.0|Y:3.1|Z:1.2,8,IDA_STAR,1,SOLVED,8,U_CW F_CW D_CW F_CCW R_CW L_CW U_CCW F_CW,51,612,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:3.0|Y:3.1|Z:1.2,8,BIDIRECTIONAL_BFS,2,SOLVED,8,R_CCW B_CW D_CCW R_CW R_CW D_CCW B_CW R_CCW,1892,22704,,20
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:3.0|Y:3.1|Z:1.2,8,IDA_STAR,2,SOLVED,8,U_CW F_CW D_CW F_CCW R_CW L_CW U_CCW F_CW,51,612,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:3.0|Y:3.1|Z:1.2,8,BFS,2,SOLVED,8,U_CW F_CW D_CW F_CCW R_CW L_CW U_CCW F_CW,41436,497232,,436
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:3.0|Y:3.1|Z:1.2,8,IDA_STAR,3,SOLVED,8,U_CW F_CW D_CW F_CCW R_CW L_CW U_CCW F_CW,51,612,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:3.0|Y:3.1|Z:1.2,8,BFS,3,SOLVED,8,U_CW F_CW D_CW F_CCW R_CW L_CW U_CCW F_CW,41436,497232,,437
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:3.0|Y:3.1|Z:1.2,8,BIDIRECTIONAL_BFS,3,SOLVED,8,R_CCW B_CW D_CCW R_CW R_CW D_CCW B_CW R_CCW,1892,22704,,21
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:3.0|Y:3.1|Z:1.2,8,BFS,4,SOLVED,8,U_CW F_CW D_CW F_CCW R_CW L_CW U_CCW F_CW,41436,497232,,439
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:3.0|Y:3.1|Z:1.2,8,BIDIRECTIONAL_BFS,4,SOLVED,8,R_CCW B_CW D_CCW R_CW R_CW D_CCW B_CW R_CCW,1892,22704,,19
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:3.0|Y:3.1|Z:1.2,8,IDA_STAR,4,SOLVED,8,U_CW F_CW D_CW F_CCW R_CW L_CW U_CCW F_CW,51,612,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:1.0|Y:1.2|Z:3.1,8,BFS,0,SOLVED,8,U_CW F_CW U_CW U_CW R_CW L_CW F_CW D_CCW,41273,495276,,433
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:1.0|Y:1.2|Z:3.1,8,BIDIRECTIONAL_BFS,0,SOLVED,8,R_CCW D_CW B_CCW R_CW R_CW B_CCW D_CW R_CCW,1892,22704,,20
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:1.0|Y:1.2|Z:3.1,8,IDA_STAR,0,SOLVED,8,U_CW F_CW U_CW U_CW R_CW L_CW F_CW D_CCW,49,588,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:1.0|Y:1.2|Z:3.1,8,BIDIRECTIONAL_BFS,1,SOLVED,8,R_CCW D_CW B_CCW R_CW R_CW B_CCW D_CW R_CCW,1892,22704,,20
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:1.0|Y:1.2|Z:3.1,8,IDA_STAR,1,SOLVED,8,U_CW F_CW U_CW U_CW R_CW L_CW F_CW D_CCW,49,588,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:1.0|Y:1.2|Z:3.1,8,BFS,1,SOLVED,8,U_CW F_CW U_CW U_CW R_CW L_CW F_CW D_CCW,41273,495276,,433
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:1.0|Y:1.2|Z:3.1,8,IDA_STAR,2,SOLVED,8,U_CW F_CW U_CW U_CW R_CW L_CW F_CW D_CCW,49,588,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:1.0|Y:1.2|Z:3.1,8,BFS,2,SOLVED,8,U_CW F_CW U_CW U_CW R_CW L_CW F_CW D_CCW,41273,495276,,433
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:1.0|Y:1.2|Z:3.1,8,BIDIRECTIONAL_BFS,2,SOLVED,8,R_CCW D_CW B_CCW R_CW R_CW B_CCW D_CW R_CCW,1892,22704,,20
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:1.0|Y:1.2|Z:3.1,8,BFS,3,SOLVED,8,U_CW F_CW U_CW U_CW R_CW L_CW F_CW D_CCW,41273,495276,,433
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:1.0|Y:1.2|Z:3.1,8,BIDIRECTIONAL_BFS,3,SOLVED,8,R_CCW D_CW B_CCW R_CW R_CW B_CCW D_CW R_CCW,1892,22704,,22
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:1.0|Y:1.2|Z:3.1,8,IDA_STAR,3,SOLVED,8,U_CW F_CW U_CW U_CW R_CW L_CW F_CW D_CCW,49,588,,1
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:1.0|Y:1.2|Z:3.1,8,BIDIRECTIONAL_BFS,4,SOLVED,8,R_CCW D_CW B_CCW R_CW R_CW B_CCW D_CW R_CCW,1892,22704,,20
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:1.0|Y:1.2|Z:3.1,8,IDA_STAR,4,SOLVED,8,U_CW F_CW U_CW U_CW R_CW L_CW F_CW D_CCW,49,588,,0
+1,phase5c-timing-v1,phase5c-timing-v1,d8:C:0|X:1.0|Y:1.2|Z:3.1,8,BFS,4,SOLVED,8,U_CW F_CW U_CW U_CW R_CW L_CW F_CW D_CCW,41273,495276,,434

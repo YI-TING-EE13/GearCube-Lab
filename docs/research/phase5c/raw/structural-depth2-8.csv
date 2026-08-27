@@ -1,0 +1,631 @@
+schemaVersion,suiteId,seed,caseId,exactDepth,algorithm,repetitionIndex,status,solutionDepth,solutionMoves,nodesExpanded,nodesGenerated,limitReason,elapsedMs
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d2:C:8|X:1.0|Y:0.1|Z:3.2,2,BFS,0,SOLVED,2,U_CCW B_CCW,29,348,,1
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d2:C:8|X:1.0|Y:0.1|Z:3.2,2,BIDIRECTIONAL_BFS,0,SOLVED,2,U_CCW B_CCW,2,24,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d2:C:8|X:1.0|Y:0.1|Z:3.2,2,IDA_STAR,0,SOLVED,2,U_CCW B_CCW,2,24,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d2:C:11|X:3.2|Y:3.1|Z:3.0,2,BIDIRECTIONAL_BFS,0,SOLVED,2,U_CCW L_CCW,2,24,,1
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d2:C:11|X:3.2|Y:3.1|Z:3.0,2,IDA_STAR,0,SOLVED,2,U_CCW L_CCW,2,24,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d2:C:11|X:3.2|Y:3.1|Z:3.0,2,BFS,0,SOLVED,2,U_CCW L_CCW,33,396,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d2:C:8|X:1.0|Y:2.2|Z:3.1,2,IDA_STAR,0,SOLVED,2,U_CW F_CCW,2,24,,1
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d2:C:8|X:1.0|Y:2.2|Z:3.1,2,BFS,0,SOLVED,2,U_CW F_CCW,17,204,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d2:C:8|X:1.0|Y:2.2|Z:3.1,2,BIDIRECTIONAL_BFS,0,SOLVED,2,U_CW F_CCW,2,24,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d2:C:19|X:2.1|Y:2.1|Z:1.0,2,BFS,0,SOLVED,2,L_CW D_CW,110,1320,,2
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d2:C:19|X:2.1|Y:2.1|Z:1.0,2,BIDIRECTIONAL_BFS,0,SOLVED,2,L_CW D_CW,2,24,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d2:C:19|X:2.1|Y:2.1|Z:1.0,2,IDA_STAR,0,SOLVED,2,L_CW D_CW,2,24,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d2:C:20|X:1.1|Y:2.0|Z:0.2,2,BIDIRECTIONAL_BFS,0,SOLVED,2,L_CW B_CCW,2,24,,1
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d2:C:20|X:1.1|Y:2.0|Z:0.2,2,IDA_STAR,0,SOLVED,2,L_CW B_CCW,2,24,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d2:C:20|X:1.1|Y:2.0|Z:0.2,2,BFS,0,SOLVED,2,L_CW B_CCW,115,1380,,2
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d2:C:12|X:2.0|Y:0.1|Z:2.2,2,IDA_STAR,0,SOLVED,2,F_CW D_CW,2,24,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d2:C:12|X:2.0|Y:0.1|Z:2.2,2,BFS,0,SOLVED,2,F_CW D_CW,52,624,,1
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d2:C:12|X:2.0|Y:0.1|Z:2.2,2,BIDIRECTIONAL_BFS,0,SOLVED,2,F_CW D_CW,2,24,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d2:C:8|X:1.0|Y:2.1|Z:0.2,2,BFS,0,SOLVED,2,D_CW F_CW,34,408,,1
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d2:C:8|X:1.0|Y:2.1|Z:0.2,2,BIDIRECTIONAL_BFS,0,SOLVED,2,D_CW F_CW,2,24,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d2:C:8|X:1.0|Y:2.1|Z:0.2,2,IDA_STAR,0,SOLVED,2,D_CW F_CW,2,24,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d2:C:20|X:3.1|Y:2.0|Z:0.1,2,BIDIRECTIONAL_BFS,0,SOLVED,2,R_CCW F_CCW,2,24,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d2:C:20|X:3.1|Y:2.0|Z:0.1,2,IDA_STAR,0,SOLVED,2,R_CCW F_CCW,2,24,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d2:C:20|X:3.1|Y:2.0|Z:0.1,2,BFS,0,SOLVED,2,R_CCW F_CCW,103,1236,,2
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d2:C:0|X:2.2|Y:0.0|Z:0.0,2,IDA_STAR,0,SOLVED,2,R_CCW R_CCW,2,24,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d2:C:0|X:2.2|Y:0.0|Z:0.0,2,BFS,0,SOLVED,2,R_CCW R_CCW,106,1272,,1
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d2:C:0|X:2.2|Y:0.0|Z:0.0,2,BIDIRECTIONAL_BFS,0,SOLVED,2,L_CW L_CW,2,24,,1
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d2:C:0|X:0.0|Y:0.0|Z:2.1,2,BFS,0,SOLVED,2,F_CW F_CW,54,648,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d2:C:0|X:0.0|Y:0.0|Z:2.1,2,BIDIRECTIONAL_BFS,0,SOLVED,2,F_CW F_CW,2,24,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d2:C:0|X:0.0|Y:0.0|Z:2.1,2,IDA_STAR,0,SOLVED,2,F_CW F_CW,2,24,,1
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d2:C:19|X:0.1|Y:2.1|Z:1.0,2,BIDIRECTIONAL_BFS,0,SOLVED,2,R_CCW D_CW,2,24,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d2:C:19|X:0.1|Y:2.1|Z:1.0,2,IDA_STAR,0,SOLVED,2,R_CCW D_CW,2,24,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d2:C:19|X:0.1|Y:2.1|Z:1.0,2,BFS,0,SOLVED,2,R_CCW D_CW,100,1200,,1
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d2:C:11|X:0.1|Y:3.2|Z:3.0,2,IDA_STAR,0,SOLVED,2,D_CCW L_CW,2,24,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d2:C:11|X:0.1|Y:3.2|Z:3.0,2,BFS,0,SOLVED,2,D_CCW L_CW,48,576,,1
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d2:C:11|X:0.1|Y:3.2|Z:3.0,2,BIDIRECTIONAL_BFS,0,SOLVED,2,D_CCW L_CW,2,24,,1
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d2:C:0|X:0.0|Y:0.2|Z:0.0,2,BFS,0,SOLVED,2,U_CCW D_CW,25,300,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d2:C:0|X:0.0|Y:0.2|Z:0.0,2,BIDIRECTIONAL_BFS,0,SOLVED,2,U_CCW D_CW,2,24,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d2:C:0|X:0.0|Y:0.2|Z:0.0,2,IDA_STAR,0,SOLVED,2,U_CCW D_CW,2,24,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d2:C:11|X:3.2|Y:1.1|Z:3.0,2,BIDIRECTIONAL_BFS,0,SOLVED,2,D_CW L_CCW,2,24,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d2:C:11|X:3.2|Y:1.1|Z:3.0,2,IDA_STAR,0,SOLVED,2,D_CW L_CCW,2,24,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d2:C:11|X:3.2|Y:1.1|Z:3.0,2,BFS,0,SOLVED,2,D_CW L_CCW,41,492,,1
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d2:C:0|X:0.2|Y:0.0|Z:0.0,2,IDA_STAR,0,SOLVED,2,R_CCW L_CW,2,24,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d2:C:0|X:0.2|Y:0.0|Z:0.0,2,BFS,0,SOLVED,2,R_CCW L_CW,107,1284,,1
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d2:C:0|X:0.2|Y:0.0|Z:0.0,2,BIDIRECTIONAL_BFS,0,SOLVED,2,R_CCW L_CW,2,24,,1
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d2:C:15|X:3.2|Y:1.0|Z:0.2,2,BFS,0,SOLVED,2,F_CW L_CCW,60,720,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d2:C:15|X:3.2|Y:1.0|Z:0.2,2,BIDIRECTIONAL_BFS,0,SOLVED,2,F_CW L_CCW,2,24,,1
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d2:C:15|X:3.2|Y:1.0|Z:0.2,2,IDA_STAR,0,SOLVED,2,F_CW L_CCW,2,24,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d2:C:19|X:2.2|Y:2.1|Z:1.0,2,BIDIRECTIONAL_BFS,0,SOLVED,2,R_CW D_CW,2,24,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d2:C:19|X:2.2|Y:2.1|Z:1.0,2,IDA_STAR,0,SOLVED,2,R_CW D_CW,2,24,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d2:C:19|X:2.2|Y:2.1|Z:1.0,2,BFS,0,SOLVED,2,R_CW D_CW,89,1068,,1
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d2:C:19|X:0.2|Y:3.2|Z:1.0,2,IDA_STAR,0,SOLVED,2,L_CCW D_CCW,2,24,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d2:C:19|X:0.2|Y:3.2|Z:1.0,2,BFS,0,SOLVED,2,L_CCW D_CCW,119,1428,,2
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d2:C:19|X:0.2|Y:3.2|Z:1.0,2,BIDIRECTIONAL_BFS,0,SOLVED,2,L_CCW D_CCW,2,24,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d2:C:15|X:2.2|Y:1.0|Z:0.2,2,BFS,0,SOLVED,2,F_CW R_CW,57,684,,1
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d2:C:15|X:2.2|Y:1.0|Z:0.2,2,BIDIRECTIONAL_BFS,0,SOLVED,2,F_CW R_CW,2,24,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d2:C:15|X:2.2|Y:1.0|Z:0.2,2,IDA_STAR,0,SOLVED,2,F_CW R_CW,2,24,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d2:C:8|X:1.0|Y:2.2|Z:0.2,2,BIDIRECTIONAL_BFS,0,SOLVED,2,U_CW F_CW,2,24,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d2:C:8|X:1.0|Y:2.2|Z:0.2,2,IDA_STAR,0,SOLVED,2,U_CW F_CW,2,24,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d2:C:8|X:1.0|Y:2.2|Z:0.2,2,BFS,0,SOLVED,2,U_CW F_CW,16,192,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d2:C:20|X:1.2|Y:2.0|Z:1.2,2,IDA_STAR,0,SOLVED,2,R_CW F_CW,2,24,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d2:C:20|X:1.2|Y:2.0|Z:1.2,2,BFS,0,SOLVED,2,R_CW F_CW,91,1092,,2
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d2:C:20|X:1.2|Y:2.0|Z:1.2,2,BIDIRECTIONAL_BFS,0,SOLVED,2,R_CW F_CW,2,24,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d2:C:19|X:0.1|Y:3.2|Z:1.0,2,BFS,0,SOLVED,2,R_CCW D_CCW,101,1212,,2
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d2:C:19|X:0.1|Y:3.2|Z:1.0,2,BIDIRECTIONAL_BFS,0,SOLVED,2,R_CCW D_CCW,2,24,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d2:C:19|X:0.1|Y:3.2|Z:1.0,2,IDA_STAR,0,SOLVED,2,R_CCW D_CCW,2,24,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d2:C:15|X:2.2|Y:1.0|Z:2.2,2,BIDIRECTIONAL_BFS,0,SOLVED,2,B_CCW R_CW,2,24,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d2:C:15|X:2.2|Y:1.0|Z:2.2,2,IDA_STAR,0,SOLVED,2,B_CCW R_CW,2,24,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d2:C:15|X:2.2|Y:1.0|Z:2.2,2,BFS,0,SOLVED,2,B_CCW R_CW,83,996,,1
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d2:C:12|X:2.0|Y:0.1|Z:0.2,2,IDA_STAR,0,SOLVED,2,B_CCW D_CW,2,24,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d2:C:12|X:2.0|Y:0.1|Z:0.2,2,BFS,0,SOLVED,2,B_CCW D_CW,81,972,,1
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d2:C:12|X:2.0|Y:0.1|Z:0.2,2,BIDIRECTIONAL_BFS,0,SOLVED,2,B_CCW D_CW,2,24,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d2:C:0|X:0.1|Y:0.0|Z:0.0,2,BFS,0,SOLVED,2,R_CW L_CCW,97,1164,,2
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d2:C:0|X:0.1|Y:0.0|Z:0.0,2,BIDIRECTIONAL_BFS,0,SOLVED,2,L_CCW R_CW,2,24,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d2:C:0|X:0.1|Y:0.0|Z:0.0,2,IDA_STAR,0,SOLVED,2,R_CW L_CCW,2,24,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d2:C:20|X:1.2|Y:2.0|Z:0.1,2,BIDIRECTIONAL_BFS,0,SOLVED,2,R_CW F_CCW,2,24,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d2:C:20|X:1.2|Y:2.0|Z:0.1,2,IDA_STAR,0,SOLVED,2,R_CW F_CCW,2,24,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d2:C:20|X:1.2|Y:2.0|Z:0.1,2,BFS,0,SOLVED,2,R_CW F_CCW,92,1104,,1
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d2:C:0|X:0.0|Y:0.0|Z:2.2,2,IDA_STAR,0,SOLVED,2,F_CCW F_CCW,2,24,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d2:C:0|X:0.0|Y:0.0|Z:2.2,2,BFS,0,SOLVED,2,F_CCW F_CCW,65,780,,1
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d2:C:0|X:0.0|Y:0.0|Z:2.2,2,BIDIRECTIONAL_BFS,0,SOLVED,2,B_CW B_CW,2,24,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d2:C:8|X:1.0|Y:0.2|Z:0.2,2,BFS,0,SOLVED,2,D_CCW F_CW,42,504,,1
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d2:C:8|X:1.0|Y:0.2|Z:0.2,2,BIDIRECTIONAL_BFS,0,SOLVED,2,D_CCW F_CW,2,24,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d2:C:8|X:1.0|Y:0.2|Z:0.2,2,IDA_STAR,0,SOLVED,2,D_CCW F_CW,2,24,,1
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d2:C:12|X:2.0|Y:3.1|Z:0.2,2,BIDIRECTIONAL_BFS,0,SOLVED,2,B_CCW U_CCW,2,24,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d2:C:12|X:2.0|Y:3.1|Z:0.2,2,IDA_STAR,0,SOLVED,2,B_CCW U_CCW,2,24,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d2:C:12|X:2.0|Y:3.1|Z:0.2,2,BFS,0,SOLVED,2,B_CCW U_CCW,80,960,,1
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d2:C:8|X:1.0|Y:0.2|Z:0.1,2,IDA_STAR,0,SOLVED,2,D_CCW B_CW,2,24,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d2:C:8|X:1.0|Y:0.2|Z:0.1,2,BFS,0,SOLVED,2,D_CCW B_CW,44,528,,1
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d2:C:8|X:1.0|Y:0.2|Z:0.1,2,BIDIRECTIONAL_BFS,0,SOLVED,2,D_CCW B_CW,2,24,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d3:C:1|X:2.1|Y:2.0|Z:1.1,3,BFS,0,SOLVED,3,F_CW L_CW B_CCW,511,6132,,5
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d3:C:1|X:2.1|Y:2.0|Z:1.1,3,BIDIRECTIONAL_BFS,0,SOLVED,3,F_CW L_CW B_CCW,14,168,,1
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d3:C:1|X:2.1|Y:2.0|Z:1.1,3,IDA_STAR,0,SOLVED,3,F_CW L_CW B_CCW,3,36,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d3:C:21|X:1.1|Y:2.2|Z:3.0,3,BIDIRECTIONAL_BFS,0,SOLVED,3,U_CCW U_CCW L_CW,14,168,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d3:C:21|X:1.1|Y:2.2|Z:3.0,3,IDA_STAR,0,SOLVED,3,U_CCW U_CCW L_CW,3,36,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d3:C:21|X:1.1|Y:2.2|Z:3.0,3,BFS,0,SOLVED,3,U_CCW U_CCW L_CW,230,2760,,3
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d3:C:5|X:1.2|Y:2.2|Z:0.0,3,IDA_STAR,0,SOLVED,3,U_CCW L_CCW U_CCW,3,36,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d3:C:5|X:1.2|Y:2.2|Z:0.0,3,BFS,0,SOLVED,3,U_CCW L_CCW U_CCW,307,3684,,4
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d3:C:5|X:1.2|Y:2.2|Z:0.0,3,BIDIRECTIONAL_BFS,0,SOLVED,3,U_CCW L_CCW U_CCW,14,168,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d3:C:18|X:3.2|Y:3.1|Z:3.1,3,BFS,0,SOLVED,3,R_CW F_CCW U_CCW,745,8940,,8
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d3:C:18|X:3.2|Y:3.1|Z:3.1,3,BIDIRECTIONAL_BFS,0,SOLVED,3,R_CW F_CCW U_CCW,14,168,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d3:C:18|X:3.2|Y:3.1|Z:3.1,3,IDA_STAR,0,SOLVED,3,R_CW F_CCW U_CCW,3,36,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d3:C:9|X:3.2|Y:0.2|Z:1.2,3,BIDIRECTIONAL_BFS,0,SOLVED,3,D_CCW F_CW L_CCW,14,168,,1
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d3:C:9|X:3.2|Y:0.2|Z:1.2,3,IDA_STAR,0,SOLVED,3,D_CCW F_CW L_CCW,3,36,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d3:C:9|X:3.2|Y:0.2|Z:1.2,3,BFS,0,SOLVED,3,D_CCW F_CW L_CCW,380,4560,,4
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d3:C:10|X:3.2|Y:3.2|Z:1.2,3,IDA_STAR,0,SOLVED,3,U_CW L_CCW B_CCW,3,36,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d3:C:10|X:3.2|Y:3.2|Z:1.2,3,BFS,0,SOLVED,3,U_CW L_CCW B_CCW,223,2676,,2
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d3:C:10|X:3.2|Y:3.2|Z:1.2,3,BIDIRECTIONAL_BFS,0,SOLVED,3,U_CW L_CCW B_CCW,14,168,,1
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d3:C:6|X:1.0|Y:1.2|Z:2.2,3,BFS,0,SOLVED,3,U_CW F_CCW F_CCW,165,1980,,2
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d3:C:6|X:1.0|Y:1.2|Z:2.2,3,BIDIRECTIONAL_BFS,0,SOLVED,3,U_CW B_CW B_CW,14,168,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d3:C:6|X:1.0|Y:1.2|Z:2.2,3,IDA_STAR,0,SOLVED,3,U_CW F_CCW F_CCW,3,36,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d3:C:10|X:3.2|Y:3.1|Z:1.2,3,BIDIRECTIONAL_BFS,0,SOLVED,3,D_CW L_CCW B_CCW,14,168,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d3:C:10|X:3.2|Y:3.1|Z:1.2,3,IDA_STAR,0,SOLVED,3,D_CW L_CCW B_CCW,3,36,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d3:C:10|X:3.2|Y:3.1|Z:1.2,3,BFS,0,SOLVED,3,D_CW L_CCW B_CCW,371,4452,,4
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d3:C:13|X:1.1|Y:3.2|Z:2.1,3,IDA_STAR,0,SOLVED,3,B_CW L_CW D_CCW,3,36,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d3:C:13|X:1.1|Y:3.2|Z:2.1,3,BFS,0,SOLVED,3,B_CW L_CW D_CCW,643,7716,,7
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d3:C:13|X:1.1|Y:3.2|Z:2.1,3,BIDIRECTIONAL_BFS,0,SOLVED,3,B_CW L_CW D_CCW,14,168,,1
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d3:C:18|X:1.2|Y:3.2|Z:3.2,3,BFS,0,SOLVED,3,L_CCW B_CCW D_CCW,944,11328,,10
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d3:C:18|X:1.2|Y:3.2|Z:3.2,3,BIDIRECTIONAL_BFS,0,SOLVED,3,L_CCW B_CCW D_CCW,14,168,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d3:C:18|X:1.2|Y:3.2|Z:3.2,3,IDA_STAR,0,SOLVED,3,L_CCW B_CCW D_CCW,3,36,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d3:C:2|X:2.0|Y:1.2|Z:3.2,3,BIDIRECTIONAL_BFS,0,SOLVED,3,F_CCW D_CCW B_CW,14,168,,1
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d3:C:2|X:2.0|Y:1.2|Z:3.2,3,IDA_STAR,0,SOLVED,3,F_CCW D_CCW B_CW,3,36,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d3:C:2|X:2.0|Y:1.2|Z:3.2,3,BFS,0,SOLVED,3,F_CCW D_CCW B_CW,545,6540,,6
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d3:C:2|X:2.0|Y:2.0|Z:2.2,3,IDA_STAR,0,SOLVED,3,U_CCW F_CW D_CCW,3,36,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d3:C:2|X:2.0|Y:2.0|Z:2.2,3,BFS,0,SOLVED,3,U_CCW F_CW D_CCW,243,2916,,3
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d3:C:2|X:2.0|Y:2.0|Z:2.2,3,BIDIRECTIONAL_BFS,0,SOLVED,3,D_CCW F_CW U_CCW,14,168,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d3:C:14|X:0.0|Y:3.0|Z:1.2,3,BFS,0,SOLVED,3,U_CW D_CW F_CW,134,1608,,1
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d3:C:14|X:0.0|Y:3.0|Z:1.2,3,BIDIRECTIONAL_BFS,0,SOLVED,3,U_CW D_CW F_CW,14,168,,1
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d3:C:14|X:0.0|Y:3.0|Z:1.2,3,IDA_STAR,0,SOLVED,3,U_CW D_CW F_CW,3,36,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d3:C:18|X:1.2|Y:3.1|Z:3.1,3,BIDIRECTIONAL_BFS,0,SOLVED,3,L_CCW F_CCW U_CCW,14,168,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d3:C:18|X:1.2|Y:3.1|Z:3.1,3,IDA_STAR,0,SOLVED,3,L_CCW F_CCW U_CCW,3,36,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d3:C:18|X:1.2|Y:3.1|Z:3.1,3,BFS,0,SOLVED,3,L_CCW F_CCW U_CCW,931,11172,,11
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d3:C:10|X:3.1|Y:1.2|Z:0.2,3,IDA_STAR,0,SOLVED,3,D_CCW R_CCW F_CW,3,36,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d3:C:10|X:3.1|Y:1.2|Z:0.2,3,BFS,0,SOLVED,3,D_CCW R_CCW F_CW,412,4944,,5
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d3:C:10|X:3.1|Y:1.2|Z:0.2,3,BIDIRECTIONAL_BFS,0,SOLVED,3,D_CCW R_CCW F_CW,14,168,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d3:C:22|X:0.1|Y:1.2|Z:0.2,3,BFS,0,SOLVED,3,R_CCW U_CW B_CCW,789,9468,,8
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d3:C:22|X:0.1|Y:1.2|Z:0.2,3,BIDIRECTIONAL_BFS,0,SOLVED,3,R_CCW U_CW B_CCW,14,168,,1
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d3:C:22|X:0.1|Y:1.2|Z:0.2,3,IDA_STAR,0,SOLVED,3,R_CCW U_CW B_CCW,3,36,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d3:C:6|X:1.0|Y:3.1|Z:3.2,3,BIDIRECTIONAL_BFS,0,SOLVED,3,F_CCW F_CCW U_CCW,14,168,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d3:C:6|X:1.0|Y:3.1|Z:3.2,3,IDA_STAR,0,SOLVED,3,F_CCW F_CCW U_CCW,3,36,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d3:C:6|X:1.0|Y:3.1|Z:3.2,3,BFS,0,SOLVED,3,F_CCW F_CCW U_CCW,552,6624,,6
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d3:C:18|X:1.1|Y:3.1|Z:2.2,3,IDA_STAR,0,SOLVED,3,R_CCW F_CW U_CCW,3,36,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d3:C:18|X:1.1|Y:3.1|Z:2.2,3,BFS,0,SOLVED,3,R_CCW F_CW U_CCW,816,9792,,9
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d3:C:18|X:1.1|Y:3.1|Z:2.2,3,BIDIRECTIONAL_BFS,0,SOLVED,3,R_CCW F_CW U_CCW,14,168,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d3:C:2|X:2.0|Y:0.2|Z:1.2,3,BFS,0,SOLVED,3,D_CW B_CCW U_CCW,337,4044,,4
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d3:C:2|X:2.0|Y:0.2|Z:1.2,3,BIDIRECTIONAL_BFS,0,SOLVED,3,D_CW B_CCW U_CCW,14,168,,1
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d3:C:2|X:2.0|Y:0.2|Z:1.2,3,IDA_STAR,0,SOLVED,3,D_CW B_CCW U_CCW,3,36,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d3:C:5|X:2.1|Y:1.2|Z:0.0,3,BIDIRECTIONAL_BFS,0,SOLVED,3,U_CCW L_CW D_CW,14,168,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d3:C:5|X:2.1|Y:1.2|Z:0.0,3,IDA_STAR,0,SOLVED,3,U_CCW L_CW D_CW,3,36,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d3:C:5|X:2.1|Y:1.2|Z:0.0,3,BFS,0,SOLVED,3,U_CCW L_CW D_CW,300,3600,,3
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d3:C:21|X:3.2|Y:0.1|Z:3.0,3,IDA_STAR,0,SOLVED,3,U_CW D_CCW L_CCW,3,36,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d3:C:21|X:3.2|Y:0.1|Z:3.0,3,BFS,0,SOLVED,3,U_CW D_CCW L_CCW,149,1788,,2
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d3:C:21|X:3.2|Y:0.1|Z:3.0,3,BIDIRECTIONAL_BFS,0,SOLVED,3,L_CCW D_CCW U_CW,14,168,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d3:C:2|X:2.0|Y:1.2|Z:3.1,3,BFS,0,SOLVED,3,B_CCW D_CCW F_CW,670,8040,,8
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d3:C:2|X:2.0|Y:1.2|Z:3.1,3,BIDIRECTIONAL_BFS,0,SOLVED,3,B_CCW D_CCW F_CW,14,168,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d3:C:2|X:2.0|Y:1.2|Z:3.1,3,IDA_STAR,0,SOLVED,3,B_CCW D_CCW F_CW,3,36,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d3:C:21|X:1.2|Y:0.0|Z:2.2,3,BIDIRECTIONAL_BFS,0,SOLVED,3,R_CW B_CW B_CW,14,168,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d3:C:21|X:1.2|Y:0.0|Z:2.2,3,IDA_STAR,0,SOLVED,3,R_CW F_CCW F_CCW,3,36,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d3:C:21|X:1.2|Y:0.0|Z:2.2,3,BFS,0,SOLVED,3,R_CW F_CCW F_CCW,748,8976,,8
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d3:C:10|X:3.1|Y:3.1|Z:1.2,3,IDA_STAR,0,SOLVED,3,D_CW R_CCW B_CCW,3,36,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d3:C:10|X:3.1|Y:3.1|Z:1.2,3,BFS,0,SOLVED,3,D_CW R_CCW B_CCW,357,4284,,5
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d3:C:10|X:3.1|Y:3.1|Z:1.2,3,BIDIRECTIONAL_BFS,0,SOLVED,3,D_CW R_CCW B_CCW,14,168,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d3:C:22|X:0.1|Y:0.1|Z:0.2,3,BFS,0,SOLVED,3,R_CCW U_CCW B_CCW,797,9564,,9
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d3:C:22|X:0.1|Y:0.1|Z:0.2,3,BIDIRECTIONAL_BFS,0,SOLVED,3,R_CCW U_CCW B_CCW,14,168,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d3:C:22|X:0.1|Y:0.1|Z:0.2,3,IDA_STAR,0,SOLVED,3,R_CCW U_CCW B_CCW,3,36,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d3:C:21|X:1.2|Y:2.0|Z:3.0,3,BIDIRECTIONAL_BFS,0,SOLVED,3,U_CW D_CW R_CW,14,168,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d3:C:21|X:1.2|Y:2.0|Z:3.0,3,IDA_STAR,0,SOLVED,3,U_CW D_CW R_CW,3,36,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d3:C:21|X:1.2|Y:2.0|Z:3.0,3,BFS,0,SOLVED,3,U_CW D_CW R_CW,138,1656,,2
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d3:C:6|X:2.1|Y:1.2|Z:1.0,3,IDA_STAR,0,SOLVED,3,U_CW R_CW R_CW,3,36,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d3:C:6|X:2.1|Y:1.2|Z:1.0,3,BFS,0,SOLVED,3,U_CW R_CW R_CW,195,2340,,2
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d3:C:6|X:2.1|Y:1.2|Z:1.0,3,BIDIRECTIONAL_BFS,0,SOLVED,3,U_CW R_CW R_CW,14,168,,1
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d3:C:1|X:0.0|Y:2.0|Z:3.1,3,BFS,0,SOLVED,3,R_CW B_CW R_CCW,756,9072,,8
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d3:C:1|X:0.0|Y:2.0|Z:3.1,3,BIDIRECTIONAL_BFS,0,SOLVED,3,R_CW B_CW R_CCW,14,168,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d3:C:1|X:0.0|Y:2.0|Z:3.1,3,IDA_STAR,0,SOLVED,3,R_CW B_CW R_CCW,3,36,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d3:C:14|X:1.1|Y:1.0|Z:1.2,3,BIDIRECTIONAL_BFS,0,SOLVED,3,F_CW R_CW R_CW,14,168,,1
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d3:C:14|X:1.1|Y:1.0|Z:1.2,3,IDA_STAR,0,SOLVED,3,F_CW R_CW R_CW,3,36,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d3:C:14|X:1.1|Y:1.0|Z:1.2,3,BFS,0,SOLVED,3,F_CW R_CW R_CW,491,5892,,5
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d3:C:10|X:0.1|Y:3.1|Z:1.2,3,IDA_STAR,0,SOLVED,3,D_CW L_CW B_CCW,3,36,,1
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d3:C:10|X:0.1|Y:3.1|Z:1.2,3,BFS,0,SOLVED,3,D_CW L_CW B_CCW,365,4380,,4
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d3:C:10|X:0.1|Y:3.1|Z:1.2,3,BIDIRECTIONAL_BFS,0,SOLVED,3,D_CW L_CW B_CCW,14,168,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d4:C:3|X:2.1|Y:1.1|Z:2.2,4,BFS,0,SOLVED,4,L_CCW D_CW B_CCW L_CCW,4751,57012,,51
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d4:C:3|X:2.1|Y:1.1|Z:2.2,4,BIDIRECTIONAL_BFS,0,SOLVED,4,L_CCW D_CW B_CCW L_CCW,26,312,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d4:C:3|X:2.1|Y:1.1|Z:2.2,4,IDA_STAR,0,SOLVED,4,L_CCW D_CW B_CCW L_CCW,4,48,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d4:C:0|X:3.0|Y:0.1|Z:0.0,4,BIDIRECTIONAL_BFS,0,SOLVED,4,D_CCW L_CCW R_CCW U_CW,26,312,,1
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d4:C:0|X:3.0|Y:0.1|Z:0.0,4,IDA_STAR,0,SOLVED,4,U_CW R_CW L_CW D_CCW,4,48,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d4:C:0|X:3.0|Y:0.1|Z:0.0,4,BFS,0,SOLVED,4,U_CW R_CW L_CW D_CCW,1501,18012,,16
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d4:C:4|X:3.1|Y:1.2|Z:3.1,4,IDA_STAR,0,SOLVED,4,D_CW L_CW F_CCW D_CW,4,48,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d4:C:4|X:3.1|Y:1.2|Z:3.1,4,BFS,0,SOLVED,4,D_CW L_CW F_CCW D_CW,2530,30360,,28
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d4:C:4|X:3.1|Y:1.2|Z:3.1,4,BIDIRECTIONAL_BFS,0,SOLVED,4,D_CW L_CW F_CCW D_CW,26,312,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d4:C:19|X:0.1|Y:3.2|Z:2.2,4,BFS,0,SOLVED,4,R_CCW D_CCW F_CCW F_CCW,4470,53640,,48
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d4:C:19|X:0.1|Y:3.2|Z:2.2,4,BIDIRECTIONAL_BFS,0,SOLVED,4,R_CCW D_CCW F_CCW F_CCW,26,312,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d4:C:19|X:0.1|Y:3.2|Z:2.2,4,IDA_STAR,0,SOLVED,4,R_CCW D_CCW F_CCW F_CCW,4,48,,1
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d4:C:0|X:1.2|Y:0.0|Z:2.0,4,BIDIRECTIONAL_BFS,0,SOLVED,4,B_CCW L_CW L_CW F_CCW,26,312,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d4:C:0|X:1.2|Y:0.0|Z:2.0,4,IDA_STAR,0,SOLVED,4,F_CW R_CCW R_CCW B_CW,4,48,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d4:C:0|X:1.2|Y:0.0|Z:2.0,4,BFS,0,SOLVED,4,F_CW R_CCW R_CCW B_CW,3303,39636,,36
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d4:C:8|X:1.0|Y:3.1|Z:2.1,4,IDA_STAR,0,SOLVED,4,F_CW D_CCW B_CCW U_CW,4,48,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d4:C:8|X:1.0|Y:3.1|Z:2.1,4,BFS,0,SOLVED,4,F_CW D_CCW B_CCW U_CW,3021,36252,,32
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d4:C:8|X:1.0|Y:3.1|Z:2.1,4,BIDIRECTIONAL_BFS,0,SOLVED,4,F_CW D_CCW B_CCW U_CW,26,312,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d4:C:3|X:0.2|Y:0.2|Z:1.1,4,BFS,0,SOLVED,4,D_CW F_CCW R_CW U_CCW,2335,28020,,25
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d4:C:3|X:0.2|Y:0.2|Z:1.1,4,BIDIRECTIONAL_BFS,0,SOLVED,4,F_CW L_CCW U_CW B_CCW,26,312,,1
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d4:C:3|X:0.2|Y:0.2|Z:1.1,4,IDA_STAR,0,SOLVED,4,D_CW F_CCW R_CW U_CCW,4,48,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d4:C:4|X:3.1|Y:1.2|Z:3.2,4,BIDIRECTIONAL_BFS,0,SOLVED,4,D_CW L_CW B_CCW D_CW,26,312,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d4:C:4|X:3.1|Y:1.2|Z:3.2,4,IDA_STAR,0,SOLVED,4,D_CW L_CW B_CCW D_CW,4,48,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d4:C:4|X:3.1|Y:1.2|Z:3.2,4,BFS,0,SOLVED,4,D_CW L_CW B_CCW D_CW,2537,30444,,28
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d4:C:3|X:1.1|Y:1.1|Z:3.2,4,IDA_STAR,0,SOLVED,4,F_CCW L_CW U_CCW F_CCW,4,48,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d4:C:3|X:1.1|Y:1.1|Z:3.2,4,BFS,0,SOLVED,4,F_CCW L_CW U_CCW F_CCW,3685,44220,,39
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d4:C:3|X:1.1|Y:1.1|Z:3.2,4,BIDIRECTIONAL_BFS,0,SOLVED,4,F_CCW L_CW U_CCW F_CCW,26,312,,1
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d4:C:3|X:1.1|Y:1.1|Z:1.2,4,BFS,0,SOLVED,4,D_CCW B_CCW R_CCW U_CW,2720,32640,,28
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d4:C:3|X:1.1|Y:1.1|Z:1.2,4,BIDIRECTIONAL_BFS,0,SOLVED,4,B_CW L_CW U_CCW F_CCW,26,312,,1
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d4:C:3|X:1.1|Y:1.1|Z:1.2,4,IDA_STAR,0,SOLVED,4,D_CCW B_CCW R_CCW U_CW,4,48,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d4:C:3|X:3.0|Y:1.2|Z:2.1,4,BIDIRECTIONAL_BFS,0,SOLVED,4,R_CW U_CW F_CCW L_CW,26,312,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d4:C:3|X:3.0|Y:1.2|Z:2.1,4,IDA_STAR,0,SOLVED,4,R_CW U_CW F_CCW L_CW,4,48,,1
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d4:C:3|X:3.0|Y:1.2|Z:2.1,4,BFS,0,SOLVED,4,R_CW U_CW F_CCW L_CW,4077,48924,,43
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d4:C:11|X:1.2|Y:1.1|Z:3.0,4,IDA_STAR,0,SOLVED,4,R_CW R_CW D_CW R_CCW,4,48,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d4:C:11|X:1.2|Y:1.1|Z:3.0,4,BFS,0,SOLVED,4,R_CW R_CW D_CW R_CCW,4303,51636,,46
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d4:C:11|X:1.2|Y:1.1|Z:3.0,4,BIDIRECTIONAL_BFS,0,SOLVED,4,R_CW R_CW D_CW R_CCW,26,312,,1
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d4:C:15|X:1.1|Y:1.0|Z:2.2,4,BFS,0,SOLVED,4,R_CW L_CW B_CCW R_CCW,4380,52560,,46
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d4:C:15|X:1.1|Y:1.0|Z:2.2,4,BIDIRECTIONAL_BFS,0,SOLVED,4,R_CW L_CW B_CCW R_CCW,26,312,,1
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d4:C:15|X:1.1|Y:1.0|Z:2.2,4,IDA_STAR,0,SOLVED,4,R_CW L_CW B_CCW R_CCW,4,48,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d4:C:12|X:2.0|Y:1.2|Z:0.0,4,BIDIRECTIONAL_BFS,0,SOLVED,4,U_CCW F_CW D_CW B_CW,26,312,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d4:C:12|X:2.0|Y:1.2|Z:0.0,4,IDA_STAR,0,SOLVED,4,U_CCW F_CW D_CW B_CW,4,48,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d4:C:12|X:2.0|Y:1.2|Z:0.0,4,BFS,0,SOLVED,4,U_CCW F_CW D_CW B_CW,1770,21240,,20
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d4:C:19|X:2.1|Y:3.1|Z:0.1,4,IDA_STAR,0,SOLVED,4,L_CW F_CW F_CW U_CCW,4,48,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d4:C:19|X:2.1|Y:3.1|Z:0.1,4,BFS,0,SOLVED,4,L_CW F_CW F_CW U_CCW,4673,56076,,50
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d4:C:19|X:2.1|Y:3.1|Z:0.1,4,BIDIRECTIONAL_BFS,0,SOLVED,4,L_CW B_CCW B_CCW U_CCW,26,312,,1
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d4:C:15|X:0.2|Y:1.0|Z:1.1,4,BFS,0,SOLVED,4,L_CW F_CW R_CCW B_CCW,4682,56184,,50
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d4:C:15|X:0.2|Y:1.0|Z:1.1,4,BIDIRECTIONAL_BFS,0,SOLVED,4,L_CW F_CW R_CCW B_CCW,26,312,,1
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d4:C:15|X:0.2|Y:1.0|Z:1.1,4,IDA_STAR,0,SOLVED,4,L_CW F_CW R_CCW B_CCW,4,48,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d4:C:16|X:2.0|Y:3.2|Z:3.1,4,BIDIRECTIONAL_BFS,0,SOLVED,4,F_CCW R_CW D_CCW L_CW,26,312,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d4:C:16|X:2.0|Y:3.2|Z:3.1,4,IDA_STAR,0,SOLVED,4,F_CCW R_CW D_CCW L_CW,4,48,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d4:C:16|X:2.0|Y:3.2|Z:3.1,4,BFS,0,SOLVED,4,F_CCW R_CW D_CCW L_CW,3598,43176,,39
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d4:C:11|X:3.1|Y:1.2|Z:3.1,4,IDA_STAR,0,SOLVED,4,U_CW F_CW B_CCW R_CCW,4,48,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d4:C:11|X:3.1|Y:1.2|Z:3.1,4,BFS,0,SOLVED,4,U_CW F_CW B_CCW R_CCW,1202,14424,,13
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d4:C:11|X:3.1|Y:1.2|Z:3.1,4,BIDIRECTIONAL_BFS,0,SOLVED,4,U_CW R_CCW B_CCW F_CW,26,312,,1
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d4:C:3|X:2.2|Y:0.1|Z:1.1,4,BFS,0,SOLVED,4,R_CCW U_CCW B_CW R_CCW,4433,53196,,49
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d4:C:3|X:2.2|Y:0.1|Z:1.1,4,BIDIRECTIONAL_BFS,0,SOLVED,4,R_CCW U_CCW B_CW R_CCW,26,312,,1
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d4:C:3|X:2.2|Y:0.1|Z:1.1,4,IDA_STAR,0,SOLVED,4,R_CCW U_CCW B_CW R_CCW,4,48,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d4:C:20|X:3.1|Y:1.0|Z:1.2,4,BIDIRECTIONAL_BFS,0,SOLVED,4,R_CCW F_CW D_CW U_CW,26,312,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d4:C:20|X:3.1|Y:1.0|Z:1.2,4,IDA_STAR,0,SOLVED,4,R_CCW F_CW U_CW D_CW,4,48,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d4:C:20|X:3.1|Y:1.0|Z:1.2,4,BFS,0,SOLVED,4,R_CCW F_CW U_CW D_CW,4484,53808,,49
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d4:C:12|X:2.0|Y:1.0|Z:0.1,4,IDA_STAR,0,SOLVED,4,U_CW U_CW F_CCW D_CCW,4,48,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d4:C:12|X:2.0|Y:1.0|Z:0.1,4,BFS,0,SOLVED,4,U_CW U_CW F_CCW D_CCW,976,11712,,10
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d4:C:12|X:2.0|Y:1.0|Z:0.1,4,BIDIRECTIONAL_BFS,0,SOLVED,4,D_CCW F_CW D_CW F_CW,26,312,,1
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d4:C:11|X:3.2|Y:3.2|Z:3.2,4,BFS,0,SOLVED,4,D_CCW F_CCW B_CW L_CCW,2642,31704,,28
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d4:C:11|X:3.2|Y:3.2|Z:3.2,4,BIDIRECTIONAL_BFS,0,SOLVED,4,D_CCW L_CCW B_CW F_CCW,26,312,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d4:C:11|X:3.2|Y:3.2|Z:3.2,4,IDA_STAR,0,SOLVED,4,D_CCW F_CCW B_CW L_CCW,4,48,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d4:C:7|X:2.2|Y:1.1|Z:3.2,4,BIDIRECTIONAL_BFS,0,SOLVED,4,B_CW L_CCW B_CW D_CW,26,312,,1
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d4:C:7|X:2.2|Y:1.1|Z:3.2,4,IDA_STAR,0,SOLVED,4,U_CCW F_CCW R_CW F_CCW,4,48,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d4:C:7|X:2.2|Y:1.1|Z:3.2,4,BFS,0,SOLVED,4,U_CCW F_CCW R_CW F_CCW,1884,22608,,20
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d4:C:4|X:1.2|Y:3.1|Z:2.1,4,IDA_STAR,0,SOLVED,4,L_CW F_CCW U_CCW L_CW,4,48,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d4:C:4|X:1.2|Y:3.1|Z:2.1,4,BFS,0,SOLVED,4,L_CW F_CCW U_CCW L_CW,4687,56244,,50
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d4:C:4|X:1.2|Y:3.1|Z:2.1,4,BIDIRECTIONAL_BFS,0,SOLVED,4,L_CW F_CCW U_CCW L_CW,26,312,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d4:C:4|X:3.0|Y:0.2|Z:3.2,4,BFS,0,SOLVED,4,R_CCW F_CW U_CW R_CW,4485,53820,,47
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d4:C:4|X:3.0|Y:0.2|Z:3.2,4,BIDIRECTIONAL_BFS,0,SOLVED,4,L_CCW F_CW U_CW L_CW,26,312,,1
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d4:C:4|X:3.0|Y:0.2|Z:3.2,4,IDA_STAR,0,SOLVED,4,R_CCW F_CW U_CW R_CW,4,48,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d4:C:12|X:2.0|Y:3.0|Z:2.1,4,BIDIRECTIONAL_BFS,0,SOLVED,4,B_CW D_CCW D_CCW U_CW,26,312,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d4:C:12|X:2.0|Y:3.0|Z:2.1,4,IDA_STAR,0,SOLVED,4,U_CW D_CCW B_CW D_CCW,4,48,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d4:C:12|X:2.0|Y:3.0|Z:2.1,4,BFS,0,SOLVED,4,U_CW D_CCW B_CW D_CCW,1112,13344,,12
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d4:C:8|X:0.2|Y:2.1|Z:3.2,4,IDA_STAR,0,SOLVED,4,D_CW B_CCW R_CCW R_CCW,4,48,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d4:C:8|X:0.2|Y:2.1|Z:3.2,4,BFS,0,SOLVED,4,D_CW B_CCW R_CCW R_CCW,2416,28992,,27
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d4:C:8|X:0.2|Y:2.1|Z:3.2,4,BIDIRECTIONAL_BFS,0,SOLVED,4,D_CW B_CCW R_CCW R_CCW,26,312,,1
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d4:C:0|X:2.2|Y:0.2|Z:0.0,4,BFS,0,SOLVED,4,U_CCW D_CW R_CCW R_CCW,1742,20904,,18
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d4:C:0|X:2.2|Y:0.2|Z:0.0,4,BIDIRECTIONAL_BFS,0,SOLVED,4,R_CCW R_CCW D_CW U_CCW,26,312,,1
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d4:C:0|X:2.2|Y:0.2|Z:0.0,4,IDA_STAR,0,SOLVED,4,U_CCW D_CW R_CCW R_CCW,4,48,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d4:C:4|X:0.2|Y:0.0|Z:2.1,4,BIDIRECTIONAL_BFS,0,SOLVED,4,U_CW L_CCW B_CW U_CCW,26,312,,1
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d4:C:4|X:0.2|Y:0.0|Z:2.1,4,IDA_STAR,0,SOLVED,4,U_CW L_CCW B_CW U_CCW,4,48,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d4:C:4|X:0.2|Y:0.0|Z:2.1,4,BFS,0,SOLVED,4,U_CW L_CCW B_CW U_CCW,1659,19908,,18
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d4:C:7|X:3.1|Y:3.1|Z:3.1,4,IDA_STAR,0,SOLVED,4,D_CW B_CCW R_CCW B_CCW,4,48,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d4:C:7|X:3.1|Y:3.1|Z:3.1,4,BFS,0,SOLVED,4,D_CW B_CCW R_CCW B_CCW,2415,28980,,25
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d4:C:7|X:3.1|Y:3.1|Z:3.1,4,BIDIRECTIONAL_BFS,0,SOLVED,4,F_CW L_CW F_CW U_CCW,26,312,,1
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d5:C:9|X:2.1|Y:0.2|Z:0.2,5,BFS,0,SOLVED,5,D_CCW F_CCW L_CW F_CW F_CW,11031,132372,,117
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d5:C:9|X:2.1|Y:0.2|Z:0.2,5,BIDIRECTIONAL_BFS,0,SOLVED,5,D_CCW B_CCW L_CW B_CW F_CW,137,1644,,2
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d5:C:9|X:2.1|Y:0.2|Z:0.2,5,IDA_STAR,0,SOLVED,5,D_CCW F_CCW L_CW F_CW F_CW,5,60,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d5:C:18|X:1.1|Y:1.1|Z:2.2,5,BIDIRECTIONAL_BFS,0,SOLVED,5,R_CCW U_CW F_CCW D_CCW F_CCW,137,1644,,2
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d5:C:18|X:1.1|Y:1.1|Z:2.2,5,IDA_STAR,0,SOLVED,5,U_CW D_CW R_CCW F_CW U_CCW,5,60,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d5:C:18|X:1.1|Y:1.1|Z:2.2,5,BFS,0,SOLVED,5,U_CW D_CW R_CCW F_CW U_CCW,5628,67536,,59
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d5:C:22|X:3.2|Y:1.1|Z:1.2,5,IDA_STAR,0,SOLVED,5,F_CCW L_CW U_CCW F_CCW L_CW,5,60,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d5:C:22|X:3.2|Y:1.1|Z:1.2,5,BFS,0,SOLVED,5,F_CCW L_CW U_CCW F_CCW L_CW,13952,167424,,149
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d5:C:22|X:3.2|Y:1.1|Z:1.2,5,BIDIRECTIONAL_BFS,0,SOLVED,5,F_CCW L_CW U_CCW F_CCW L_CW,137,1644,,1
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d5:C:17|X:3.0|Y:2.0|Z:2.2,5,BFS,0,SOLVED,5,B_CCW R_CW U_CCW L_CW U_CW,14636,175632,,158
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d5:C:17|X:3.0|Y:2.0|Z:2.2,5,BIDIRECTIONAL_BFS,0,SOLVED,5,R_CCW U_CW L_CCW F_CW D_CW,137,1644,,1
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d5:C:17|X:3.0|Y:2.0|Z:2.2,5,IDA_STAR,0,SOLVED,5,B_CCW R_CW U_CCW L_CW U_CW,5,60,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d5:C:22|X:0.2|Y:2.0|Z:2.2,5,BIDIRECTIONAL_BFS,0,SOLVED,5,L_CCW B_CW U_CW F_CCW U_CCW,137,1644,,2
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d5:C:22|X:0.2|Y:2.0|Z:2.2,5,IDA_STAR,0,SOLVED,5,B_CW U_CCW F_CCW R_CW D_CCW,5,60,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d5:C:22|X:0.2|Y:2.0|Z:2.2,5,BFS,0,SOLVED,5,B_CW U_CCW F_CCW R_CW D_CCW,14110,169320,,151
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d5:C:1|X:3.2|Y:2.2|Z:0.2,5,IDA_STAR,0,SOLVED,5,U_CCW D_CW F_CCW L_CCW B_CW,5,60,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d5:C:1|X:3.2|Y:2.2|Z:0.2,5,BFS,0,SOLVED,5,U_CCW D_CW F_CCW L_CCW B_CW,8154,97848,,92
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d5:C:1|X:3.2|Y:2.2|Z:0.2,5,BIDIRECTIONAL_BFS,0,SOLVED,5,F_CCW L_CCW B_CW D_CW U_CCW,137,1644,,2
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d5:C:1|X:0.2|Y:1.2|Z:2.2,5,BFS,0,SOLVED,5,L_CW B_CCW U_CCW U_CCW R_CCW,16308,195696,,178
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d5:C:1|X:0.2|Y:1.2|Z:2.2,5,BIDIRECTIONAL_BFS,0,SOLVED,5,L_CW B_CCW D_CW D_CW R_CCW,137,1644,,2
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d5:C:1|X:0.2|Y:1.2|Z:2.2,5,IDA_STAR,0,SOLVED,5,L_CW B_CCW U_CCW U_CCW R_CCW,5,60,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d5:C:9|X:0.2|Y:3.1|Z:1.2,5,BIDIRECTIONAL_BFS,0,SOLVED,5,R_CCW U_CW B_CCW R_CCW U_CW,137,1644,,2
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d5:C:9|X:0.2|Y:3.1|Z:1.2,5,IDA_STAR,0,SOLVED,5,R_CCW U_CW B_CCW R_CCW U_CW,5,60,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d5:C:9|X:0.2|Y:3.1|Z:1.2,5,BFS,0,SOLVED,5,R_CCW U_CW B_CCW R_CCW U_CW,15611,187332,,167
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d5:C:21|X:3.1|Y:2.0|Z:2.1,5,IDA_STAR,0,SOLVED,5,U_CW D_CW R_CCW F_CW F_CW,5,60,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d5:C:21|X:3.1|Y:2.0|Z:2.1,5,BFS,0,SOLVED,5,U_CW D_CW R_CCW F_CW F_CW,5630,67560,,61
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d5:C:21|X:3.1|Y:2.0|Z:2.1,5,BIDIRECTIONAL_BFS,0,SOLVED,5,U_CW D_CW R_CCW F_CW F_CW,137,1644,,1
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d5:C:9|X:3.2|Y:3.2|Z:3.2,5,BFS,0,SOLVED,5,B_CW U_CCW F_CCW D_CW L_CCW,14103,169236,,158
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d5:C:9|X:3.2|Y:3.2|Z:3.2,5,BIDIRECTIONAL_BFS,0,SOLVED,5,B_CW U_CCW F_CCW D_CW L_CCW,137,1644,,2
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d5:C:9|X:3.2|Y:3.2|Z:3.2,5,IDA_STAR,0,SOLVED,5,B_CW U_CCW F_CCW D_CW L_CCW,5,60,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d5:C:21|X:2.2|Y:0.0|Z:0.2,5,BIDIRECTIONAL_BFS,0,SOLVED,5,B_CCW R_CCW F_CW L_CW F_CCW,137,1644,,2
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d5:C:21|X:2.2|Y:0.0|Z:0.2,5,IDA_STAR,0,SOLVED,5,F_CW R_CCW F_CCW L_CW F_CW,5,60,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d5:C:21|X:2.2|Y:0.0|Z:0.2,5,BFS,0,SOLVED,5,F_CW R_CCW F_CCW L_CW F_CW,12859,154308,,145
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d5:C:6|X:1.2|Y:3.1|Z:2.1,5,IDA_STAR,0,SOLVED,5,U_CCW F_CW F_CW R_CCW L_CW,6,72,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d5:C:6|X:1.2|Y:3.1|Z:2.1,5,BFS,0,SOLVED,5,U_CCW F_CW F_CW R_CCW L_CW,8399,100788,,95
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d5:C:6|X:1.2|Y:3.1|Z:2.1,5,BIDIRECTIONAL_BFS,0,SOLVED,5,U_CCW R_CCW L_CW F_CW F_CW,137,1644,,2
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d5:C:2|X:3.2|Y:2.1|Z:2.0,5,BFS,0,SOLVED,5,F_CCW R_CCW R_CCW D_CW B_CCW,13925,167100,,148
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d5:C:2|X:3.2|Y:2.1|Z:2.0,5,BIDIRECTIONAL_BFS,0,SOLVED,5,B_CCW R_CCW R_CCW D_CW F_CCW,137,1644,,2
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d5:C:2|X:3.2|Y:2.1|Z:2.0,5,IDA_STAR,0,SOLVED,5,F_CCW R_CCW R_CCW D_CW B_CCW,5,60,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d5:C:18|X:2.2|Y:0.1|Z:0.2,5,BIDIRECTIONAL_BFS,0,SOLVED,5,B_CW U_CCW L_CW B_CW R_CCW,137,1644,,2
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d5:C:18|X:2.2|Y:0.1|Z:0.2,5,IDA_STAR,0,SOLVED,5,B_CW U_CCW L_CW B_CW R_CCW,5,60,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d5:C:18|X:2.2|Y:0.1|Z:0.2,5,BFS,0,SOLVED,5,B_CW U_CCW L_CW B_CW R_CCW,14148,169776,,150
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d5:C:10|X:0.2|Y:2.2|Z:2.1,5,IDA_STAR,0,SOLVED,5,B_CCW U_CCW L_CCW B_CCW U_CCW,5,60,,1
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d5:C:10|X:0.2|Y:2.2|Z:2.1,5,BFS,0,SOLVED,5,B_CCW U_CCW L_CCW B_CCW U_CCW,14537,174444,,154
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d5:C:10|X:0.2|Y:2.2|Z:2.1,5,BIDIRECTIONAL_BFS,0,SOLVED,5,B_CCW U_CCW L_CCW B_CCW U_CCW,137,1644,,1
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d5:C:2|X:0.1|Y:1.0|Z:1.2,5,BFS,0,SOLVED,5,U_CW B_CCW D_CW R_CW R_CW,7082,84984,,81
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d5:C:2|X:0.1|Y:1.0|Z:1.2,5,BIDIRECTIONAL_BFS,0,SOLVED,5,U_CW B_CCW D_CW R_CW R_CW,137,1644,,1
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d5:C:2|X:0.1|Y:1.0|Z:1.2,5,IDA_STAR,0,SOLVED,5,U_CW B_CCW D_CW R_CW R_CW,5,60,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d5:C:22|X:0.0|Y:1.1|Z:1.2,5,BIDIRECTIONAL_BFS,0,SOLVED,5,F_CCW R_CW U_CCW F_CCW R_CCW,137,1644,,2
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d5:C:22|X:0.0|Y:1.1|Z:1.2,5,IDA_STAR,0,SOLVED,5,F_CCW R_CW U_CCW F_CCW R_CCW,5,60,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d5:C:22|X:0.0|Y:1.1|Z:1.2,5,BFS,0,SOLVED,5,F_CCW R_CW U_CCW F_CCW R_CCW,13732,164784,,148
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d5:C:18|X:3.2|Y:1.2|Z:3.2,5,IDA_STAR,0,SOLVED,5,U_CW U_CW R_CW B_CCW U_CCW,5,60,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d5:C:18|X:3.2|Y:1.2|Z:3.2,5,BFS,0,SOLVED,5,U_CW U_CW R_CW B_CCW U_CCW,5217,62604,,58
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d5:C:18|X:3.2|Y:1.2|Z:3.2,5,BIDIRECTIONAL_BFS,0,SOLVED,5,R_CW D_CW B_CW U_CCW B_CW,137,1644,,1
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d5:C:2|X:2.1|Y:0.0|Z:2.2,5,BFS,0,SOLVED,5,U_CW F_CW U_CCW R_CW L_CCW,6105,73260,,68
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d5:C:2|X:2.1|Y:0.0|Z:2.2,5,BIDIRECTIONAL_BFS,0,SOLVED,5,U_CW F_CW U_CCW L_CCW R_CW,137,1644,,1
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d5:C:2|X:2.1|Y:0.0|Z:2.2,5,IDA_STAR,0,SOLVED,5,U_CW F_CW U_CCW R_CW L_CCW,5,60,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d5:C:10|X:3.2|Y:3.2|Z:2.1,5,BIDIRECTIONAL_BFS,0,SOLVED,5,B_CCW R_CCW F_CW D_CCW L_CW,137,1644,,2
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d5:C:10|X:3.2|Y:3.2|Z:2.1,5,IDA_STAR,0,SOLVED,5,U_CW F_CW B_CW L_CCW F_CCW,5,60,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d5:C:10|X:3.2|Y:3.2|Z:2.1,5,BFS,0,SOLVED,5,U_CW F_CW B_CW L_CCW F_CCW,6305,75660,,67
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d5:C:5|X:0.1|Y:3.2|Z:0.2,5,IDA_STAR,0,SOLVED,5,F_CCW B_CW R_CW D_CCW L_CCW,5,60,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d5:C:5|X:0.1|Y:3.2|Z:0.2,5,BFS,0,SOLVED,5,F_CCW B_CW R_CW D_CCW L_CCW,13645,163740,,150
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d5:C:5|X:0.1|Y:3.2|Z:0.2,5,BIDIRECTIONAL_BFS,0,SOLVED,5,R_CW D_CCW L_CCW B_CW F_CCW,137,1644,,2
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d5:C:2|X:2.2|Y:2.2|Z:3.1,5,BFS,0,SOLVED,5,B_CCW U_CW F_CW R_CCW L_CW,14432,173184,,154
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d5:C:2|X:2.2|Y:2.2|Z:3.1,5,BIDIRECTIONAL_BFS,0,SOLVED,5,B_CCW U_CW F_CW L_CW R_CCW,137,1644,,1
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d5:C:2|X:2.2|Y:2.2|Z:3.1,5,IDA_STAR,0,SOLVED,5,B_CCW U_CW F_CW R_CCW L_CW,5,60,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d5:C:2|X:2.0|Y:3.1|Z:0.2,5,BIDIRECTIONAL_BFS,0,SOLVED,5,D_CCW B_CCW U_CW B_CW F_CW,137,1644,,2
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d5:C:2|X:2.0|Y:3.1|Z:0.2,5,IDA_STAR,0,SOLVED,5,U_CW D_CW B_CW U_CCW F_CCW,5,60,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d5:C:2|X:2.0|Y:3.1|Z:0.2,5,BFS,0,SOLVED,5,U_CW D_CW B_CW U_CCW F_CCW,5505,66060,,59
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d5:C:10|X:0.0|Y:3.1|Z:2.0,5,IDA_STAR,0,SOLVED,5,D_CW F_CCW R_CCW F_CW L_CCW,5,60,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d5:C:10|X:0.0|Y:3.1|Z:2.0,5,BFS,0,SOLVED,5,D_CW F_CCW R_CCW F_CW L_CCW,10131,121572,,110
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d5:C:10|X:0.0|Y:3.1|Z:2.0,5,BIDIRECTIONAL_BFS,0,SOLVED,5,F_CCW R_CW F_CW U_CCW R_CCW,137,1644,,1
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d5:C:10|X:0.2|Y:1.1|Z:0.0,5,BFS,0,SOLVED,5,U_CCW F_CW B_CCW R_CW F_CW,8457,101484,,90
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d5:C:10|X:0.2|Y:1.1|Z:0.0,5,BIDIRECTIONAL_BFS,0,SOLVED,5,U_CCW R_CW F_CW B_CCW F_CW,137,1644,,1
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d5:C:10|X:0.2|Y:1.1|Z:0.0,5,IDA_STAR,0,SOLVED,5,U_CCW F_CW B_CCW R_CW F_CW,5,60,,1
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d5:C:1|X:1.0|Y:3.2|Z:2.2,5,BIDIRECTIONAL_BFS,0,SOLVED,5,L_CCW U_CCW U_CCW B_CCW L_CW,137,1644,,1
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d5:C:1|X:1.0|Y:3.2|Z:2.2,5,IDA_STAR,0,SOLVED,5,R_CCW U_CCW U_CCW B_CCW R_CW,5,60,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d5:C:1|X:1.0|Y:3.2|Z:2.2,5,BFS,0,SOLVED,5,R_CCW U_CCW U_CCW B_CCW R_CW,15667,188004,,171
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d5:C:10|X:0.1|Y:3.2|Z:3.2,5,IDA_STAR,0,SOLVED,5,U_CW F_CW F_CW L_CW B_CW,5,60,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d5:C:10|X:0.1|Y:3.2|Z:3.2,5,BFS,0,SOLVED,5,U_CW F_CW F_CW L_CW B_CW,6248,74976,,67
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d5:C:10|X:0.1|Y:3.2|Z:3.2,5,BIDIRECTIONAL_BFS,0,SOLVED,5,B_CW R_CW F_CCW D_CCW L_CCW,137,1644,,1
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d5:C:18|X:1.1|Y:1.1|Z:1.1,5,BFS,0,SOLVED,5,U_CW B_CCW D_CCW L_CW B_CCW,7102,85224,,77
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d5:C:18|X:1.1|Y:1.1|Z:1.1,5,BIDIRECTIONAL_BFS,0,SOLVED,5,R_CCW U_CW F_CW D_CCW B_CCW,137,1644,,3
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d5:C:18|X:1.1|Y:1.1|Z:1.1,5,IDA_STAR,0,SOLVED,5,U_CW B_CCW D_CCW L_CW B_CCW,5,60,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d5:C:5|X:0.1|Y:1.1|Z:0.0,5,BIDIRECTIONAL_BFS,0,SOLVED,5,R_CW D_CW L_CCW D_CW U_CW,137,1644,,1
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d5:C:5|X:0.1|Y:1.1|Z:0.0,5,IDA_STAR,0,SOLVED,5,U_CW D_CW R_CW U_CCW L_CCW,5,60,,1
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d5:C:5|X:0.1|Y:1.1|Z:0.0,5,BFS,0,SOLVED,5,U_CW D_CW R_CW U_CCW L_CCW,5573,66876,,60
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d5:C:18|X:1.2|Y:0.2|Z:0.2,5,IDA_STAR,0,SOLVED,5,D_CW B_CW D_CW R_CW B_CW,5,60,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d5:C:18|X:1.2|Y:0.2|Z:0.2,5,BFS,0,SOLVED,5,D_CW B_CW D_CW R_CW B_CW,10193,122316,,108
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d5:C:18|X:1.2|Y:0.2|Z:0.2,5,BIDIRECTIONAL_BFS,0,SOLVED,5,L_CCW F_CW U_CW B_CW F_CW,137,1644,,2
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d6:C:8|X:0.2|Y:0.2|Z:2.2,6,BFS,0,SOLVED,6,D_CCW F_CW R_CCW F_CW B_CW R_CCW,29035,348420,,314
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d6:C:8|X:0.2|Y:0.2|Z:2.2,6,BIDIRECTIONAL_BFS,0,SOLVED,6,D_CCW R_CW F_CCW R_CW B_CW R_CCW,248,2976,,2
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d6:C:8|X:0.2|Y:0.2|Z:2.2,6,IDA_STAR,0,SOLVED,6,D_CCW F_CW R_CCW F_CW B_CW R_CCW,9,108,,1
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d6:C:7|X:0.1|Y:3.0|Z:1.0,6,BIDIRECTIONAL_BFS,0,SOLVED,6,B_CCW D_CCW R_CW F_CCW D_CW R_CW,248,2976,,2
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d6:C:7|X:0.1|Y:3.0|Z:1.0,6,IDA_STAR,0,SOLVED,6,F_CCW U_CCW R_CW B_CCW U_CW R_CW,11,132,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d6:C:7|X:0.1|Y:3.0|Z:1.0,6,BFS,0,SOLVED,6,F_CCW U_CCW R_CW B_CCW U_CW R_CW,31173,374076,,337
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d6:C:15|X:0.2|Y:2.1|Z:3.2,6,IDA_STAR,0,SOLVED,6,L_CW F_CCW U_CW U_CW R_CCW B_CW,16,192,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d6:C:15|X:0.2|Y:2.1|Z:3.2,6,BFS,0,SOLVED,6,L_CW F_CCW U_CW U_CW R_CCW B_CW,32815,393780,,350
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d6:C:15|X:0.2|Y:2.1|Z:3.2,6,BIDIRECTIONAL_BFS,0,SOLVED,6,L_CW F_CCW D_CCW D_CCW R_CCW B_CW,248,2976,,3
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d6:C:8|X:3.2|Y:1.2|Z:0.0,6,BFS,0,SOLVED,6,F_CCW D_CW B_CCW R_CCW R_CCW U_CCW,31283,375396,,345
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d6:C:8|X:3.2|Y:1.2|Z:0.0,6,BIDIRECTIONAL_BFS,0,SOLVED,6,R_CCW R_CCW B_CCW D_CW F_CCW U_CCW,248,2976,,2
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d6:C:8|X:3.2|Y:1.2|Z:0.0,6,IDA_STAR,0,SOLVED,6,F_CCW D_CW B_CCW R_CCW R_CCW U_CCW,9,108,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d6:C:20|X:3.0|Y:1.2|Z:0.2,6,BIDIRECTIONAL_BFS,0,SOLVED,6,B_CW U_CCW U_CCW L_CW B_CW R_CW,248,2976,,2
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d6:C:20|X:3.0|Y:1.2|Z:0.2,6,IDA_STAR,0,SOLVED,6,U_CW R_CW U_CCW L_CW U_CW B_CCW,6,72,,1
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d6:C:20|X:3.0|Y:1.2|Z:0.2,6,BFS,0,SOLVED,6,U_CW R_CW U_CCW L_CW U_CW B_CCW,23634,283608,,254
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d6:C:16|X:3.1|Y:2.2|Z:3.0,6,IDA_STAR,0,SOLVED,6,D_CW F_CW R_CW U_CCW F_CCW R_CW,8,96,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d6:C:16|X:3.1|Y:2.2|Z:3.0,6,BFS,0,SOLVED,6,D_CW F_CW R_CW U_CCW F_CCW R_CW,27833,333996,,308
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d6:C:16|X:3.1|Y:2.2|Z:3.0,6,BIDIRECTIONAL_BFS,0,SOLVED,6,L_CW D_CCW B_CCW R_CCW F_CCW R_CW,248,2976,,3
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d6:C:23|X:1.1|Y:0.1|Z:3.0,6,BFS,0,SOLVED,6,U_CW D_CW F_CW D_CW F_CCW L_CW,18349,220188,,196
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d6:C:23|X:1.1|Y:0.1|Z:3.0,6,BIDIRECTIONAL_BFS,0,SOLVED,6,F_CCW F_CCW R_CCW U_CW F_CCW D_CCW,248,2976,,3
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d6:C:23|X:1.1|Y:0.1|Z:3.0,6,IDA_STAR,0,SOLVED,6,U_CW D_CW F_CW D_CW F_CCW L_CW,6,72,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d6:C:4|X:2.2|Y:3.0|Z:0.2,6,BIDIRECTIONAL_BFS,0,SOLVED,6,U_CCW F_CCW D_CCW L_CW F_CCW R_CCW,248,2976,,3
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d6:C:4|X:2.2|Y:3.0|Z:0.2,6,IDA_STAR,0,SOLVED,6,U_CCW F_CCW D_CCW L_CW F_CCW R_CCW,7,84,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d6:C:4|X:2.2|Y:3.0|Z:0.2,6,BFS,0,SOLVED,6,U_CCW F_CCW D_CCW L_CW F_CCW R_CCW,26304,315648,,308
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d6:C:3|X:3.2|Y:3.1|Z:0.0,6,IDA_STAR,0,SOLVED,6,U_CW L_CW D_CCW F_CCW L_CW F_CW,6,72,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d6:C:3|X:3.2|Y:3.1|Z:0.0,6,BFS,0,SOLVED,6,U_CW L_CW D_CCW F_CCW L_CW F_CW,24801,297612,,285
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d6:C:3|X:3.2|Y:3.1|Z:0.0,6,BIDIRECTIONAL_BFS,0,SOLVED,6,U_CW L_CW D_CCW F_CCW L_CW F_CW,248,2976,,4
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d6:C:7|X:0.1|Y:0.1|Z:0.1,6,BFS,0,SOLVED,6,F_CW U_CW R_CW F_CW U_CW R_CW,29976,359712,,340
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d6:C:7|X:0.1|Y:0.1|Z:0.1,6,BIDIRECTIONAL_BFS,0,SOLVED,6,F_CW U_CW R_CW F_CW U_CW R_CW,248,2976,,3
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d6:C:7|X:0.1|Y:0.1|Z:0.1,6,IDA_STAR,0,SOLVED,6,F_CW U_CW R_CW F_CW U_CW R_CW,10,120,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d6:C:0|X:0.1|Y:2.1|Z:3.2,6,BIDIRECTIONAL_BFS,0,SOLVED,6,U_CW R_CW L_CCW F_CCW F_CCW U_CW,248,2976,,3
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d6:C:0|X:0.1|Y:2.1|Z:3.2,6,IDA_STAR,0,SOLVED,6,U_CW F_CCW F_CCW U_CW R_CW L_CCW,6,72,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d6:C:0|X:0.1|Y:2.1|Z:3.2,6,BFS,0,SOLVED,6,U_CW F_CCW F_CCW U_CW R_CW L_CCW,22122,265464,,246
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d6:C:4|X:2.2|Y:1.2|Z:3.2,6,IDA_STAR,0,SOLVED,6,U_CW U_CW R_CCW F_CW U_CCW R_CCW,6,72,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d6:C:4|X:2.2|Y:1.2|Z:3.2,6,BFS,0,SOLVED,6,U_CW U_CW R_CCW F_CW U_CCW R_CCW,18080,216960,,202
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d6:C:4|X:2.2|Y:1.2|Z:3.2,6,BIDIRECTIONAL_BFS,0,SOLVED,6,D_CW B_CW U_CCW L_CW F_CCW R_CCW,248,2976,,3
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d6:C:4|X:2.1|Y:3.2|Z:1.1,6,BFS,0,SOLVED,6,U_CCW F_CW U_CCW R_CW F_CW L_CCW,25517,306204,,271
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d6:C:4|X:2.1|Y:3.2|Z:1.1,6,BIDIRECTIONAL_BFS,0,SOLVED,6,F_CW U_CW F_CCW R_CW F_CCW L_CCW,248,2976,,3
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d6:C:4|X:2.1|Y:3.2|Z:1.1,6,IDA_STAR,0,SOLVED,6,U_CCW F_CW U_CCW R_CW F_CW L_CCW,7,84,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d6:C:16|X:1.2|Y:0.1|Z:2.1,6,BIDIRECTIONAL_BFS,0,SOLVED,6,U_CCW L_CCW F_CW D_CCW B_CCW U_CCW,248,2976,,3
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d6:C:16|X:1.2|Y:0.1|Z:2.1,6,IDA_STAR,0,SOLVED,6,U_CW F_CW D_CW B_CCW R_CW D_CW,6,72,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d6:C:16|X:1.2|Y:0.1|Z:2.1,6,BFS,0,SOLVED,6,U_CW F_CW D_CW B_CCW R_CW D_CW,20597,247164,,222
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d6:C:4|X:1.1|Y:1.2|Z:1.1,6,IDA_STAR,0,SOLVED,6,D_CW F_CW U_CCW L_CCW F_CW R_CW,8,96,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d6:C:4|X:1.1|Y:1.2|Z:1.1,6,BFS,0,SOLVED,6,D_CW F_CW U_CCW L_CCW F_CW R_CW,27645,331740,,299
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d6:C:4|X:1.1|Y:1.2|Z:1.1,6,BIDIRECTIONAL_BFS,0,SOLVED,6,D_CW F_CW U_CCW L_CCW F_CW R_CW,248,2976,,3
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d6:C:0|X:3.0|Y:2.2|Z:1.2,6,BFS,0,SOLVED,6,U_CCW R_CW F_CCW F_CCW L_CW U_CCW,27064,324768,,344
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d6:C:0|X:3.0|Y:2.2|Z:1.2,6,BIDIRECTIONAL_BFS,0,SOLVED,6,D_CW L_CCW F_CCW F_CCW R_CCW D_CW,248,2976,,3
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d6:C:0|X:3.0|Y:2.2|Z:1.2,6,IDA_STAR,0,SOLVED,6,U_CCW R_CW F_CCW F_CCW L_CW U_CCW,7,84,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d6:C:16|X:3.2|Y:2.0|Z:2.0,6,BIDIRECTIONAL_BFS,0,SOLVED,6,U_CW F_CW L_CW U_CCW B_CW L_CW,248,2976,,4
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d6:C:16|X:3.2|Y:2.0|Z:2.0,6,IDA_STAR,0,SOLVED,6,U_CW F_CW L_CW U_CCW B_CW L_CW,6,72,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d6:C:16|X:3.2|Y:2.0|Z:2.0,6,BFS,0,SOLVED,6,U_CW F_CW L_CW U_CCW B_CW L_CW,21476,257712,,237
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d6:C:23|X:2.2|Y:2.0|Z:0.2,6,IDA_STAR,0,SOLVED,6,U_CCW R_CCW B_CW U_CW R_CCW B_CW,7,84,,1
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d6:C:23|X:2.2|Y:2.0|Z:0.2,6,BFS,0,SOLVED,6,U_CCW R_CCW B_CW U_CW R_CCW B_CW,27377,328524,,300
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d6:C:23|X:2.2|Y:2.0|Z:0.2,6,BIDIRECTIONAL_BFS,0,SOLVED,6,D_CCW R_CCW B_CW D_CW R_CCW B_CW,248,2976,,2
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d6:C:23|X:3.0|Y:2.2|Z:1.1,6,BFS,0,SOLVED,6,U_CW B_CW R_CW U_CW L_CW U_CCW,22795,273540,,248
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d6:C:23|X:3.0|Y:2.2|Z:1.1,6,BIDIRECTIONAL_BFS,0,SOLVED,6,B_CCW U_CW L_CCW R_CW B_CCW L_CCW,248,2976,,2
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d6:C:23|X:3.0|Y:2.2|Z:1.1,6,IDA_STAR,0,SOLVED,6,U_CW B_CW R_CW U_CW L_CW U_CCW,6,72,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d6:C:11|X:2.1|Y:0.0|Z:2.2,6,BIDIRECTIONAL_BFS,0,SOLVED,6,R_CW F_CCW F_CCW U_CW L_CCW U_CCW,248,2976,,3
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d6:C:11|X:2.1|Y:0.0|Z:2.2,6,IDA_STAR,0,SOLVED,6,R_CW U_CW L_CCW U_CCW F_CCW F_CCW,14,168,,1
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d6:C:11|X:2.1|Y:0.0|Z:2.2,6,BFS,0,SOLVED,6,R_CW U_CW L_CCW U_CCW F_CCW F_CCW,32153,385836,,346
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d6:C:0|X:3.0|Y:2.2|Z:3.0,6,IDA_STAR,0,SOLVED,6,U_CCW F_CW B_CW R_CW L_CW U_CCW,7,84,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d6:C:0|X:3.0|Y:2.2|Z:3.0,6,BFS,0,SOLVED,6,U_CCW F_CW B_CW R_CW L_CW U_CCW,25777,309324,,285
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d6:C:0|X:3.0|Y:2.2|Z:3.0,6,BIDIRECTIONAL_BFS,0,SOLVED,6,D_CW R_CW L_CW B_CW F_CW D_CW,248,2976,,3
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d6:C:7|X:1.0|Y:1.2|Z:1.0,6,BFS,0,SOLVED,6,D_CCW F_CW F_CW R_CW B_CCW R_CCW,28825,345900,,313
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d6:C:7|X:1.0|Y:1.2|Z:1.0,6,BIDIRECTIONAL_BFS,0,SOLVED,6,D_CCW F_CCW F_CCW R_CW F_CCW R_CCW,248,2976,,3
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d6:C:7|X:1.0|Y:1.2|Z:1.0,6,IDA_STAR,0,SOLVED,6,D_CCW F_CW F_CW R_CW B_CCW R_CCW,9,108,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d6:C:20|X:3.0|Y:1.2|Z:0.0,6,BIDIRECTIONAL_BFS,0,SOLVED,6,F_CW U_CCW U_CCW L_CW B_CW R_CW,248,2976,,3
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d6:C:20|X:3.0|Y:1.2|Z:0.0,6,IDA_STAR,0,SOLVED,6,F_CW U_CCW U_CCW R_CW B_CW L_CW,10,120,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d6:C:20|X:3.0|Y:1.2|Z:0.0,6,BFS,0,SOLVED,6,F_CW U_CCW U_CCW R_CW B_CW L_CW,30112,361344,,338
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d6:C:3|X:3.2|Y:0.2|Z:0.1,6,IDA_STAR,0,SOLVED,6,D_CW L_CW D_CW B_CCW L_CW F_CW,8,96,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d6:C:3|X:3.2|Y:0.2|Z:0.1,6,BFS,0,SOLVED,6,D_CW L_CW D_CW B_CCW L_CW F_CW,28637,343644,,360
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d6:C:3|X:3.2|Y:0.2|Z:0.1,6,BIDIRECTIONAL_BFS,0,SOLVED,6,D_CW L_CW D_CW B_CCW L_CW F_CW,248,2976,,3
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d6:C:0|X:0.1|Y:2.0|Z:2.0,6,BFS,0,SOLVED,6,U_CW D_CW F_CW B_CW R_CW L_CCW,18419,221028,,196
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d6:C:0|X:0.1|Y:2.0|Z:2.0,6,BIDIRECTIONAL_BFS,0,SOLVED,6,U_CW R_CW L_CCW D_CW B_CW F_CW,248,2976,,4
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d6:C:0|X:0.1|Y:2.0|Z:2.0,6,IDA_STAR,0,SOLVED,6,U_CW D_CW F_CW B_CW R_CW L_CCW,8,96,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d6:C:16|X:3.2|Y:1.0|Z:2.1,6,BIDIRECTIONAL_BFS,0,SOLVED,6,U_CW F_CW L_CW D_CW F_CW L_CW,248,2976,,3
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d6:C:16|X:3.2|Y:1.0|Z:2.1,6,IDA_STAR,0,SOLVED,6,U_CW F_CW L_CW D_CW F_CW L_CW,6,72,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d6:C:16|X:3.2|Y:1.0|Z:2.1,6,BFS,0,SOLVED,6,U_CW F_CW L_CW D_CW F_CW L_CW,21480,257760,,230
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d6:C:4|X:2.1|Y:2.1|Z:2.2,6,IDA_STAR,0,SOLVED,6,U_CW D_CW L_CCW B_CCW D_CW L_CCW,6,72,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d6:C:4|X:2.1|Y:2.1|Z:2.2,6,BFS,0,SOLVED,6,U_CW D_CW L_CCW B_CCW D_CW L_CCW,19193,230316,,205
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d6:C:4|X:2.1|Y:2.1|Z:2.2,6,BIDIRECTIONAL_BFS,0,SOLVED,6,D_CCW F_CCW U_CW R_CW B_CW L_CCW,248,2976,,3
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d6:C:19|X:2.0|Y:0.0|Z:0.0,6,BFS,0,SOLVED,6,U_CW R_CCW F_CW B_CW U_CCW L_CCW,24533,294396,,261
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d6:C:19|X:2.0|Y:0.0|Z:0.0,6,BIDIRECTIONAL_BFS,0,SOLVED,6,U_CW L_CCW F_CW B_CW U_CCW R_CCW,248,2976,,3
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d6:C:19|X:2.0|Y:0.0|Z:0.0,6,IDA_STAR,0,SOLVED,6,U_CW R_CCW F_CW B_CW U_CCW L_CCW,6,72,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d6:C:23|X:2.1|Y:0.1|Z:2.0,6,BIDIRECTIONAL_BFS,0,SOLVED,6,U_CW L_CCW F_CW U_CW L_CCW F_CCW,248,2976,,3
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d6:C:23|X:2.1|Y:0.1|Z:2.0,6,IDA_STAR,0,SOLVED,6,U_CW L_CCW F_CW U_CW L_CCW F_CCW,6,72,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d6:C:23|X:2.1|Y:0.1|Z:2.0,6,BFS,0,SOLVED,6,U_CW L_CCW F_CW U_CW L_CCW F_CCW,25022,300264,,273
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d6:C:23|X:0.1|Y:1.0|Z:1.0,6,IDA_STAR,0,SOLVED,6,U_CW R_CW F_CCW U_CCW R_CW F_CW,6,72,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d6:C:23|X:0.1|Y:1.0|Z:1.0,6,BFS,0,SOLVED,6,U_CW R_CW F_CCW U_CCW R_CW F_CW,23915,286980,,264
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d6:C:23|X:0.1|Y:1.0|Z:1.0,6,BIDIRECTIONAL_BFS,0,SOLVED,6,U_CW R_CW B_CCW U_CCW R_CW B_CW,248,2976,,3
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d7:C:21|X:0.1|Y:0.1|Z:2.1,7,BFS,0,SOLVED,7,U_CW D_CCW F_CW R_CW B_CW L_CCW F_CCW,36829,441948,,402
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d7:C:21|X:0.1|Y:0.1|Z:2.1,7,BIDIRECTIONAL_BFS,0,SOLVED,7,U_CW D_CCW F_CCW R_CW F_CCW L_CCW F_CW,1070,12840,,12
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d7:C:21|X:0.1|Y:0.1|Z:2.1,7,IDA_STAR,0,SOLVED,7,U_CW D_CCW F_CW R_CW B_CW L_CCW F_CCW,10,120,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d7:C:22|X:0.0|Y:3.0|Z:1.1,7,BIDIRECTIONAL_BFS,0,SOLVED,7,U_CW L_CCW U_CCW F_CW L_CCW B_CCW R_CW,1070,12840,,12
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d7:C:22|X:0.0|Y:3.0|Z:1.1,7,IDA_STAR,0,SOLVED,7,U_CW U_CW B_CCW R_CW D_CCW B_CCW R_CCW,8,96,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d7:C:22|X:0.0|Y:3.0|Z:1.1,7,BFS,0,SOLVED,7,U_CW U_CW B_CCW R_CW D_CCW B_CCW R_CCW,34593,415116,,387
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d7:C:2|X:1.0|Y:0.1|Z:0.0,7,IDA_STAR,0,SOLVED,7,U_CW D_CW F_CW D_CW R_CW L_CW F_CCW,9,108,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d7:C:2|X:1.0|Y:0.1|Z:0.0,7,BFS,0,SOLVED,7,U_CW D_CW F_CW D_CW R_CW L_CW F_CCW,35520,426240,,383
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d7:C:2|X:1.0|Y:0.1|Z:0.0,7,BIDIRECTIONAL_BFS,0,SOLVED,7,U_CW L_CCW F_CW U_CW F_CW L_CW B_CCW,1070,12840,,12
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d7:C:22|X:3.2|Y:3.0|Z:2.0,7,BFS,0,SOLVED,7,U_CW U_CW F_CW L_CW D_CCW B_CW L_CW,33924,407088,,368
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d7:C:22|X:3.2|Y:3.0|Z:2.0,7,BIDIRECTIONAL_BFS,0,SOLVED,7,U_CW R_CW U_CCW B_CCW R_CCW B_CW R_CW,1070,12840,,12
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d7:C:22|X:3.2|Y:3.0|Z:2.0,7,IDA_STAR,0,SOLVED,7,U_CW U_CW F_CW L_CW D_CCW B_CW L_CW,8,96,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d7:C:21|X:0.0|Y:2.0|Z:0.0,7,BIDIRECTIONAL_BFS,0,SOLVED,7,U_CW D_CW F_CW R_CW B_CCW R_CCW F_CW,1070,12840,,11
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d7:C:21|X:0.0|Y:2.0|Z:0.0,7,IDA_STAR,0,SOLVED,7,U_CW D_CW F_CW R_CW B_CCW R_CCW F_CW,9,108,,1
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d7:C:21|X:0.0|Y:2.0|Z:0.0,7,BFS,0,SOLVED,7,U_CW D_CW F_CW R_CW B_CCW R_CCW F_CW,35727,428724,,388
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d7:C:6|X:2.1|Y:2.1|Z:1.1,7,IDA_STAR,0,SOLVED,7,U_CW F_CW B_CCW R_CW U_CCW U_CCW R_CW,11,132,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d7:C:6|X:2.1|Y:2.1|Z:1.1,7,BFS,0,SOLVED,7,U_CW F_CW B_CCW R_CW U_CCW U_CCW R_CW,38453,461436,,416
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d7:C:6|X:2.1|Y:2.1|Z:1.1,7,BIDIRECTIONAL_BFS,0,SOLVED,7,F_CW D_CW R_CW R_CW D_CW B_CCW U_CW,1070,12840,,11
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d7:C:21|X:1.2|Y:3.2|Z:0.1,7,BFS,0,SOLVED,7,U_CW U_CW R_CW U_CW F_CW F_CW U_CW,34627,415524,,369
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d7:C:21|X:1.2|Y:3.2|Z:0.1,7,BIDIRECTIONAL_BFS,0,SOLVED,7,B_CW U_CCW U_CCW R_CCW F_CCW R_CCW F_CW,1070,12840,,12
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d7:C:21|X:1.2|Y:3.2|Z:0.1,7,IDA_STAR,0,SOLVED,7,U_CW U_CW R_CW U_CW F_CW F_CW U_CW,7,84,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d7:C:5|X:3.1|Y:0.0|Z:3.1,7,BIDIRECTIONAL_BFS,0,SOLVED,7,U_CW F_CW R_CCW D_CW R_CCW B_CCW R_CW,1070,12840,,12
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d7:C:5|X:3.1|Y:0.0|Z:3.1,7,IDA_STAR,0,SOLVED,7,U_CW U_CW L_CCW U_CW F_CW F_CW R_CW,8,96,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d7:C:5|X:3.1|Y:0.0|Z:3.1,7,BFS,0,SOLVED,7,U_CW U_CW L_CCW U_CW F_CW F_CW R_CW,35350,424200,,384
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d7:C:14|X:3.0|Y:0.0|Z:0.2,7,IDA_STAR,0,SOLVED,7,U_CW F_CCW D_CCW B_CW R_CW L_CW U_CW,10,120,,1
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d7:C:14|X:3.0|Y:0.0|Z:0.2,7,BFS,0,SOLVED,7,U_CW F_CCW D_CCW B_CW R_CW L_CW U_CW,39176,470112,,486
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d7:C:14|X:3.0|Y:0.0|Z:0.2,7,BIDIRECTIONAL_BFS,0,SOLVED,7,L_CCW U_CW D_CW B_CW R_CW F_CCW L_CCW,1070,12840,,12
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d7:C:21|X:1.0|Y:2.1|Z:3.2,7,BFS,0,SOLVED,7,U_CW U_CW F_CW R_CCW F_CW L_CCW B_CW,33878,406536,,368
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d7:C:21|X:1.0|Y:2.1|Z:3.2,7,BIDIRECTIONAL_BFS,0,SOLVED,7,U_CW U_CW B_CW R_CW L_CCW F_CCW R_CW,1070,12840,,12
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d7:C:21|X:1.0|Y:2.1|Z:3.2,7,IDA_STAR,0,SOLVED,7,U_CW U_CW F_CW R_CCW F_CW L_CCW B_CW,8,96,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d7:C:14|X:2.0|Y:2.0|Z:2.2,7,BIDIRECTIONAL_BFS,0,SOLVED,7,R_CW F_CW U_CW D_CW F_CW L_CW F_CCW,1070,12840,,12
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d7:C:14|X:2.0|Y:2.0|Z:2.2,7,IDA_STAR,0,SOLVED,7,U_CW B_CW U_CW R_CW L_CW F_CCW D_CCW,13,156,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d7:C:14|X:2.0|Y:2.0|Z:2.2,7,BFS,0,SOLVED,7,U_CW B_CW U_CW R_CW L_CW F_CCW D_CCW,39521,474252,,453
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d7:C:5|X:1.0|Y:0.1|Z:3.1,7,IDA_STAR,0,SOLVED,7,U_CW D_CW R_CW D_CW F_CW F_CW L_CW,9,108,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d7:C:5|X:1.0|Y:0.1|Z:3.1,7,BFS,0,SOLVED,7,U_CW D_CW R_CW D_CW F_CW F_CW L_CW,36189,434268,,396
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d7:C:5|X:1.0|Y:0.1|Z:3.1,7,BIDIRECTIONAL_BFS,0,SOLVED,7,U_CW F_CW L_CCW U_CW R_CW B_CCW L_CCW,1070,12840,,12
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d7:C:2|X:3.0|Y:2.0|Z:0.2,7,BFS,0,SOLVED,7,U_CW D_CCW B_CW R_CW L_CW U_CW F_CCW,37191,446292,,398
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d7:C:2|X:3.0|Y:2.0|Z:0.2,7,BIDIRECTIONAL_BFS,0,SOLVED,7,U_CCW R_CW F_CCW U_CW R_CW F_CCW L_CCW,1070,12840,,11
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d7:C:2|X:3.0|Y:2.0|Z:0.2,7,IDA_STAR,0,SOLVED,7,U_CW D_CCW B_CW R_CW L_CW U_CW F_CCW,10,120,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d7:C:10|X:2.2|Y:2.2|Z:0.0,7,BIDIRECTIONAL_BFS,0,SOLVED,7,U_CW B_CCW U_CW D_CW R_CCW F_CCW L_CW,1070,12840,,12
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d7:C:10|X:2.2|Y:2.2|Z:0.0,7,IDA_STAR,0,SOLVED,7,U_CW F_CCW U_CW D_CW R_CCW B_CCW L_CW,12,144,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d7:C:10|X:2.2|Y:2.2|Z:0.0,7,BFS,0,SOLVED,7,U_CW F_CCW U_CW D_CW R_CCW B_CCW L_CW,38695,464340,,418
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d7:C:18|X:0.1|Y:2.1|Z:3.0,7,IDA_STAR,0,SOLVED,7,U_CW D_CW F_CW U_CCW L_CCW F_CCW R_CW,9,108,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d7:C:18|X:0.1|Y:2.1|Z:3.0,7,BFS,0,SOLVED,7,U_CW D_CW F_CW U_CCW L_CCW F_CCW R_CW,35491,425892,,420
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d7:C:18|X:0.1|Y:2.1|Z:3.0,7,BIDIRECTIONAL_BFS,0,SOLVED,7,U_CW D_CW F_CW U_CCW L_CCW F_CCW R_CW,1070,12840,,12
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d7:C:14|X:0.2|Y:0.0|Z:2.2,7,BFS,0,SOLVED,7,U_CW B_CW D_CCW F_CCW U_CW R_CCW L_CW,39628,475536,,485
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d7:C:14|X:0.2|Y:0.0|Z:2.2,7,BIDIRECTIONAL_BFS,0,SOLVED,7,L_CCW U_CW D_CW F_CCW L_CCW B_CW R_CCW,1070,12840,,12
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d7:C:14|X:0.2|Y:0.0|Z:2.2,7,IDA_STAR,0,SOLVED,7,U_CW B_CW D_CCW F_CCW U_CW R_CCW L_CW,13,156,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d7:C:5|X:1.0|Y:1.0|Z:0.1,7,BIDIRECTIONAL_BFS,0,SOLVED,7,U_CCW B_CCW L_CCW D_CCW R_CW B_CCW L_CCW,1070,12840,,11
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d7:C:5|X:1.0|Y:1.0|Z:0.1,7,IDA_STAR,0,SOLVED,7,U_CW U_CW F_CW B_CCW R_CW D_CCW L_CW,8,96,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d7:C:5|X:1.0|Y:1.0|Z:0.1,7,BFS,0,SOLVED,7,U_CW U_CW F_CW B_CCW R_CW D_CCW L_CW,33666,403992,,361
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d7:C:5|X:3.0|Y:3.0|Z:1.0,7,IDA_STAR,0,SOLVED,7,U_CW D_CCW R_CCW F_CW B_CW D_CCW R_CW,10,120,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d7:C:5|X:3.0|Y:3.0|Z:1.0,7,BFS,0,SOLVED,7,U_CW D_CCW R_CCW F_CW B_CW D_CCW R_CW,37526,450312,,414
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d7:C:5|X:3.0|Y:3.0|Z:1.0,7,BIDIRECTIONAL_BFS,0,SOLVED,7,U_CW B_CCW R_CW U_CCW B_CCW L_CW F_CW,1070,12840,,12
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d7:C:2|X:3.0|Y:3.0|Z:0.1,7,BFS,0,SOLVED,7,U_CW U_CW F_CW R_CW L_CW D_CCW B_CCW,33823,405876,,361
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d7:C:2|X:3.0|Y:3.0|Z:0.1,7,BIDIRECTIONAL_BFS,0,SOLVED,7,U_CCW R_CW B_CCW D_CCW R_CW B_CCW L_CCW,1070,12840,,11
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d7:C:2|X:3.0|Y:3.0|Z:0.1,7,IDA_STAR,0,SOLVED,7,U_CW U_CW F_CW R_CW L_CW D_CCW B_CCW,8,96,,1
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d7:C:1|X:1.0|Y:0.1|Z:0.2,7,BIDIRECTIONAL_BFS,0,SOLVED,7,U_CW U_CW F_CW F_CW R_CCW F_CCW R_CW,1070,12840,,11
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d7:C:1|X:1.0|Y:0.1|Z:0.2,7,IDA_STAR,0,SOLVED,7,U_CW U_CW F_CW F_CW R_CCW F_CCW R_CW,8,96,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d7:C:1|X:1.0|Y:0.1|Z:0.2,7,BFS,0,SOLVED,7,U_CW U_CW F_CW F_CW R_CCW F_CCW R_CW,33561,402732,,364
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d7:C:22|X:0.0|Y:2.0|Z:1.2,7,IDA_STAR,0,SOLVED,7,U_CW U_CW F_CCW R_CW U_CW F_CCW R_CCW,8,96,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d7:C:22|X:0.0|Y:2.0|Z:1.2,7,BFS,0,SOLVED,7,U_CW U_CW F_CCW R_CW U_CW F_CCW R_CCW,34244,410928,,374
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d7:C:22|X:0.0|Y:2.0|Z:1.2,7,BIDIRECTIONAL_BFS,0,SOLVED,7,U_CCW L_CCW U_CW B_CW L_CCW F_CCW R_CW,1070,12840,,11
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d7:C:9|X:0.1|Y:1.1|Z:0.1,7,BFS,0,SOLVED,7,U_CW L_CCW U_CCW U_CCW F_CW R_CW B_CCW,40710,488520,,440
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d7:C:9|X:0.1|Y:1.1|Z:0.1,7,BIDIRECTIONAL_BFS,0,SOLVED,7,R_CW D_CCW L_CW U_CW F_CW L_CW B_CCW,1070,12840,,12
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d7:C:9|X:0.1|Y:1.1|Z:0.1,7,IDA_STAR,0,SOLVED,7,U_CW L_CCW U_CCW U_CCW F_CW R_CW B_CCW,18,216,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d7:C:5|X:2.0|Y:2.0|Z:2.1,7,BIDIRECTIONAL_BFS,0,SOLVED,7,U_CCW B_CW L_CCW U_CW F_CCW L_CW F_CW,1070,12840,,12
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d7:C:5|X:2.0|Y:2.0|Z:2.1,7,IDA_STAR,0,SOLVED,7,U_CW D_CCW F_CW F_CW R_CCW U_CW L_CCW,10,120,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d7:C:5|X:2.0|Y:2.0|Z:2.1,7,BFS,0,SOLVED,7,U_CW D_CCW F_CW F_CW R_CCW U_CW L_CCW,36681,440172,,411
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d7:C:13|X:3.0|Y:1.1|Z:3.1,7,IDA_STAR,0,SOLVED,7,U_CW D_CW R_CW D_CW F_CW L_CW B_CCW,9,108,,1
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d7:C:13|X:3.0|Y:1.1|Z:3.1,7,BFS,0,SOLVED,7,U_CW D_CW R_CW D_CW F_CW L_CW B_CCW,36202,434424,,385
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d7:C:13|X:3.0|Y:1.1|Z:3.1,7,BIDIRECTIONAL_BFS,0,SOLVED,7,U_CW D_CW R_CW D_CW F_CW L_CW B_CCW,1070,12840,,13
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d7:C:18|X:2.0|Y:1.0|Z:3.0,7,BFS,0,SOLVED,7,U_CW U_CW F_CW U_CW R_CW F_CCW R_CCW,33309,399708,,356
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d7:C:18|X:2.0|Y:1.0|Z:3.0,7,BIDIRECTIONAL_BFS,0,SOLVED,7,U_CW U_CW F_CW U_CW R_CW F_CCW R_CCW,1070,12840,,12
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d7:C:18|X:2.0|Y:1.0|Z:3.0,7,IDA_STAR,0,SOLVED,7,U_CW U_CW F_CW U_CW R_CW F_CCW R_CCW,8,96,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d7:C:21|X:1.0|Y:2.0|Z:1.1,7,BIDIRECTIONAL_BFS,0,SOLVED,7,U_CW D_CW B_CCW R_CW L_CCW B_CCW R_CW,1070,12840,,12
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d7:C:21|X:1.0|Y:2.0|Z:1.1,7,IDA_STAR,0,SOLVED,7,U_CW D_CW F_CW F_CW R_CW R_CW L_CCW,9,108,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d7:C:21|X:1.0|Y:2.0|Z:1.1,7,BFS,0,SOLVED,7,U_CW D_CW F_CW F_CW R_CW R_CW L_CCW,35572,426864,,382
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d7:C:2|X:3.2|Y:0.0|Z:2.0,7,IDA_STAR,0,SOLVED,7,U_CW U_CW F_CCW R_CCW R_CCW U_CW B_CCW,8,96,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d7:C:2|X:3.2|Y:0.0|Z:2.0,7,BFS,0,SOLVED,7,U_CW U_CW F_CCW R_CCW R_CCW U_CW B_CCW,34357,412284,,368
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d7:C:2|X:3.2|Y:0.0|Z:2.0,7,BIDIRECTIONAL_BFS,0,SOLVED,7,U_CW R_CW B_CCW D_CW R_CW B_CW R_CCW,1070,12840,,12
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d7:C:21|X:0.2|Y:1.0|Z:3.2,7,BFS,0,SOLVED,7,U_CW F_CCW B_CW R_CCW U_CW L_CW D_CCW,39340,472080,,424
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d7:C:21|X:0.2|Y:1.0|Z:3.2,7,BIDIRECTIONAL_BFS,0,SOLVED,7,B_CW L_CCW U_CW D_CW R_CCW F_CCW R_CW,1070,12840,,12
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d7:C:21|X:0.2|Y:1.0|Z:3.2,7,IDA_STAR,0,SOLVED,7,U_CW F_CCW B_CW R_CCW U_CW L_CW D_CCW,12,144,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d7:C:21|X:2.0|Y:1.2|Z:0.1,7,BIDIRECTIONAL_BFS,0,SOLVED,7,B_CW L_CCW U_CCW U_CCW F_CCW L_CW F_CW,1070,12840,,11
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d7:C:21|X:2.0|Y:1.2|Z:0.1,7,IDA_STAR,0,SOLVED,7,U_CW F_CW F_CW R_CW U_CW R_CCW U_CCW,9,108,,1
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d7:C:21|X:2.0|Y:1.2|Z:0.1,7,BFS,0,SOLVED,7,U_CW F_CW F_CW R_CW U_CW R_CCW U_CCW,38286,459432,,407
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d7:C:14|X:0.1|Y:3.2|Z:2.2,7,IDA_STAR,0,SOLVED,7,U_CW B_CW U_CCW F_CCW D_CCW R_CW L_CCW,13,156,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d7:C:14|X:0.1|Y:3.2|Z:2.2,7,BFS,0,SOLVED,7,U_CW B_CW U_CCW F_CCW D_CCW R_CW L_CCW,39560,474720,,428
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d7:C:14|X:0.1|Y:3.2|Z:2.2,7,BIDIRECTIONAL_BFS,0,SOLVED,7,U_CCW U_CCW R_CCW F_CCW L_CCW B_CW R_CCW,1070,12840,,11
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d8:C:0|X:3.2|Y:1.1|Z:1.2,8,BFS,0,SOLVED,8,U_CW F_CW U_CCW F_CCW R_CCW R_CCW D_CW F_CW,41406,496872,,475
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d8:C:0|X:3.2|Y:1.1|Z:1.2,8,BIDIRECTIONAL_BFS,0,SOLVED,8,U_CW R_CW F_CCW D_CW R_CW U_CCW B_CW R_CCW,1892,22704,,21
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d8:C:0|X:3.2|Y:1.1|Z:1.2,8,IDA_STAR,0,SOLVED,8,U_CW F_CW U_CCW F_CCW R_CCW R_CCW D_CW F_CW,50,600,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d8:C:0|X:1.1|Y:2.0|Z:1.2,8,BIDIRECTIONAL_BFS,0,SOLVED,8,F_CCW R_CW R_CW F_CCW D_CW B_CW F_CW U_CW,1892,22704,,27
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d8:C:0|X:1.1|Y:2.0|Z:1.2,8,IDA_STAR,0,SOLVED,8,U_CW D_CW F_CW R_CW F_CW F_CW R_CW F_CW,26,312,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d8:C:0|X:1.1|Y:2.0|Z:1.2,8,BFS,0,SOLVED,8,U_CW D_CW F_CW R_CW F_CW F_CW R_CW F_CW,41220,494640,,443
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d8:C:0|X:1.2|Y:0.1|Z:1.2,8,IDA_STAR,0,SOLVED,8,U_CW D_CCW F_CW R_CW F_CW R_CCW F_CCW L_CCW,35,420,,1
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d8:C:0|X:1.2|Y:0.1|Z:1.2,8,BFS,0,SOLVED,8,U_CW D_CCW F_CW R_CW F_CW R_CCW F_CCW L_CCW,41235,494820,,441
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d8:C:0|X:1.2|Y:0.1|Z:1.2,8,BIDIRECTIONAL_BFS,0,SOLVED,8,F_CCW R_CCW R_CCW F_CCW D_CCW B_CW F_CW U_CW,1892,22704,,21
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d8:C:0|X:0.2|Y:3.2|Z:3.2,8,BFS,0,SOLVED,8,U_CW U_CW R_CCW U_CW F_CCW F_CCW U_CW L_CW,41211,494532,,439
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d8:C:0|X:0.2|Y:3.2|Z:3.2,8,BIDIRECTIONAL_BFS,0,SOLVED,8,R_CCW U_CCW U_CCW L_CW D_CW F_CCW F_CCW U_CW,1892,22704,,21
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d8:C:0|X:0.2|Y:3.2|Z:3.2,8,IDA_STAR,0,SOLVED,8,U_CW U_CW R_CCW U_CW F_CCW F_CCW U_CW L_CW,25,300,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d8:C:0|X:3.2|Y:1.1|Z:3.0,8,BIDIRECTIONAL_BFS,0,SOLVED,8,U_CW L_CW B_CCW D_CW F_CW R_CCW D_CW F_CW,1892,22704,,21
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d8:C:0|X:3.2|Y:1.1|Z:3.0,8,IDA_STAR,0,SOLVED,8,U_CW F_CW U_CW U_CW B_CW R_CCW R_CCW U_CCW,41,492,,1
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d8:C:0|X:3.2|Y:1.1|Z:3.0,8,BFS,0,SOLVED,8,U_CW F_CW U_CW U_CW B_CW R_CCW R_CCW U_CCW,41259,495108,,441
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d8:C:0|X:1.1|Y:1.0|Z:3.2,8,IDA_STAR,0,SOLVED,8,U_CW F_CW D_CCW F_CCW U_CW R_CW R_CW B_CCW,52,624,,1
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d8:C:0|X:1.1|Y:1.0|Z:3.2,8,BFS,0,SOLVED,8,U_CW F_CW D_CCW F_CCW U_CW R_CW R_CW B_CCW,41450,497400,,443
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d8:C:0|X:1.1|Y:1.0|Z:3.2,8,BIDIRECTIONAL_BFS,0,SOLVED,8,U_CCW B_CW R_CCW D_CW R_CW F_CCW D_CW R_CCW,1892,22704,,22
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d8:C:0|X:3.1|Y:1.0|Z:3.0,8,BFS,0,SOLVED,8,U_CW F_CW U_CW D_CW B_CW R_CW R_CW U_CCW,41292,495504,,447
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d8:C:0|X:3.1|Y:1.0|Z:3.0,8,BIDIRECTIONAL_BFS,0,SOLVED,8,D_CW R_CW B_CCW D_CW F_CW L_CCW D_CW F_CW,1892,22704,,20
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d8:C:0|X:3.1|Y:1.0|Z:3.0,8,IDA_STAR,0,SOLVED,8,U_CW F_CW U_CW D_CW B_CW R_CW R_CW U_CCW,41,492,,1
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d8:C:0|X:1.1|Y:3.1|Z:3.1,8,BIDIRECTIONAL_BFS,0,SOLVED,8,R_CW B_CW D_CCW L_CW B_CW R_CCW U_CW F_CW,1892,22704,,21
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d8:C:0|X:1.1|Y:3.1|Z:3.1,8,IDA_STAR,0,SOLVED,8,U_CW F_CW U_CW U_CW R_CW R_CW F_CW D_CW,49,588,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d8:C:0|X:1.1|Y:3.1|Z:3.1,8,BFS,0,SOLVED,8,U_CW F_CW U_CW U_CW R_CW R_CW F_CW D_CW,41264,495168,,513
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d8:C:0|X:3.1|Y:3.2|Z:1.1,8,IDA_STAR,0,SOLVED,8,U_CW F_CW U_CW F_CCW R_CW R_CW U_CCW B_CW,49,588,,1
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d8:C:0|X:3.1|Y:3.2|Z:1.1,8,BFS,0,SOLVED,8,U_CW F_CW U_CW F_CCW R_CW R_CW U_CCW B_CW,41335,496020,,460
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d8:C:0|X:3.1|Y:3.2|Z:1.1,8,BIDIRECTIONAL_BFS,0,SOLVED,8,F_CCW D_CW R_CCW F_CW R_CW U_CCW B_CW R_CCW,1892,22704,,20
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d8:C:0|X:3.2|Y:1.2|Z:1.1,8,BFS,0,SOLVED,8,U_CW F_CW U_CCW F_CCW R_CCW R_CCW U_CW B_CW,41404,496848,,441
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d8:C:0|X:3.2|Y:1.2|Z:1.1,8,BIDIRECTIONAL_BFS,0,SOLVED,8,U_CW R_CW B_CCW U_CW R_CW U_CCW F_CW R_CCW,1892,22704,,22
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d8:C:0|X:3.2|Y:1.2|Z:1.1,8,IDA_STAR,0,SOLVED,8,U_CW F_CW U_CCW F_CCW R_CCW R_CCW U_CW B_CW,50,600,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d8:C:0|X:3.0|Y:1.2|Z:3.1,8,BIDIRECTIONAL_BFS,0,SOLVED,8,U_CW R_CW F_CCW U_CW B_CW R_CCW D_CW F_CW,1892,22704,,24
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d8:C:0|X:3.0|Y:1.2|Z:3.1,8,IDA_STAR,0,SOLVED,8,U_CW F_CW U_CW U_CW F_CW R_CW L_CW D_CCW,41,492,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d8:C:0|X:3.0|Y:1.2|Z:3.1,8,BFS,0,SOLVED,8,U_CW F_CW U_CW U_CW F_CW R_CW L_CW D_CCW,41245,494940,,438
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d8:C:0|X:3.2|Y:3.0|Z:1.1,8,IDA_STAR,0,SOLVED,8,U_CW F_CW U_CW F_CCW R_CCW R_CCW D_CCW B_CW,49,588,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d8:C:0|X:3.2|Y:3.0|Z:1.1,8,BFS,0,SOLVED,8,U_CW F_CW U_CW F_CCW R_CCW R_CCW D_CCW B_CW,41350,496200,,442
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d8:C:0|X:3.2|Y:3.0|Z:1.1,8,BIDIRECTIONAL_BFS,0,SOLVED,8,F_CCW U_CW L_CCW F_CW R_CW U_CCW B_CW R_CCW,1892,22704,,21
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d8:C:0|X:1.1|Y:3.1|Z:3.0,8,BFS,0,SOLVED,8,U_CW F_CW U_CW U_CW R_CW R_CW B_CW D_CW,41268,495216,,469
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d8:C:0|X:1.1|Y:3.1|Z:3.0,8,BIDIRECTIONAL_BFS,0,SOLVED,8,R_CW F_CW D_CCW L_CW F_CW R_CCW U_CW F_CW,1892,22704,,23
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d8:C:0|X:1.1|Y:3.1|Z:3.0,8,IDA_STAR,0,SOLVED,8,U_CW F_CW U_CW U_CW R_CW R_CW B_CW D_CW,49,588,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d8:C:0|X:0.1|Y:3.2|Z:3.1,8,BIDIRECTIONAL_BFS,0,SOLVED,8,R_CW U_CCW U_CCW L_CCW D_CW F_CW F_CW U_CW,1892,22704,,22
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d8:C:0|X:0.1|Y:3.2|Z:3.1,8,IDA_STAR,0,SOLVED,8,U_CW U_CW R_CW U_CW F_CW F_CW U_CW L_CCW,24,288,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d8:C:0|X:0.1|Y:3.2|Z:3.1,8,BFS,0,SOLVED,8,U_CW U_CW R_CW U_CW F_CW F_CW U_CW L_CCW,41177,494124,,446
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d8:C:0|X:3.0|Y:1.0|Z:1.1,8,IDA_STAR,0,SOLVED,8,U_CW F_CW D_CCW F_CCW R_CW L_CW U_CW B_CW,52,624,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d8:C:0|X:3.0|Y:1.0|Z:1.1,8,BFS,0,SOLVED,8,U_CW F_CW D_CCW F_CCW R_CW L_CW U_CW B_CW,41461,497532,,441
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d8:C:0|X:3.0|Y:1.0|Z:1.1,8,BIDIRECTIONAL_BFS,0,SOLVED,8,U_CW R_CW B_CCW D_CW U_CW B_CCW L_CW U_CCW,1892,22704,,21
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d8:C:0|X:1.2|Y:3.0|Z:1.1,8,BFS,0,SOLVED,8,U_CW F_CW U_CW F_CCW D_CCW R_CCW R_CCW B_CW,41332,495984,,477
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d8:C:0|X:1.2|Y:3.0|Z:1.1,8,BIDIRECTIONAL_BFS,0,SOLVED,8,L_CW F_CW D_CCW L_CW R_CW U_CCW F_CW R_CCW,1892,22704,,21
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d8:C:0|X:1.2|Y:3.0|Z:1.1,8,IDA_STAR,0,SOLVED,8,U_CW F_CW U_CW F_CCW D_CCW R_CCW R_CCW B_CW,44,528,,1
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d8:C:0|X:3.2|Y:3.2|Z:3.0,8,BIDIRECTIONAL_BFS,0,SOLVED,8,B_CW D_CW L_CCW B_CW R_CW U_CCW B_CW R_CCW,1892,22704,,20
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d8:C:0|X:3.2|Y:3.2|Z:3.0,8,IDA_STAR,0,SOLVED,8,U_CW F_CW U_CW U_CW B_CW R_CCW R_CCW U_CW,41,492,,1
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d8:C:0|X:3.2|Y:3.2|Z:3.0,8,BFS,0,SOLVED,8,U_CW F_CW U_CW U_CW B_CW R_CCW R_CCW U_CW,41258,495096,,486
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d8:C:0|X:1.0|Y:0.1|Z:1.0,8,IDA_STAR,0,SOLVED,8,U_CW D_CCW F_CW R_CW F_CW B_CW L_CW B_CW,35,420,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d8:C:0|X:1.0|Y:0.1|Z:1.0,8,BFS,0,SOLVED,8,U_CW D_CCW F_CW R_CW F_CW B_CW L_CW B_CW,41234,494808,,473
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d8:C:0|X:1.0|Y:0.1|Z:1.0,8,BIDIRECTIONAL_BFS,0,SOLVED,8,F_CW R_CW L_CW B_CW D_CCW B_CW F_CW U_CW,1892,22704,,21
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d8:C:0|X:1.0|Y:1.0|Z:3.2,8,BFS,0,SOLVED,8,U_CW F_CW D_CCW F_CCW U_CW R_CW L_CW B_CCW,41453,497436,,459
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d8:C:0|X:1.0|Y:1.0|Z:3.2,8,BIDIRECTIONAL_BFS,0,SOLVED,8,R_CCW U_CW F_CCW R_CW R_CW F_CCW D_CW R_CCW,1892,22704,,33
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d8:C:0|X:1.0|Y:1.0|Z:3.2,8,IDA_STAR,0,SOLVED,8,U_CW F_CW D_CCW F_CCW U_CW R_CW L_CW B_CCW,52,624,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d8:C:0|X:1.2|Y:3.0|Z:1.0,8,BIDIRECTIONAL_BFS,0,SOLVED,8,L_CW F_CW D_CCW L_CW R_CW U_CCW B_CW R_CCW,1892,22704,,23
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d8:C:0|X:1.2|Y:3.0|Z:1.0,8,IDA_STAR,0,SOLVED,8,U_CW F_CW U_CW B_CCW D_CCW R_CCW R_CCW F_CW,44,528,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d8:C:0|X:1.2|Y:3.0|Z:1.0,8,BFS,0,SOLVED,8,U_CW F_CW U_CW B_CCW D_CCW R_CCW R_CCW F_CW,41360,496320,,443
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d8:C:0|X:3.2|Y:3.0|Z:1.2,8,IDA_STAR,0,SOLVED,8,U_CW F_CW U_CW F_CCW R_CCW R_CCW D_CCW F_CW,49,588,,1
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d8:C:0|X:3.2|Y:3.0|Z:1.2,8,BFS,0,SOLVED,8,U_CW F_CW U_CW F_CCW R_CCW R_CCW D_CCW F_CW,41349,496188,,445
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d8:C:0|X:3.2|Y:3.0|Z:1.2,8,BIDIRECTIONAL_BFS,0,SOLVED,8,U_CCW R_CW F_CCW D_CW R_CW U_CCW B_CW R_CCW,1892,22704,,23
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d8:C:0|X:1.2|Y:3.2|Z:3.2,8,BFS,0,SOLVED,8,U_CW F_CW U_CW F_CCW U_CCW R_CCW R_CCW B_CCW,41318,495816,,446
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d8:C:0|X:1.2|Y:3.2|Z:3.2,8,BIDIRECTIONAL_BFS,0,SOLVED,8,R_CW F_CW U_CCW R_CW B_CW R_CCW D_CW F_CW,1892,22704,,21
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d8:C:0|X:1.2|Y:3.2|Z:3.2,8,IDA_STAR,0,SOLVED,8,U_CW F_CW U_CW F_CCW U_CCW R_CCW R_CCW B_CCW,49,588,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d8:C:0|X:1.2|Y:0.2|Z:1.0,8,BIDIRECTIONAL_BFS,0,SOLVED,8,F_CW R_CCW R_CCW B_CW D_CW B_CW F_CW U_CCW,1892,22704,,22
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d8:C:0|X:1.2|Y:0.2|Z:1.0,8,IDA_STAR,0,SOLVED,8,U_CW F_CW U_CW B_CCW D_CW R_CCW R_CCW F_CW,44,528,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d8:C:0|X:1.2|Y:0.2|Z:1.0,8,BFS,0,SOLVED,8,U_CW F_CW U_CW B_CCW D_CW R_CCW R_CCW F_CW,41357,496284,,448
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d8:C:0|X:0.1|Y:3.1|Z:3.1,8,IDA_STAR,0,SOLVED,8,U_CW U_CW R_CW U_CW F_CW F_CW D_CW L_CCW,24,288,,0
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d8:C:0|X:0.1|Y:3.1|Z:3.1,8,BFS,0,SOLVED,8,U_CW U_CW R_CW U_CW F_CW F_CW D_CW L_CCW,41180,494160,,705
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d8:C:0|X:0.1|Y:3.1|Z:3.1,8,BIDIRECTIONAL_BFS,0,SOLVED,8,R_CW U_CW U_CW L_CCW D_CW F_CW F_CW U_CW,1892,22704,,38
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d8:C:0|X:1.0|Y:3.0|Z:3.2,8,BFS,0,SOLVED,8,U_CW F_CW U_CW F_CCW D_CCW R_CW L_CW B_CCW,41330,495960,,748
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d8:C:0|X:1.0|Y:3.0|Z:3.2,8,BIDIRECTIONAL_BFS,0,SOLVED,8,L_CW F_CW D_CCW L_CW B_CW R_CCW D_CW F_CW,1892,22704,,34
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d8:C:0|X:1.0|Y:3.0|Z:3.2,8,IDA_STAR,0,SOLVED,8,U_CW F_CW U_CW F_CCW D_CCW R_CW L_CW B_CCW,49,588,,1
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d8:C:0|X:3.0|Y:1.2|Z:0.2,8,BIDIRECTIONAL_BFS,0,SOLVED,8,U_CCW R_CW L_CW U_CCW B_CW D_CW U_CW F_CCW,1892,22704,,34
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d8:C:0|X:3.0|Y:1.2|Z:0.2,8,IDA_STAR,0,SOLVED,8,U_CW U_CW F_CCW U_CW R_CW L_CW U_CW B_CW,21,252,,1
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d8:C:0|X:3.0|Y:1.2|Z:0.2,8,BFS,0,SOLVED,8,U_CW U_CW F_CCW U_CW R_CW L_CW U_CW B_CW,41162,493944,,709
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d8:C:0|X:3.0|Y:1.1|Z:3.2,8,IDA_STAR,0,SOLVED,8,U_CW F_CW U_CCW F_CCW R_CW L_CW D_CW B_CCW,42,504,,1
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d8:C:0|X:3.0|Y:1.1|Z:3.2,8,BFS,0,SOLVED,8,U_CW F_CW U_CCW F_CCW R_CW L_CW D_CW B_CCW,41402,496824,,460
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d8:C:0|X:3.0|Y:1.1|Z:3.2,8,BIDIRECTIONAL_BFS,0,SOLVED,8,U_CW R_CW B_CCW D_CW B_CW R_CCW D_CW F_CW,1892,22704,,22
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d8:C:0|X:1.2|Y:3.2|Z:1.0,8,BFS,0,SOLVED,8,U_CW F_CW U_CW B_CCW U_CCW R_CCW R_CCW F_CW,41354,496248,,479
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d8:C:0|X:1.2|Y:3.2|Z:1.0,8,BIDIRECTIONAL_BFS,0,SOLVED,8,L_CW F_CW U_CCW L_CW R_CW U_CCW B_CW R_CCW,1892,22704,,23
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d8:C:0|X:1.2|Y:3.2|Z:1.0,8,IDA_STAR,0,SOLVED,8,U_CW F_CW U_CW B_CCW U_CCW R_CCW R_CCW F_CW,44,528,,1
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d8:C:0|X:3.0|Y:1.1|Z:2.2,8,BIDIRECTIONAL_BFS,0,SOLVED,8,U_CW R_CW L_CW U_CW F_CCW D_CW U_CW F_CCW,1892,22704,,22
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d8:C:0|X:3.0|Y:1.1|Z:2.2,8,IDA_STAR,0,SOLVED,8,U_CW U_CW F_CCW U_CW R_CW L_CW D_CW F_CCW,21,252,,1
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d8:C:0|X:3.0|Y:1.1|Z:2.2,8,BFS,0,SOLVED,8,U_CW U_CW F_CCW U_CW R_CW L_CW D_CW F_CCW,41163,493956,,446
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d8:C:0|X:1.2|Y:1.0|Z:1.2,8,IDA_STAR,0,SOLVED,8,U_CW F_CW D_CCW F_CCW U_CW R_CCW R_CCW F_CW,47,564,,1
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d8:C:0|X:1.2|Y:1.0|Z:1.2,8,BFS,0,SOLVED,8,U_CW F_CW D_CCW F_CCW U_CW R_CCW R_CCW F_CW,41454,497448,,509
+1,phase5c-structural-depth2-8-v1,phase5c-structural-d2-8-v1,d8:C:0|X:1.2|Y:1.0|Z:1.2,8,BIDIRECTIONAL_BFS,0,SOLVED,8,R_CW B_CW U_CW R_CW D_CCW F_CCW L_CW D_CCW,1892,22704,,21
