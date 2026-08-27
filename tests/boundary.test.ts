@@ -522,3 +522,257 @@ describe('Phase 5 Benchmark Package Boundary & Architectural Invariants', () => 
     expect(benchPkg.devDependencies?.tsx).toBeUndefined();
   });
 });
+
+describe('Phase 5D Browser Research Mode Boundary & Architectural Invariants', () => {
+  const webRoot = path.resolve(process.cwd(), 'apps/web');
+  const webSrc = path.join(webRoot, 'src');
+
+  function collectWebTsFiles(dir: string): string[] {
+    const results: string[] = [];
+    if (!fs.existsSync(dir)) return results;
+    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+      const fullPath = path.join(dir, entry.name);
+      if (entry.isDirectory()) {
+        results.push(...collectWebTsFiles(fullPath));
+      } else if (entry.isFile() && (entry.name.endsWith('.ts') || entry.name.endsWith('.tsx'))) {
+        results.push(fullPath);
+      }
+    }
+    return results;
+  }
+
+  it('WEB_BENCHMARK_DEPENDENCY_GATE: verifies @gearcube/web manifest declares exact @gearcube/benchmark@0.0.0 dependency', () => {
+    const webPkgPath = path.join(webRoot, 'package.json');
+    expect(fs.existsSync(webPkgPath)).toBe(true);
+
+    const pkg = JSON.parse(fs.readFileSync(webPkgPath, 'utf8'));
+    expect(pkg.dependencies['@gearcube/benchmark']).toBe('0.0.0');
+  });
+
+  it('BENCHMARK_WORKER_ENTRY_GATE: verifies dedicated benchmark worker and lifecycle hook exist', () => {
+    const workerPath = path.join(webSrc, 'workers', 'benchmark.worker.ts');
+    const hookPath = path.join(webSrc, 'hooks', 'useBenchmarkWorker.ts');
+    expect(fs.existsSync(workerPath)).toBe(true);
+    expect(fs.existsSync(hookPath)).toBe(true);
+  });
+
+  it('BROWSER_SAFE_BENCHMARK_IMPORT_GATE: verifies apps/web consumes @gearcube/benchmark ONLY via package-root specifier', () => {
+    const files = collectWebTsFiles(webSrc);
+    expect(files.length).toBeGreaterThan(0);
+    const forbiddenBenchmarkImports: Array<{ file: string; spec: string }> = [];
+
+    for (const filePath of files) {
+      const content = fs.readFileSync(filePath, 'utf8');
+      const specs = extractModuleSpecifiers(content);
+      for (const spec of specs) {
+        if (spec.includes('benchmark')) {
+          if (spec === '@gearcube/benchmark') {
+            continue;
+          }
+          if (spec.startsWith('./') || spec.startsWith('../')) {
+            continue;
+          }
+          forbiddenBenchmarkImports.push({
+            file: path.relative(process.cwd(), filePath).replace(/\\/g, '/'),
+            spec,
+          });
+        }
+      }
+    }
+
+    expect(forbiddenBenchmarkImports).toEqual([]);
+  });
+
+  it('NODE_CLI_LEAKAGE_GATE: verifies no apps/web module imports Node built-ins or CLI adapters', () => {
+    const files = collectWebTsFiles(webSrc);
+    const prohibitedSpecs: Array<{ file: string; spec: string }> = [];
+
+    for (const filePath of files) {
+      const content = fs.readFileSync(filePath, 'utf8');
+      const specs = extractModuleSpecifiers(content);
+      for (const spec of specs) {
+        if (
+          spec.startsWith('node:') ||
+          spec === 'fs' ||
+          spec === 'path' ||
+          spec === 'os' ||
+          spec === 'child_process' ||
+          spec === 'process' ||
+          spec.includes('cli.ts') ||
+          spec.includes('cli.js')
+        ) {
+          prohibitedSpecs.push({
+            file: path.relative(process.cwd(), filePath).replace(/\\/g, '/'),
+            spec,
+          });
+        }
+      }
+    }
+
+    expect(prohibitedSpecs).toEqual([]);
+  });
+
+  it('BENCHMARK_RUNTIME_IMPORT_ISOLATION_GATE: verifies runBenchmarkSuite and serializers are imported/called ONLY in benchmark.worker.ts', () => {
+    const files = collectWebTsFiles(webSrc);
+    const runtimeSites: string[] = [];
+    const runtimeFns = ['runBenchmarkSuite', 'serializeBenchmarkReportJson', 'serializeBenchmarkReportCsv'];
+
+    for (const filePath of files) {
+      const relPath = path.relative(process.cwd(), filePath).replace(/\\/g, '/');
+      if (relPath === 'apps/web/src/workers/benchmark.worker.ts') {
+        continue;
+      }
+
+      const content = fs.readFileSync(filePath, 'utf8');
+      for (const fn of runtimeFns) {
+        const importRegex = new RegExp(`\\bimport\\s+[^;]*\\b${fn}\\b[^;]*from\\s+['"]@gearcube/benchmark['"]`, 'g');
+        const callRegex = new RegExp(`\\b${fn}\\s*\\(`, 'g');
+
+        if (importRegex.test(content) || callRegex.test(content)) {
+          runtimeSites.push(`${relPath}: ${fn}`);
+        }
+      }
+    }
+
+    expect(runtimeSites).toEqual([]);
+  });
+
+  it('MAIN_THREAD_VALIDATOR_BOUNDARY: verifies ResearchPanel imports ONLY validator/config types and does not reference runner/corpus/serializers', () => {
+    const panelPath = path.join(webSrc, 'components', 'research', 'ResearchPanel.tsx');
+    expect(fs.existsSync(panelPath)).toBe(true);
+
+    const content = fs.readFileSync(panelPath, 'utf8');
+    const forbiddenInPanel = [
+      'runBenchmarkSuite',
+      'buildExactDistanceCorpus',
+      'validateConfigCorpusCapacity',
+      'serializeBenchmarkReportJson',
+      'serializeBenchmarkReportCsv',
+    ];
+
+    for (const ident of forbiddenInPanel) {
+      expect(content.includes(ident)).toBe(false);
+    }
+    expect(content.includes('validateBenchmarkSuiteConfig')).toBe(true);
+    expect(content.includes('BenchmarkConfigError')).toBe(true);
+  });
+
+  it('BENCHMARK_WORKER_OWNERSHIP_GATE: verifies benchmark.worker.ts is referenced ONLY by useBenchmarkWorker.ts', () => {
+    const files = collectWebTsFiles(webSrc);
+    const workerRefSites: string[] = [];
+
+    for (const filePath of files) {
+      const relPath = path.relative(process.cwd(), filePath).replace(/\\/g, '/');
+      const content = fs.readFileSync(filePath, 'utf8');
+      if (content.includes('benchmark.worker.ts')) {
+        workerRefSites.push(relPath);
+      }
+    }
+
+    expect(workerRefSites).toEqual(['apps/web/src/hooks/useBenchmarkWorker.ts']);
+
+    const hookContent = fs.readFileSync(
+      path.join(webSrc, 'hooks', 'useBenchmarkWorker.ts'),
+      'utf8'
+    );
+    expect(hookContent.includes('benchmark.worker.ts')).toBe(true);
+    expect(hookContent.includes('import.meta.url')).toBe(true);
+  });
+
+  it('BENCHMARK_HOOK_UI_OWNERSHIP_GATE: verifies useBenchmarkWorker is owned by GearCubeViewport and NOT ResearchPanel', () => {
+    const viewportPath = path.join(webSrc, 'components', 'canvas', 'GearCubeViewport.tsx');
+    const panelPath = path.join(webSrc, 'components', 'research', 'ResearchPanel.tsx');
+
+    const viewportContent = fs.readFileSync(viewportPath, 'utf8');
+    const panelContent = fs.readFileSync(panelPath, 'utf8');
+
+    expect(viewportContent.includes('useBenchmarkWorker')).toBe(true);
+    expect(panelContent.includes('useBenchmarkWorker')).toBe(false);
+  });
+
+  it('RESEARCH_PANEL_NO_WORKER_GATE: verifies ResearchPanel contains no worker construction', () => {
+    const panelPath = path.join(webSrc, 'components', 'research', 'ResearchPanel.tsx');
+    const content = fs.readFileSync(panelPath, 'utf8');
+
+    expect(content.includes('new Worker')).toBe(false);
+    expect(content.includes('WorkerConstructor')).toBe(false);
+    expect(content.includes('benchmark.worker.ts')).toBe(false);
+    expect(content.includes('solver.worker.ts')).toBe(false);
+  });
+
+  it('NO_FAKE_PROGRESS_PROTOCOL_GATE: verifies protocol message types are strictly limited and contain no fake progress fields', () => {
+    const protocolPath = path.join(
+      webSrc,
+      'components',
+      'research',
+      'benchmark-worker-protocol.ts'
+    );
+    expect(fs.existsSync(protocolPath)).toBe(true);
+
+    const content = fs.readFileSync(protocolPath, 'utf8');
+    const forbiddenProtocolTerms = [
+      'BENCHMARK_PROGRESS',
+      'PROGRESS',
+      'CANCEL_BENCHMARK',
+      'RESET_BENCHMARK',
+      'percentage',
+      'eta',
+      'progressIntervalNodes',
+      'AbortSignal',
+    ];
+
+    for (const term of forbiddenProtocolTerms) {
+      expect(content.includes(term)).toBe(false);
+    }
+
+    expect(content.includes('START_BENCHMARK')).toBe(true);
+    expect(content.includes('BENCHMARK_STARTED')).toBe(true);
+    expect(content.includes('BENCHMARK_COMPLETE')).toBe(true);
+    expect(content.includes('BENCHMARK_ERROR')).toBe(true);
+  });
+
+  it('WORKER_SIDE_SERIALIZATION_GATE: verifies benchmark.worker.ts serializes JSON and CSV worker-side and does not post full report object', () => {
+    const workerPath = path.join(webSrc, 'workers', 'benchmark.worker.ts');
+    const content = fs.readFileSync(workerPath, 'utf8');
+
+    expect(content.includes('runBenchmarkSuite')).toBe(true);
+    expect(content.includes('serializeBenchmarkReportJson')).toBe(true);
+    expect(content.includes('serializeBenchmarkReportCsv')).toBe(true);
+    expect(content.includes('jsonText')).toBe(true);
+    expect(content.includes('csvText')).toBe(true);
+    expect(content.includes('postMessage')).toBe(true);
+    expect(content.includes('report: report')).toBe(false);
+  });
+
+  it('HOST_SIDE_CANCELLATION_BOUNDARY: verifies cancellation is host-side worker termination and not an in-band protocol message', () => {
+    const protocolPath = path.join(
+      webSrc,
+      'components',
+      'research',
+      'benchmark-worker-protocol.ts'
+    );
+    const hookPath = path.join(webSrc, 'hooks', 'useBenchmarkWorker.ts');
+
+    const protocolContent = fs.readFileSync(protocolPath, 'utf8');
+    const hookContent = fs.readFileSync(hookPath, 'utf8');
+
+    expect(protocolContent.includes('CANCEL')).toBe(false);
+    expect(hookContent.includes('.terminate()')).toBe(true);
+  });
+
+  it('WORKSPACE_OWNERSHIP_BOUNDARY: verifies GearCubeViewport owns WorkspaceMode with PLAY default and ResearchPanel does not define it', () => {
+    const viewportPath = path.join(webSrc, 'components', 'canvas', 'GearCubeViewport.tsx');
+    const panelPath = path.join(webSrc, 'components', 'research', 'ResearchPanel.tsx');
+
+    const viewportContent = fs.readFileSync(viewportPath, 'utf8');
+    const panelContent = fs.readFileSync(panelPath, 'utf8');
+
+    expect(viewportContent.includes('WorkspaceMode')).toBe(true);
+    expect(viewportContent.includes('ResearchPanel')).toBe(true);
+    expect(viewportContent.includes('useBenchmarkWorker')).toBe(true);
+    expect(viewportContent.includes("'PLAY'")).toBe(true);
+
+    expect(panelContent.includes('type WorkspaceMode')).toBe(false);
+    expect(panelContent.includes('workspaceMode')).toBe(false);
+  });
+});
