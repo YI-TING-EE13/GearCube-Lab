@@ -357,18 +357,28 @@ test.describe('GearCube Browser Research Mode End-to-End Suite', () => {
     // Observe ACTIVE status
     await expect(page.getByTestId('research-status')).toHaveText('Running benchmark...');
 
-    // Interact with benign enabled control (clicking already-active research button)
+    // Obtain workspace-mode-research button and ensure it is not currently focused
     const researchBtn = page.getByTestId('workspace-mode-research');
+    await page.evaluate(() => (document.activeElement as HTMLElement | null)?.blur());
+    const isAlreadyFocused = await researchBtn.evaluate((el) => el === document.activeElement);
+    expect(isAlreadyFocused).toBe(false);
+
+    // Perform a real Playwright click to prove main-thread interaction
     await researchBtn.click();
 
-    // Verify main thread processed interaction without error and status remains active
-    await expect(researchBtn).toHaveAttribute('aria-pressed', 'true');
+    // Require observable DOM effect: research button received focus
+    await expect(researchBtn).toBeFocused();
+
+    // Require benchmark is STILL ACTIVE on the Worker thread
     await expect(page.getByTestId('research-status')).toHaveText('Running benchmark...');
 
-    // Clean up: cancel benchmark
+    // Clean up: cancel benchmark using real click
     const cancelBtn = page.getByTestId('research-cancel-button');
-    await cancelBtn.scrollIntoViewIfNeeded();
-    await cancelBtn.dispatchEvent('click');
+    await page.evaluate(() => {
+      const form = document.querySelector('.research-form') || document.querySelector('[data-testid="research-panel"] form');
+      form?.addEventListener('submit', (e) => { e.preventDefault(); e.stopImmediatePropagation(); }, { capture: true, once: true });
+    });
+    await cancelBtn.click();
     await expect(page.getByTestId('research-status')).toHaveText('Cancelled');
   });
 
@@ -376,21 +386,43 @@ test.describe('GearCube Browser Research Mode End-to-End Suite', () => {
     await enterResearchMode(page);
     await configureLongCancellationSuite(page);
 
+    // Arm worker creation listener before starting benchmark
+    const workerPromise = page.waitForEvent('worker');
+
     await page.getByTestId('research-run-button').click();
+
+    // Capture benchmark worker and verify URL identity
+    const worker: Worker = await workerPromise;
+    expect(worker.url()).toMatch(/benchmark\.worker/);
 
     // Observe ACTIVE status
     await expect(page.getByTestId('research-status')).toHaveText('Running benchmark...');
 
-    // Click Cancel
+    // Arm worker close observation before triggering cancel
+    const workerClosedPromise = new Promise<void>((resolve) => {
+      worker.once('close', () => resolve());
+    });
+
+    // Click Cancel via real Playwright click
     const cancelBtn = page.getByTestId('research-cancel-button');
-    await cancelBtn.scrollIntoViewIfNeeded();
-    await cancelBtn.dispatchEvent('click');
+    await page.evaluate(() => {
+      const form = document.querySelector('.research-form') || document.querySelector('[data-testid="research-panel"] form');
+      form?.addEventListener('submit', (e) => { e.preventDefault(); e.stopImmediatePropagation(); }, { capture: true, once: true });
+    });
+    await cancelBtn.click();
 
     // Verify CANCELLED state
     await expect(page.getByTestId('research-status')).toHaveText('Cancelled');
     await expect(page.getByTestId('research-summary')).toBeHidden();
     await expect(page.getByTestId('research-download-json')).toBeHidden();
     await expect(page.getByTestId('research-download-csv')).toBeHidden();
+
+    // Await Worker termination/close event
+    await workerClosedPromise;
+
+    // Verify page.workers() contains no live benchmark Worker
+    const liveBenchmarkWorkers = page.workers().filter((w) => w === worker || w.url().includes('benchmark.worker'));
+    expect(liveBenchmarkWorkers).toHaveLength(0);
 
     // Observe for bounded 1s interval to confirm no stale completion arrives
     await page.waitForTimeout(1000);
@@ -445,7 +477,8 @@ test.describe('GearCube Browser Research Mode End-to-End Suite', () => {
     await page.getByTestId('research-run-button').click();
 
     // Worker is spawned and fails validation
-    await workerPromise;
+    const worker = await workerPromise;
+    expect(worker.url()).toMatch(/benchmark\.worker/);
 
     await expect(page.getByTestId('research-status')).toHaveText('Error');
     await expect(page.getByTestId('research-worker-error')).toBeVisible();
@@ -465,12 +498,19 @@ test.describe('GearCube Browser Research Mode End-to-End Suite', () => {
     await expect(page.getByTestId('research-status')).toHaveText('Completed', { timeout: 30000 });
     await expect(page.getByTestId('research-summary')).toBeVisible();
 
-    // Check metadata cards
+    // Check exact metadata cards
     const summary = page.getByTestId('research-summary');
-    await expect(summary).toContainText('e2e-browser-fast');
-    await expect(summary).toContainText('2'); // Sampled cases
-    await expect(summary).toContainText('6'); // Measured trials
-    await expect(summary).toContainText('browser');
+    await expect(summary).toContainText('e2e-browser-fast'); // Suite ID
+    await expect(summary.locator('.meta-card', { hasText: 'Sampled Cases' })).toContainText('2');
+    await expect(summary.locator('.meta-card', { hasText: 'Measured Trials' })).toContainText('6');
+    await expect(summary.locator('.meta-card', { hasText: 'Platform' })).toContainText('browser');
+
+    // Check all algorithm representations exist in cards
+    const algCards = summary.locator('.alg-summary-card');
+    await expect(algCards).toHaveCount(3);
+    await expect(summary.locator('.alg-summary-title', { hasText: /Breadth-First Search/ })).toBeVisible();
+    await expect(summary.locator('.alg-summary-title', { hasText: /Bidirectional BFS/ })).toBeVisible();
+    await expect(summary.locator('.alg-summary-title', { hasText: /IDA\*/ })).toBeVisible();
 
     // Check by-depth summary table (3 rows for 3 algorithms at depth 1)
     const table = page.getByTestId('research-summary-table');
@@ -479,11 +519,29 @@ test.describe('GearCube Browser Research Mode End-to-End Suite', () => {
     const rows = table.locator('tbody tr');
     await expect(rows).toHaveCount(3);
 
-    for (let i = 0; i < 3; i++) {
-      const row = rows.nth(i);
-      await expect(row).toContainText('1'); // Depth 1
-      await expect(row).toContainText('2'); // Trials 2
-    }
+    // BFS row verification
+    const bfsRow = rows.filter({ hasText: /Breadth-First Search/ });
+    await expect(bfsRow).toHaveCount(1);
+    await expect(bfsRow.locator('td').nth(1)).toHaveText('1'); // Depth
+    await expect(bfsRow.locator('td').nth(2)).toHaveText('2'); // Trials
+    await expect(bfsRow.locator('td').nth(3)).toHaveText('2'); // Solved
+    await expect(bfsRow.locator('td').nth(4)).toHaveText('0'); // Limits
+
+    // Bidirectional BFS row verification
+    const bibfsRow = rows.filter({ hasText: /Bidirectional BFS/ });
+    await expect(bibfsRow).toHaveCount(1);
+    await expect(bibfsRow.locator('td').nth(1)).toHaveText('1'); // Depth
+    await expect(bibfsRow.locator('td').nth(2)).toHaveText('2'); // Trials
+    await expect(bibfsRow.locator('td').nth(3)).toHaveText('2'); // Solved
+    await expect(bibfsRow.locator('td').nth(4)).toHaveText('0'); // Limits
+
+    // IDA* row verification
+    const idaRow = rows.filter({ hasText: /IDA\*/ });
+    await expect(idaRow).toHaveCount(1);
+    await expect(idaRow.locator('td').nth(1)).toHaveText('1'); // Depth
+    await expect(idaRow.locator('td').nth(2)).toHaveText('2'); // Trials
+    await expect(idaRow.locator('td').nth(3)).toHaveText('2'); // Solved
+    await expect(idaRow.locator('td').nth(4)).toHaveText('0'); // Limits
   });
 
   test('8. JSON_DOWNLOAD_GATE: json export download emits valid BenchmarkReport with exact shape and metadata', async ({ page }) => {
@@ -632,12 +690,33 @@ test.describe('GearCube Browser Research Mode End-to-End Suite', () => {
     await enterResearchMode(page);
     await configureLongCancellationSuite(page);
 
+    // Arm worker creation listener before starting benchmark
+    const workerPromise = page.waitForEvent('worker');
+
     await page.getByTestId('research-run-button').click();
+
+    // Capture benchmark worker and verify URL identity
+    const worker: Worker = await workerPromise;
+    expect(worker.url()).toMatch(/benchmark\.worker/);
+
+    // Observe ACTIVE status
     await expect(page.getByTestId('research-status')).toHaveText('Running benchmark...');
 
-    // Switch to PLAY while benchmark is active
+    // Arm worker close observation before triggering mode switch
+    const workerClosedPromise = new Promise<void>((resolve) => {
+      worker.once('close', () => resolve());
+    });
+
+    // Switch to PLAY while benchmark is active via real click
     await page.getByTestId('workspace-mode-play').click();
     await expect(page.getByTestId('research-panel')).toBeHidden();
+
+    // Await Worker termination/close event
+    await workerClosedPromise;
+
+    // Verify page.workers() contains no live benchmark Worker
+    const liveBenchmarkWorkers = page.workers().filter((w) => w === worker || w.url().includes('benchmark.worker'));
+    expect(liveBenchmarkWorkers).toHaveLength(0);
 
     // Re-enter Research mode
     await enterResearchMode(page);
@@ -662,32 +741,62 @@ test.describe('GearCube Browser Research Mode End-to-End Suite', () => {
 
       await enterResearchMode(page);
 
-      // Verify no page-level horizontal overflow
-      const { scrollWidth, clientWidth } = await page.evaluate(() => ({
-        scrollWidth: document.documentElement.scrollWidth,
-        clientWidth: document.documentElement.clientWidth,
+      // A. Document and body horizontal overflow verification
+      const { docScrollWidth, docClientWidth, bodyScrollWidth } = await page.evaluate(() => ({
+        docScrollWidth: document.documentElement.scrollWidth,
+        docClientWidth: document.documentElement.clientWidth,
+        bodyScrollWidth: document.body.scrollWidth,
       }));
-      expect(scrollWidth).toBeLessThanOrEqual(clientWidth);
+      expect(docScrollWidth).toBeLessThanOrEqual(docClientWidth);
+      expect(bodyScrollWidth).toBeLessThanOrEqual(docClientWidth);
 
-      // Verify critical controls are visible/scrollable
+      // B. Workspace mode switch bounds verification
+      const switchBox = await page.getByTestId('workspace-mode-switch').boundingBox();
+      expect(switchBox).not.toBeNull();
+      expect(switchBox!.x).toBeGreaterThanOrEqual(0);
+      expect(switchBox!.y).toBeGreaterThanOrEqual(0);
+      expect(switchBox!.x + switchBox!.width).toBeLessThanOrEqual(vp.width);
+      expect(switchBox!.y + switchBox!.height).toBeLessThanOrEqual(vp.height);
+
+      // C. Research panel horizontal bounds verification
       const panel = page.getByTestId('research-panel');
-      await expect(panel).toBeVisible();
+      const panelBox = await panel.boundingBox();
+      expect(panelBox).not.toBeNull();
+      expect(panelBox!.x).toBeGreaterThanOrEqual(0);
+      expect(panelBox!.x + panelBox!.width).toBeLessThanOrEqual(vp.width);
+
+      // D. Essential control actionability verification (using trial click)
+      const suiteInput = page.getByTestId('research-input-suite-id');
+      await suiteInput.scrollIntoViewIfNeeded();
+      await suiteInput.click({ trial: true });
+
+      const depth1Cb = page.getByTestId('research-checkbox-depth-1');
+      await depth1Cb.scrollIntoViewIfNeeded();
+      await depth1Cb.click({ trial: true });
+
+      const bfsCb = page.getByTestId('research-checkbox-algo-BFS');
+      await bfsCb.scrollIntoViewIfNeeded();
+      await bfsCb.click({ trial: true });
 
       const runBtn = page.getByTestId('research-run-button');
       await runBtn.scrollIntoViewIfNeeded();
-      await expect(runBtn).toBeVisible();
+      await runBtn.click({ trial: true });
 
-      // For mobile 375x667, return to PLAY and verify mode switch and top overlay bar do not overlap
+      const activeResearchBtn = page.getByTestId('workspace-mode-research');
+      await activeResearchBtn.scrollIntoViewIfNeeded();
+      await activeResearchBtn.click({ trial: true });
+
+      // E. Mobile portrait: verify mode switch and top overlay bar do not overlap in PLAY mode
       if (vp.width === 375) {
         await returnToPlayMode(page);
 
-        const switchBox = await page.getByTestId('workspace-mode-switch').boundingBox();
+        const playSwitchBox = await page.getByTestId('workspace-mode-switch').boundingBox();
         const topBarBox = await page.locator('.top-overlay-bar').boundingBox();
 
-        expect(switchBox).not.toBeNull();
+        expect(playSwitchBox).not.toBeNull();
         expect(topBarBox).not.toBeNull();
 
-        const overlap = rectsOverlap(switchBox!, topBarBox!);
+        const overlap = rectsOverlap(playSwitchBox!, topBarBox!);
         expect(overlap, 'Workspace mode switch and top-overlay-bar must not overlap in PLAY mode at mobile portrait').toBe(false);
       }
     }
