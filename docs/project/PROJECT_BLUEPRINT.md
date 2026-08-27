@@ -312,7 +312,7 @@ The project roadmap is structured into 9 sequential phases (detailed in [`docs/d
 - **Phase 2:** 3D Model, Visual Assets, and Kinematic Animation Engine *(Accepted)*
 - **Phase 3:** Interactive UI, History, Undo/Redo, Keyboard Controls, and Responsive Layout *(Accepted)*
 - **Phase 4:** Classical Solver Infrastructure (Web Worker, BFS / Bidirectional BFS / IDA*, Solve Mode UI & Playback) *(Implemented & Accepted)*
-- **Phase 5:** Research Benchmark Framework & Empirical Evaluation *(Not Started)*
+- **Phase 5:** Research Benchmark Framework & Empirical Evaluation *(In Progress — Preflight, Phase 5A, Phase 5B & Phase 5C Accepted; Phase 5D Not Started)*
 - **Phase 6:** Neural Heuristic & AI-Guided Search *(Planned)*
 - **Phase 7:** Camera-Based Physical State Reconstruction & Guided Solver *(Planned)*
 - **Phase 8:** Integration, Polish, Reproducibility, and v1.0 Release *(Planned)*

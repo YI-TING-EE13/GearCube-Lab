@@ -1,6 +1,6 @@
 # SYSTEM_ARCHITECTURE.md — System Architecture & Component Contracts
 
-> **Document Status:** `DECIDED (Accepted architecture through Phase 4; Phase 5 preflight architecture accepted); Phase 5 implementation: IN PROGRESS (Phases 5A & 5B Implemented & Accepted)`
+> **Document Status:** `DECIDED (Accepted architecture through Phase 4; Phase 5 preflight architecture accepted); Phase 5 implementation: IN PROGRESS (Phases 5A, 5B & 5C Implemented & Accepted; Phase 5D Not Started)`
 > **Target System:** GearCube Lab Web Application & Research Framework
 
 ---
@@ -43,7 +43,7 @@ graph TD
         WorkerAdapter[Browser Solver Worker Adapter<br/>apps/web/src/workers/solver.worker.ts]
         SolverEngine[Pure Solver Engine<br/>Pure TS Algorithms — packages/solvers]
         BenchmarkWorker[Browser Benchmark Worker Adapter<br/>apps/web/src/workers/benchmark.worker.ts — Future Phase 5D]
-        BenchmarkEngine[Pure Benchmark Engine<br/>packages/benchmark — Phases 5A & 5B Implemented & Accepted]
+        BenchmarkEngine[Pure Benchmark Engine<br/>packages/benchmark — Phases 5A, 5B & 5C Implemented & Accepted]
         NodeCLI[Node CLI Runner<br/>packages/benchmark/src/cli.ts — Phase 5B Implemented & Accepted]
     end
 
@@ -122,10 +122,9 @@ graph TD
 - **Prohibited Dependencies:** Must not access DOM, window, Three.js, React, or browser Worker global objects directly. Depends only on `@gearcube/core`.
 
 ### 3.6. Research & Benchmark Harness (`packages/benchmark` — Phase 5 In Progress)
-- **Status & Scope:** `PHASE5_PREFLIGHT_ACCEPTED` (Phases 5A & 5B implemented & accepted; Phases 5C–5D pending; [`docs/development/PHASE_5_IMPLEMENTATION_PLAN.md`](../development/PHASE_5_IMPLEMENTATION_PLAN.md)).
+- **Status & Scope:** `PHASE5_PREFLIGHT_ACCEPTED` (Phases 5A, 5B & 5C implemented & accepted; Phase 5D pending; [`docs/development/PHASE_5_IMPLEMENTATION_PLAN.md`](../development/PHASE_5_IMPLEMENTATION_PLAN.md)).
 - **Core Responsibilities:**
-  - **Implemented (Phases 5A & 5B):** Pure `@gearcube/benchmark` package, materialized v1 benchmark schemas, typed `BenchmarkConfigError` runtime validation, stable state-derived case identity (`d${exactDepth}:${stateKey}`), independent Core-only exact-distance corpus builder (discovering 41,472 canonical states and diameter 8 without calling production solvers), deterministic seed hashing (`FNV1A_UTF16_CODE_UNITS_32`), PRNG (`MULBERRY32_EXACT`), stratified sampling, headless batch runner evaluating solvers (`solveBfs`, `solveBidirectionalBfs`, `solveIdaStar`), warm-up/measured execution separation, cyclic algorithm rotation, lossless JSON export, flat 14-column RFC-4180 CSV export, and isolated Node CLI runner (`packages/benchmark/src/cli.ts`).
-  - **Pending (Phase 5C):** Empirical evaluation datasets and classical solver comparative report.
+  - **Implemented (Phases 5A, 5B & 5C):** Pure `@gearcube/benchmark` package, materialized v1 benchmark schemas, typed `BenchmarkConfigError` runtime validation, stable state-derived case identity (`d${exactDepth}:${stateKey}`), independent Core-only exact-distance corpus builder (discovering 41,472 canonical states and diameter 8 without calling production solvers), deterministic seed hashing (`FNV1A_UTF16_CODE_UNITS_32`), PRNG (`MULBERRY32_EXACT`), stratified sampling, headless batch runner evaluating solvers (`solveBfs`, `solveBidirectionalBfs`, `solveIdaStar`), warm-up/measured execution separation, cyclic algorithm rotation, lossless JSON export, flat 14-column RFC-4180 CSV export, isolated Node CLI runner (`packages/benchmark/src/cli.ts`), and empirical comparative research evaluation datasets and report ([`docs/research/PHASE_5_CLASSICAL_SOLVER_BENCHMARK_REPORT.md`](../research/PHASE_5_CLASSICAL_SOLVER_BENCHMARK_REPORT.md)).
   - **Pending (Phase 5D):** Dedicated browser Web Worker (`apps/web/src/workers/benchmark.worker.ts`) and Research Mode UI.
 - **Execution & Import Boundaries:**
   - **Shared Engine (`packages/benchmark`):** Pure TypeScript, browser-safe root entry with zero UI/DOM, zero 3rd-party runtime dependencies, and zero `node:fs` / `node:path` / CLI imports.

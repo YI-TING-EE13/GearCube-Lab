@@ -7,10 +7,11 @@
 > **Phase 5A Status:** `COMPLETED / ACCEPTED ON MAIN`
 > **Phase 5B Status:** `COMPLETED / ACCEPTED ON MAIN`
 > **Phase 5C Planning:** `COMPLETED / ACCEPTED`
-> **Phase 5C Research Execution:** `NOT STARTED`
-> **Final Research Data Collected:** `NO`
-> **Final Report Created:** `NO`
-> **Phase 5C Overall Accepted:** `NO`
+> **Phase 5C Research Execution:** `COMPLETED / ACCEPTED`
+> **Final Research Data Collected:** `YES`
+> **Deterministic Analysis:** `COMPLETED / ACCEPTED`
+> **Final Report:** `COMPLETED / ACCEPTED`
+> **Phase 5C Overall:** `COMPLETED / ACCEPTED`
 > **Phase 5D Status:** `NOT STARTED`
 
 ---
@@ -32,8 +33,8 @@ This document formalizes the complete Phase 5C experiment design, statistical an
 - **Independent Final Review:** `PASS`
 - **Experiment Matrix Accepted:** `YES` (Structural: 222 cases / 666 trials; Timing: 64 cases $\times 3$ process replicates / 2880 measured trials; 4,698 total solver invocations)
 - **Pilot Calibration Accepted:** `YES — CALIBRATION ONLY` (Pilot evidence validated engine feasibility and timer quantization; pilot values are excluded from final research datasets)
-- **Final Data Collection Authorization:** `AUTHORIZED BY PLAN`, to proceed strictly AFTER fast-forward promotion of this accepted plan to main and creation of the dedicated Phase 5C execution-baseline commit (`PHASE5C_EXECUTION_BASELINE_COMMIT`).
-- **Final Research Execution Started:** `NO` (Research execution remains `NOT STARTED`)
+- **Final Data Collection Authorization:** `AUTHORIZED BY PLAN`, executed under `1fcc48dffcc10a59dbb9fe1eb1e5d7e2ce123ba6` (`PHASE5C_EXECUTION_BASELINE_COMMIT`) with evidence recorded in `4cf4efb47841c7d0fa206991734736a751ac1fd2`.
+- **Final Research Execution Status:** `COMPLETED / ACCEPTED` (Report accepted in [`PHASE_5_CLASSICAL_SOLVER_BENCHMARK_REPORT.md`](PHASE_5_CLASSICAL_SOLVER_BENCHMARK_REPORT.md))
 
 ---
 

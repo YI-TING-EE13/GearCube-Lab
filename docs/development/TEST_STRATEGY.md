@@ -245,9 +245,18 @@
     - `CLI_REAL_SUBPROCESS_GATE`: Subprocess acceptance test verifies execution of root `npm run benchmark` script.
     - `STATIC_CONFIG_VALIDATION_GATE`: Static config validation executes before canonical 41,472-state corpus construction.
     - `ALGORITHM_FAIRNESS_GATE`: BFS, BiBFS, and IDA* evaluated on identical case instances in cyclic rotated execution order with identical configured resource limits.
-  - **Phase 5C & 5D Gates (Pending):**
-    - `RESEARCH_DATASET_GATE`: Full comparative data collected across BFS, BiBFS, and IDA* for depths 1..8 (Phase 5C).
-    - `METRIC_SEPARATION_GATE`: Research report strictly separates deterministic search metrics from observational timing (Phase 5C).
+  - **Phase 5C Classical Comparative Benchmark Gates (Implemented & Accepted):**
+    - `EXECUTION_BASELINE_GATE`: Pre-run execution baseline commit frozen at `1fcc48dffcc10a59dbb9fe1eb1e5d7e2ce123ba6`.
+    - `RESEARCH_DATASET_GATE`: Full comparative data collected across BFS, BiBFS, and IDA* for depths 1..8 (3,546 measured rows, 4,698 solver invocations).
+    - `ALL_SOLVED_GATE`: 100% of measured trials solved with 0 limit reached.
+    - `OPTIMALITY_GATE`: Zero optimality violations (`solutionDepth === exactDepth`).
+    - `REPRODUCIBILITY_GATE`: Zero deterministic projection mismatches across 3 independent CLI replicates.
+    - `RAW_ARTIFACT_INTEGRITY_GATE`: All 10 raw JSON/CSV artifact SHA-256 hashes immutable.
+    - `STRUCTURAL_ANALYSIS_GATE`: Traceable paired reduction statistics deterministically recomputed and validated.
+    - `TIMING_RESOLUTION_GATE`: Two-stage median with integer-ms quantization labeling (`TIMER_RESOLUTION_LIMITED`).
+    - `METRIC_SEPARATION_GATE`: Deterministic search metrics strictly separated from observational execution times.
+    - `REPORT_TRACEABILITY_GATE`: Complete bidirectional traceability to committed evidence in [`docs/research/PHASE_5_CLASSICAL_SOLVER_BENCHMARK_REPORT.md`](../research/PHASE_5_CLASSICAL_SOLVER_BENCHMARK_REPORT.md).
+  - **Phase 5D Browser Research Mode Gates (Pending):**
     - `RESEARCH_WORKER_ISOLATION_GATE`: Benchmark compute executes off the UI thread in dedicated Web Worker (Phase 5D).
     - `PLAYWRIGHT_RESEARCH_E2E_GATE`: Automated Playwright test passes across desktop, tablet, and mobile viewports (Phase 5D).
 

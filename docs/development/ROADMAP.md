@@ -1,7 +1,7 @@
 # ROADMAP.md — Project Lifecycle & Dependency-Ordered Milestones
 
-> **Current Milestone:** `Phase 4 — Classical Solver Infrastructure (Completed & Accepted)`
-> **Previous Milestone:** `Phase 3 — Interactive UI, History, Undo/Redo, and Scramble (Completed & Accepted)`
+> **Current Milestone:** `Phase 5 — Research & Benchmarking Harness (In Progress)`
+> **Previous Milestone:** `Phase 4 — Classical Solver Infrastructure (Completed & Accepted)`
 
 ---
 
@@ -54,8 +54,8 @@
 [ Phase 5: Research & Benchmarking Harness ] (In Progress)
       ├─ 5 Preflight: Preflight Contract Freeze & Methodology (Completed & Accepted)
       ├─ 5A: Benchmark Package Bootstrap, Schemas & Exact-Distance Corpus (Completed & Accepted)
-      ├─ 5B: Headless Runner, Deterministic Sampling, CLI & Exporters (Not Started)
-      ├─ 5C: Classical Comparative Research Runs & Report (Not Started)
+      ├─ 5B: Headless Runner, Deterministic Sampling, CLI & Exporters (Completed & Accepted)
+      ├─ 5C: Classical Comparative Research Runs & Report (Completed & Accepted)
       └─ 5D: Browser Research Mode, Dedicated Worker & E2E Acceptance (Not Started)
       │
       ▼
@@ -292,7 +292,7 @@ Phase 0B is partitioned into four dependency-ordered subphases:
 ---
 
 ### Phase 5: Research & Benchmarking Harness (In Progress)
-- **Status:** `IN PROGRESS` (Phase 5 Preflight, Phase 5A & Phase 5B `COMPLETED & ACCEPTED`; Phases 5C–5D `NOT STARTED`)
+- **Status:** `IN PROGRESS` (Phase 5 Preflight, Phase 5A, Phase 5B & Phase 5C `COMPLETED & ACCEPTED`; Phase 5D `NOT STARTED`)
 - **Objective:** Build an empirical research harness to conduct deterministic comparative evaluations of solving algorithms (BFS, Bidirectional BFS, IDA* with pattern databases, and future learned heuristics) across exact-distance-stratified benchmark suites.
 - **Prerequisites:** Completion and acceptance of Phase 4 (`COMPLETED & ACCEPTED ON MAIN`).
 - **In-Scope:** `packages/benchmark` (pure TS engine), independent Core-only exact-distance corpus builder, deterministic FNV-1a + Mulberry32 stratified sampling, algorithm orchestration runner, Node CLI adapter, JSON/CSV exporters, comparative research report, and browser Research Mode with dedicated background Web Worker in `apps/web`.
@@ -301,12 +301,12 @@ Phase 0B is partitioned into four dependency-ordered subphases:
   - **Phase 5 Preflight:** Architecture, contract freeze, metric classification, and subphase gates ([`docs/development/PHASE_5_IMPLEMENTATION_PLAN.md`](./PHASE_5_IMPLEMENTATION_PLAN.md)) — **Status:** `COMPLETED & ACCEPTED`.
   - **Phase 5A:** Benchmark Package Bootstrap, Schemas & Exact-Distance Corpus (`packages/benchmark/src/types.ts`, `config.ts`, `corpus.ts`, exhaustive 41,472 traversal) — **Status:** `COMPLETED & ACCEPTED`.
   - **Phase 5B:** Headless Runner, Deterministic Sampling, CLI & Exporters (`hash.ts`, `prng.ts`, `sampler.ts`, `runner.ts`, `export.ts`, `cli.ts`) — **Status:** `COMPLETED & ACCEPTED`.
-  - **Phase 5C:** Classical Comparative Research Runs & Report (`docs/research/PHASE_5_CLASSICAL_SOLVER_BENCHMARK_REPORT.md`) — **Status:** `NOT STARTED`.
+  - **Phase 5C:** Classical Comparative Research Runs & Report ([`docs/research/PHASE_5_CLASSICAL_SOLVER_BENCHMARK_REPORT.md`](../research/PHASE_5_CLASSICAL_SOLVER_BENCHMARK_REPORT.md)) — **Status:** `COMPLETED & ACCEPTED`.
   - **Phase 5D:** Browser Research Mode, Dedicated Worker & E2E Acceptance (`apps/web/src/workers/benchmark.worker.ts`, `ResearchPanel.tsx`, Playwright E2E) — **Status:** `NOT STARTED`.
 - **Deliverables:**
   - Pure benchmark engine package (`@gearcube/benchmark` — Phase 5A foundation & Phase 5B runner/exporters complete).
   - Node CLI runner for automated/headless execution and JSON/CSV artifact exports (`npm run benchmark` — Phase 5B complete).
-  - Comparative research dataset and report evaluating BFS vs. BiBFS vs. IDA* (Phase 5C).
+  - Comparative research dataset and report evaluating BFS vs. BiBFS vs. IDA* (Phase 5C complete; [`docs/research/PHASE_5_CLASSICAL_SOLVER_BENCHMARK_REPORT.md`](../research/PHASE_5_CLASSICAL_SOLVER_BENCHMARK_REPORT.md)).
   - Browser Research Mode panel with off-main-thread execution and file downloads (Phase 5D).
 - **Verification:** Seeded benchmark test runs producing bit-for-bit identical search metrics (node counts, paths, depths, statuses) across repeat runs; independent exact-distance corpus discovering 41,472 states and diameter 8; Playwright browser E2E tests.
 - **Acceptance Gate Criteria (`PHASE_5_PASS`):**
@@ -317,6 +317,7 @@ Phase 0B is partitioned into four dependency-ordered subphases:
   - [x] Bit-for-bit identical deterministic search metrics (`nodesExpanded`, `nodesGenerated`, `solutionDepth`, `solutionMoves`, `status`, `limitReason`) verified across repeat runs (Phase 5B).
   - [x] Optimality verified for all solved cases (`solutionDepth === exactDepth`) across BFS, BiBFS, and IDA* (Phase 5B).
   - [x] Lossless JSON export and 14-column RFC-4180 CSV export match frozen schemas with measured trials only (Phase 5B).
+  - [x] Comparative research benchmark suites executed across depths 1..8 with 100% optimal solutions, reproducible deterministic projections across replicates, and full research report published (Phase 5C).
   - [ ] Browser Research Mode executes via dedicated Web Worker without blocking UI interaction, verified by automated Playwright tests and Chrome DevTools acceptance (Phase 5D).
 
 ---

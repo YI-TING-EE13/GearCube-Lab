@@ -1,15 +1,15 @@
 # PHASE_5_IMPLEMENTATION_PLAN.md — Research & Benchmarking Harness
 
-> **Document Status:** `PHASE5B_ACCEPTED`
-> **Authoritative Main Baseline:** `a576616253d6afeb95ed0c31c3ac50ccb561e666`
-> **Accepted Technical Head:** `d3989cde79087811506ed0295d8411739301db92`
-> **Branch:** `phase/5b-benchmark-runner-cli`
+> **Document Status:** `PHASE5C_ACCEPTED`
+> **Authoritative Main Baseline:** `fac6ecf74a06ccfeeb81cb6bf39247a09fcf3369`
+> **Accepted Technical Head:** `7552e61ffd79766b66d34ace0e510776aa8b9cb6`
+> **Branch:** `phase/5c-execution`
 > **Implementation Started:** `YES`
 > **Phase 5 Accepted:** `NO`
 > **Phase 5 Preflight Accepted:** `YES`
 > **Phase 5A Status:** `COMPLETED & ACCEPTED`
 > **Phase 5B Status:** `COMPLETED & ACCEPTED`
-> **Phase 5C Status:** `NOT STARTED`
+> **Phase 5C Status:** `COMPLETED & ACCEPTED`
 > **Phase 5D Status:** `NOT STARTED`
 
 ---
@@ -34,8 +34,22 @@
 - **PHASE5B_ACCEPTED_TECHNICAL_HEAD:** `d3989cde79087811506ed0295d8411739301db92`
 - **PHASE5B_INDEPENDENT_REVIEW:** `PASS`
 - **PHASE5B_ACCEPTED:** `YES`
-- **PHASE5C_STATUS:** `NOT STARTED`
+
+### Phase 5C Research & Benchmark Report Acceptance
+- **PHASE5C_EXECUTION_BASELINE_COMMIT:** `1fcc48dffcc10a59dbb9fe1eb1e5d7e2ce123ba6`
+- **PHASE5C_RESEARCH_EVIDENCE_COMMIT:** `4cf4efb47841c7d0fa206991734736a751ac1fd2`
+- **PHASE5C_REPORT_TECHNICAL_HEAD:** `7552e61ffd79766b66d34ace0e510776aa8b9cb6`
+- **TOTAL_STORED_MEASURED_ROWS:** `3546`
+- **TOTAL_SOLVER_INVOCATIONS:** `4698`
+- **ALL_SOLVED:** `3546 / 3546`
+- **LIMIT_REACHED:** `0`
+- **OPTIMALITY_VIOLATIONS:** `0`
+- **TIMING_DETERMINISTIC_PROJECTION_MISMATCHES:** `0`
+- **ALL_TEN_PHASE5C_GATES:** `PASS`
+- **INDEPENDENT_REVIEW:** `PASS`
+- **PHASE5C_ACCEPTED:** `YES`
 - **PHASE5D_STATUS:** `NOT STARTED`
+- **REPORT_REFERENCE:** [`docs/research/PHASE_5_CLASSICAL_SOLVER_BENCHMARK_REPORT.md`](../research/PHASE_5_CLASSICAL_SOLVER_BENCHMARK_REPORT.md)
 
 ---
 
@@ -410,12 +424,19 @@ graph TD
   - `CLI_EXIT_SEMANTICS_GATE`: Exit 0 on completed suite (including LIMIT_REACHED); exit 2 on typed `BenchmarkConfigError` or CLI usage errors; exit 1 on filesystem export or unhandled runtime failures.
   - `STATIC_CONFIG_VALIDATION_GATE`: Static config validation executes before canonical 41,472-state corpus construction.
 
-### 9.3. Phase 5C: Classical Comparative Research Runs & Report
-- **Deliverables:** Evaluation datasets and `docs/research/PHASE_5_CLASSICAL_SOLVER_BENCHMARK_REPORT.md`.
+### 9.3. Phase 5C: Classical Comparative Research Runs & Report (Completed & Accepted)
+- **Deliverables:** Evaluation datasets (`docs/research/phase5c/raw/**`, `docs/research/phase5c/derived/**`, `scripts/analyze-phase5c.mjs`) and [`docs/research/PHASE_5_CLASSICAL_SOLVER_BENCHMARK_REPORT.md`](../research/PHASE_5_CLASSICAL_SOLVER_BENCHMARK_REPORT.md).
 - **Acceptance Gates:**
-  - `RESEARCH_DATASET_GATE`: Full comparative data collected across BFS, BiBFS, and IDA* for depths 1..8.
-  - `METRIC_SEPARATION_GATE`: Report clearly separates deterministic search tree efficiency from observational execution times.
-  - `REPRODUCIBILITY_GATE`: Benchmark suite config and seed documented enabling exact reproduction.
+  - `EXECUTION_BASELINE_GATE`: Pre-run execution baseline commit frozen at `1fcc48dffcc10a59dbb9fe1eb1e5d7e2ce123ba6`.
+  - `RESEARCH_DATASET_GATE`: Full comparative data collected across BFS, BiBFS, and IDA* for depths 1..8 (3,546 measured rows, 4,698 solver invocations).
+  - `ALL_SOLVED_GATE`: 100% of measured trials solved with 0 limit reached.
+  - `OPTIMALITY_GATE`: Zero optimality violations (`solutionDepth === exactDepth`).
+  - `REPRODUCIBILITY_GATE`: Zero deterministic projection mismatches across 3 independent CLI replicates.
+  - `RAW_ARTIFACT_INTEGRITY_GATE`: All 10 raw JSON/CSV artifact SHA-256 hashes immutable.
+  - `STRUCTURAL_ANALYSIS_GATE`: Traceable paired reduction statistics recomputed and validated.
+  - `TIMING_RESOLUTION_GATE`: Two-stage median with integer-ms quantization labeling (`TIMER_RESOLUTION_LIMITED`).
+  - `METRIC_SEPARATION_GATE`: Deterministic search metrics strictly separated from observational execution times.
+  - `REPORT_TRACEABILITY_GATE`: Complete bidirectional traceability to committed evidence.
 
 ### 9.4. Phase 5D: Browser Research Mode, Dedicated Worker & E2E Acceptance
 - **Deliverables:** `apps/web/src/workers/benchmark.worker.ts`, `apps/web/src/components/research/ResearchPanel.tsx`, `tests/e2e/research-mode.spec.ts`.

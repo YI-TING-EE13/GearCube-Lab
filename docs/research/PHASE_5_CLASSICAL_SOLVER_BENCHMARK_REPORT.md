@@ -1,11 +1,13 @@
 # Phase 5C Classical Solver Benchmark Report
 
-> **Document Status**: `PHASE5C_CLASSICAL_SOLVER_BENCHMARK_REPORT_CANDIDATE`  
-> **Research Evidence**: `ACCEPTED` (Commit `4cf4efb47841c7d0fa206991734736a751ac1fd2`)  
-> **Execution Baseline**: `1fcc48dffcc10a59dbb9fe1eb1e5d7e2ce123ba6`  
-> **Authoritative Main**: `fac6ecf74a06ccfeeb81cb6bf39247a09fcf3369`  
-> **Phase 5C Overall Acceptance**: `PENDING INDEPENDENT REPORT REVIEW`  
-> **Phase 5D**: `NOT STARTED`  
+> **Document Status**: `PHASE5C_CLASSICAL_SOLVER_BENCHMARK_REPORT_ACCEPTED`<br/>
+> **Research Evidence**: `ACCEPTED` (Commit `4cf4efb47841c7d0fa206991734736a751ac1fd2`)<br/>
+> **Execution Baseline**: `1fcc48dffcc10a59dbb9fe1eb1e5d7e2ce123ba6`<br/>
+> **Authoritative Main**: `fac6ecf74a06ccfeeb81cb6bf39247a09fcf3369`<br/>
+> **Accepted Report Head**: `7552e61ffd79766b66d34ace0e510776aa8b9cb6`<br/>
+> **Independent Final Report Review**: `PASS`<br/>
+> **Phase 5C Overall Acceptance**: `ACCEPTED`<br/>
+> **Phase 5D**: `NOT STARTED`<br/>
 > **Governance Note**: Required agent skills `$governance-task-planning` and `$technical-writing-editorial-review` were reported as `UNAVAILABLE_IN_CURRENT_AGENT_ENVIRONMENT`; explicit manual editorial and governance review procedures were executed.
 
 ---
@@ -284,7 +286,7 @@ Cross-process determinism was verified across the three independent timing runs 
 | **METRIC_SEPARATION_GATE** | Primary deterministic / secondary timing | Separate structural and timing tables | **PASS** |
 | **REPORT_TRACEABILITY_GATE** | Full traceability to committed artifacts | Relative paths to configs, raw, derived | **PASS** |
 
-> **Formal Acceptance Status**: `PENDING INDEPENDENT REPORT REVIEW`
+> **Formal Acceptance Status**: `ACCEPTED`
 
 ---
 
