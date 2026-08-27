@@ -341,42 +341,124 @@ export type WorkerOutboundMessage =
 
 ---
 
-## 6. Research & Benchmark Harness Contracts (NON-NORMATIVE HISTORICAL / CONCEPTUAL PLACEHOLDER)
+## 6. Research & Benchmark Harness Contracts (PRELIMINARY PHASE 5 PREFLIGHT CANDIDATE)
 
-> [!WARNING]
-> **Phase 5 has NOT started.** The interfaces below are historical/conceptual placeholders and must NOT be interpreted as frozen implementation contracts.
-> All benchmark schemas, seed semantics, metric definitions, and package boundaries require explicit resolution during Phase 5 preflight (`PHASE5_PREFLIGHT_DECISION_REQUIRED`).
+> [!NOTE]
+> **Phase 5 Preflight Candidate Contracts:** The interfaces below define the frozen preflight candidate contracts for `@gearcube/benchmark` pursuant to [`docs/development/PHASE_5_IMPLEMENTATION_PLAN.md`](../development/PHASE_5_IMPLEMENTATION_PLAN.md).
+> Implementation has **not** started. Literal public exports will live in `packages/benchmark` upon Phase 5A bootstrap.
 
 ```typescript
-// NON-NORMATIVE CONCEPTUAL EXAMPLE — PHASE5_PREFLIGHT_DECISION_REQUIRED
+/**
+ * Configuration schema for an empirical benchmark run.
+ */
 export interface BenchmarkSuiteConfig {
+  readonly schemaVersion: '1';
   readonly suiteId: string;
-  readonly scrambleDepths: readonly number[];
-  readonly trialsPerDepth: number;
-  readonly randomSeed: number;
+  readonly seed: string;
+  readonly exactDepths: readonly number[]; // e.g. [1, 2, 3, 4, 5, 6, 7, 8]
+  readonly casesPerDepth: number;          // e.g. 5
   readonly algorithms: readonly SolverAlgorithm[];
-}
-
-export interface BenchmarkTrialMetric {
-  readonly trialIndex: number;
-  readonly scrambleDepth: number;
-  readonly scrambleSequence: readonly Move[];
-  readonly algorithm: SolverAlgorithm;
-  readonly executionTimeMs: number;
-  readonly nodesExpanded: number;
-  readonly solutionLength: number;
-  readonly isOptimal: boolean;
-}
-
-export interface BenchmarkReport {
-  readonly timestamp: string;
-  readonly config: BenchmarkSuiteConfig;
-  readonly trials: readonly BenchmarkTrialMetric[];
-  readonly summary: {
-    readonly meanTimeMsByDepth: Record<number, number>;
-    readonly meanNodesByDepth: Record<number, number>;
-    readonly optimalityRate: number;
+  readonly warmupRuns: number;             // default: 0
+  readonly measuredRuns: number;           // default: 1
+  readonly limits?: {
+    readonly maxNodes?: number;
+    readonly maxDepth?: number;
   };
+}
+
+/**
+ * Deterministically sampled benchmark case with ground-truth mathematical distance.
+ */
+export interface BenchmarkCase {
+  readonly caseId: string;       // Deterministic case identifier e.g. "d3_c0"
+  readonly stateKey: string;     // Canonical state serialization string
+  readonly exactDepth: number;   // True distance from solved state (1..8)
+}
+
+/**
+ * Individual algorithm trial execution result.
+ */
+export interface BenchmarkTrialResult {
+  // Deterministic Identifiers
+  readonly caseId: string;
+  readonly exactDepth: number;
+  readonly algorithm: SolverAlgorithm;
+  readonly repetitionIndex: number;
+  readonly isWarmup: boolean;
+
+  // Deterministic Search Metrics
+  readonly status: 'SOLVED' | 'LIMIT_REACHED' | 'ERROR';
+  readonly solutionDepth?: number;
+  readonly solutionMoves?: readonly string[];
+  readonly nodesExpanded: number;
+  readonly nodesGenerated: number;
+  readonly limitReason?: 'MAX_NODES' | 'MAX_DEPTH';
+
+  // Observational Performance Metrics
+  readonly elapsedMs: number;
+  readonly memoryBytes?: number | 'NOT_AVAILABLE';
+}
+
+/**
+ * Summary metrics aggregated by depth for an individual algorithm.
+ */
+export interface AlgorithmSummaryByDepth {
+  readonly exactDepth: number;
+  readonly totalTrials: number;
+  readonly solvedCount: number;
+  readonly limitCount: number;
+  readonly meanNodesExpanded: number;
+  readonly medianNodesExpanded: number;
+  readonly meanNodesGenerated: number;
+  readonly medianNodesGenerated: number;
+  readonly meanElapsedMs: number;
+  readonly medianElapsedMs: number;
+}
+
+/**
+ * Summary metrics aggregated across an entire suite for an algorithm.
+ */
+export interface AlgorithmSummary {
+  readonly algorithm: SolverAlgorithm;
+  readonly byDepth: readonly AlgorithmSummaryByDepth[];
+  readonly totalSolved: number;
+  readonly totalLimits: number;
+  readonly overallMeanNodesExpanded: number;
+  readonly overallMedianElapsedMs: number;
+}
+
+/**
+ * Complete benchmark summary.
+ */
+export interface BenchmarkSummary {
+  readonly totalCases: number;
+  readonly totalTrials: number;
+  readonly algorithms: readonly AlgorithmSummary[];
+}
+
+/**
+ * Non-normative host and runtime provenance metadata.
+ */
+export interface EnvironmentProvenance {
+  readonly platform: 'node' | 'browser';
+  readonly userAgent?: string;
+  readonly nodeVersion?: string;
+  readonly os?: string;
+  readonly cpuModel?: string;
+  readonly logicalCores?: number;
+  readonly executionTimestamp: string;
+}
+
+/**
+ * Complete, lossless exported benchmark report.
+ */
+export interface BenchmarkReport {
+  readonly schemaVersion: '1';
+  readonly config: BenchmarkSuiteConfig;
+  readonly environment: EnvironmentProvenance;
+  readonly cases: readonly BenchmarkCase[];
+  readonly trials: readonly BenchmarkTrialResult[];
+  readonly summary: BenchmarkSummary;
 }
 ```
 

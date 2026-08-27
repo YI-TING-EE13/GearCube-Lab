@@ -13,13 +13,14 @@ GearCube Lab is architected around strict unidirectional layer isolation. The do
 1. **Unidirectional Dependency Direction:**
    $$\text{UI} \longrightarrow \text{Renderer} \longrightarrow \text{Kinematics} \longrightarrow \text{Core}$$
    $$\text{Solvers} \longrightarrow \text{Core}$$
-   *(Phase 5 Benchmark dependency boundary is not yet frozen; candidate directions such as $\text{Benchmark} \longrightarrow \text{Solvers} \longrightarrow \text{Core}$ vs. direct $\text{Benchmark} \longrightarrow \text{Core}$ are subject to `PHASE5_PREFLIGHT_DECISION_REQUIRED`.)*
+   $$\text{Benchmark} \longrightarrow \text{Solvers} \ \text{and} \ \text{Core}$$
+   *(Phase 5 Benchmark preflight candidate architecture: `packages/benchmark` depends directly on `@gearcube/core` and `@gearcube/solvers`; `apps/web` Research Mode consumes `@gearcube/benchmark` via a dedicated Web Worker; status: `PHASE5_PREFLIGHT_CANDIDATE`.)*
 2. **Zero Core Framework Coupling:**
    The Puzzle Domain Core has zero dependencies on React, Three.js, R3F, Zustand, Web APIs, DOM, or ML frameworks.
 3. **Renderer Independence:**
    The 3D Scene Graph and mesh instances reflect state; they never own, mutate, or calculate puzzle state transitions.
 4. **Thread Boundary Isolation:**
-   Expensive combinatorial search algorithms execute outside the browser UI/main thread in background Web Workers so that solving does not directly block rendering or interaction.
+   Expensive combinatorial search and batch benchmark algorithms execute outside the browser UI/main thread in background Web Workers so that solving and benchmarking do not block rendering or interaction.
 
 ---
 
@@ -38,10 +39,12 @@ graph TD
         Encoding[State Encoding & Serialization<br/>Deterministic Hashes / Canonical Keys]
     end
 
-    subgraph ComputeSpace [Solver Subsystem (Implemented) & Research Subsystems (Future)]
-        WorkerAdapter[Browser Worker Adapter<br/>apps/web/src/workers/solver.worker.ts]
+    subgraph ComputeSpace [Solver Subsystem (Implemented) & Research Subsystems (Phase 5 Candidate)]
+        WorkerAdapter[Browser Solver Worker Adapter<br/>apps/web/src/workers/solver.worker.ts]
         SolverEngine[Pure Solver Engine<br/>Pure TS Algorithms — packages/solvers]
-        Benchmark[Research & Benchmark Harness<br/>packages/benchmark — Phase 5 Not Started]
+        BenchmarkWorker[Browser Benchmark Worker Adapter<br/>apps/web/src/workers/benchmark.worker.ts — Phase 5D]
+        BenchmarkEngine[Pure Benchmark Engine<br/>packages/benchmark — Phase 5 Preflight Candidate]
+        NodeCLI[Node CLI Runner<br/>packages/benchmark/src/cli.ts — Phase 5B]
     end
 
     subgraph FutureSubsystems [Offline Research & Vision Ingestion — Future]
@@ -61,7 +64,11 @@ graph TD
     SolverEngine -->|Evaluates States & Legal Moves| Core
     WorkerAdapter -->|Streams Progress & Terminal Results| UI
 
-    Benchmark -.->|Candidate Boundary (TBD Phase 5 Preflight)| SolverEngine
+    UI -->|Initiates Research Run / Cancel| BenchmarkWorker
+    BenchmarkWorker -->|Executes Benchmark Suites| BenchmarkEngine
+    NodeCLI -->|Executes Headless Suites| BenchmarkEngine
+    BenchmarkEngine -->|Evaluates Search Algorithms| SolverEngine
+    BenchmarkEngine -->|Traverses Independent Corpus| Core
 
     MLTraining -.->|Exports Weights / ONNX / JSON| SolverEngine
     VisionPipeline -.->|Validates & Ingests Reconstructed State| Core
@@ -114,10 +121,19 @@ graph TD
   - User cancellation is handled by host-driven `worker.terminate()` (no in-band CANCEL_SOLVE protocol message required).
 - **Prohibited Dependencies:** Must not access DOM, window, Three.js, React, or browser Worker global objects directly. Depends only on `@gearcube/core`.
 
-### 3.6. Research & Benchmark Harness (`packages/benchmark` — Phase 5 — Not Started)
-- **Status & Scope:** `PROPOSED OBJECTIVES / NOT FROZEN` (`PHASE5_PREFLIGHT_DECISION_REQUIRED`).
-- **Broad Objective:** Provide a reproducible comparative solver research and evaluation harness.
-- **Unresolved Preflight Decisions:** Exact fixture generation ownership, sampling methodology, metric schemas (time, memory, nodes), export formats (JSON/CSV), package dependency boundaries, and CLI vs. browser UI integration are explicitly deferred to Phase 5 preflight before any implementation begins.
+### 3.6. Research & Benchmark Harness (`packages/benchmark` — Phase 5 Preflight Candidate)
+- **Status & Scope:** `PHASE5_PREFLIGHT_CANDIDATE` ([`docs/development/PHASE_5_IMPLEMENTATION_PLAN.md`](../development/PHASE_5_IMPLEMENTATION_PLAN.md); implementation `NOT STARTED`).
+- **Core Responsibilities:**
+  - Owns the independent Core-only exact-distance corpus builder (discovering 41,472 canonical states and diameter 8 without calling production solvers).
+  - Implements deterministic stratified sampling (FNV-1a + Mulberry32 PRNG) across exact depths $1 \dots 8$.
+  - Executes batch comparative search runs across classical solvers (`solveBfs`, `solveBidirectionalBfs`, `solveIdaStar`).
+  - Gathers deterministic search metrics (`nodesExpanded`, `nodesGenerated`, `solutionDepth`, `solutionMoves`, `status`) and observational metrics (`elapsedMs`, optional memory).
+  - Exports lossless versioned JSON and flat 14-column CSV reports.
+- **Execution Boundaries:**
+  - **Shared Engine (`packages/benchmark`):** Pure TypeScript, zero UI/DOM or 3rd-party runtime dependencies.
+  - **Node CLI Adapter (`packages/benchmark/src/cli.ts`):** Headless terminal runner with filesystem output.
+  - **Browser Research Mode (`apps/web`):** Dedicated Web Worker (`apps/web/src/workers/benchmark.worker.ts`) preventing heavy benchmark workloads from blocking the UI thread.
+- **Prohibited Dependencies:** Zero dependencies on React, Three.js, R3F, DOM, or Worker global objects in shared engine entry.
 
 ### 3.7. Offline ML Research Pipeline (`ml/` — Future Phase 6)
 - **Responsibilities:**

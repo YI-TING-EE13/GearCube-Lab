@@ -212,11 +212,25 @@
   - `STEP_BACK_FORWARD_GATE`: Step back/forward history navigation within baseline bounds in `solve-mode.spec.ts`.
   - `RESPONSIVE_SOLVER_UI_GATE`: Verified layout bounds across desktop, tablet, and mobile in `solve-mode.spec.ts`.
 
-### Level 8: Seeded Benchmark Determinism & Metrics
-- **Scope:** `packages/benchmark` (Future Phase 5)
-- **Focus:** Empirical repeatability of research runs.
-- **Invariants Tested:**
-  - Running a benchmark suite twice with seed `1337` produces bit-for-bit identical node expansion counts and solution paths.
+### Level 8: Seeded Benchmark Determinism & Empirical Metrics (Future Phase 5)
+- **Scope:** `packages/benchmark` (Phase 5)
+- **Focus:** Empirical repeatability, deterministic metric verification, and algorithm search efficiency comparisons.
+- **Contract Principles:**
+  - **Deterministic Metrics (Bit-for-Bit Equality Gates):** `schemaVersion`, `suiteId`, `seed`, `exactDepths`, `casesPerDepth`, `caseId`, `stateKey`, `exactDepth`, `algorithm`, `repetitionIndex`, `status`, `solutionDepth`, `solutionMoves`, `nodesExpanded`, `nodesGenerated`, `limitReason`. Repeated runs with identical configuration and seed must match these fields bit-for-bit.
+  - **Observational Metrics (Excluded from Deterministic Gates):** `elapsedMs`, memory measurements (`memoryBytes` or `'NOT_AVAILABLE'`), timestamps, host/environment metadata (CPU, OS, Node/browser version).
+- **Invariants Tested & Preflight Gates:**
+  - `BENCHMARK_PACKAGE_BOUNDARY_GATE`: `@gearcube/benchmark` depends strictly on `@gearcube/core` and `@gearcube/solvers`; zero UI/DOM or 3rd-party dependencies.
+  - `CORE_TRUTH_GATE`: Domain transitions and serialization owned solely by `@gearcube/core`.
+  - `EXACT_DISTANCE_CORPUS_CLOSURE_GATE`: Independent Core-only traversal discovers exactly 41,472 canonical states without calling production solver implementations.
+  - `EXACT_DISTANCE_DIAMETER_GATE`: Maximum exact distance verified as exactly 8.
+  - `SAMPLING_DETERMINISM_GATE`: Seed string normalized via FNV-1a and Mulberry32 PRNG produces bit-for-bit identical case selections and orderings.
+  - `CASE_ID_STABILITY_GATE`: Stable case IDs assigned deterministically (`d<depth>_c<index>`).
+  - `REPEATED_RUN_DETERMINISM_GATE`: Identical suite runs yield bit-for-bit identical search paths, depths, node counters, and terminal statuses.
+  - `OPTIMALITY_GATE`: For all solved exact-distance cases, `solutionDepth === exactDepth` for BFS, Bidirectional BFS, and IDA*.
+  - `JSON_EXPORT_ROUNDTRIP_GATE`: Lossless JSON export conforms to schema and recovers all case and trial records.
+  - `CSV_SCHEMA_GATE`: Flat CSV export strictly adheres to the 14-column specification with valid space-delimited move strings.
+  - `CLI_HEADLESS_GATE`: Node CLI executes and emits reports without unhandled exceptions.
+  - `ALGORITHM_FAIRNESS_GATE`: BFS, BiBFS, and IDA* evaluated on identical case instances with identical configured resource limits.
 
 ### Level 9: Browser End-to-End Tests (Playwright — Available / Implemented)
 - **Scope:** Whole Web Application (`playwright.config.ts`, `tests/e2e/play-mode.spec.ts`)
