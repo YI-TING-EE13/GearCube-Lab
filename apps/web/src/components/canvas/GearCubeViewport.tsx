@@ -92,11 +92,9 @@ export const GearCubeViewport: React.FC = () => {
 
   // Mode Transition Handlers
   const handleSwitchToPlay = useCallback(() => {
-    if (benchmarkWorkerState.status === 'ACTIVE') {
-      cancelBenchmark();
-    }
+    cancelBenchmark();
     setWorkspaceMode('PLAY');
-  }, [benchmarkWorkerState.status, cancelBenchmark]);
+  }, [cancelBenchmark]);
 
   const handleSwitchToResearch = useCallback(() => {
     if (!isSessionIdle(app.session)) {
@@ -345,7 +343,7 @@ export const GearCubeViewport: React.FC = () => {
   });
 
   return (
-    <div className="canvas-container" style={{ width: '100vw', height: '100vh', position: 'relative' }}>
+    <div className={`canvas-container workspace-mode-${workspaceMode.toLowerCase()}`} style={{ width: '100vw', height: '100vh', position: 'relative' }}>
       <Canvas
         camera={{
           position: [3.5, 3.0, 4.5],

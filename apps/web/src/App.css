@@ -1454,6 +1454,26 @@ body,
   }
 }
 
+@media (max-width: 640px) {
+  .workspace-mode-play .workspace-mode-switch {
+    top: 8px;
+  }
+
+  .workspace-mode-play .top-overlay-bar {
+    top: 44px;
+  }
+
+  .workspace-mode-research .workspace-mode-switch {
+    top: 8px;
+  }
+
+  .workspace-mode-research .research-mode-overlay {
+    top: 44px;
+    bottom: 8px;
+    padding: 0 8px;
+  }
+}
+
 @media (max-width: 480px) {
   .workspace-mode-switch {
     top: 8px;
