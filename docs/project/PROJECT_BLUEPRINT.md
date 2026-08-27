@@ -81,13 +81,13 @@
 - Solution playback controls (implemented & accepted: Play, Pause, Step Forward, Step Backward; Auto-Step Speed slider is DEFERRED / FUTURE).
 - 3D visual move annotations (directional rotation arrows, highlighted face slices are DEFERRED / FUTURE presentation enhancements).
 
-### Mode 3: Research & Benchmarking Mode (Phase 5 Preflight Candidate — Implementation Not Started)
+### Mode 3: Research & Benchmarking Mode (Phase 5 Preflight Accepted — Implementation Not Started)
 - Empirical research harness defined in [`docs/development/PHASE_5_IMPLEMENTATION_PLAN.md`](../development/PHASE_5_IMPLEMENTATION_PLAN.md):
   - Independent Core-only exact-distance corpus builder (discovering 41,472 canonical states and diameter 8).
-  - Deterministic stratified sampling (FNV-1a + Mulberry32 PRNG) across exact depths $1 \dots 8$.
+  - Deterministic stratified sampling (FNV1A_UTF16_CODE_UNITS_32 + Mulberry32 PRNG) across exact depths $1 \dots 8$.
   - Comparative batch runner evaluating BFS, Bidirectional BFS, and IDA* across identical cases and resource limits.
-  - Telemetry logging: deterministic search metrics (`nodesExpanded`, `nodesGenerated`, `solutionDepth`, `solutionMoves`, `status`) and observational metrics (`elapsedMs`, optional memory).
-  - Export benchmark results in lossless versioned JSON and flat 14-column CSV formats.
+  - Telemetry logging: deterministic search metrics (`nodesExpanded`, `nodesGenerated`, `solutionDepth`, `solutionMoves`, `status`, `limitReason`) and observational metrics (`elapsedMs`).
+  - Export benchmark results in lossless versioned JSON and flat 14-column RFC-4180 CSV formats.
   - Dedicated background Web Worker execution in `apps/web` (Phase 5D) ensuring UI remains interactive during benchmarking.
 
 ---
@@ -128,7 +128,7 @@
 |        |           v (Discrete State & Legal Moves)                               |
 |  [ Classical Solver Worker (BFS / BiBFS / IDA*) — Implemented & Accepted (Phase 4) ]              |
 |                                                                                   |
-|  [ Research & Benchmark Harness (Headless Runner & Telemetry Exporter) — Phase 5 Not Started ]   |
+|  [ Research & Benchmark Harness (Headless Runner & Telemetry Exporter) — Phase 5 Preflight Accepted ] |
 |                                                                                   |
 |  [ AI / Neural Search (Web Worker Inference) — Future (Phase 6) ]                                 |
 |                                                                                   |
@@ -160,7 +160,7 @@ $$\text{Presentation Layer (UI/3D)} \longrightarrow \text{Domain Core Contracts}
 | `packages/kinematics` | Continuous trajectory generation, coupled gear angles, static piece placement projection | Depends only on `@gearcube/core` | Implemented & Accepted |
 | `apps/web` | Web application container hosting React UI components, R3F/Three.js 3D viewport, procedural piece geometries, MoveControls, single authoritative `GearCubeSessionState`, Play Mode history/undo/redo/scramble/keyboard (Phase 3), Solve Mode UI/playback/Worker adapter (Phase 4) | Internal: `@gearcube/core`, `@gearcube/kinematics`, `@gearcube/solvers`; External: React, R3F, Three.js presentation stack (no Zustand requirement) | Implemented & Accepted (Phases 1–4) |
 | `packages/solvers` | Classical graph search (primary: BFS, Bidirectional BFS, IDA* with H2 two-slice PDB heuristic; optional/deferred: IDDFS, A*, Pattern Databases), heuristic estimators | Depends only on `@gearcube/core` | Implemented & Accepted (Phase 4) |
-| `packages/benchmark` | Pure benchmark engine, independent Core-only exact-distance corpus builder, deterministic stratified sampling, comparative solver runner, JSON/CSV exports, and Node CLI adapter | Depends directly on `@gearcube/core` and `@gearcube/solvers`; zero UI/DOM runtime dependencies | Preflight Candidate (Phase 5 — Implementation Not Started) |
+| `packages/benchmark` | Pure benchmark engine, independent Core-only exact-distance corpus builder, deterministic stratified sampling, comparative solver runner, JSON/CSV exports, and Node CLI adapter | Depends directly on `@gearcube/core` and `@gearcube/solvers`; zero UI/DOM runtime dependencies | Preflight Accepted (Phase 5 — Implementation Not Started) |
 | `ml/` (Python) | PyTorch model architectures, offline self-play/dataset generation, heuristic export | Python (version selected based on ML dependency compatibility) managed exclusively via `uv` | Planned (Phase 6) |
 | `packages/vision` | Webcam video capture, color segmentation, state consistency validation, and correction | Browser WebRTC / Canvas APIs; depends on `@gearcube/core` | Planned (Phase 7) |
 

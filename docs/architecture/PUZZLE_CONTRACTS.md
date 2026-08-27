@@ -341,11 +341,11 @@ export type WorkerOutboundMessage =
 
 ---
 
-## 6. Research & Benchmark Harness Contracts (PRELIMINARY PHASE 5 PREFLIGHT CANDIDATE)
+## 6. Research & Benchmark Harness Contracts (PHASE 5 PREFLIGHT ACCEPTED CONTRACTS)
 
 > [!NOTE]
-> **Phase 5 Preflight Candidate Contracts:** The interfaces below define the frozen preflight candidate contracts for `@gearcube/benchmark` pursuant to [`docs/development/PHASE_5_IMPLEMENTATION_PLAN.md`](../development/PHASE_5_IMPLEMENTATION_PLAN.md).
-> Implementation has **not** started. Literal public exports will live in `packages/benchmark` upon Phase 5A bootstrap.
+> **Phase 5 Preflight Accepted Contracts:** The interfaces below define the frozen and accepted preflight contracts for `@gearcube/benchmark` pursuant to [`docs/development/PHASE_5_IMPLEMENTATION_PLAN.md`](../development/PHASE_5_IMPLEMENTATION_PLAN.md).
+> Implementation has **not** started. Literal public package exports will be created in `packages/benchmark` in Phase 5A/5B according to these accepted contracts.
 
 ```typescript
 /**

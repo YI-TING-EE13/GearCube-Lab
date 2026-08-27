@@ -1,6 +1,6 @@
 # SYSTEM_ARCHITECTURE.md — System Architecture & Component Contracts
 
-> **Document Status:** `DECIDED (Accepted architecture through Phase 4); Phase 5 additions: PHASE5_PREFLIGHT_CANDIDATE`
+> **Document Status:** `DECIDED (Accepted architecture through Phase 4; Phase 5 preflight architecture accepted); Phase 5 implementation: NOT STARTED`
 > **Target System:** GearCube Lab Web Application & Research Framework
 
 ---
@@ -14,7 +14,7 @@ GearCube Lab is architected around strict unidirectional layer isolation. The do
    $$\text{UI} \longrightarrow \text{Renderer} \longrightarrow \text{Kinematics} \longrightarrow \text{Core}$$
    $$\text{Solvers} \longrightarrow \text{Core}$$
    $$\text{Benchmark} \longrightarrow \text{Solvers} \ \text{and} \ \text{Core}$$
-   *(Phase 5 Benchmark preflight candidate architecture: `packages/benchmark` depends directly on `@gearcube/core` and `@gearcube/solvers`; `apps/web` Research Mode consumes `@gearcube/benchmark` via a dedicated Web Worker; status: `PHASE5_PREFLIGHT_CANDIDATE`.)*
+   *(Phase 5 Benchmark preflight accepted architecture: `packages/benchmark` depends directly on `@gearcube/core` and `@gearcube/solvers`; `apps/web` Research Mode consumes `@gearcube/benchmark` via a dedicated Web Worker; status: `PHASE5_PREFLIGHT_ACCEPTED`.)*
 2. **Zero Core Framework Coupling:**
    The Puzzle Domain Core has zero dependencies on React, Three.js, R3F, Zustand, Web APIs, DOM, or ML frameworks.
 3. **Renderer Independence:**
@@ -39,11 +39,11 @@ graph TD
         Encoding[State Encoding & Serialization<br/>Deterministic Hashes / Canonical Keys]
     end
 
-    subgraph ComputeSpace [Solver Subsystem (Implemented) & Research Subsystems (Phase 5 Candidate)]
+    subgraph ComputeSpace [Solver Subsystem (Implemented) & Research Subsystems (Phase 5 Preflight Accepted)]
         WorkerAdapter[Browser Solver Worker Adapter<br/>apps/web/src/workers/solver.worker.ts]
         SolverEngine[Pure Solver Engine<br/>Pure TS Algorithms — packages/solvers]
         BenchmarkWorker[Browser Benchmark Worker Adapter<br/>apps/web/src/workers/benchmark.worker.ts — Phase 5D]
-        BenchmarkEngine[Pure Benchmark Engine<br/>packages/benchmark — Phase 5 Preflight Candidate]
+        BenchmarkEngine[Pure Benchmark Engine<br/>packages/benchmark — Phase 5 Preflight Accepted]
         NodeCLI[Node CLI Runner<br/>packages/benchmark/src/cli.ts — Phase 5B]
     end
 
@@ -121,8 +121,8 @@ graph TD
   - User cancellation is handled by host-driven `worker.terminate()` (no in-band CANCEL_SOLVE protocol message required).
 - **Prohibited Dependencies:** Must not access DOM, window, Three.js, React, or browser Worker global objects directly. Depends only on `@gearcube/core`.
 
-### 3.6. Research & Benchmark Harness (`packages/benchmark` — Phase 5 Preflight Candidate)
-- **Status & Scope:** `PHASE5_PREFLIGHT_CANDIDATE` ([`docs/development/PHASE_5_IMPLEMENTATION_PLAN.md`](../development/PHASE_5_IMPLEMENTATION_PLAN.md); implementation `NOT STARTED`).
+### 3.6. Research & Benchmark Harness (`packages/benchmark` — Phase 5 Preflight Accepted)
+- **Status & Scope:** `PHASE5_PREFLIGHT_ACCEPTED` ([`docs/development/PHASE_5_IMPLEMENTATION_PLAN.md`](../development/PHASE_5_IMPLEMENTATION_PLAN.md); implementation `NOT STARTED`).
 - **Core Responsibilities:**
   - Owns the independent Core-only exact-distance corpus builder (discovering 41,472 canonical states and diameter 8 without calling production solvers).
   - Implements deterministic stratified sampling (FNV1A_UTF16_CODE_UNITS_32 + Mulberry32 PRNG) across exact depths $1 \dots 8$.
