@@ -217,19 +217,29 @@
 - **Focus:** Empirical repeatability, deterministic metric verification, and algorithm search efficiency comparisons.
 - **Contract Principles:**
   - **Deterministic Metrics (Bit-for-Bit Equality Gates):** `schemaVersion`, `suiteId`, `seed`, `exactDepths`, `casesPerDepth`, `caseId`, `stateKey`, `exactDepth`, `algorithm`, `repetitionIndex`, `status`, `solutionDepth`, `solutionMoves`, `nodesExpanded`, `nodesGenerated`, `limitReason`. Repeated runs with identical configuration and seed must match these fields bit-for-bit.
-  - **Observational Metrics (Excluded from Deterministic Gates):** `elapsedMs`, memory measurements (`memoryBytes` or `'NOT_AVAILABLE'`), timestamps, host/environment metadata (CPU, OS, Node/browser version).
+  - **Observational Metrics (Excluded from Deterministic Gates):** `elapsedMs`, timestamps, host/environment metadata (CPU, OS, Node/browser version).
 - **Invariants Tested & Preflight Gates:**
   - `BENCHMARK_PACKAGE_BOUNDARY_GATE`: `@gearcube/benchmark` depends strictly on `@gearcube/core` and `@gearcube/solvers`; zero UI/DOM or 3rd-party dependencies.
   - `CORE_TRUTH_GATE`: Domain transitions and serialization owned solely by `@gearcube/core`.
   - `EXACT_DISTANCE_CORPUS_CLOSURE_GATE`: Independent Core-only traversal discovers exactly 41,472 canonical states without calling production solver implementations.
   - `EXACT_DISTANCE_DIAMETER_GATE`: Maximum exact distance verified as exactly 8.
-  - `SAMPLING_DETERMINISM_GATE`: Seed string normalized via FNV-1a and Mulberry32 PRNG produces bit-for-bit identical case selections and orderings.
-  - `CASE_ID_STABILITY_GATE`: Stable case IDs assigned deterministically (`d<depth>_c<index>`).
+  - `EXACT_DISTANCE_HISTOGRAM_GATE`: Independent corpus verifies exact canonical distance histogram: `{ 0:1, 1:12, 2:111, 3:822, 4:3863, 5:11706, 6:16410, 7:8196, 8:351 }`.
+  - `CASE_ID_STABILITY_GATE`: Case IDs use state-derived `d${exactDepth}:${stateKey}`, invariant to sample position or seed.
+  - `CONFIG_VALIDATION_GATE`: Validator rejects invalid config (schema version, depth range 1..8, non-empty algorithm list) before executing trials.
+  - `SEED_HASH_EXACTNESS_GATE`: `FNV1A_UTF16_CODE_UNITS_32` produces exact 32-bit unsigned hashes across test vectors.
+  - `PRNG_EXACTNESS_GATE`: `MULBERRY32_EXACT` produces bit-for-bit reproducible pseudo-random sequence.
+  - `SAMPLING_ALGORITHM_GATE`: Ordinal string sorting and partial Fisher-Yates shuffle produce deterministic case sequences.
   - `REPEATED_RUN_DETERMINISM_GATE`: Identical suite runs yield bit-for-bit identical search paths, depths, node counters, and terminal statuses.
   - `OPTIMALITY_GATE`: For all solved exact-distance cases, `solutionDepth === exactDepth` for BFS, Bidirectional BFS, and IDA*.
+  - `SOLVER_RESULT_ALIGNMENT_GATE`: Results mapped strictly to `SOLVED` (with depth and canonical `Move[]`) or `LIMIT_REACHED` (with limit reason).
+  - `MEASURED_TRIAL_ONLY_REPORT_GATE`: Warm-up trials are executed, discarded, and excluded from reports, CSV exports, and summaries.
+  - `MOVE_EXPORT_ENCODING_GATE`: Canonical `Move[]` preserved in JSON; CSV serializes space-delimited `<FACE>_<DIRECTION>` tokens.
   - `JSON_EXPORT_ROUNDTRIP_GATE`: Lossless JSON export conforms to schema and recovers all case and trial records.
   - `CSV_SCHEMA_GATE`: Flat CSV export strictly adheres to the 14-column specification with valid space-delimited move strings.
-  - `CLI_HEADLESS_GATE`: Node CLI executes and emits reports without unhandled exceptions.
+  - `CSV_ESCAPING_GATE`: RFC-4180 compliant CSV field quoting and double-quote escaping.
+  - `BROWSER_SAFE_ENTRY_GATE`: Root engine entry exports zero Node built-in dependencies (`node:fs`, `node:path`).
+  - `CLI_HEADLESS_GATE`: Node CLI executes and emits reports; exits 0 on completion (including limit reached), non-zero on validation/runtime error.
+  - `CLI_EXIT_SEMANTICS_GATE`: Validated exit code behavior for completed runs and operational failures.
   - `ALGORITHM_FAIRNESS_GATE`: BFS, BiBFS, and IDA* evaluated on identical case instances with identical configured resource limits.
 
 ### Level 9: Browser End-to-End Tests (Playwright — Available / Implemented)

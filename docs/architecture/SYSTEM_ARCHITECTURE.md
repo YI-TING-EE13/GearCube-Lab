@@ -1,6 +1,6 @@
 # SYSTEM_ARCHITECTURE.md — System Architecture & Component Contracts
 
-> **Document Status:** `DECIDED`
+> **Document Status:** `DECIDED (Accepted architecture through Phase 4); Phase 5 additions: PHASE5_PREFLIGHT_CANDIDATE`
 > **Target System:** GearCube Lab Web Application & Research Framework
 
 ---
@@ -125,14 +125,14 @@ graph TD
 - **Status & Scope:** `PHASE5_PREFLIGHT_CANDIDATE` ([`docs/development/PHASE_5_IMPLEMENTATION_PLAN.md`](../development/PHASE_5_IMPLEMENTATION_PLAN.md); implementation `NOT STARTED`).
 - **Core Responsibilities:**
   - Owns the independent Core-only exact-distance corpus builder (discovering 41,472 canonical states and diameter 8 without calling production solvers).
-  - Implements deterministic stratified sampling (FNV-1a + Mulberry32 PRNG) across exact depths $1 \dots 8$.
+  - Implements deterministic stratified sampling (FNV1A_UTF16_CODE_UNITS_32 + Mulberry32 PRNG) across exact depths $1 \dots 8$.
   - Executes batch comparative search runs across classical solvers (`solveBfs`, `solveBidirectionalBfs`, `solveIdaStar`).
-  - Gathers deterministic search metrics (`nodesExpanded`, `nodesGenerated`, `solutionDepth`, `solutionMoves`, `status`) and observational metrics (`elapsedMs`, optional memory).
-  - Exports lossless versioned JSON and flat 14-column CSV reports.
-- **Execution Boundaries:**
-  - **Shared Engine (`packages/benchmark`):** Pure TypeScript, zero UI/DOM or 3rd-party runtime dependencies.
-  - **Node CLI Adapter (`packages/benchmark/src/cli.ts`):** Headless terminal runner with filesystem output.
-  - **Browser Research Mode (`apps/web`):** Dedicated Web Worker (`apps/web/src/workers/benchmark.worker.ts`) preventing heavy benchmark workloads from blocking the UI thread.
+  - Gathers deterministic search metrics (`nodesExpanded`, `nodesGenerated`, `solutionDepth`, `solutionMoves`, `status`, `limitReason`) and observational metrics (`elapsedMs`).
+  - Exports lossless versioned JSON and flat 14-column RFC-4180 CSV reports.
+- **Execution & Import Boundaries:**
+  - **Shared Engine (`packages/benchmark`):** Pure TypeScript, browser-safe root entry with zero UI/DOM, zero 3rd-party runtime dependencies, and zero `node:fs` / `node:path` / CLI imports.
+  - **Node CLI Adapter (`packages/benchmark/src/cli.ts`):** Isolated Node-only terminal runner with filesystem output (`node:fs`); unreachable from the browser-safe root engine entry.
+  - **Browser Research Mode (`apps/web`):** Dedicated Web Worker (`apps/web/src/workers/benchmark.worker.ts`) importing the browser-safe engine and preventing heavy benchmark workloads from blocking the UI thread.
 - **Prohibited Dependencies:** Zero dependencies on React, Three.js, R3F, DOM, or Worker global objects in shared engine entry.
 
 ### 3.7. Offline ML Research Pipeline (`ml/` — Future Phase 6)

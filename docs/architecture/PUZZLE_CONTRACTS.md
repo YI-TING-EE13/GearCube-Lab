@@ -356,48 +356,59 @@ export interface BenchmarkSuiteConfig {
   readonly suiteId: string;
   readonly seed: string;
   readonly exactDepths: readonly number[]; // e.g. [1, 2, 3, 4, 5, 6, 7, 8]
-  readonly casesPerDepth: number;          // e.g. 5
+  readonly casesPerDepth: number;          // integer >= 1
   readonly algorithms: readonly SolverAlgorithm[];
-  readonly warmupRuns: number;             // default: 0
-  readonly measuredRuns: number;           // default: 1
+  readonly warmupRuns: number;             // integer >= 0, default: 0
+  readonly measuredRuns: number;           // integer >= 1, default: 1
   readonly limits?: {
-    readonly maxNodes?: number;
-    readonly maxDepth?: number;
+    readonly maxNodes?: number;            // integer >= 1
+    readonly maxDepth?: number;            // integer >= 0
   };
 }
 
 /**
- * Deterministically sampled benchmark case with ground-truth mathematical distance.
+ * Deterministically sampled benchmark case with state-derived stable identifier.
  */
 export interface BenchmarkCase {
-  readonly caseId: string;       // Deterministic case identifier e.g. "d3_c0"
-  readonly stateKey: string;     // Canonical state serialization string
-  readonly exactDepth: number;   // True distance from solved state (1..8)
+  readonly caseId: string;       // State-derived stable identifier: `d${exactDepth}:${stateKey}`
+  readonly stateKey: string;     // Canonical serializeLogicalState string
+  readonly exactDepth: number;   // True mathematical distance from solved state (1..8)
 }
 
 /**
- * Individual algorithm trial execution result.
+ * Common base fields for measured solver trial execution results.
  */
-export interface BenchmarkTrialResult {
-  // Deterministic Identifiers
+export interface BenchmarkTrialBase {
   readonly caseId: string;
   readonly exactDepth: number;
   readonly algorithm: SolverAlgorithm;
-  readonly repetitionIndex: number;
-  readonly isWarmup: boolean;
-
-  // Deterministic Search Metrics
-  readonly status: 'SOLVED' | 'LIMIT_REACHED' | 'ERROR';
-  readonly solutionDepth?: number;
-  readonly solutionMoves?: readonly string[];
+  readonly repetitionIndex: number; // 0-indexed measured run: 0 .. measuredRuns - 1
   readonly nodesExpanded: number;
   readonly nodesGenerated: number;
-  readonly limitReason?: 'MAX_NODES' | 'MAX_DEPTH';
-
-  // Observational Performance Metrics
-  readonly elapsedMs: number;
-  readonly memoryBytes?: number | 'NOT_AVAILABLE';
+  readonly elapsedMs: number;       // Unrounded observational timing from solver
 }
+
+/**
+ * Solved trial execution result.
+ */
+export interface BenchmarkSolvedTrial extends BenchmarkTrialBase {
+  readonly status: 'SOLVED';
+  readonly solutionDepth: number;
+  readonly solutionMoves: readonly Move[];
+}
+
+/**
+ * Limit reached trial execution result.
+ */
+export interface BenchmarkLimitTrial extends BenchmarkTrialBase {
+  readonly status: 'LIMIT_REACHED';
+  readonly limitReason: 'MAX_NODES' | 'MAX_DEPTH';
+}
+
+/**
+ * Individual measured algorithm trial result (discriminated union).
+ */
+export type BenchmarkTrialResult = BenchmarkSolvedTrial | BenchmarkLimitTrial;
 
 /**
  * Summary metrics aggregated by depth for an individual algorithm.
@@ -441,16 +452,20 @@ export interface BenchmarkSummary {
  */
 export interface EnvironmentProvenance {
   readonly platform: 'node' | 'browser';
-  readonly userAgent?: string;
-  readonly nodeVersion?: string;
+  readonly executionTimestamp: string; // ISO 8601 string
   readonly os?: string;
+  readonly architecture?: string;
+  readonly nodeVersion?: string;
+  readonly browserName?: string;
+  readonly browserVersion?: string;
+  readonly userAgent?: string;
   readonly cpuModel?: string;
   readonly logicalCores?: number;
-  readonly executionTimestamp: string;
+  readonly repositoryCommit?: string;
 }
 
 /**
- * Complete, lossless exported benchmark report.
+ * Complete, lossless exported benchmark report (contains measured trials only).
  */
 export interface BenchmarkReport {
   readonly schemaVersion: '1';

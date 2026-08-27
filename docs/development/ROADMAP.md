@@ -310,12 +310,12 @@ Phase 0B is partitioned into four dependency-ordered subphases:
   - Browser Research Mode panel with off-main-thread execution and file downloads.
 - **Verification:** Seeded benchmark test runs producing bit-for-bit identical search metrics (node counts, paths, depths, statuses) across repeat runs; independent exact-distance corpus discovering 41,472 states and diameter 8; Playwright browser E2E tests.
 - **Acceptance Gate Criteria (`PHASE_5_PASS`):**
-  - [ ] `packages/benchmark` package boundary strictly depends only on `@gearcube/core` and `@gearcube/solvers`.
-  - [ ] Independent Core-only corpus builder verifies exactly 41,472 reachable states with canonical diameter 8 without calling production solver implementations.
-  - [ ] Stratified sampling from exact-distance buckets with deterministic seeds produces bit-for-bit reproducible case sequences.
-  - [ ] Bit-for-bit identical deterministic search metrics (`nodesExpanded`, `nodesGenerated`, `solutionDepth`, `solutionMoves`, `status`) verified across repeat runs with identical seed and configuration.
+  - [ ] `packages/benchmark` package boundary strictly depends only on `@gearcube/core` and `@gearcube/solvers` with a browser-safe root engine entry.
+  - [ ] Independent Core-only corpus builder verifies exactly 41,472 reachable states, canonical diameter 8, and the exact 0..8 distance histogram without calling production solvers.
+  - [ ] State-derived case identity (`d${exactDepth}:${stateKey}`) and FNV-1a + Mulberry32 stratified sampling yield bit-for-bit reproducible case selections.
+  - [ ] Bit-for-bit identical deterministic search metrics (`nodesExpanded`, `nodesGenerated`, `solutionDepth`, `solutionMoves`, `status`, `limitReason`) verified across repeat runs.
   - [ ] Optimality verified for all solved cases (`solutionDepth === exactDepth`) across BFS, BiBFS, and IDA*.
-  - [ ] Lossless JSON export and 14-column per-trial CSV export match frozen schemas.
+  - [ ] Lossless JSON export and 14-column RFC-4180 CSV export match frozen schemas with measured trials only.
   - [ ] Browser Research Mode executes via dedicated Web Worker without blocking UI interaction, verified by automated Playwright tests and Chrome DevTools acceptance.
 
 ---
