@@ -1,16 +1,17 @@
 # PHASE_5C_EXPERIMENT_PLAN.md — Classical Solver Benchmark Experiment Design & Calibration
 
-> **Document Status:** `PHASE5C_EXPERIMENT_PLAN_CANDIDATE`
+> **Document Status:** `PHASE5C_EXPERIMENT_PLAN_ACCEPTED`
 > **Authoritative Main Baseline:** `e0711761a0ffeeb5555c55e9ae92abc29000c21c`
 > **Planning Branch:** `phase/5c-experiment-plan`
 > **Phase 5 Preflight Status:** `COMPLETED / ACCEPTED ON MAIN`
 > **Phase 5A Status:** `COMPLETED / ACCEPTED ON MAIN`
 > **Phase 5B Status:** `COMPLETED / ACCEPTED ON MAIN`
-> **Phase 5C Status:** `NOT STARTED` (Planning / Calibration Candidate Only)
-> **Phase 5D Status:** `NOT STARTED`
-> **Final Research Execution Started:** `NO`
+> **Phase 5C Planning:** `COMPLETED / ACCEPTED`
+> **Phase 5C Research Execution:** `NOT STARTED`
 > **Final Research Data Collected:** `NO`
+> **Final Report Created:** `NO`
 > **Phase 5C Overall Accepted:** `NO`
+> **Phase 5D Status:** `NOT STARTED`
 
 ---
 
@@ -22,6 +23,17 @@ Phase 5C establishes the empirical comparative evaluation of classical search al
 3. **Iterative Deepening A\* (IDA\*)** — Memory-bounded heuristic search guided by the admissible, consistent H2 two-slice pattern database (PDB) heuristic ($10.37\text{ KB}$ footprint).
 
 This document formalizes the complete Phase 5C experiment design, statistical analysis units, deterministic matrices, timing interpretation constraints, pre-run execution baseline commit protocols, quartile algorithms, raw/derived artifact schemas, reproducibility gates, and pilot calibration evidence **prior to** executing any final research benchmark runs.
+
+### 1.1. Formal Acceptance Record
+- **Authoritative Main Baseline:** `e0711761a0ffeeb5555c55e9ae92abc29000c21c`
+- **Initial Plan Candidate Head:** `0987f1cd15293af0902cd29831405e62e1a6eec8`
+- **Analysis-Protocol Repair Head:** `5d9c65e3ecef77190f06d86513349719cc20d569`
+- **Accepted Plan Technical Head:** `710c949cb159e06116019c86bc810c11e29bf845`
+- **Independent Final Review:** `PASS`
+- **Experiment Matrix Accepted:** `YES` (Structural: 222 cases / 666 trials; Timing: 64 cases $\times 3$ process replicates / 2880 measured trials; 4,698 total solver invocations)
+- **Pilot Calibration Accepted:** `YES — CALIBRATION ONLY` (Pilot evidence validated engine feasibility and timer quantization; pilot values are excluded from final research datasets)
+- **Final Data Collection Authorization:** `AUTHORIZED BY PLAN`, to proceed strictly AFTER fast-forward promotion of this accepted plan to main and creation of the dedicated Phase 5C execution-baseline commit (`PHASE5C_EXECUTION_BASELINE_COMMIT`).
+- **Final Research Execution Started:** `NO` (Research execution remains `NOT STARTED`)
 
 ---
 
