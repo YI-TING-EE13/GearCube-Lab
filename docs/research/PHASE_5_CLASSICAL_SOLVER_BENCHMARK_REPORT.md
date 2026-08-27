@@ -25,7 +25,7 @@ Across a frozen benchmark suite comprising **222 unique structural cases** (666 
   - Within the sampled structural strata, BFS search effort increased sharply with exact depth, expanding a median of 41,324 nodes (generating 495,888 nodes) at depth 8.
   - BiBFS reduced median expanded-node counts relative to BFS at every measured depth, expanding a median of 1,892 nodes at depth 8 (a median paired reduction factor of **21.84×** vs. BFS).
   - IDA\* with $H_2$ achieved substantial state-expansion reductions at deeper strata, expanding a median of 44 nodes at depth 8 (a median paired reduction factor of **939.90×** vs. BFS).
-- **Observational Execution Time**: Runtime measurements exhibit consistent rank-ordering with deterministic node counters at resolved depths. However, integer-millisecond timer quantization ($\text{Date.now()}$) renders shallow and highly pruned search cells ($< 1\text{ ms}$) `TIMER_RESOLUTION_LIMITED`.
+- **Observational Execution Time**: Runtime measurements exhibit consistent rank-ordering with deterministic node counters at resolved depths. However, integer-millisecond $\text{Date.now()}$ quantization produces `TIMER_RESOLUTION_LIMITED` cells where the derived median is recorded as $0\text{ ms}$ (which does not imply zero execution duration).
 - **Deterministic Reproducibility**: The deterministic projection was identical across all three timing process replicates, with zero mismatches; `elapsedMs` and `executionTimestamp` were intentionally excluded from this equality contract.
 
 ---
@@ -279,7 +279,7 @@ Cross-process determinism was verified across the three independent timing runs 
 | **OPTIMALITY_GATE** | solutionDepth == exactDepth | 0 optimality violations across all trials | **PASS** |
 | **REPRODUCIBILITY_GATE** | Deterministic projection identity across replicates | 0 mismatches across 3 CLI replicates | **PASS** |
 | **RAW_ARTIFACT_INTEGRITY_GATE** | Immutable raw JSON/CSV SHA-256 hashes | All 10 raw file hashes match accepted record | **PASS** |
-| **STRUCTURAL_ANALYSIS_GATE** | Traceable paired reduction statistics | Derived CSV matches raw data 1:1 | **PASS** |
+| **STRUCTURAL_ANALYSIS_GATE** | Traceable paired reduction statistics | Derived structural statistics were deterministically recomputed from and independently validated against committed raw evidence | **PASS** |
 | **TIMING_RESOLUTION_GATE** | Two-stage median with quantization labeling | `TIMER_RESOLUTION_LIMITED` labeled | **PASS** |
 | **METRIC_SEPARATION_GATE** | Primary deterministic / secondary timing | Separate structural and timing tables | **PASS** |
 | **REPORT_TRACEABILITY_GATE** | Full traceability to committed artifacts | Relative paths to configs, raw, derived | **PASS** |
@@ -305,7 +305,7 @@ Cross-process determinism was verified across the three independent timing runs 
 1. **BFS Scalability**: Within the sampled structural strata, BFS search effort increased sharply with exact depth, reaching a median of 41,324 expanded nodes and 495,888 generated nodes at depth 8.
 2. **BiBFS Practicality**: BiBFS reduced median expanded-node counts relative to BFS at every measured depth, with paired median reduction factors ranging from 6.50× to 110.40× across depths 1–8, without requiring precomputed heuristic tables.
 3. **IDA\* Efficiency with $H_2$**: In the sampled structural strata, informed IDA\* search guided by the 12-edge Pattern Database heuristic tied BiBFS at depths 1–2 and had lower median $\text{nodesExpanded}$ and $\text{nodesGenerated}$ at depths 3–8 (expanding $\le 44$ median nodes across all measured depths). For the eight timing-sampled depth-8 cases, IDA\* had a median observational `elapsedMs` of 1 ms on the recorded execution environment. This does not establish universal superiority over every Gear Cube state or arbitrary search implementation.
-4. **Methodological Rigor**: The frozen execution baseline, deterministic PRNG stream, and separate structural/timing suites successfully prevented metric contamination and produced reproducible deterministic projections.
+4. **Methodological Rigor**: The frozen execution baseline, deterministic PRNG stream, and separate structural/timing suites kept the measurement protocols separated and produced reproducible deterministic projections.
 
 ---
 
