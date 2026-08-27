@@ -1,16 +1,16 @@
 # PHASE_5_IMPLEMENTATION_PLAN.md — Research & Benchmarking Harness
 
-> **Document Status:** `PHASE5_ACCEPTANCE_RECORD_CANDIDATE`
+> **Document Status:** `PHASE5_ACCEPTED`
 > **Authoritative Main Baseline:** `717f2b89a425b2da6437e75adf4c4245aee8dc08`
 > **Accepted Technical Head:** `8bc1d51d74e3b047872598f3439755361cd91fb6`
 > **Implementation Branch:** `phase/5d-research-mode-implementation`
 > **Implementation Started:** `YES`
-> **Phase 5 Accepted:** `TECHNICALLY COMPLETE (Formal Acceptance Record Candidate)`
+> **Phase 5 Accepted:** `YES`
 > **Phase 5 Preflight Accepted:** `YES`
 > **Phase 5A Status:** `COMPLETED & ACCEPTED`
 > **Phase 5B Status:** `COMPLETED & ACCEPTED`
 > **Phase 5C Status:** `COMPLETED & ACCEPTED`
-> **Phase 5D Status:** `TECHNICALLY COMPLETED & ACCEPTED`
+> **Phase 5D Status:** `COMPLETED & ACCEPTED`
 
 ---
 
@@ -47,7 +47,7 @@
 - **RAW_WEBGL_ORACLE:** `PASS` (exact decoded RGBA bitmap equality)
 - **INDEPENDENT_TECHNICAL_REVIEW:** `PASS`
 - **PHASE5D_TECHNICAL_STATUS:** `COMPLETED & ACCEPTED`
-- **PROPOSED_PHASE5_FORMAL_STATUS:** `COMPLETED & ACCEPTED (Pending Record Review & Main Promotion)`
+- **PHASE5_FORMAL_STATUS:** `COMPLETED & ACCEPTED`
 
 ### Phase 5C Research & Benchmark Report Acceptance
 - **PHASE5C_EXECUTION_BASELINE_COMMIT:** `1fcc48dffcc10a59dbb9fe1eb1e5d7e2ce123ba6`
@@ -62,7 +62,7 @@
 - **ALL_TEN_PHASE5C_GATES:** `PASS`
 - **INDEPENDENT_REVIEW:** `PASS`
 - **PHASE5C_ACCEPTED:** `YES`
-- **PHASE5D_STATUS:** `TECHNICALLY COMPLETED & ACCEPTED`
+- **PHASE5D_STATUS:** `COMPLETED & ACCEPTED`
 - **REPORT_REFERENCE:** [`docs/research/PHASE_5_CLASSICAL_SOLVER_BENCHMARK_REPORT.md`](../research/PHASE_5_CLASSICAL_SOLVER_BENCHMARK_REPORT.md)
 
 ---

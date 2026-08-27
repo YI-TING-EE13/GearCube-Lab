@@ -6,7 +6,7 @@
 
 ## Project Status
 
-**Current Status:** `Phase 5 Completed / Accepted Candidate (Pending Promotion to Main)`
+**Current Status:** `Phase 5 Completed & Accepted`
 
 > [!IMPORTANT]
 > **Phases 0–5 are technically implemented and accepted.** The discrete core, 3D kinematics, Play Mode UI (Phase 3), full Classical Solver infrastructure with Solve Mode (Phase 4), Phase 5A/5B Headless Benchmark Infrastructure, Phase 5C Classical Solver Comparative Benchmark Research & Report ([`docs/research/PHASE_5_CLASSICAL_SOLVER_BENCHMARK_REPORT.md`](docs/research/PHASE_5_CLASSICAL_SOLVER_BENCHMARK_REPORT.md)), and Phase 5D Browser Research Mode are complete and verified across unit, boundary, automated Playwright browser, and interactive Chrome DevTools acceptance suites. All implementation adheres to the canonical architecture contracts defined in [`docs/`](docs/README.md).

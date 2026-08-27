@@ -1,6 +1,6 @@
 # ROADMAP.md — Project Lifecycle & Dependency-Ordered Milestones
 
-> **Current Milestone:** `Phase 5 — Research & Benchmarking Harness (Technically Completed & Accepted; Formal Acceptance Candidate)`
+> **Current Milestone:** `Phase 5 — Research & Benchmarking Harness (Completed & Accepted)`
 > **Next Milestone:** `Phase 6 — Neural Heuristic & AI-Guided Search (Not Started)`
 > **Previous Milestone:** `Phase 4 — Classical Solver Infrastructure (Completed & Accepted)`
 
@@ -52,7 +52,7 @@
       └─ 4E: Solve Mode UI, Playback & Playwright Browser Acceptance (Completed & Accepted)
       │
       ▼
-[ Phase 5: Research & Benchmarking Harness ] (Completed & Accepted Candidate)
+[ Phase 5: Research & Benchmarking Harness ] (Completed & Accepted)
       ├─ 5 Preflight: Preflight Contract Freeze & Methodology (Completed & Accepted)
       ├─ 5A: Benchmark Package Bootstrap, Schemas & Exact-Distance Corpus (Completed & Accepted)
       ├─ 5B: Headless Runner, Deterministic Sampling, CLI & Exporters (Completed & Accepted)
@@ -292,8 +292,8 @@ Phase 0B is partitioned into four dependency-ordered subphases:
 
 ---
 
-### Phase 5: Research & Benchmarking Harness (Completed & Accepted Candidate)
-- **Status:** `COMPLETED & ACCEPTED CANDIDATE` (Phase 5 Preflight, Phase 5A, Phase 5B, Phase 5C & Phase 5D `COMPLETED & ACCEPTED`; formal acceptance subject to candidate review and promotion to main)
+### Phase 5: Research & Benchmarking Harness (Completed & Accepted)
+- **Status:** `COMPLETED & ACCEPTED` (Phase 5 Preflight, Phase 5A, Phase 5B, Phase 5C & Phase 5D `COMPLETED & ACCEPTED`)
 - **Objective:** Build an empirical research harness to conduct deterministic comparative evaluations of solving algorithms (BFS, Bidirectional BFS, IDA* with pattern databases, and future learned heuristics) across exact-distance-stratified benchmark suites.
 - **Prerequisites:** Completion and acceptance of Phase 4 (`COMPLETED & ACCEPTED ON MAIN`).
 - **In-Scope:** `packages/benchmark` (pure TS engine), independent Core-only exact-distance corpus builder, deterministic FNV-1a + Mulberry32 stratified sampling, algorithm orchestration runner, Node CLI adapter, JSON/CSV exporters, comparative research report, and browser Research Mode with dedicated background Web Worker in `apps/web`.

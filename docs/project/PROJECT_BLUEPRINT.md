@@ -153,7 +153,7 @@ $$\text{Presentation Layer (UI/3D)} \longrightarrow \text{Domain Core Contracts}
 | :--- | :--- | :--- | :--- |
 | `packages/core` | Discrete state models, move definitions, legality checks, canonical serialization, and materialized piece views | Zero external dependencies (no React, no Three.js, no DOM) | Implemented & Accepted |
 | `packages/kinematics` | Continuous trajectory generation, coupled gear angles, static piece placement projection | Depends only on `@gearcube/core` | Implemented & Accepted |
-| `apps/web` | Web application container hosting React UI components, R3F/Three.js 3D viewport, procedural piece geometries, MoveControls, single authoritative `GearCubeSessionState`, Play Mode history/undo/redo/scramble/keyboard (Phase 3), Solve Mode UI/playback/Worker adapter (Phase 4), and Browser Research Mode panel / benchmark Worker adapter (Phase 5D) | Internal: `@gearcube/core`, `@gearcube/kinematics`, `@gearcube/solvers`, `@gearcube/benchmark`; External: React, R3F, Three.js presentation stack (no Zustand requirement) | Implemented & Accepted (Phases 1–5D Technically Accepted; Formal Candidate) |
+| `apps/web` | Web application container hosting React UI components, R3F/Three.js 3D viewport, procedural piece geometries, MoveControls, single authoritative `GearCubeSessionState`, Play Mode history/undo/redo/scramble/keyboard (Phase 3), Solve Mode UI/playback/Worker adapter (Phase 4), and Browser Research Mode panel / benchmark Worker adapter (Phase 5D) | Internal: `@gearcube/core`, `@gearcube/kinematics`, `@gearcube/solvers`, `@gearcube/benchmark`; External: React, R3F, Three.js presentation stack (no Zustand requirement) | Implemented & Accepted through Phase 5D |
 | `packages/solvers` | Classical graph search (primary: BFS, Bidirectional BFS, IDA* with H2 two-slice PDB heuristic; optional/deferred: IDDFS, A*, Pattern Databases), heuristic estimators | Depends only on `@gearcube/core` | Implemented & Accepted (Phase 4) |
 | `packages/benchmark` | Pure benchmark engine, independent Core-only exact-distance corpus builder, deterministic stratified sampling, comparative solver runner, JSON/CSV exports, and Node CLI adapter | Depends directly on `@gearcube/core` and `@gearcube/solvers`; zero UI/DOM runtime dependencies | Implemented & Accepted — Phase 5 |
 | `ml/` (Python) | PyTorch model architectures, offline self-play/dataset generation, heuristic export | Python (version selected based on ML dependency compatibility) managed exclusively via `uv` | Planned (Phase 6) |
@@ -311,7 +311,7 @@ The project roadmap is structured into 9 sequential phases (detailed in [`docs/d
 - **Phase 2:** 3D Model, Visual Assets, and Kinematic Animation Engine *(Accepted)*
 - **Phase 3:** Interactive UI, History, Undo/Redo, Keyboard Controls, and Responsive Layout *(Accepted)*
 - **Phase 4:** Classical Solver Infrastructure (Web Worker, BFS / Bidirectional BFS / IDA*, Solve Mode UI & Playback) *(Implemented & Accepted)*
-- **Phase 5:** Research Benchmark Framework & Empirical Evaluation *(Completed & Accepted Candidate — Phases 5A–5D Accepted)*
+- **Phase 5:** Research Benchmark Framework & Empirical Evaluation *(Completed & Accepted — Phases 5A–5D Accepted)*
 - **Phase 6:** Neural Heuristic & AI-Guided Search *(Planned)*
 - **Phase 7:** Camera-Based Physical State Reconstruction & Guided Solver *(Planned)*
 - **Phase 8:** Integration, Polish, Reproducibility, and v1.0 Release *(Planned)*

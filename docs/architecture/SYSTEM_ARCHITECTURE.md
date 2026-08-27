@@ -1,6 +1,6 @@
 # SYSTEM_ARCHITECTURE.md — System Architecture & Component Contracts
 
-> **Document Status:** `DECIDED (Accepted architecture through Phase 5; Phase 5 Implementation Technically Accepted; Formal Acceptance Candidate Pending Main Promotion)`
+> **Document Status:** `DECIDED (Accepted architecture through Phase 5; Phase 5 Implementation Completed & Accepted)`
 > **Target System:** GearCube Lab Web Application & Research Framework
 
 ---
@@ -123,7 +123,7 @@ graph TD
 - **Prohibited Dependencies:** Must not access DOM, window, Three.js, React, or browser Worker global objects directly. Depends only on `@gearcube/core`.
 
 ### 3.6. Research & Benchmark Harness (`packages/benchmark` & Browser Research Mode — Implemented & Accepted — Phase 5)
-- **Status & Scope:** `PHASE5_TECHNICALLY_ACCEPTED` (Phases 5A, 5B, 5C, and 5D implemented & technically accepted; Formal Acceptance Candidate Pending Main Promotion; [`docs/development/PHASE_5_IMPLEMENTATION_PLAN.md`](../development/PHASE_5_IMPLEMENTATION_PLAN.md)).
+- **Status & Scope:** `PHASE5_ACCEPTED` (Phases 5A, 5B, 5C, and 5D implemented & accepted; [`docs/development/PHASE_5_IMPLEMENTATION_PLAN.md`](../development/PHASE_5_IMPLEMENTATION_PLAN.md)).
 - **Core Responsibilities:**
   - **Pure Benchmark Engine (Phases 5A & 5B):** Materialized v1 benchmark schemas, typed `BenchmarkConfigError` runtime validation, stable state-derived case identity (`d${exactDepth}:${stateKey}`), independent Core-only exact-distance corpus builder (discovering 41,472 canonical states and diameter 8 without calling production solvers), deterministic seed hashing (`FNV1A_UTF16_CODE_UNITS_32`), PRNG (`MULBERRY32_EXACT`), stratified sampling, headless batch runner evaluating solvers (`solveBfs`, `solveBidirectionalBfs`, `solveIdaStar`), warm-up/measured execution separation, cyclic algorithm rotation, lossless JSON export, flat 14-column RFC-4180 CSV export, and isolated Node CLI runner (`packages/benchmark/src/cli.ts`).
   - **Empirical Research Dataset & Analysis (Phase 5C):** Empirical comparative evaluation across exact distance strata 1..8 with 100% optimal solutions and reproducible deterministic projections ([`docs/research/PHASE_5_CLASSICAL_SOLVER_BENCHMARK_REPORT.md`](../research/PHASE_5_CLASSICAL_SOLVER_BENCHMARK_REPORT.md)).

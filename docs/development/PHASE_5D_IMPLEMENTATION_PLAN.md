@@ -1,6 +1,6 @@
 # PHASE_5D_IMPLEMENTATION_PLAN.md — Browser Research Mode Architecture & Implementation Plan
 
-> **Document Status:** `PHASE5D_IMPLEMENTATION_ACCEPTED_CANDIDATE`
+> **Document Status:** `PHASE5D_IMPLEMENTATION_ACCEPTED`
 > **Authoritative Main Baseline:** `717f2b89a425b2da6437e75adf4c4245aee8dc08`
 > **Accepted Technical Head:** `8bc1d51d74e3b047872598f3439755361cd91fb6`
 > **Implementation Branch:** `phase/5d-research-mode-implementation`
@@ -9,9 +9,9 @@
 > **Phase 5B Status:** `COMPLETED / ACCEPTED ON MAIN`
 > **Phase 5C Status:** `COMPLETED / ACCEPTED ON MAIN`
 > **Phase 5D Planning:** `COMPLETED / ACCEPTED`
-> **Phase 5D Implementation:** `COMPLETED & TECHNICALLY ACCEPTED`
-> **Phase 5 Overall Status:** `TECHNICALLY COMPLETE (Phase 5 Formal Acceptance Candidate)`
-> **Phase 5D Accepted:** `TECHNICALLY ACCEPTED (Formal Acceptance Candidate Pending Independent Review)`
+> **Phase 5D Implementation:** `COMPLETED & ACCEPTED`
+> **Phase 5 Overall Status:** `COMPLETED & ACCEPTED`
+> **Phase 5D Accepted:** `YES`
 
 ---
 
@@ -29,7 +29,7 @@
 - **PLANNING_ACCEPTANCE_MAIN:** `717f2b89a425b2da6437e75adf4c4245aee8dc08`
 - **IMPLEMENTATION_BRANCH:** `phase/5d-research-mode-implementation`
 - **ACCEPTED_TECHNICAL_IMPLEMENTATION_HEAD:** `8bc1d51d74e3b047872598f3439755361cd91fb6`
-- **PROPOSED_FORMAL_STATUS:** `COMPLETED / ACCEPTED`
+- **FORMAL_STATUS:** `COMPLETED & ACCEPTED`
 - **IMPLEMENTATION_LINEAGE:**
   1. `1250e3c1f136eca6e7a548032301fbb1e5e000db` — Implement Phase 5D benchmark controller contracts
   2. `f1c0f9cb94bd9fbe98b78931959ffc7a6697923d` — Repair Phase 5D filename sanitizer test
@@ -64,7 +64,7 @@
 - **BENCHMARK_ENGINE_API_CHANGE:** `NO`
 - **PHASE5C_EVIDENCE_MUTATION:** `NO`
 - **PHASE5D_TECHNICAL_ACCEPTANCE:** `PASS`
-- **FORMAL_ACCEPTANCE_STATUS:** `RECORD CANDIDATE (Pending Independent Review & Main Promotion)`
+- **FORMAL_ACCEPTANCE_STATUS:** `ACCEPTED`
 
 ---
 
@@ -557,7 +557,7 @@ export const LONG_CANCEL_CONFIG: BenchmarkSuiteConfig = {
 
 ## 14. Dependency-Ordered Implementation Sequence
 
-Implementation executed and verified in strict dependency order (Steps A–G Completed & Accepted; Step H Documentation Candidate):
+Implementation executed and verified in strict dependency order (Steps A–G Completed & Accepted; Step H Documentation Accepted):
 ```text
 Step A: Workspace Dependency & Pure Protocol/Controller Contracts
         ├─ Update apps/web/package.json + package-lock.json ("@gearcube/benchmark": "0.0.0")
