@@ -443,8 +443,8 @@ export const ResearchPanel: React.FC<ResearchPanelProps> = ({
           </div>
         </fieldset>
 
-        <div className="research-action-row">
-          {!isBusy ? (
+        {!isBusy && (
+          <div className="research-action-row">
             <button
               type="submit"
               className="research-btn run-btn"
@@ -452,18 +452,22 @@ export const ResearchPanel: React.FC<ResearchPanelProps> = ({
             >
               Run Benchmark
             </button>
-          ) : (
-            <button
-              type="button"
-              className="research-btn cancel-btn"
-              onClick={onCancelBenchmark}
-              data-testid="research-cancel-button"
-            >
-              Cancel Benchmark
-            </button>
-          )}
-        </div>
+          </div>
+        )}
       </form>
+
+      {isBusy && (
+        <div className="research-action-row">
+          <button
+            type="button"
+            className="research-btn cancel-btn"
+            onClick={onCancelBenchmark}
+            data-testid="research-cancel-button"
+          >
+            Cancel Benchmark
+          </button>
+        </div>
+      )}
 
       {benchmarkState.status === 'COMPLETED' && (
         <section className="research-results-section" data-testid="research-summary">

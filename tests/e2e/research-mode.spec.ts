@@ -374,10 +374,6 @@ test.describe('GearCube Browser Research Mode End-to-End Suite', () => {
 
     // Clean up: cancel benchmark using real click
     const cancelBtn = page.getByTestId('research-cancel-button');
-    await page.evaluate(() => {
-      const form = document.querySelector('.research-form') || document.querySelector('[data-testid="research-panel"] form');
-      form?.addEventListener('submit', (e) => { e.preventDefault(); e.stopImmediatePropagation(); }, { capture: true, once: true });
-    });
     await cancelBtn.click();
     await expect(page.getByTestId('research-status')).toHaveText('Cancelled');
   });
@@ -385,6 +381,14 @@ test.describe('GearCube Browser Research Mode End-to-End Suite', () => {
   test('4. BENCHMARK_CANCELLATION_GATE: cancel button terminates active benchmark worker and produces CANCELLED state', async ({ page }) => {
     await enterResearchMode(page);
     await configureLongCancellationSuite(page);
+
+    // Track total benchmark workers created throughout test lifecycle
+    let totalBenchmarkWorkersCreated = 0;
+    page.on('worker', (w) => {
+      if (w.url().includes('benchmark.worker')) {
+        totalBenchmarkWorkersCreated++;
+      }
+    });
 
     // Arm worker creation listener before starting benchmark
     const workerPromise = page.waitForEvent('worker');
@@ -405,10 +409,6 @@ test.describe('GearCube Browser Research Mode End-to-End Suite', () => {
 
     // Click Cancel via real Playwright click
     const cancelBtn = page.getByTestId('research-cancel-button');
-    await page.evaluate(() => {
-      const form = document.querySelector('.research-form') || document.querySelector('[data-testid="research-panel"] form');
-      form?.addEventListener('submit', (e) => { e.preventDefault(); e.stopImmediatePropagation(); }, { capture: true, once: true });
-    });
     await cancelBtn.click();
 
     // Verify CANCELLED state
@@ -428,6 +428,9 @@ test.describe('GearCube Browser Research Mode End-to-End Suite', () => {
     await page.waitForTimeout(1000);
     await expect(page.getByTestId('research-status')).toHaveText('Cancelled');
     await expect(page.getByTestId('research-summary')).toBeHidden();
+
+    // Verify exactly 1 benchmark worker was created (no restart / replacement Worker B)
+    expect(totalBenchmarkWorkersCreated, 'Exactly 1 benchmark worker must be created throughout cancellation lifecycle').toBe(1);
   });
 
   test('5. STATIC_CONFIG_ERROR_GATE: invalid static config triggers validation error and spawns zero workers', async ({ page }) => {
@@ -500,10 +503,17 @@ test.describe('GearCube Browser Research Mode End-to-End Suite', () => {
 
     // Check exact metadata cards
     const summary = page.getByTestId('research-summary');
-    await expect(summary).toContainText('e2e-browser-fast'); // Suite ID
-    await expect(summary.locator('.meta-card', { hasText: 'Sampled Cases' })).toContainText('2');
-    await expect(summary.locator('.meta-card', { hasText: 'Measured Trials' })).toContainText('6');
-    await expect(summary.locator('.meta-card', { hasText: 'Platform' })).toContainText('browser');
+    const suiteCard = summary.locator('.meta-card', { hasText: 'Suite ID' });
+    await expect(suiteCard.locator('.meta-value')).toHaveText('e2e-browser-fast');
+
+    const casesCard = summary.locator('.meta-card', { hasText: 'Sampled Cases' });
+    await expect(casesCard.locator('.meta-value')).toHaveText('2');
+
+    const trialsCard = summary.locator('.meta-card', { hasText: 'Measured Trials' });
+    await expect(trialsCard.locator('.meta-value')).toHaveText('6');
+
+    const platformCard = summary.locator('.meta-card', { hasText: 'Platform' });
+    await expect(platformCard.locator('.meta-value')).toHaveText('browser');
 
     // Check all algorithm representations exist in cards
     const algCards = summary.locator('.alg-summary-card');
