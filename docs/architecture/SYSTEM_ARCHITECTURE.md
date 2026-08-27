@@ -50,7 +50,7 @@ graph TD
     end
 
     %% Interactions
-    UI -->|Render Calls & Skin Config| Renderer
+    UI -->|Render Calls & Presentation Config| Renderer
     UI -->|Dispatches Moves| Core
     Core -->|materializeState -> fromView/toView| Kinematics
     Core -->|Generates Hashes| Encoding
@@ -92,8 +92,7 @@ graph TD
 
 ### 3.3. 3D Renderer & View (`apps/web/src/components/**` — Conceptual View Layer)
 - **Responsibilities:**
-  - Manages the Three.js scene graph, lights, orbital camera, and mesh instancing inside `apps/web` (e.g. `GearCubeViewport.tsx`, `GearCubeModel.tsx`, procedural piece meshes, and materials).
-  - Implements interchangeable visual skins and face sticker materials.
+  - Manages the Three.js scene graph, lights, OrbitControls orbital camera, and mesh instancing inside `apps/web` (e.g. `GearCubeViewport.tsx`, `GearCubeModel.tsx`, procedural piece geometries, and fixed material/sticker mappings defined in `materials.ts`; interchangeable visual skin switching is deferred to future presentation enhancements).
   - Consumes Kinematic Plans and ComponentTransforms to position 3D meshes along calculated trajectories.
   - Maintains zero puzzle state authority: rendering is strictly downstream of domain state and kinematic projections.
 - **Topology Note:** Implemented directly within `apps/web/src/components/` rather than as an isolated `packages/renderer` package; maintains strict layer separation by consuming domain projections internally from `@gearcube/core` and `@gearcube/kinematics` alongside presentation framework dependencies (React, React Three Fiber, Three.js).

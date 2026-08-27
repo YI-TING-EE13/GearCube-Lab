@@ -154,7 +154,7 @@ $$\text{Presentation Layer (UI/3D)} \longrightarrow \text{Domain Core Contracts}
 | `packages/kinematics` | Continuous trajectory generation, coupled gear angles, static piece placement projection | Depends only on `@gearcube/core` | Implemented & Accepted |
 | `apps/web` | Web application container hosting React UI components, R3F/Three.js 3D viewport, procedural piece geometries, MoveControls, single authoritative `GearCubeSessionState`, Play Mode history/undo/redo/scramble/keyboard (Phase 3), Solve Mode UI/playback/Worker adapter (Phase 4) | Internal: `@gearcube/core`, `@gearcube/kinematics`, `@gearcube/solvers`; External: React, R3F, Three.js presentation stack (no Zustand requirement) | Implemented & Accepted (Phases 1–4) |
 | `packages/solvers` | Classical graph search (primary: BFS, Bidirectional BFS, IDA* with H2 two-slice PDB heuristic; optional/deferred: IDDFS, A*, Pattern Databases), heuristic estimators | Depends only on `@gearcube/core` | Implemented & Accepted (Phase 4) |
-| `packages/benchmark` | Deterministic benchmark harness, seed generation, statistical metric export | Depends on `@gearcube/core` and `@gearcube/solvers` — `PHASE5_PREFLIGHT_DECISION_REQUIRED` | Not Started (Phase 5) |
+| `packages/benchmark` | Deterministic benchmark harness, seed generation, statistical metric export | Dependency boundary: `PHASE5_PREFLIGHT_DECISION_REQUIRED` (candidates: `benchmark -> solvers -> core` or direct `benchmark -> core` only where fixture/state generation demonstrably requires it) | Not Started (Phase 5) |
 | `ml/` (Python) | PyTorch model architectures, offline self-play/dataset generation, heuristic export | Python (version selected based on ML dependency compatibility) managed exclusively via `uv` | Planned (Phase 6) |
 | `packages/vision` | Webcam video capture, color segmentation, state consistency validation, and correction | Browser WebRTC / Canvas APIs; depends on `@gearcube/core` | Planned (Phase 7) |
 
@@ -213,7 +213,7 @@ All inter-module communication is governed by immutable TypeScript interfaces de
 
 ## 18. Rendering Strategy
 
-- **Modular Visual Skins:** Support multiple visual presentations (e.g., Daiso OEM plastic, technical wireframe, exploded engineering view) without altering kinematic or domain behavior.
+- **Modular Visual Skins (Deferred / Future Capability):** Support for multiple visual presentations (e.g., Daiso OEM plastic, technical wireframe, exploded engineering view) without altering kinematic or domain behavior. Current implementation uses fixed procedural geometries and standard face material mappings.
 - **Instanced & Optimized Meshes:** Shared geometries and materials for gear teeth and corner pieces to optimize rendering performance.
 
 ---

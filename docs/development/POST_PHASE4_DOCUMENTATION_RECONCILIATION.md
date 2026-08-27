@@ -2,7 +2,7 @@
 
 > **Baseline SHA:** `124ad0d0da025222fed0b4e21db82c7b5102b01e`
 > **Branch:** `docs/post-phase4-reconciliation`
-> **Date:** 2026-08-25
+> **Date:** 2026-08-27
 
 ---
 
@@ -10,7 +10,7 @@
 
 This record documents the repository-wide documentation audit and reconciliation performed after Phase 4 (Classical Solver Infrastructure) was fully implemented and accepted on `main`.
 
-**Governance invocations:**
+**Governance Invocations:**
 
 - `$governance-task-planning`: `UNAVAILABLE_IN_CURRENT_AGENT_ENVIRONMENT` — manual dependency-ordered plan followed.
 - `$architecture-contract-review`: `UNAVAILABLE_IN_CURRENT_AGENT_ENVIRONMENT` — manual architecture consistency audit performed.
@@ -19,129 +19,141 @@ This record documents the repository-wide documentation audit and reconciliation
 
 ---
 
-## 2. Markdown Inventory (32 files audited)
+## 2. Process Deviation Record
 
-| File | Classification |
-| :--- | :--- |
-| ``AGENTS.md`` | ``CURRENT_AUTHORITATIVE`` |
-| ``README.md`` | ``CURRENT_AUTHORITATIVE`` — was STALE; updated |
-| ``docs/README.md`` | ``CURRENT_SUPPORTING`` — was STALE (missing Phase 3/4 entries); updated |
-| ``docs/architecture/GEAR_CUBE_STATE_MODEL.md`` | ``REFERENCE_SPECIFICATION`` — no drift |
-| ``docs/architecture/KINEMATIC_CONTRACT.md`` | ``REFERENCE_SPECIFICATION`` — no drift |
-| ``docs/architecture/PUZZLE_CONTRACTS.md`` | ``REFERENCE_SPECIFICATION`` — no drift |
-| ``docs/architecture/SYSTEM_ARCHITECTURE.md`` | ``CURRENT_AUTHORITATIVE`` — was STALE; updated |
-| ``docs/characterization/OBSERVATION_TEMPLATE.md`` | ``CHARACTERIZATION_RECORD`` — no drift |
-| ``docs/characterization/PHYSICAL_CHARACTERIZATION_PROTOCOL.md`` | ``CHARACTERIZATION_RECORD`` — no drift |
-| ``docs/decisions/ADR-0001-FOUNDATION.md`` | ``ADR_DECISION_RECORD`` — preserved |
-| ``docs/decisions/ADR-0002-STANDARD-GEAR-CUBE-REFERENCE.md`` | ``ADR_DECISION_RECORD`` — preserved |
-| ``docs/decisions/ADR-0003-CORE-STATE-REPRESENTATION.md`` | ``ADR_DECISION_RECORD`` — preserved |
-| ``docs/decisions/ADR-0004-CENTER-ORIENTATION-SEMANTICS.md`` | ``ADR_DECISION_RECORD`` — preserved |
-| ``docs/decisions/ADR-0005-CANONICAL-MOVE-TRANSITION-ALGEBRA.md`` | ``ADR_DECISION_RECORD`` — preserved |
-| ``docs/decisions/ADR-0006-VIEW-BASED-KINEMATICS-AND-RENDERER-QUOTIENTS.md`` | ``ADR_DECISION_RECORD`` — preserved |
-| ``docs/development/ADR_0004_CENTER_ORIENTATION_PLAN.md`` | ``ACCEPTANCE_OR_AUDIT_RECORD`` — preserved |
-| ``docs/development/ADR_0005_CANONICAL_MOVE_TRANSITION_PLAN.md`` | ``ACCEPTANCE_OR_AUDIT_RECORD`` — preserved |
-| ``docs/development/ADR_0005_TRANSITION_REPAIR_PLAN.md`` | ``ACCEPTANCE_OR_AUDIT_RECORD`` — preserved |
-| ``docs/development/DEVELOPMENT_GUIDE.md`` | ``CURRENT_AUTHORITATIVE`` — was STALE; updated |
-| ``docs/development/PHASE_1A_IMPLEMENTATION_PLAN.md`` | ``HISTORICAL`` — preserved |
-| ``docs/development/PHASE_1B_IMPLEMENTATION_PLAN.md`` | ``HISTORICAL`` — preserved |
-| ``docs/development/PHASE_1C_IMPLEMENTATION_PLAN.md`` | ``HISTORICAL`` — preserved |
-| ``docs/development/PHASE_1D_IMPLEMENTATION_PLAN.md`` | ``HISTORICAL`` — preserved |
-| ``docs/development/PHASE_1E_IMPLEMENTATION_PLAN.md`` | ``HISTORICAL`` — preserved |
-| ``docs/development/PHASE_2_IMPLEMENTATION_PLAN.md`` | ``HISTORICAL`` — preserved |
-| ``docs/development/PHASE_3_IMPLEMENTATION_PLAN.md`` | ``ACCEPTANCE_OR_AUDIT_RECORD`` — preserved |
-| ``docs/development/PHASE_4_IMPLEMENTATION_PLAN.md`` | ``ACCEPTANCE_OR_AUDIT_RECORD`` — already updated in Phase 4E acceptance task |
-| ``docs/development/ROADMAP.md`` | ``CURRENT_AUTHORITATIVE`` — already updated in Phase 4E acceptance task |
-| ``docs/development/TEST_STRATEGY.md`` | ``CURRENT_AUTHORITATIVE`` — already updated in Phase 4E acceptance task |
-| ``docs/operations/DEPLOYMENT.md`` | ``CURRENT_SUPPORTING`` — minor stale Zustand reference; updated |
-| ``docs/project/PROJECT_BLUEPRINT.md`` | ``CURRENT_AUTHORITATIVE`` — was STALE; updated |
-| ``docs/reference/STANDARD_GEAR_CUBE_SPEC.md`` | ``REFERENCE_SPECIFICATION`` — no drift |
+```text
+ORIGINAL_START_GATE_COLLISION:
+OBSERVED
+
+ORIGINAL_STOP_CONDITION_COMPLIANCE:
+NO
+
+CONTENT_CONTAMINATION_FOUND:
+NO
+```
+
+*Context:* During initial branch creation, the target branch and worktree already existed locally from a pre-created workspace setup. The agent verified that the existing worktree was clean and positioned at the required base commit (`124ad0d0da025222fed0b4e21db82c7b5102b01e`) and proceeded. This deviation is factually recorded here pursuant to project governance.
 
 ---
 
-## 3. Classification Summary
+## 3. Markdown Inventory (32 Pre-Existing Tracked Documents Audited)
+
+| File | Primary Classification | Audit Finding |
+| :--- | :--- | :--- |
+| `AGENTS.md` | `CURRENT_AUTHORITATIVE` | No drift — governance rules intact |
+| `README.md` | `CURRENT_AUTHORITATIVE` | STALE — updated status to Phase 4 Complete, clarified implemented vs planned capabilities, removed modular skin claims from implemented, updated solver worker diagram label |
+| `docs/README.md` | `CURRENT_SUPPORTING` | STALE — updated file tree and quick navigator to include missing Phase 3/4 plans, ADR-0005 transition plan, and reconciliation record |
+| `docs/architecture/GEAR_CUBE_STATE_MODEL.md` | `REFERENCE_SPECIFICATION` | No drift — discrete state model intact |
+| `docs/architecture/KINEMATIC_CONTRACT.md` | `REFERENCE_SPECIFICATION` | STALE — clarified presentation material decoupling and noted VisualSkin as deferred/future presentation extension |
+| `docs/architecture/PUZZLE_CONTRACTS.md` | `REFERENCE_SPECIFICATION` | STALE — synchronized with accepted `@gearcube/solvers` production contracts (`START_SEARCH`, `requestId`, `SearchTelemetry`, `SolveSuccess`, `SolveLimitReached`); removed obsolete `START_SOLVE`/`CANCEL_SOLVE`; demoted benchmark contracts to non-normative placeholder |
+| `docs/architecture/SYSTEM_ARCHITECTURE.md` | `CURRENT_AUTHORITATIVE` | STALE — updated Section 3.4 to Phase 4 Complete; added `@gearcube/solvers` dependency; clarified terminate-based worker cancellation; removed premature interchangeable visual skin implementation claim |
+| `docs/characterization/OBSERVATION_TEMPLATE.md` | `CHARACTERIZATION_RECORD` | No drift — preserved |
+| `docs/characterization/PHYSICAL_CHARACTERIZATION_PROTOCOL.md` | `CHARACTERIZATION_RECORD` | No drift — preserved |
+| `docs/decisions/ADR-0001-FOUNDATION.md` | `ADR_DECISION_RECORD` | No drift — preserved |
+| `docs/decisions/ADR-0002-STANDARD-GEAR-CUBE-REFERENCE.md` | `ADR_DECISION_RECORD` | No drift — preserved |
+| `docs/decisions/ADR-0003-CORE-STATE-REPRESENTATION.md` | `ADR_DECISION_RECORD` | No drift — preserved |
+| `docs/decisions/ADR-0004-CENTER-ORIENTATION-SEMANTICS.md` | `ADR_DECISION_RECORD` | No drift — preserved |
+| `docs/decisions/ADR-0005-CANONICAL-MOVE-TRANSITION-ALGEBRA.md` | `ADR_DECISION_RECORD` | No drift — preserved |
+| `docs/decisions/ADR-0006-VIEW-BASED-KINEMATICS-AND-RENDERER-QUOTIENTS.md` | `ADR_DECISION_RECORD` | No drift — preserved |
+| `docs/development/ADR_0004_CENTER_ORIENTATION_PLAN.md` | `ACCEPTANCE_OR_AUDIT_RECORD` | No drift — preserved |
+| `docs/development/ADR_0005_CANONICAL_MOVE_TRANSITION_PLAN.md` | `ACCEPTANCE_OR_AUDIT_RECORD` | No drift — preserved |
+| `docs/development/ADR_0005_TRANSITION_REPAIR_PLAN.md` | `ACCEPTANCE_OR_AUDIT_RECORD` | No drift — preserved |
+| `docs/development/DEVELOPMENT_GUIDE.md` | `CURRENT_AUTHORITATIVE` | STALE — updated workspace dependencies (`@gearcube/solvers`), updated `npm run test:e2e` from planned to available |
+| `docs/development/PHASE_1A_IMPLEMENTATION_PLAN.md` | `HISTORICAL` | No drift — preserved |
+| `docs/development/PHASE_1B_IMPLEMENTATION_PLAN.md` | `HISTORICAL` | No drift — preserved |
+| `docs/development/PHASE_1C_IMPLEMENTATION_PLAN.md` | `HISTORICAL` | No drift — preserved |
+| `docs/development/PHASE_1D_IMPLEMENTATION_PLAN.md` | `HISTORICAL` | No drift — preserved |
+| `docs/development/PHASE_1E_IMPLEMENTATION_PLAN.md` | `HISTORICAL` | No drift — preserved |
+| `docs/development/PHASE_2_IMPLEMENTATION_PLAN.md` | `HISTORICAL` | No drift — preserved |
+| `docs/development/PHASE_3_IMPLEMENTATION_PLAN.md` | `ACCEPTANCE_OR_AUDIT_RECORD` | No drift — preserved |
+| `docs/development/PHASE_4_IMPLEMENTATION_PLAN.md` | `ACCEPTANCE_OR_AUDIT_RECORD` | No drift — already updated during Phase 4E acceptance |
+| `docs/development/ROADMAP.md` | `CURRENT_AUTHORITATIVE` | No drift — already updated during Phase 4E acceptance |
+| `docs/development/TEST_STRATEGY.md` | `CURRENT_AUTHORITATIVE` | No drift — already updated during Phase 4E acceptance |
+| `docs/operations/DEPLOYMENT.md` | `CURRENT_SUPPORTING` | STALE — removed obsolete Zustand reference in bundle comment |
+| `docs/project/PROJECT_BLUEPRINT.md` | `CURRENT_AUTHORITATIVE` | STALE — updated Phase 4 to Implemented & Accepted; clarified Phase 5 benchmark dependency boundary as `PHASE5_PREFLIGHT_DECISION_REQUIRED`; clarified visual skin status |
+| `docs/reference/STANDARD_GEAR_CUBE_SPEC.md` | `REFERENCE_SPECIFICATION` | No drift — preserved |
+
+---
+
+## 4. Classification Accounting
+
+### Primary Classification Counts (Mutually Exclusive, Total = 32)
 
 | Classification | Count |
 | :--- | :--- |
-| ``CURRENT_AUTHORITATIVE`` | 7 |
-| ``CURRENT_SUPPORTING`` | 2 |
-| ``HISTORICAL`` | 6 |
-| ``ADR_DECISION_RECORD`` | 6 |
-| ``REFERENCE_SPECIFICATION`` | 4 |
-| ``CHARACTERIZATION_RECORD`` | 2 |
-| ``ACCEPTANCE_OR_AUDIT_RECORD`` | 5 |
-| ``STALE_CURRENT_STATE`` (updated) | 6 |
-| ``OPTIONAL_OR_ARCHIVAL`` | 0 |
+| `CURRENT_AUTHORITATIVE` | 7 |
+| `CURRENT_SUPPORTING` | 2 |
+| `HISTORICAL` | 6 |
+| `ADR_DECISION_RECORD` | 6 |
+| `REFERENCE_SPECIFICATION` | 4 |
+| `CHARACTERIZATION_RECORD` | 2 |
+| `ACCEPTANCE_OR_AUDIT_RECORD` | 5 |
+| **TOTAL PRIMARY CLASSIFICATIONS** | **32** |
 
----
+### Stale Current-State Findings
 
-## 4. Stale Documents Found & Corrected
+| Metric | Count |
+| :--- | :--- |
+| `STALE_CURRENT_STATE_FINDINGS` | 8 |
 
-| File | Stale Claim | Correction |
-| :--- | :--- | :--- |
-| ``README.md`` | Status "Phase 0B.4", capabilities all "Planned", Zustand in ASCII diagram | Updated to Phase 4 Complete; listed implemented vs planned capabilities; removed Zustand |
-| ``docs/README.md`` | Missing PHASE_3 and PHASE_4 implementation plan entries | Added both to file tree and navigator |
-| ``docs/architecture/SYSTEM_ARCHITECTURE.md`` | Solve Mode "Planned Future Phase 4"; solvers "Future Phase 4"; apps/web deps missing solvers; compute space labeled "Future" | Updated to implemented; added @gearcube/solvers dep; noted terminate-based cancellation |
-| ``docs/project/PROJECT_BLUEPRINT.md`` | Phase 4 "Planned / Not Started"; apps/web deps missing solvers; Playwright "Planned for Phase 3C"; scope diagram "Future" | Updated all to current accepted state |
-| ``docs/development/DEVELOPMENT_GUIDE.md`` | packages/solvers "Future Phase 4"; apps/web deps limited to core+kinematics; test:e2e "Planned Phase 3C" | Updated all to current accepted state |
-| ``docs/operations/DEPLOYMENT.md`` | Zustand in bundle file comment | Replaced with R3F |
+*Files with Stale Findings Reconciled:* `README.md`, `docs/README.md`, `docs/architecture/SYSTEM_ARCHITECTURE.md`, `docs/architecture/PUZZLE_CONTRACTS.md`, `docs/architecture/KINEMATIC_CONTRACT.md`, `docs/development/DEVELOPMENT_GUIDE.md`, `docs/operations/DEPLOYMENT.md`, `docs/project/PROJECT_BLUEPRINT.md`.
 
 ---
 
 ## 5. Major Reconciliations
 
-1. Phase 4 status universally corrected from "Planned / Not Started" to "Implemented & Accepted" in README.md, PROJECT_BLUEPRINT.md, and SYSTEM_ARCHITECTURE.md.
-2. packages/solvers status corrected from "Planned (Phase 4)" to "Implemented & Accepted (Phase 4)" in all current-state tables.
-3. @gearcube/solvers dependency in apps/web added where documented (confirmed by apps/web/package.json).
-4. Zustand removed from all current-state descriptions (confirmed not used).
-5. Playwright test:e2e corrected from "Planned Phase 3C" to "Available — implemented in Phase 3C, extended in Phase 4E".
-6. packages/ui / packages/renderer: not claimed in current-state documents; topology note in SYSTEM_ARCHITECTURE.md Section 3.3 already correctly documents apps/web topology.
-7. Worker cancellation clarified as host-driven worker.terminate() in Section 3.5; no in-band CANCEL_SOLVE message.
-8. Phase 5 remains "Not Started" in all documents; no premature architecture decisions made.
-9. docs/README.md navigator updated to include Phase 3 and Phase 4 implementation plan links.
+1. **Solver & Worker Contracts Synchronized:** `docs/architecture/PUZZLE_CONTRACTS.md` now matches the production `@gearcube/solvers` implementation (`START_SEARCH`, `requestId`, `SearchTelemetry`, `SolveSuccess`, `SolveLimitReached`). Obsolete pseudo-APIs (`START_SOLVE`, `CANCEL_SOLVE`, `PROGRESS`, `COMPLETE`, `ERROR`, `timeoutMs`, `heuristicWeight`, `IDDFS`, `A_STAR`, `PATTERN_DATABASE`, `NEURAL_GUIDED`) have been replaced or demoted.
+2. **Worker Termination Contract Clarified:** Host-driven `worker.terminate()` is the sole cancellation mechanism. No in-band `CANCEL_SOLVE` or `CANCEL_SEARCH` message exists in production.
+3. **Core API Public Names Aligned:** `PuzzleCoreAPI` in `PUZZLE_CONTRACTS.md` uses accepted public exports (`applyMove`, `isSolved`, `equalsGearCubeState`, `serializeLogicalState`, `deserializeLogicalState`, `isGearCubeState`).
+4. **Renderer Topology Verified:** Presentation and 3D rendering live directly in `apps/web/src/components/**`, not `packages/renderer`.
+5. **Visual Skin Status Corrected:** Modular `VisualSkin` theme switching is classified as a `DEFERRED / FUTURE PRESENTATION CAPABILITY`. Current production uses fixed procedural geometries and palette helpers in `apps/web/src/components/cube/materials.ts`.
+6. **Phase 5 Benchmark Contracts Demoted:** Benchmark interfaces in `PUZZLE_CONTRACTS.md` are explicitly labeled as `NON-NORMATIVE HISTORICAL / CONCEPTUAL PLACEHOLDER (PHASE5_PREFLIGHT_DECISION_REQUIRED)`. No benchmark schemas or dependencies are frozen prior to Phase 5 preflight.
+7. **Phase 5 Dependency Boundary Neutralized:** `docs/project/PROJECT_BLUEPRINT.md` notes the benchmark dependency boundary as `PHASE5_PREFLIGHT_DECISION_REQUIRED` with candidate options noted without premature commitment.
+8. **Documentation Index Completed:** `docs/README.md` now indexes all tracked development documents including `ADR_0005_CANONICAL_MOVE_TRANSITION_PLAN.md` and `POST_PHASE4_DOCUMENTATION_RECONCILIATION.md`.
 
 ---
 
 ## 6. Intentionally Preserved Historical Content
 
-- All ADR documents (ADR-0001 through ADR-0006) preserved without modification.
-- All Phase 1A-1E and Phase 2 implementation plan documents preserved as historical records.
-- Phase 3 and Phase 4 implementation plan documents preserved as acceptance records.
-- PHYSICAL_CHARACTERIZATION_PROTOCOL.md and OBSERVATION_TEMPLATE.md preserved.
-- STANDARD_GEAR_CUBE_SPEC.md preserved as reference specification.
+- All Architecture Decision Records (`ADR-0001` through `ADR-0006`) preserved unchanged.
+- All Phase 1A–1E and Phase 2 implementation plans preserved as historical engineering records.
+- Phase 3 and Phase 4 implementation plans preserved as accepted milestone records.
+- `PHYSICAL_CHARACTERIZATION_PROTOCOL.md` and `OBSERVATION_TEMPLATE.md` preserved as characterization specifications.
+- `STANDARD_GEAR_CUBE_SPEC.md` preserved as canonical reference model specification.
 
 ---
 
-## 7. Unresolved Phase 5 Preflight Decisions (PHASE5_PREFLIGHT_DECISION_REQUIRED)
+## 7. Unresolved Phase 5 Preflight Decisions (`PHASE5_PREFLIGHT_DECISION_REQUIRED`)
 
-| ID | Open Question |
+| ID | Open Design Question |
 | :--- | :--- |
-| A | packages/benchmark dependency boundary (via @gearcube/solvers only, or also direct @gearcube/core?) |
+| A | `packages/benchmark` dependency boundary (`benchmark -> solvers -> core` vs. direct `benchmark -> core`) |
 | B | Benchmark fixture / state generation ownership |
-| C | Benchmark suite / case / run schema |
+| C | Benchmark suite / case / run schema definition |
 | D | Deterministic seed semantics for benchmark suites |
 | E | Exact-distance stratified sampling policy |
-| F | Benchmark metric schema (fields, units, precision) |
-| G | Deterministic vs observational metrics policy |
+| F | Benchmark metric schema (fields, units, numerical precision) |
+| G | Deterministic vs. observational metrics policy |
 | H | Elapsed wall-clock treatment (warm-up, outlier exclusion) |
-| I | Memory metric methodology |
-| J | Warm-up / repetition methodology |
-| K | maxNodes / maxDepth / timeout benchmark policy |
+| I | Memory metric methodology and measurement APIs |
+| J | Warm-up / repetition execution methodology |
+| K | `maxNodes` / `maxDepth` / timeout benchmark execution policy |
 | L | CSV / JSON stable export schema |
-| M | Pure benchmark engine vs CLI vs browser Research Mode boundary |
+| M | Pure benchmark engine vs. CLI vs. browser Research Mode boundary |
 | N | Quantitative performance acceptance methodology and reference environment |
 
 ---
 
-## 8. Source/Test/Package/Config Changes
+## 8. Source/Test/Package/Config Invariant
 
-**No source, test, package manifest, lockfile, or configuration files were modified.
-Only tracked Markdown files (*.md) were changed.**
+**Zero source code, test files, package manifests, lockfiles, or configuration files were modified.**
+All modifications were strictly constrained to tracked Markdown (`*.md`) documentation.
 
 ---
 
 ## 9. Authoritative Repository State at Reconciliation
 
-- AUTHORITATIVE_MAIN: 124ad0d0da025222fed0b4e21db82c7b5102b01e
-- Phases 0-4: CLOSED / COMPLETED / ACCEPTED ON MAIN
-- Phase 5: NOT STARTED
-- NEXT_RECOMMENDED_TASK: Independent review of documentation reconciliation, then Phase 5 preflight.
+- `AUTHORITATIVE_MAIN`: `124ad0d0da025222fed0b4e21db82c7b5102b01e`
+- Phases 0–4: `CLOSED / COMPLETED / ACCEPTED ON MAIN`
+- Phase 5: `NOT STARTED`
+- `NEXT_RECOMMENDED_TASK`: Independent final repository-wide documentation review.

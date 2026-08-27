@@ -15,7 +15,7 @@
 
 ## Implemented Capabilities
 
-- **Interactive 3D Simulation (Implemented & Accepted):** WebGL/Three.js-based rendering featuring visibly coupled gear kinematics, responsive camera controls, and modular visual skins.
+- **Interactive 3D Simulation (Implemented & Accepted):** WebGL/Three.js-based rendering featuring visibly coupled gear kinematics, responsive camera controls, and fixed face material/sticker presentation.
 - **Pure Combinatorial Domain Core (Implemented & Accepted):** Framework-independent discrete puzzle state engine enforcing strict move legality ($180^\circ$ face turns) and canonical state representation.
 - **Play Mode UI (Implemented & Accepted):** Interactive face controls, move history timeline with undo/redo, deterministic seeded scramble generator, keyboard shortcuts, and responsive layout.
 - **Classical Search Solvers (Implemented & Accepted — Phase 4):** Web Worker-isolated search algorithms (BFS, Bidirectional BFS, IDA* with H2 two-slice PDB heuristic) providing optimal solution paths without blocking the UI.
@@ -23,6 +23,7 @@
 
 ## Planned Capabilities (Future Phases)
 
+- **Modular Visual Skins (Deferred / Future Presentation):** Support for interchangeable material schemes, wireframe views, or custom visual themes without altering puzzle mechanics.
 - **Empirical Research & Benchmark Harness (Phase 5 — Not Started):** Deterministic, headless comparative evaluation framework to measure search node expansions, branch pruning efficiency, and execution time.
 - **AI-Guided Search (Phase 6 — Not Started):** Offline PyTorch-trained neural heuristics and value networks integrated into guided tree search.
 - **Computer Vision State Ingestion (Phase 7 — Not Started):** Local-first camera capture to recognize physical cube faces, reconstruct a candidate discrete state, validate consistency/reachability, allow user corrections, and generate step-by-step 3D visual solving guidance.
@@ -47,21 +48,21 @@ $$\text{UI / Renderer / Solvers / Research} \longrightarrow \text{Core Contracts
 +-------------------+                               +-------------------+
 |    3D Renderer    |                               |  Discrete Core    |
 | (R3F / Three.js)  | <--- [Kinematic Plan] ------- | (Pure TypeScript) |
-|   [Visual Skin]   |                               |  * State Truth    |
+| [Presentation]    |                               |  * State Truth    |
 +-------------------+                               |  * Legal Moves    |
                                                     +---------+---------+
                                                               ^
           +---------------------------------------------------+
           |
 +---------+---------+
-|   Solver Worker   | <--- [Search State]
-|  (Classical / AI) |
+| Classical Solver  | <--- [Search State]
+| (Worker Engine)   |
 +-------------------+
 ```
 
 - **Domain Core is the Sole Source of Truth:** 3D rendering meshes and visual scene graphs reflect puzzle state; they never own or mutate state.
 - **Thread Boundary Isolation:** Compute-intensive graph search runs outside the main thread inside background Web Workers so that solving does not directly block rendering or interaction.
-- **Kinematic & Skin Decoupling:** Gear meshes and physical animations are computed via kinematic mappings derived from discrete state transitions, allowing custom visual skins without altering puzzle semantics.
+- **Kinematic & Presentation Decoupling:** Gear meshes and physical animations are computed via kinematic mappings derived from discrete state transitions, allowing future visual presentation themes without altering puzzle semantics.
 
 ---
 

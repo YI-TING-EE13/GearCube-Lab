@@ -135,8 +135,8 @@ export interface ActiveTransition {
 
 ---
 
-## 6. Visual Skin, Quotients & Mesh Decoupling
+## 6. Presentation Decoupling, Quotients & Mesh Geometry
 
-- **Visual Assets:** Materials, PBR textures, gear tooth bevels, and stickers are defined in `VisualSkin`.
+- **Presentation Material Decoupling:** Kinematic trajectory calculation is entirely independent of visual materials, lighting, and textures. The current presentation layer in `apps/web` uses fixed procedural geometry and color palette helpers (`FACE_COLORS`, `BODY_COLOR` in `materials.ts`); modular `VisualSkin` theme switching is a conceptual/deferred presentation extension and is not part of the Kinematics API.
 - **Edge Axial Quotient ([`ADR-0006`](../decisions/ADR-0006-VIEW-BASED-KINEMATICS-AND-RENDERER-QUOTIENTS.md)):** Edge gear axial orientation is evaluated modulo $180^\circ$. MVP placeholder gear geometry adopts an intentional $C_2$ axial symmetry (`PROJECT_DESIGN_CHOICE`; not a proven physical hardware property) ensuring visual continuity across $\mathbb{Z}_3$ phase wraps.
 - **Center Axial Quotient ([`ADR-0004`](../decisions/ADR-0004-CENTER-ORIENTATION-SEMANTICS.md)):** Centers are rotationally symmetric unmarked caps whose position and identity are derived from Core.

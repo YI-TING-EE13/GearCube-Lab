@@ -79,7 +79,7 @@ export interface PuzzleDefinition {
   readonly baseTurnAngleDegrees: 180; // [SOURCE_SUPPORTED]
 }
 
-/** Core functional operations contract */
+/** Core functional operations contract (pursuant to @gearcube/core exports) */
 export interface PuzzleCoreAPI {
   /** Applies a legal move to a state and returns the resulting immutable state */
   applyMove(state: GearCubeState, move: Move): GearCubeState;
@@ -88,13 +88,16 @@ export interface PuzzleCoreAPI {
   isSolved(state: GearCubeState): boolean;
 
   /** Validates whether two state instances are combinatorially identical */
-  equalsState(a: GearCubeState, b: GearCubeState): boolean;
+  equalsGearCubeState(a: GearCubeState, b: GearCubeState): boolean;
 
-  /** Generates a deterministic string key for debugging and serialization */
+  /** Generates a deterministic string key for serialization and transposition tables */
   serializeLogicalState(state: GearCubeState): string;
 
-  /** Validates state consistency and coordinate domain invariants */
-  validateState(state: unknown): { readonly isValid: boolean; readonly error?: string };
+  /** Deserializes a canonical string key back into a validated GearCubeState */
+  deserializeLogicalState(serialized: string): GearCubeState;
+
+  /** Type guard validating state consistency and coordinate domain invariants */
+  isGearCubeState(state: unknown): state is GearCubeState;
 }
 ```
 
@@ -102,18 +105,34 @@ export interface PuzzleCoreAPI {
 
 ## 3. Derived Materialized View & Kinematic Contracts
 
-*(Specified in detail in [`KINEMATIC_CONTRACT.md`](KINEMATIC_CONTRACT.md). These interfaces are downstream contracts owned by `packages/kinematics` and `packages/renderer`. The pure Domain Core has ZERO dependencies on kinematics, rendering, or animation timing, and does not import `KinematicPlanner` or `KinematicPlan`.)*
+*(Specified in detail in [`KINEMATIC_CONTRACT.md`](KINEMATIC_CONTRACT.md). These interfaces are downstream contracts owned by `packages/kinematics` and consumed by the presentation layer in `apps/web`. The pure Domain Core has ZERO dependencies on kinematics, rendering, or animation timing, and does not import `KinematicPlanner` or `KinematicPlan`.)*
 
 ```typescript
+export type CornerSlot = 'UFL' | 'UBR' | 'DFR' | 'DBL' | 'UFR' | 'UBL' | 'DFL' | 'DBR';
+export type CornerPieceId =
+  | 'corner-UFL' | 'corner-UBR' | 'corner-DFR' | 'corner-DBL'
+  | 'corner-UFR' | 'corner-UBL' | 'corner-DFL' | 'corner-DBR';
+
 export interface CornerPlacement {
-  readonly slotIndex: number; // 0..7
-  readonly pieceId: number;   // 0..7
+  readonly slot: CornerSlot;
+  readonly pieceId: CornerPieceId;
+  readonly orbit: 'free' | 'ref';
 }
 
+export type EdgeSlot =
+  | 'UB' | 'UF' | 'DF' | 'DB'
+  | 'FL' | 'FR' | 'BR' | 'BL'
+  | 'UR' | 'UL' | 'DL' | 'DR';
+export type EdgePieceId =
+  | 'edge-UB' | 'edge-UF' | 'edge-DF' | 'edge-DB'
+  | 'edge-FL' | 'edge-FR' | 'edge-BR' | 'edge-BL'
+  | 'edge-UR' | 'edge-UL' | 'edge-DL' | 'edge-DR';
+
 export interface EdgePlacement {
-  readonly slotIndex: number; // 0..11
-  readonly pieceId: number;   // 0..11
-  readonly gearPhase: SliceGearPhase; // 0..2
+  readonly slot: EdgeSlot;
+  readonly pieceId: EdgePieceId;
+  readonly slice: 'X' | 'Y' | 'Z';
+  readonly phase: SliceGearPhase;
 }
 
 export type CenterSlot = 'U' | 'D' | 'F' | 'B' | 'R' | 'L';
@@ -188,9 +207,12 @@ export interface ActiveTransition {
 
 ---
 
-## 4. Visual Skin & Renderer Adapter Contracts
+## 4. Visual Presentation & Material Concepts (NON-NORMATIVE CONCEPTUAL EXAMPLE)
+
+*(Visual skins and dynamic theme switching are **DEFERRED / FUTURE PRESENTATION CAPABILITIES**. The current presentation layer in `apps/web/src/components/cube/` uses fixed procedural geometries, standard color palettes (`FACE_COLORS`, `BODY_COLOR`), and normal helpers defined in `materials.ts`. The interfaces below illustrate conceptual extensions for future multi-skin support and are non-normative.)*
 
 ```typescript
+// NON-NORMATIVE CONCEPTUAL EXAMPLE — DEFERRED PRESENTATION CAPABILITY
 export interface MaterialConfig {
   readonly color: string;
   readonly metalness: number;
@@ -206,85 +228,140 @@ export interface VisualSkin {
   readonly centerMaterial: MaterialConfig;
   readonly stickerColors: Record<Face, string>;
 }
-
-export interface RendererAdapter {
-  /** Binds a visual skin to the 3D scene */
-  applySkin(skin: VisualSkin): void;
-
-  /** Executes an animation plan smoothly across the render loop */
-  executeAnimation(plan: KinematicPlan): Promise<void>;
-
-  /** Instantly snaps the 3D meshes to reflect a discrete state */
-  snapToState(state: GearCubeState, spatialFrame?: SpatialFrame): void;
-}
 ```
 
 ---
 
-## 5. Solver Engine & Worker Contracts
+## 5. Solver Engine & Worker Contracts (Implemented & Accepted — Phase 4)
+
+*(Pursuant to accepted production contracts in `packages/solvers/src/types.ts` and `packages/solvers/src/protocol.ts`. The solver engine operates off the main thread inside `apps/web/src/workers/solver.worker.ts`. User cancellation is executed via host-driven `worker.terminate()`; no in-band cancel protocol message exists.)*
 
 ```typescript
-export type SolverAlgorithmType =
-  | 'BFS'
-  | 'BIDIRECTIONAL_BFS'
-  | 'IDA_STAR'
-  | 'IDDFS'
-  | 'A_STAR'
-  | 'PATTERN_DATABASE'
-  | 'NEURAL_GUIDED';
+/** Accepted production solver algorithms */
+export type SolverAlgorithm = 'BFS' | 'BIDIRECTIONAL_BFS' | 'IDA_STAR';
 
-export interface SolverConfig {
-  readonly algorithm: SolverAlgorithmType;
-  readonly maxDepth?: number;
-  readonly timeoutMs?: number;
-  readonly heuristicWeight?: number;
-}
-
-export interface SolverProgress {
+export interface SearchCounters {
   readonly nodesExpanded: number;
-  readonly currentDepth: number;
+  readonly nodesGenerated: number;
+}
+
+/** Algorithm-specific real-time progress telemetry */
+export type SearchTelemetry =
+  | {
+      readonly algorithm: 'BFS';
+      readonly nodesExpanded: number;
+      readonly nodesGenerated: number;
+      readonly elapsedMs: number;
+      readonly frontierDepth: number;
+    }
+  | {
+      readonly algorithm: 'BIDIRECTIONAL_BFS';
+      readonly nodesExpanded: number;
+      readonly nodesGenerated: number;
+      readonly elapsedMs: number;
+      readonly forwardDepth: number;
+      readonly backwardDepth: number;
+      readonly bestSolutionDepth: number | null;
+    }
+  | {
+      readonly algorithm: 'IDA_STAR';
+      readonly nodesExpanded: number;
+      readonly nodesGenerated: number;
+      readonly elapsedMs: number;
+      readonly threshold: number;
+      readonly currentDepth: number;
+    };
+
+export interface SolveSuccess {
+  readonly status: 'SOLVED';
+  readonly algorithm: SolverAlgorithm;
+  readonly moves: readonly Move[];
+  readonly depth: number;
+  readonly counters: SearchCounters;
   readonly elapsedMs: number;
-  readonly memoryUsageEstimateBytes?: number;
 }
 
-export interface SolverResult {
-  readonly isSuccess: boolean;
-  readonly solutionPath: readonly Move[];
-  readonly totalNodesExpanded: number;
-  readonly totalTimeMs: number;
-  readonly solutionLength: number;
-  readonly error?: string;
+export interface SolveLimitReached {
+  readonly status: 'LIMIT_REACHED';
+  readonly algorithm: SolverAlgorithm;
+  readonly limit: 'MAX_NODES' | 'MAX_DEPTH';
+  readonly counters: SearchCounters;
+  readonly elapsedMs: number;
 }
 
-/** Messages exchanged between UI thread and Solver Web Worker */
-export type SolverWorkerRequest =
-  | { type: 'START_SOLVE'; state: GearCubeState; config: SolverConfig }
-  | { type: 'CANCEL_SOLVE' };
+export type SolveResult = SolveSuccess | SolveLimitReached;
 
-export type SolverWorkerResponse =
-  | { type: 'PROGRESS'; progress: SolverProgress }
-  | { type: 'COMPLETE'; result: SolverResult }
-  | { type: 'ERROR'; message: string };
+export interface SolverOptions {
+  readonly maxNodes?: number;
+  readonly maxDepth?: number;
+  readonly progressIntervalNodes?: number;
+  readonly onProgress?: (telemetry: SearchTelemetry) => void;
+}
+
+/** Inbound message sent from UI host to Solver Web Worker */
+export type WorkerInboundMessage = {
+  readonly type: 'START_SEARCH';
+  readonly requestId: string;
+  readonly algorithm: SolverAlgorithm;
+  readonly state: GearCubeState;
+  readonly options?: {
+    readonly maxNodes?: number;
+    readonly maxDepth?: number;
+    readonly progressIntervalNodes?: number;
+  };
+};
+
+/** Outbound messages sent from Solver Web Worker to UI host */
+export type WorkerOutboundMessage =
+  | {
+      readonly type: 'SEARCH_STARTED';
+      readonly requestId: string;
+    }
+  | {
+      readonly type: 'SEARCH_PROGRESS';
+      readonly requestId: string;
+      readonly telemetry: SearchTelemetry;
+    }
+  | {
+      readonly type: 'SEARCH_COMPLETE';
+      readonly requestId: string;
+      readonly result: SolveSuccess;
+    }
+  | {
+      readonly type: 'SEARCH_LIMIT_REACHED';
+      readonly requestId: string;
+      readonly result: SolveLimitReached;
+    }
+  | {
+      readonly type: 'SEARCH_ERROR';
+      readonly requestId: string;
+      readonly error: string;
+    };
 ```
 
 ---
 
-## 6. Research & Benchmark Harness Contracts
+## 6. Research & Benchmark Harness Contracts (NON-NORMATIVE HISTORICAL / CONCEPTUAL PLACEHOLDER)
+
+> [!WARNING]
+> **Phase 5 has NOT started.** The interfaces below are historical/conceptual placeholders and must NOT be interpreted as frozen implementation contracts.
+> All benchmark schemas, seed semantics, metric definitions, and package boundaries require explicit resolution during Phase 5 preflight (`PHASE5_PREFLIGHT_DECISION_REQUIRED`).
 
 ```typescript
+// NON-NORMATIVE CONCEPTUAL EXAMPLE — PHASE5_PREFLIGHT_DECISION_REQUIRED
 export interface BenchmarkSuiteConfig {
   readonly suiteId: string;
-  readonly scrambleDepths: readonly number[]; // e.g. [2, 4, 6, 8, 10, 12]
-  readonly trialsPerDepth: number; // e.g. 50
+  readonly scrambleDepths: readonly number[];
+  readonly trialsPerDepth: number;
   readonly randomSeed: number;
-  readonly algorithms: readonly SolverConfig[];
+  readonly algorithms: readonly SolverAlgorithm[];
 }
 
 export interface BenchmarkTrialMetric {
   readonly trialIndex: number;
   readonly scrambleDepth: number;
   readonly scrambleSequence: readonly Move[];
-  readonly algorithm: SolverAlgorithmType;
+  readonly algorithm: SolverAlgorithm;
   readonly executionTimeMs: number;
   readonly nodesExpanded: number;
   readonly solutionLength: number;
