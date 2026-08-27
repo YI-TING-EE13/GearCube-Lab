@@ -60,7 +60,7 @@ Inspection of `packages/benchmark/src/` confirms:
 ## 3. Goals & Explicit Non-Goals
 
 ### 3.1. Phase 5D Goals
-1. **Workspace Mode Orchestration:** Introduce a clean top-level presentation mode toggle (`PLAY` vs. `RESEARCH`) in `apps/web`.
+1. **Workspace Mode Orchestration:** Introduce a clean top-level presentation mode toggle (`PLAY` vs. `RESEARCH`) owned by `GearCubeViewport.tsx` in `apps/web`.
 2. **Dedicated Background Web Worker:** Implement `apps/web/src/workers/benchmark.worker.ts` running `@gearcube/benchmark` entirely off the main thread.
 3. **Reactive Worker Hook & Pure Controller:** Build `useBenchmarkWorker.ts`, `benchmark-worker-controller.ts`, and `benchmark-worker-protocol.ts` providing deterministic lifecycle state transitions and cancellation.
 4. **Research Mode UI Panel:** Build `ResearchPanel.tsx` with a strongly validated configuration form, real-time lifecycle status display, tabular summary metrics, and client-side JSON/CSV export downloads.
@@ -83,7 +83,7 @@ Inspection of `packages/benchmark/src/` confirms:
 ```mermaid
 graph TD
     subgraph BrowserMainThread [Browser UI / Main Thread — apps/web]
-        ModeToggle[Workspace Mode State<br/>mode: 'PLAY' | 'RESEARCH']
+        ModeToggle[Workspace Mode State & Toggle<br/>mode: 'PLAY' | 'RESEARCH']
         Viewport[GearCubeViewport.tsx]
         PlayUI[Play / Solve Overlays<br/>MoveControls, SolvePanel, PlaybackControls]
         ResearchUI[ResearchPanel.tsx<br/>ConfigForm, SummaryTable, DownloadButtons]
@@ -102,8 +102,8 @@ graph TD
 
     %% Interactions
     Viewport --> ModeToggle
-    ModeToggle -->|mode === 'PLAY'| PlayUI
-    ModeToggle -->|mode === 'RESEARCH'| ResearchUI
+    Viewport -->|mode === 'PLAY'| PlayUI
+    Viewport -->|mode === 'RESEARCH'| ResearchUI
     ResearchUI --> StaticValidator
     ResearchUI --> Hook
     Hook --> Controller
@@ -122,11 +122,12 @@ graph TD
 
 ## 5. Workspace Mode Lifecycle & Cube Isolation
 
-### 5.1. Workspace Mode Model
+### 5.1. Workspace Mode Model & Ownership
 ```typescript
 export type WorkspaceMode = 'PLAY' | 'RESEARCH';
 ```
-- **Default:** `'PLAY'`
+- **Ownership:** `WorkspaceMode` state is owned by `GearCubeViewport.tsx` (default: `'PLAY'`).
+- **Always-Visible Mode Switch:** `GearCubeViewport.tsx` renders the mode toggle button regardless of whether `PLAY` or `RESEARCH` mode is active. `ResearchPanel.tsx` does **not** own the mode toggle; its responsibility is focused entirely on the benchmark configuration form, status, summary, and downloads.
 - **Presentation Policy:**
   - In `'PLAY'` mode: All existing Phase 3 (History, Scramble, MoveControls) and Phase 4 (SolvePanel, PlaybackControls) UI clusters render normally.
   - In `'RESEARCH'` mode: Play and Solve overlay clusters (`HistoryControls`, `ScramblePanel`, `TimelineScrubber`, `SolvePanel`, `PlaybackControls`, `MoveControls`) are hidden. The `ResearchPanel` renders on the right/center overlay. The 3D Canvas remains visible in the background for visual coherence.
@@ -289,7 +290,7 @@ To prevent structured-cloning thousands of trial objects and performing CPU-heav
 ### 7.3. Zero Fabricated Progress Guarantee
 - `runBenchmarkSuite` is synchronous and atomic.
 - In `ACTIVE` status, the UI renders `"Running benchmark..."` with an active spinner/indicator.
-- No progress percentages ($0\%\dots 100\%$), estimated completed case counts, or speculative ETAs are displayed.
+- No progress percentages, estimated completed case counts, or speculative ETAs are displayed.
 
 ---
 
@@ -297,7 +298,7 @@ To prevent structured-cloning thousands of trial objects and performing CPU-heav
 
 ### 8.1. Config Form Fields & Schema v1
 The form allows users to configure:
-1. `suiteId` (string, non-empty, trimmed)
+1. `suiteId` (string, preserved verbatim as entered without trimming)
 2. `seed` (string, default `"GearCube-Lab"`, empty string allowed)
 3. `exactDepths` (multi-select checkboxes for depths $1\dots 8$, stored as ascending integer array)
 4. `casesPerDepth` (integer $\ge 1$)
@@ -322,18 +323,20 @@ The form allows users to configure:
   "measuredRuns": 1
 }
 ```
-*Rationale: Depth 1–8 with 2 cases per depth yields 16 cases and 48 measured trials, completing in $\approx 1\text{s}$ in modern browsers—providing instant interactive gratification without freezing or timing out.*
+*Rationale: This is a deliberately small exploratory default (16 cases, 48 measured trials) intended to bound interactive workload. Actual browser runtime is not frozen at planning time and must be calibrated during Phase 5D implementation and browser acceptance.*
 
 ### 8.3. Two-Layer Validation Strategy
 - **Layer 1: Main-Thread Static Validation (`validateBenchmarkSuiteConfig`):**
   - Executed before spawning the Worker.
-  - Validates types, schema version, non-empty arrays, positive integers, depth ranges ($1\dots 8$), and known algorithm names.
+  - `const validatedConfig = validateBenchmarkSuiteConfig(rawFormConfig)` validates types, schema version, non-empty arrays, positive integers, depth ranges ($1\dots 8$), and known algorithm names.
+  - `suiteId` is preserved verbatim as validated by `@gearcube/benchmark` without additional trimming or mutation.
+  - The exact returned `validatedConfig` is passed directly to `startBenchmark(validatedConfig)`.
   - Does **not** build the 41,472-state corpus on the main thread.
   - If validation fails, displays user-friendly error without creating a Worker.
 - **Layer 2: In-Worker Canonical Execution Validation (`runBenchmarkSuite`):**
-  - Executed inside the background Worker during corpus sampling.
-  - Validates that `casesPerDepth` does not exceed available corpus capacity at each selected depth (e.g., depth 1 has only 6 states).
-  - If capacity validation fails, throws `BenchmarkConfigError` which is caught and posted back as `BENCHMARK_ERROR` (`errorKind: 'CONFIG_ERROR'`).
+  - Executed inside the background Worker during corpus sampling via `validateConfigCorpusCapacity`.
+  - Validates that `casesPerDepth` does not exceed available corpus capacity at each selected depth (e.g., depth 1 has exactly 12 states in the canonical Gear Cube graph).
+  - If capacity validation fails (e.g., `exactDepths: [1]` with `casesPerDepth: 13`), throws `BenchmarkConfigError` which is caught and posted back as `BENCHMARK_ERROR` (`errorKind: 'CONFIG_ERROR'`).
 
 ---
 
@@ -353,11 +356,12 @@ Upon `COMPLETED` status, `ResearchPanel` renders:
 
 ### 9.2. Deterministic Safe Download Policy
 - **Download Actions:** "Download JSON" and "Download CSV" buttons enabled only in `COMPLETED` state.
-- **Implementation:**
+- **Safe Object URL Lifecycle:**
   1. Create `Blob` from `jsonText` (`application/json`) or `csvText` (`text/csv;charset=utf-8;`).
   2. Create temporary object URL via `URL.createObjectURL(blob)`.
-  3. Create hidden `<a>` element with sanitized download filename, trigger `.click()`.
-  4. Revoke object URL immediately via `URL.revokeObjectURL(url)`.
+  3. Create hidden `<a>` element with sanitized download filename, trigger `anchor.click()`.
+  4. Remove anchor element from DOM if attached.
+  5. Defer `URL.revokeObjectURL(url)` to the next macrotask (e.g., `setTimeout(() => URL.revokeObjectURL(url), 0)`) so the browser has sufficient time to initiate the download stream before the URL is invalidated, preventing cancelled downloads and avoiding object URL memory leaks.
 - **Filename Sanitization Policy:**
   - Template: `gearcube-benchmark-<sanitized-suite-id>.<ext>`
   - Sanitizer regex: replace any character not in `[A-Za-z0-9._-]` with `_`, collapse consecutive `_`, trim leading/trailing `_`.
@@ -377,10 +381,10 @@ Upon `COMPLETED` status, `ResearchPanel` renders:
 | `apps/web/src/hooks/useBenchmarkWorker.ts` | **Required** | React hook managing Worker lifecycle, single-job dispatch, and cancellation |
 | `apps/web/src/workers/benchmark.worker.ts` | **Required** | Dedicated background Web Worker importing `@gearcube/benchmark` |
 | `apps/web/src/components/research/download-helper.ts` | **Required** | Pure filename sanitizer and browser Blob download trigger helper |
-| `apps/web/src/components/research/ResearchPanel.tsx` | **Required** | UI component hosting Mode toggle, Config Form, Status, Summary, and Exports |
-| `apps/web/src/components/canvas/GearCubeViewport.tsx` | **Required** | Integration of `WorkspaceMode` state, mode toggle, and conditional overlay rendering |
-| `apps/web/src/App.css` | **Required** | CSS styling for Research Mode panel, config grid, summary table, and responsiveness |
-| `tests/boundary.test.ts` | **Required** | Architectural boundary tests verifying `@gearcube/web` $\to$ `@gearcube/benchmark` dependency and Worker isolation |
+| `apps/web/src/components/research/ResearchPanel.tsx` | **Required** | UI component hosting Config Form, Status, Summary, and Exports (does not own mode toggle) |
+| `apps/web/src/components/canvas/GearCubeViewport.tsx` | **Required** | Owns `WorkspaceMode` state, renders always-visible mode toggle, and orchestrates overlay gating |
+| `apps/web/src/App.css` | **Required** | CSS styling for Research Mode panel, config grid, summary table, mode switch, and responsiveness |
+| `tests/boundary.test.ts` | **Required** | Architectural boundary tests verifying `@gearcube/web` $	o$ `@gearcube/benchmark` dependency and Worker isolation |
 | `tests/unit/benchmark-worker-controller.test.ts` | **Required** | Vitest unit tests for pure benchmark controller state machine |
 | `tests/e2e/research-mode.spec.ts` | **Required** | Comprehensive Playwright E2E test suite covering all 13 acceptance scenarios |
 | `docs/development/PHASE_5D_IMPLEMENTATION_PLAN.md` | **Current** | This authoritative Phase 5D planning candidate document |
@@ -392,11 +396,11 @@ Upon `COMPLETED` status, `ResearchPanel` renders:
 
 ### 11.1. Pure Controller Vitest Unit Tests (`tests/unit/benchmark-worker-controller.test.ts`)
 - `INITIAL_STATE`: verifies initial state is `IDLE`.
-- `BEGIN_BENCHMARK`: transitions `IDLE`/`COMPLETED`/`ERROR` $\to$ `ACTIVE` with specified `requestId` and `config`.
+- `BEGIN_BENCHMARK`: transitions `IDLE`/`COMPLETED`/`ERROR` $	o$ `ACTIVE` with specified `requestId` and `config`.
 - `STARTED_MESSAGE`: maintains `ACTIVE` status.
-- `COMPLETE_MESSAGE`: transitions `ACTIVE` $\to$ `COMPLETED` storing summary and serialized strings.
-- `ERROR_MESSAGE`: transitions `ACTIVE` $\to$ `ERROR` with error message and classification.
-- `CANCEL_ACTIVE`: transitions `ACTIVE` $\to$ `CANCELLED`.
+- `COMPLETE_MESSAGE`: transitions `ACTIVE` $	o$ `COMPLETED` storing summary and serialized strings.
+- `ERROR_MESSAGE`: transitions `ACTIVE` $	o$ `ERROR` with error message and classification.
+- `CANCEL_ACTIVE`: transitions `ACTIVE` $	o$ `CANCELLED`.
 - `CANCEL_IDLE`: no-op when already idle.
 - `STALE_REQUEST_ID_ISOLATION`: ignores messages matching mismatched `requestId`.
 - `STALE_STATUS_ISOLATION`: ignores messages received when controller is not `ACTIVE`.
@@ -404,10 +408,12 @@ Upon `COMPLETED` status, `ResearchPanel` renders:
 - `FILENAME_SANITIZATION`: unit tests verifying filename sanitizer against edge cases (spaces, slashes, unicode, empty strings).
 
 ### 11.2. Architectural Boundary Tests (`tests/boundary.test.ts`)
+Using the existing repository-owned module-specifier extraction and lexical boundary scanner (`extractModuleSpecifiers`):
 - Verify `@gearcube/web` package manifest declares `"@gearcube/benchmark": "0.0.0"`.
 - Verify `apps/web/src/workers/benchmark.worker.ts` exists.
 - Verify `new Worker(...)` for benchmark occurs strictly in `useBenchmarkWorker.ts`.
-- Verify benchmark runner functions (`runBenchmarkSuite`, `serializeBenchmarkReportJson`, etc.) are imported on the web side **only** in `benchmark.worker.ts` and `validateBenchmarkSuiteConfig` in UI.
+- Verify benchmark runner functions (`runBenchmarkSuite`, `serializeBenchmarkReportJson`, `serializeBenchmarkReportCsv`) are imported on the web side **only** in `benchmark.worker.ts`, and `validateBenchmarkSuiteConfig` / types are imported in UI code.
+- Verify no web code imports from `packages/benchmark/src/cli.ts` or Node built-ins.
 
 ### 11.3. Playwright Browser E2E Test Suite (`tests/e2e/research-mode.spec.ts`)
 The test suite will enforce the 13 required scenarios:
@@ -437,16 +443,16 @@ export const LONG_CANCEL_CONFIG: BenchmarkSuiteConfig = {
 };
 ```
 
-1. **`1. RESEARCH_MODE_UI_GATE`:** Verify mode switcher toggles between `PLAY` and `RESEARCH`. Play controls hidden, Research controls visible in `RESEARCH` mode.
+1. **`1. RESEARCH_MODE_UI_GATE`:** Verify mode switcher toggles between `PLAY` and `RESEARCH`. Play controls hidden, Research controls visible in `RESEARCH` mode. Mode switcher remains visible and reachable in both modes.
 2. **`2. REAL_BENCHMARK_WORKER_GATE`:** Capture `page.waitForEvent('worker')`. Verify worker URL contains `benchmark.worker`. Verify worker context has `typeof document === 'undefined'`.
 3. **`3. MAIN_THREAD_ACTIONABILITY_GATE`:** Start `LONG_CANCEL_CONFIG`. Verify `ACTIVE` state. Interact with a benign UI control (e.g. checkbox or input focus) while worker executes; verify interaction succeeds immediately without main-thread blocking.
 4. **`4. BENCHMARK_CANCELLATION_GATE`:** Start `LONG_CANCEL_CONFIG`. Click "Cancel Benchmark". Verify transition to `CANCELLED`. Verify no delayed `COMPLETED` message or summary table appears.
 5. **`5. STATIC_CONFIG_ERROR_GATE`:** Submit invalid form (e.g., zero depths selected or empty suiteId). Verify Layer 1 error renders without spawning a Worker.
-6. **`6. WORKER_CONFIG_ERROR_GATE`:** Configure depth 1 with `casesPerDepth: 10` (exceeding corpus capacity of 6). Verify Layer 1 passes, Worker runs, and surfaces `CONFIG_ERROR` (`BenchmarkConfigError`).
+6. **`6. WORKER_CONFIG_ERROR_GATE`:** Configure depth 1 with `casesPerDepth: 13` (exceeding canonical depth-1 corpus capacity of 12). Verify Layer 1 passes, Worker runs, and surfaces `CONFIG_ERROR` (`BenchmarkConfigError` with message indicating requested cases exceed available states).
 7. **`7. RESULT_SUMMARY_GATE`:** Run `FAST_VALID_CONFIG`. Verify summary table renders 2 cases, 6 trials, depth 1 metrics for BFS, BiBFS, and IDA*.
 8. **`8. JSON_DOWNLOAD_GATE`:** Click "Download JSON". Intercept Playwright download event. Parse JSON content; verify `schemaVersion === "1"`, `cases.length === 2`, `trials.length === 6`, and `environment.platform === "browser"`.
 9. **`9. CSV_DOWNLOAD_GATE`:** Click "Download CSV". Intercept Playwright download event. Verify 14-column RFC-4180 header and exactly 6 measured data rows.
-10. **`10. PLAY_RESEARCH_ISOLATION_GATE`:** Apply a 2-move scramble in Play mode. Switch to Research mode, run benchmark to completion. Switch back to Play mode; verify cube state, move history, and canvas transforms remain unaltered.
+10. **`10. PLAY_RESEARCH_ISOLATION_GATE`:** In Play mode, switch to `DIRECT_180` turn interaction mode. Execute two explicit canonical move button actions (e.g. `U Clockwise` and `R Clockwise`), waiting for each to settle at IDLE. Record logical cube state and move history. Switch to Research mode, run `FAST_VALID_CONFIG` to completion. Switch back to Play mode; verify logical cube state, move history, and canvas transforms remain strictly unaltered.
 11. **`11. MODE_SWITCH_CANCELLATION_GATE`:** Start long benchmark in Research mode. Switch mode back to Play while `ACTIVE`. Verify Worker is terminated and background compute stops.
 12. **`12. RESPONSIVE_RESEARCH_LAYOUT_GATE`:** Test across Desktop ($1280\times 800$), Tablet ($768\times 1024$), and Mobile ($375\times 667$). Verify `scrollWidth <= clientWidth` (zero horizontal overflow) and all controls clickable.
 13. **`13. ZERO_BROWSER_ERROR_GATE`:** Error collector listener verifies 0 `pageerror` events and 0 console error messages throughout the entire E2E test run.
@@ -468,7 +474,7 @@ export const LONG_CANCEL_CONFIG: BenchmarkSuiteConfig = {
 | Gate Identifier | Description | Verification Method |
 | :--- | :--- | :--- |
 | `WEB_BENCHMARK_DEPENDENCY_GATE` | `@gearcube/web` depends on `@gearcube/benchmark@0.0.0` | `boundary.test.ts` manifest check |
-| `BROWSER_SAFE_BENCHMARK_IMPORT_GATE` | Web code imports only from browser-safe root `@gearcube/benchmark` | `boundary.test.ts` AST check |
+| `BROWSER_SAFE_BENCHMARK_IMPORT_GATE` | Web code imports only from browser-safe root `@gearcube/benchmark` | `boundary.test.ts` scanner check |
 | `RESEARCH_WORKER_ISOLATION_GATE` | Benchmark runner executes off main thread in dedicated Web Worker | Playwright `worker` event & `typeof document` |
 | `SINGLE_JOB_WORKER_GATE` | One fresh Worker instance per benchmark run | Code inspection & Worker lifecycle unit test |
 | `BENCHMARK_CANCELLATION_GATE` | Active benchmark terminates cleanly via `worker.terminate()` | Playwright cancellation test |
@@ -550,7 +556,7 @@ Step H: Documentation Synchronization & Formal Phase 5 Acceptance
 | **Stale Result Overwrite** | Cancelled job completes and overwrites UI | Match monotonic `requestId` on all outbound messages; reject mismatched callbacks in pure reducer. |
 | **Concurrent Solver & Benchmark Worker Conflicts** | CPU resource exhaustion or race conditions | Automatically cancel solver on mode switch to `RESEARCH`; cancel benchmark on mode switch to `PLAY`. |
 | **Memory / Serialization Overhead** | Large benchmark reports slow down UI | Serialize JSON and CSV strings directly inside the Worker; transfer only summary + text blobs. |
-| **Object URL Memory Leaks** | Blobs accumulate in browser memory | Immediately invoke `URL.revokeObjectURL(url)` after download trigger. |
+| **Object URL Memory Leaks / Cancelled Downloads** | Blobs leak or browser download fails | Defer `URL.revokeObjectURL(url)` to next macrotask after `anchor.click()`. |
 | **Unsafe Filenames** | Corrupted downloads or browser path errors | Sanitize `suiteId` using strict regex filter (`[A-Za-z0-9._-]`) with fallback to `"suite"`. |
 | **Expensive Corpus Work on Invalid Config** | Wasted CPU cycles before validation | Enforce Layer 1 static validation (`validateBenchmarkSuiteConfig`) on main thread before spawning Worker. |
 | **Corpus Construction Leaking to Main Thread** | UI lag on config change | Keep `buildExactDistanceCorpus` strictly inside the Worker during execution validation. |
@@ -564,7 +570,12 @@ Step H: Documentation Synchronization & Formal Phase 5 Acceptance
 ## 16. Stop Conditions
 
 The implementation agent must **STOP** and request clarification if:
-1. Vite fails to bundle or spawn `apps/web/src/workers/benchmark.worker.ts` with standard module worker syntax.
-2. `@gearcube/benchmark` root exports cannot be resolved in browser code without bundling Node built-ins.
-3. Unexpected performance characteristics prevent reliable cancellation testing on standard CI environments.
-4. Remote `main` changes before Phase 5D work begins.
+1. `@gearcube/benchmark` root cannot bundle or resolve in browser code without bundling Node built-ins.
+2. Root import graph leaks Node-only modules into browser-safe entry points.
+3. Current benchmark runner or serializer requires benchmark-engine API modification.
+4. Current serializers are browser-incompatible.
+5. Vite module Worker cannot execute current runner.
+6. Required `PLAY`/`RESEARCH` mode isolation needs a larger architectural redesign.
+7. Cancellation E2E cannot obtain a reliable `ACTIVE` window without production-only artificial delay.
+8. Remote `main` changes before Phase 5D work begins.
+9. Protected dirty Phase 1D worktree would need modification.
