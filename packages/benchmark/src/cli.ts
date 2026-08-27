@@ -3,6 +3,7 @@ import * as path from 'node:path';
 import * as os from 'node:os';
 import { fileURLToPath } from 'node:url';
 import type { EnvironmentProvenance } from './types.js';
+import { BenchmarkConfigError } from './config.js';
 import { runBenchmarkSuite } from './runner.js';
 import { serializeBenchmarkReportCsv, serializeBenchmarkReportJson } from './export.js';
 
@@ -95,19 +96,11 @@ export async function runCli(args: readonly string[]): Promise<number> {
   try {
     report = runBenchmarkSuite(configObj, environment);
   } catch (err: unknown) {
-    const msg = err instanceof Error ? err.message : String(err);
-    if (
-      msg.includes('BenchmarkSuiteConfig') ||
-      msg.includes('schemaVersion') ||
-      msg.includes('Unknown configuration property') ||
-      msg.includes('casesPerDepth') ||
-      msg.includes('exactDepths') ||
-      msg.includes('algorithms') ||
-      msg.includes('limits')
-    ) {
-      globalThis.process.stderr.write(`Configuration validation error: ${msg}\n`);
+    if (err instanceof BenchmarkConfigError) {
+      globalThis.process.stderr.write(`Configuration validation error: ${err.message}\n`);
       return 2;
     }
+    const msg = err instanceof Error ? err.message : String(err);
     globalThis.process.stderr.write(`Benchmark execution error: ${msg}\n`);
     return 1;
   }

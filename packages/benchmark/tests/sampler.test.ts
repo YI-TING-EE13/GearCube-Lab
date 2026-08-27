@@ -35,30 +35,20 @@ describe('Phase 5B Hash, PRNG & Deterministic Sampler Gates', () => {
   describe('Mulberry32 Exact PRNG Sequence Vectors', () => {
     it('produces exact first five sequence values for seed=0', () => {
       const prng = createMulberry32(0);
-      const expected = [
-        0.26642920868471265,
-        0.0003297457005828619,
-        0.22327202744781971,
-        0.1462021479383111,
-        0.46732782293111086,
-      ];
-      for (const exp of expected) {
-        expect(prng()).toBeCloseTo(exp, 15);
-      }
+      expect(prng()).toBe(0.26642920868471265);
+      expect(prng()).toBe(0.0003297457005828619);
+      expect(prng()).toBe(0.22327202744781971);
+      expect(prng()).toBe(0.1462021479383111);
+      expect(prng()).toBe(0.46732782293111086);
     });
 
     it('produces exact first five sequence values for seed=2166136261 (hash of empty string)', () => {
       const prng = createMulberry32(2166136261);
-      const expected = [
-        0.6112444521859288,
-        0.4935242917854339,
-        0.7740248835179955,
-        0.4122861116193235,
-        0.8122657814528793,
-      ];
-      for (const exp of expected) {
-        expect(prng()).toBeCloseTo(exp, 15);
-      }
+      expect(prng()).toBe(0.6112444521859288);
+      expect(prng()).toBe(0.4935242917854339);
+      expect(prng()).toBe(0.7740248835179955);
+      expect(prng()).toBe(0.4122861116193235);
+      expect(prng()).toBe(0.8122657814528793);
     });
   });
 
@@ -82,9 +72,9 @@ describe('Phase 5B Hash, PRNG & Deterministic Sampler Gates', () => {
       },
     };
 
-    const goldenConfig: BenchmarkSuiteConfig = {
+    const goldenConfigK2: BenchmarkSuiteConfig = {
       schemaVersion: '1',
-      suiteId: 'synthetic-golden',
+      suiteId: 'synthetic-golden-k2',
       seed: 'seed-alpha',
       exactDepths: [1, 2],
       casesPerDepth: 2,
@@ -93,8 +83,19 @@ describe('Phase 5B Hash, PRNG & Deterministic Sampler Gates', () => {
       measuredRuns: 1,
     };
 
-    it('SYNTHETIC_SAMPLING_GOLDEN: matches exact expected state keys across depths', () => {
-      const cases = sampleBenchmarkCases(goldenConfig, mockCorpus);
+    const goldenConfigK1: BenchmarkSuiteConfig = {
+      schemaVersion: '1',
+      suiteId: 'synthetic-golden-k1',
+      seed: 'seed-alpha',
+      exactDepths: [1, 2],
+      casesPerDepth: 1,
+      algorithms: ['BFS'],
+      warmupRuns: 0,
+      measuredRuns: 1,
+    };
+
+    it('SYNTHETIC_SAMPLING_GOLDEN: matches exact expected state keys across depths for K=2', () => {
+      const cases = sampleBenchmarkCases(goldenConfigK2, mockCorpus);
       expect(cases.length).toBe(4);
 
       // Depth 1: D, C
@@ -116,33 +117,48 @@ describe('Phase 5B Hash, PRNG & Deterministic Sampler Gates', () => {
       expect(cases[3]?.caseId).toBe('d2:x');
     });
 
+    it('CONTINUOUS_STREAM_GATE: proves continuous PRNG stream across depths with K=1 golden vector (depth1=D, depth2=y)', () => {
+      const cases = sampleBenchmarkCases(goldenConfigK1, mockCorpus);
+      expect(cases.length).toBe(2);
+
+      // Depth 1 draw #1 selects D
+      expect(cases[0]?.stateKey).toBe('D');
+      expect(cases[0]?.exactDepth).toBe(1);
+      expect(cases[0]?.caseId).toBe('d1:D');
+
+      // Depth 2 draw #2 selects y (proving no PRNG reset to draw #1 which would select z)
+      expect(cases[1]?.stateKey).toBe('y');
+      expect(cases[1]?.exactDepth).toBe(2);
+      expect(cases[1]?.caseId).toBe('d2:y');
+    });
+
     it('proves repeat sampling with identical config produces bit-for-bit identical cases', () => {
-      const run1 = sampleBenchmarkCases(goldenConfig, mockCorpus);
-      const run2 = sampleBenchmarkCases(goldenConfig, mockCorpus);
+      const run1 = sampleBenchmarkCases(goldenConfigK2, mockCorpus);
+      const run2 = sampleBenchmarkCases(goldenConfigK2, mockCorpus);
       expect(run1).toEqual(run2);
     });
 
     it('proves different seed produces a different selection', () => {
       const diffSeedConfig: BenchmarkSuiteConfig = {
-        ...goldenConfig,
+        ...goldenConfigK2,
         seed: 'seed-beta',
       };
       const runBeta = sampleBenchmarkCases(diffSeedConfig, mockCorpus);
-      const keys1 = sampleBenchmarkCases(goldenConfig, mockCorpus).map((c) => c.stateKey);
+      const keys1 = sampleBenchmarkCases(goldenConfigK2, mockCorpus).map((c) => c.stateKey);
       const keys2 = runBeta.map((c) => c.stateKey);
       expect(keys1).not.toEqual(keys2);
     });
 
     it('proves corpus bucket arrays remain unmutated', () => {
       const d1Before = mockCorpus.getStatesAtDepth(1);
-      sampleBenchmarkCases(goldenConfig, mockCorpus);
+      sampleBenchmarkCases(goldenConfigK2, mockCorpus);
       const d1After = mockCorpus.getStatesAtDepth(1);
       expect(d1After).toEqual(d1Before);
     });
 
     it('throws when requested casesPerDepth exceeds corpus bucket capacity', () => {
       const overflowConfig: BenchmarkSuiteConfig = {
-        ...goldenConfig,
+        ...goldenConfigK2,
         casesPerDepth: 10,
       };
       expect(() => sampleBenchmarkCases(overflowConfig, mockCorpus)).toThrow(

@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeAll } from 'vitest';
-import { runBenchmarkSuite } from '../src/runner.js';
+import { runBenchmarkSuite, runBenchmarkSuiteWithCorpusForTesting } from '../src/runner.js';
 import { buildExactDistanceCorpus, type ExactDistanceCorpus } from '../src/corpus.js';
 import type { BenchmarkReport, BenchmarkSuiteConfig, EnvironmentProvenance } from '../src/types.js';
 
@@ -17,6 +17,26 @@ describe('Phase 5B Classical Solver Benchmark Runner Gates', () => {
     corpus = buildExactDistanceCorpus();
   });
 
+  describe('CANONICAL_PRODUCTION_API_GATE: Default Production Corpus Invocation', () => {
+    it('executes canonical runBenchmarkSuite without corpus injection parameter', () => {
+      const config: BenchmarkSuiteConfig = {
+        schemaVersion: '1',
+        suiteId: 'canonical-production-test',
+        seed: 'production-seed-01',
+        exactDepths: [1],
+        casesPerDepth: 1,
+        algorithms: ['BFS'],
+        warmupRuns: 0,
+        measuredRuns: 1,
+      };
+
+      const report = runBenchmarkSuite(config, mockEnv);
+      expect(report.cases.length).toBe(1);
+      expect(report.trials.length).toBe(1);
+      expect(report.trials[0]?.status).toBe('SOLVED');
+    });
+  });
+
   describe('OPTIMALITY_GATE: Depths 1 to 8 Solver Optimality Verification', () => {
     it('proves solutionDepth === exactDepth for BFS, BiBFS, and IDA* across all 8 exact depths', () => {
       const config: BenchmarkSuiteConfig = {
@@ -30,7 +50,7 @@ describe('Phase 5B Classical Solver Benchmark Runner Gates', () => {
         measuredRuns: 1,
       };
 
-      const report = runBenchmarkSuite(config, mockEnv, { corpus });
+      const report = runBenchmarkSuiteWithCorpusForTesting(config, mockEnv, corpus);
       expect(report.cases.length).toBe(8);
       expect(report.trials.length).toBe(24);
 
@@ -96,13 +116,41 @@ describe('Phase 5B Classical Solver Benchmark Runner Gates', () => {
         measuredRuns: 2,
       };
 
-      const run1 = runBenchmarkSuite(config, mockEnv, { corpus });
-      const run2 = runBenchmarkSuite(config, mockEnv, { corpus });
+      const run1 = runBenchmarkSuiteWithCorpusForTesting(config, mockEnv, corpus);
+      const run2 = runBenchmarkSuiteWithCorpusForTesting(config, mockEnv, corpus);
 
       const p1 = projectDeterministicMetrics(run1);
       const p2 = projectDeterministicMetrics(run2);
 
       expect(p1).toEqual(p2);
+    });
+  });
+
+  describe('WARMUP_MEASURED_ONLY_GATE: Warm-up Multiplicity Excluded from Report', () => {
+    it('verifies warm-up executions do NOT appear in trials or summary metrics', () => {
+      const config: BenchmarkSuiteConfig = {
+        schemaVersion: '1',
+        suiteId: 'warmup-gate',
+        seed: 'warmup-seed-01',
+        exactDepths: [1, 2],
+        casesPerDepth: 1,
+        algorithms: ['BFS', 'IDA_STAR'],
+        warmupRuns: 3,
+        measuredRuns: 2,
+      };
+
+      const report = runBenchmarkSuiteWithCorpusForTesting(config, mockEnv, corpus);
+      // Expected measured trials: 2 cases * 2 algorithms * 2 measuredRuns = 8 trials
+      const expectedTrials = config.exactDepths.length * config.casesPerDepth * config.algorithms.length * config.measuredRuns;
+      expect(report.trials.length).toBe(expectedTrials);
+      expect(report.summary.totalTrials).toBe(expectedTrials);
+      expect(report.summary.totalCases).toBe(2);
+
+      // Verify no warmup repetition index exists
+      for (const trial of report.trials) {
+        expect(trial.repetitionIndex).toBeGreaterThanOrEqual(0);
+        expect(trial.repetitionIndex).toBeLessThan(config.measuredRuns);
+      }
     });
   });
 
@@ -120,7 +168,7 @@ describe('Phase 5B Classical Solver Benchmark Runner Gates', () => {
         limits: { maxDepth: 0 },
       };
 
-      const report = runBenchmarkSuite(config, mockEnv, { corpus });
+      const report = runBenchmarkSuiteWithCorpusForTesting(config, mockEnv, corpus);
       expect(report.trials.length).toBe(3);
 
       for (const trial of report.trials) {
@@ -145,7 +193,7 @@ describe('Phase 5B Classical Solver Benchmark Runner Gates', () => {
         measuredRuns: 2,
       };
 
-      const report = runBenchmarkSuite(config, mockEnv, { corpus });
+      const report = runBenchmarkSuiteWithCorpusForTesting(config, mockEnv, corpus);
       // Case 0, Rep 0: offset 0 -> BFS, BIDIRECTIONAL_BFS, IDA_STAR
       // Case 0, Rep 1: offset 1 -> BIDIRECTIONAL_BFS, IDA_STAR, BFS
       // Case 1, Rep 0: offset 1 -> BIDIRECTIONAL_BFS, IDA_STAR, BFS

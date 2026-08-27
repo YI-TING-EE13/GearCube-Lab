@@ -13,6 +13,7 @@ export type {
 } from './types.js';
 
 export {
+  BenchmarkConfigError,
   validateBenchmarkSuiteConfig,
   validateConfigCorpusCapacity,
 } from './config.js';
@@ -29,10 +30,7 @@ export { createMulberry32 } from './prng.js';
 
 export { sampleBenchmarkCases } from './sampler.js';
 
-export {
-  runBenchmarkSuite,
-  type RunBenchmarkSuiteOptions,
-} from './runner.js';
+export { runBenchmarkSuite } from './runner.js';
 
 export {
   serializeBenchmarkReportJson,

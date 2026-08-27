@@ -19,10 +19,6 @@ import { validateBenchmarkSuiteConfig, validateConfigCorpusCapacity } from './co
 import { buildExactDistanceCorpus, type ExactDistanceCorpus } from './corpus.js';
 import { sampleBenchmarkCases } from './sampler.js';
 
-export interface RunBenchmarkSuiteOptions {
-  readonly corpus?: ExactDistanceCorpus;
-}
-
 function calculateMedian(values: readonly number[]): number {
   if (values.length === 0) return 0;
   const sorted = [...values].sort((a, b) => a - b);
@@ -54,17 +50,12 @@ function dispatchSolver(
   }
 }
 
-/**
- * Executes a deterministic benchmark suite across configured algorithms and exact-distance cases.
- * Returns a complete, lossless BenchmarkReport.
- */
-export function runBenchmarkSuite(
+function executeBenchmarkSuite(
   configInput: unknown,
   environment: EnvironmentProvenance,
-  options?: RunBenchmarkSuiteOptions,
+  corpus: ExactDistanceCorpus,
 ): BenchmarkReport {
   const config = validateBenchmarkSuiteConfig(configInput);
-  const corpus = options?.corpus ?? buildExactDistanceCorpus();
   validateConfigCorpusCapacity(config, (depth) => corpus.getStatesAtDepth(depth).length);
 
   const cases = sampleBenchmarkCases(config, corpus);
@@ -205,4 +196,29 @@ export function runBenchmarkSuite(
     trials: Object.freeze(trials),
     summary,
   });
+}
+
+/**
+ * Executes a deterministic benchmark suite across configured algorithms and exact-distance cases.
+ * Always builds and uses the canonical Phase 5A exact-distance corpus.
+ * Returns a complete, lossless BenchmarkReport.
+ */
+export function runBenchmarkSuite(
+  configInput: unknown,
+  environment: EnvironmentProvenance,
+): BenchmarkReport {
+  const corpus = buildExactDistanceCorpus();
+  return executeBenchmarkSuite(configInput, environment, corpus);
+}
+
+/**
+ * Internal test-only execution seam that accepts a pre-built corpus to avoid redundant BFS rebuilds.
+ * MUST NOT be exported from the package root public API.
+ */
+export function runBenchmarkSuiteWithCorpusForTesting(
+  configInput: unknown,
+  environment: EnvironmentProvenance,
+  corpus: ExactDistanceCorpus,
+): BenchmarkReport {
+  return executeBenchmarkSuite(configInput, environment, corpus);
 }

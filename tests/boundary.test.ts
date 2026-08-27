@@ -476,6 +476,43 @@ describe('Phase 5 Benchmark Package Boundary & Architectural Invariants', () => 
     expect(content.includes('cli')).toBe(false);
   });
 
+  it('PUBLIC_RUNNER_API_GATE: verifies root public API exports runBenchmarkSuite without corpus injection and exports BenchmarkConfigError', async () => {
+    const benchmark = await import('@gearcube/benchmark');
+    expect(typeof benchmark.runBenchmarkSuite).toBe('function');
+    expect(benchmark.runBenchmarkSuite.length).toBeLessThanOrEqual(2);
+
+    // Forbidden corpus override exports from root
+    expect('RunBenchmarkSuiteOptions' in benchmark).toBe(false);
+    expect('runBenchmarkSuiteWithCorpusForTesting' in benchmark).toBe(false);
+
+    // Required BenchmarkConfigError export
+    expect(benchmark.BenchmarkConfigError).toBeDefined();
+    expect(typeof benchmark.BenchmarkConfigError).toBe('function');
+  });
+
+  it('CLI_IMPORT_BOUNDARY_GATE: verifies cli.ts does NOT import directly from @gearcube/core, @gearcube/solvers, ./sampler, ./hash, or ./prng', () => {
+    const cliPath = path.join(benchmarkSrc, 'cli.ts');
+    expect(fs.existsSync(cliPath)).toBe(true);
+
+    const content = fs.readFileSync(cliPath, 'utf8');
+    const specs = extractModuleSpecifiers(content);
+
+    const forbiddenDirectCliImports = [
+      '@gearcube/core',
+      '@gearcube/solvers',
+      './sampler',
+      './sampler.js',
+      './hash',
+      './hash.js',
+      './prng',
+      './prng.js',
+    ];
+
+    for (const spec of specs) {
+      expect(forbiddenDirectCliImports).not.toContain(spec);
+    }
+  });
+
   it('verifies root devDependencies includes pinned tsx@4.23.12 and @gearcube/benchmark does not depend on it', () => {
     const rootPkg = JSON.parse(fs.readFileSync(path.resolve(process.cwd(), 'package.json'), 'utf8'));
     expect(rootPkg.devDependencies?.tsx).toBe('4.23.12');
