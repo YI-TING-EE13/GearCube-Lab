@@ -35,6 +35,7 @@ docs/
 │   ├── PHASE_3_IMPLEMENTATION_PLAN.md  # Phase 3 Interactive UI, History & Scramble plan (Accepted)
 │   ├── PHASE_4_IMPLEMENTATION_PLAN.md  # Phase 4 Classical Solver Infrastructure plan (Accepted)
 │   ├── PHASE_5_IMPLEMENTATION_PLAN.md  # Phase 5 Research & Benchmarking Harness plan (Preflight Accepted)
+│   ├── PHASE_5D_IMPLEMENTATION_PLAN.md # Phase 5D Browser Research Mode plan (Candidate)
 │   ├── ADR_0004_CENTER_ORIENTATION_PLAN.md # ADR-0004 Center orientation semantics plan
 │   ├── ADR_0005_CANONICAL_MOVE_TRANSITION_PLAN.md # ADR-0005 Canonical move transition plan
 │   ├── ADR_0005_TRANSITION_REPAIR_PLAN.md # ADR-0005 Canonical transition repair plan
@@ -96,6 +97,7 @@ Throughout all documents in `docs/`, technical specifications and mechanical ass
 - **Phase 3 Interactive UI, History & Scramble Plan (Accepted):** [`docs/development/PHASE_3_IMPLEMENTATION_PLAN.md`](development/PHASE_3_IMPLEMENTATION_PLAN.md)
 - **Phase 4 Classical Solver Infrastructure Plan (Accepted):** [`docs/development/PHASE_4_IMPLEMENTATION_PLAN.md`](development/PHASE_4_IMPLEMENTATION_PLAN.md)
 - **Phase 5 Research & Benchmarking Harness Plan (Accepted):** [`docs/development/PHASE_5_IMPLEMENTATION_PLAN.md`](development/PHASE_5_IMPLEMENTATION_PLAN.md)
+- **Phase 5D Browser Research Mode Plan (Candidate):** [`docs/development/PHASE_5D_IMPLEMENTATION_PLAN.md`](development/PHASE_5D_IMPLEMENTATION_PLAN.md)
 - **Phase 5C Experiment Plan — Accepted:** [`docs/research/PHASE_5C_EXPERIMENT_PLAN.md`](research/PHASE_5C_EXPERIMENT_PLAN.md)
 - **Phase 5C Classical Solver Benchmark Report — Accepted:** [`docs/research/PHASE_5_CLASSICAL_SOLVER_BENCHMARK_REPORT.md`](research/PHASE_5_CLASSICAL_SOLVER_BENCHMARK_REPORT.md)
 - **Post-Phase 4 Documentation Reconciliation Record:** [`docs/development/POST_PHASE4_DOCUMENTATION_RECONCILIATION.md`](development/POST_PHASE4_DOCUMENTATION_RECONCILIATION.md)
