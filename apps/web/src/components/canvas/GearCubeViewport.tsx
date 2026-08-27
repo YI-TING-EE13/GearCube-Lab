@@ -1,6 +1,8 @@
 /**
  * @file GearCubeViewport.tsx
- * @description React Three Fiber canvas viewport hosting the interactive Gear Cube session, MoveControls, HistoryControls, TimelineScrubber, ScramblePanel, SolvePanel, and PlaybackControls overlays.
+ * @description React Three Fiber canvas viewport hosting the interactive Gear Cube session,
+ * workspace presentation modes ('PLAY' vs 'RESEARCH'), MoveControls, HistoryControls,
+ * TimelineScrubber, ScramblePanel, SolvePanel, PlaybackControls, and ResearchPanel overlays.
  */
 
 import React, { useState, useCallback, useEffect } from 'react';
@@ -8,6 +10,7 @@ import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import { isSolved, serializeLogicalState, type Move } from '@gearcube/core';
 import type { SolverAlgorithm } from '@gearcube/solvers';
+import type { BenchmarkSuiteConfig } from '@gearcube/benchmark';
 import { GearCubeModel } from '../cube/GearCubeModel';
 import { MoveControls } from '../controls/MoveControls';
 import { useKeyboardControls } from '../controls/useKeyboardControls';
@@ -35,7 +38,9 @@ import { TimelineScrubber } from '../history/TimelineScrubber';
 import { ScramblePanel } from '../history/ScramblePanel';
 import { SolvePanel } from '../solver/SolvePanel';
 import { PlaybackControls } from '../solver/PlaybackControls';
+import { ResearchPanel } from '../research/ResearchPanel';
 import { useSolverWorker } from '../../hooks/useSolverWorker';
+import { useBenchmarkWorker } from '../../hooks/useBenchmarkWorker';
 import {
   createPlaybackMetadata,
   setPlayIntent,
@@ -47,6 +52,8 @@ import {
   recordStepBackward,
   type SolutionPlaybackMetadata,
 } from '../solver/playback-controller';
+
+export type WorkspaceMode = 'PLAY' | 'RESEARCH';
 
 interface AnimatedGearCubeSceneProps {
   readonly session: GearCubeSessionState;
@@ -70,72 +77,127 @@ const AnimatedGearCubeScene: React.FC<AnimatedGearCubeSceneProps> = ({
 };
 
 export const GearCubeViewport: React.FC = () => {
+  const [workspaceMode, setWorkspaceMode] = useState<WorkspaceMode>('PLAY');
   const [app, setApp] = useState<PlayApplicationState>(createInitialPlayApplicationState);
   const [seed, setSeed] = useState<string>('GearCube-Lab');
   const [selectedAlgorithm, setSelectedAlgorithm] = useState<SolverAlgorithm>('IDA_STAR');
   const [playbackMetadata, setPlaybackMetadata] = useState<SolutionPlaybackMetadata | null>(null);
 
   const { state: solverWorkerState, startSearch, cancelSearch } = useSolverWorker();
+  const {
+    state: benchmarkWorkerState,
+    startBenchmark,
+    cancelBenchmark,
+  } = useBenchmarkWorker();
 
-  // External Action Handlers: Cancel search, clear playback, then mutate play application state
-  const handleTriggerMove = useCallback((move: Move) => {
+  // Mode Transition Handlers
+  const handleSwitchToPlay = useCallback(() => {
+    if (benchmarkWorkerState.status === 'ACTIVE') {
+      cancelBenchmark();
+    }
+    setWorkspaceMode('PLAY');
+  }, [benchmarkWorkerState.status, cancelBenchmark]);
+
+  const handleSwitchToResearch = useCallback(() => {
+    if (!isSessionIdle(app.session)) {
+      return;
+    }
     cancelSearch();
     setPlaybackMetadata(null);
-    setApp((prev) => startPlayMove(prev, move, performance.now()));
-  }, [cancelSearch]);
+    setWorkspaceMode('RESEARCH');
+  }, [app.session, cancelSearch]);
+
+  // Benchmark Execution Callbacks
+  const handleStartBenchmark = useCallback(
+    (config: BenchmarkSuiteConfig) => {
+      if (workspaceMode !== 'RESEARCH') {
+        return;
+      }
+      startBenchmark(config);
+    },
+    [workspaceMode, startBenchmark]
+  );
+
+  const handleCancelBenchmark = useCallback(() => {
+    cancelBenchmark();
+  }, [cancelBenchmark]);
+
+  // External Action Handlers: Cancel search, clear playback, then mutate play application state
+  const handleTriggerMove = useCallback(
+    (move: Move) => {
+      if (workspaceMode !== 'PLAY') return;
+      cancelSearch();
+      setPlaybackMetadata(null);
+      setApp((prev) => startPlayMove(prev, move, performance.now()));
+    },
+    [workspaceMode, cancelSearch]
+  );
 
   const handleStepAnimation = useCallback((nowMs: number) => {
     setApp((prev) => stepPlayAnimation(prev, nowMs));
   }, []);
 
-  const handleChangeInteractionMode = useCallback((mode: TurnInteractionMode) => {
-    setApp((prev) => setPlayInteractionMode(prev, mode));
-  }, []);
+  const handleChangeInteractionMode = useCallback(
+    (mode: TurnInteractionMode) => {
+      if (workspaceMode !== 'PLAY') return;
+      setApp((prev) => setPlayInteractionMode(prev, mode));
+    },
+    [workspaceMode]
+  );
 
   const handleUndo = useCallback(() => {
+    if (workspaceMode !== 'PLAY') return;
     cancelSearch();
     setPlaybackMetadata(null);
     setApp((prev) => undoPlay(prev));
-  }, [cancelSearch]);
+  }, [workspaceMode, cancelSearch]);
 
   const handleRedo = useCallback(() => {
+    if (workspaceMode !== 'PLAY') return;
     cancelSearch();
     setPlaybackMetadata(null);
     setApp((prev) => redoPlay(prev));
-  }, [cancelSearch]);
+  }, [workspaceMode, cancelSearch]);
 
   const handleResetBaseline = useCallback(() => {
+    if (workspaceMode !== 'PLAY') return;
     cancelSearch();
     setPlaybackMetadata(null);
     setApp((prev) => backToBaselinePlay(prev));
-  }, [cancelSearch]);
+  }, [workspaceMode, cancelSearch]);
 
-  const handleScrub = useCallback((index: number) => {
-    cancelSearch();
-    setPlaybackMetadata(null);
-    setApp((prev) => scrubPlay(prev, index));
-  }, [cancelSearch]);
+  const handleScrub = useCallback(
+    (index: number) => {
+      if (workspaceMode !== 'PLAY') return;
+      cancelSearch();
+      setPlaybackMetadata(null);
+      setApp((prev) => scrubPlay(prev, index));
+    },
+    [workspaceMode, cancelSearch]
+  );
 
   const handleScramble = useCallback(() => {
+    if (workspaceMode !== 'PLAY') return;
     cancelSearch();
     setPlaybackMetadata(null);
     setApp((prev) => applyScrambleToPlay(prev, seed));
-  }, [cancelSearch, seed]);
+  }, [workspaceMode, cancelSearch, seed]);
 
   // Solver Action Handlers
   const handleSolve = useCallback(() => {
+    if (workspaceMode !== 'PLAY') return;
     if (!isSessionIdle(app.session)) return;
     setPlaybackMetadata(null);
     startSearch(selectedAlgorithm, app.session.currentState);
-  }, [app.session, selectedAlgorithm, startSearch]);
+  }, [workspaceMode, app.session, selectedAlgorithm, startSearch]);
 
   const handleCancelSearch = useCallback(() => {
     cancelSearch();
   }, [cancelSearch]);
 
-  // Defensive Solution Acceptance Gate
+  // Defensive Solution Acceptance Gate (active only in PLAY mode)
   useEffect(() => {
-    if (solverWorkerState.status === 'SOLVED') {
+    if (workspaceMode === 'PLAY' && solverWorkerState.status === 'SOLVED') {
       if (
         isSessionIdle(app.session) &&
         serializeLogicalState(app.session.currentState) === solverWorkerState.searchStartStateKey
@@ -152,18 +214,21 @@ export const GearCubeViewport: React.FC = () => {
         });
       }
     }
-  }, [solverWorkerState, app.session, app.history.cursorIndex]);
+  }, [workspaceMode, solverWorkerState, app.session, app.history.cursorIndex]);
 
   // Playback Control Handlers
   const handlePlay = useCallback(() => {
+    if (workspaceMode !== 'PLAY') return;
     setPlaybackMetadata((prev) => (prev ? setPlayIntent(prev, true) : null));
-  }, []);
+  }, [workspaceMode]);
 
   const handlePause = useCallback(() => {
+    if (workspaceMode !== 'PLAY') return;
     setPlaybackMetadata((prev) => (prev ? setPlayIntent(prev, false) : null));
-  }, []);
+  }, [workspaceMode]);
 
   const handleStepForward = useCallback(() => {
+    if (workspaceMode !== 'PLAY') return;
     if (!playbackMetadata || playbackMetadata.playing || playbackMetadata.canonicalMoveInFlight) {
       return;
     }
@@ -181,9 +246,10 @@ export const GearCubeViewport: React.FC = () => {
     } else {
       setPlaybackMetadata(null);
     }
-  }, [playbackMetadata, app.session]);
+  }, [workspaceMode, playbackMetadata, app.session]);
 
   const handleStepBackward = useCallback(() => {
+    if (workspaceMode !== 'PLAY') return;
     if (!playbackMetadata) return;
     if (!isSessionIdle(app.session)) return;
 
@@ -199,13 +265,14 @@ export const GearCubeViewport: React.FC = () => {
         setPlaybackMetadata(null);
       }
     }
-  }, [playbackMetadata, app]);
+  }, [workspaceMode, playbackMetadata, app]);
 
   // Playback Animation & Settlement Orchestration Effect
   const stagedPhase = app.session.stagedMove?.phase;
   const isIdle = isSessionIdle(app.session);
 
   useEffect(() => {
+    if (workspaceMode !== 'PLAY') return;
     if (!playbackMetadata) return;
 
     // Case 1: A move is in flight
@@ -246,7 +313,7 @@ export const GearCubeViewport: React.FC = () => {
         setPlaybackMetadata(null);
       }
     }
-  }, [stagedPhase, isIdle, app.session.currentState, playbackMetadata]);
+  }, [workspaceMode, stagedPhase, isIdle, app.session.currentState, playbackMetadata]);
 
   const { session, history } = app;
   const isAnimating = isSessionAnimating(session);
@@ -267,11 +334,11 @@ export const GearCubeViewport: React.FC = () => {
   );
 
   useKeyboardControls({
-    isIdle,
-    isAnimating,
-    stagedMove: session.stagedMove,
-    canUndo: hasUndo,
-    canRedo: hasRedo,
+    isIdle: workspaceMode === 'PLAY' && isIdle,
+    isAnimating: workspaceMode !== 'PLAY' || isAnimating,
+    stagedMove: workspaceMode === 'PLAY' ? session.stagedMove : null,
+    canUndo: workspaceMode === 'PLAY' && hasUndo,
+    canRedo: workspaceMode === 'PLAY' && hasRedo,
     onTriggerMove: handleTriggerMove,
     onUndo: handleUndo,
     onRedo: handleRedo,
@@ -307,66 +374,111 @@ export const GearCubeViewport: React.FC = () => {
         />
       </Canvas>
 
-      {/* Top Bar: History Navigation & Scramble Controls */}
-      <div className="top-overlay-bar">
-        <HistoryControls
-          canUndo={hasUndo}
-          canRedo={hasRedo}
-          canResetBaseline={canReset}
-          isBusy={isBusy}
-          onUndo={handleUndo}
-          onRedo={handleRedo}
-          onResetBaseline={handleResetBaseline}
-        />
+      {/* Top Center: Always-Visible Workspace Mode Switch */}
+      <nav
+        className={`workspace-mode-switch workspace-mode-switch-${workspaceMode.toLowerCase()}`}
+        aria-label="Workspace Mode"
+        data-testid="workspace-mode-switch"
+      >
+        <button
+          type="button"
+          className={`workspace-mode-btn ${workspaceMode === 'PLAY' ? 'workspace-mode-btn-active' : ''}`}
+          onClick={handleSwitchToPlay}
+          aria-pressed={workspaceMode === 'PLAY'}
+          data-testid="workspace-mode-play"
+        >
+          Play
+        </button>
+        <button
+          type="button"
+          className={`workspace-mode-btn ${workspaceMode === 'RESEARCH' ? 'workspace-mode-btn-active' : ''}`}
+          onClick={handleSwitchToResearch}
+          disabled={workspaceMode === 'PLAY' && !isIdle}
+          aria-pressed={workspaceMode === 'RESEARCH'}
+          data-testid="workspace-mode-research"
+        >
+          Research
+        </button>
+      </nav>
 
-        <ScramblePanel
-          seed={seed}
-          isBusy={isBusy}
-          onSeedChange={setSeed}
-          onScramble={handleScramble}
-        />
-      </div>
+      {/* Mode-Conditional UI Clusters */}
+      {workspaceMode === 'PLAY' && (
+        <>
+          {/* Top Bar: History Navigation & Scramble Controls */}
+          <div className="top-overlay-bar">
+            <HistoryControls
+              canUndo={hasUndo}
+              canRedo={hasRedo}
+              canResetBaseline={canReset}
+              isBusy={isBusy}
+              onUndo={handleUndo}
+              onRedo={handleRedo}
+              onResetBaseline={handleResetBaseline}
+            />
 
-      {/* Left/Bottom-Left: Timeline Scrubber */}
-      <TimelineScrubber
-        entries={history.entries}
-        cursorIndex={history.cursorIndex}
-        isBusy={isBusy}
-        onScrub={handleScrub}
-      />
+            <ScramblePanel
+              seed={seed}
+              isBusy={isBusy}
+              onSeedChange={setSeed}
+              onScramble={handleScramble}
+            />
+          </div>
 
-      {/* Right Side Overlay: Solve Panel & Playback Controls */}
-      <div className="right-overlay-cluster">
-        <SolvePanel
-          isSolved={isCubeSolved}
-          isSessionBusy={isBusy}
-          solverState={solverWorkerState}
-          selectedAlgorithm={selectedAlgorithm}
-          onSelectAlgorithm={setSelectedAlgorithm}
-          onSolve={handleSolve}
-          onCancel={handleCancelSearch}
-        />
+          {/* Left/Bottom-Left: Timeline Scrubber */}
+          <TimelineScrubber
+            entries={history.entries}
+            cursorIndex={history.cursorIndex}
+            isBusy={isBusy}
+            onScrub={handleScrub}
+          />
 
-        <PlaybackControls
-          playbackMetadata={playbackMetadata}
-          isSessionBusy={isBusy}
-          canStepBack={canStepBack}
-          onPlay={handlePlay}
-          onPause={handlePause}
-          onStepForward={handleStepForward}
-          onStepBackward={handleStepBackward}
-        />
-      </div>
+          {/* Right Side Overlay: Solve Panel & Playback Controls */}
+          <div className="right-overlay-cluster">
+            <SolvePanel
+              isSolved={isCubeSolved}
+              isSessionBusy={isBusy}
+              solverState={solverWorkerState}
+              selectedAlgorithm={selectedAlgorithm}
+              onSelectAlgorithm={setSelectedAlgorithm}
+              onSolve={handleSolve}
+              onCancel={handleCancelSearch}
+            />
 
-      {/* 12-Move Control Overlay with Phase 2E Turn Interaction Mode Support */}
-      <MoveControls
-        interactionMode={session.interactionMode}
-        isIdle={isIdle}
-        isAnimating={isAnimating}
-        stagedMove={session.stagedMove}
-        onTriggerMove={handleTriggerMove}
-        onChangeInteractionMode={handleChangeInteractionMode}
-      />
+            <PlaybackControls
+              playbackMetadata={playbackMetadata}
+              isSessionBusy={isBusy}
+              canStepBack={canStepBack}
+              onPlay={handlePlay}
+              onPause={handlePause}
+              onStepForward={handleStepForward}
+              onStepBackward={handleStepBackward}
+            />
+          </div>
+
+          {/* 12-Move Control Overlay with Phase 2E Turn Interaction Mode Support */}
+          <MoveControls
+            interactionMode={session.interactionMode}
+            isIdle={isIdle}
+            isAnimating={isAnimating}
+            stagedMove={session.stagedMove}
+            onTriggerMove={handleTriggerMove}
+            onChangeInteractionMode={handleChangeInteractionMode}
+          />
+        </>
+      )}
+
+      {workspaceMode === 'RESEARCH' && (
+        <div
+          className="research-mode-overlay"
+          data-testid="research-mode-overlay"
+        >
+          <ResearchPanel
+            benchmarkState={benchmarkWorkerState}
+            onStartBenchmark={handleStartBenchmark}
+            onCancelBenchmark={handleCancelBenchmark}
+          />
+        </div>
+      )}
     </div>
   );
 };
