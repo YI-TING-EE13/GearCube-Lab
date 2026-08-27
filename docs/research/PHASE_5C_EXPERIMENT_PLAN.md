@@ -16,12 +16,12 @@
 
 ## 1. Executive Summary & Purpose
 
-Phase 5C conducts the first rigorous empirical comparative evaluation of classical search algorithms on the Gear Cube puzzle domain:
+Phase 5C establishes the empirical comparative evaluation of classical search algorithms on the Gear Cube puzzle domain:
 1. **Breadth-First Search (BFS)** — Uninformed forward shortest-path baseline.
 2. **Bidirectional BFS (BiBFS)** — Meet-in-the-middle bidirectional shortest-path baseline with algebraic move inverse predecessor generation.
 3. **Iterative Deepening A\* (IDA\*)** — Memory-bounded heuristic search guided by the admissible, consistent H2 two-slice pattern database (PDB) heuristic ($10.37\text{ KB}$ footprint).
 
-This document formalizes the complete Phase 5C experiment design, statistical analysis units, deterministic matrices, timing interpretation constraints, raw/derived artifact layouts, reproducibility gates, and pilot calibration evidence **prior to** executing any final research benchmark runs.
+This document formalizes the complete Phase 5C experiment design, statistical analysis units, deterministic matrices, timing interpretation constraints, execution environment protocols, quartile algorithms, raw/derived artifact layouts, reproducibility gates, and pilot calibration evidence **prior to** executing any final research benchmark runs.
 
 ---
 
@@ -53,13 +53,54 @@ This document formalizes the complete Phase 5C experiment design, statistical an
 ### 4.1. Deterministic Search Metrics
 - **Analysis Unit:** One unique canonical case $\times$ algorithm pair (`caseId × algorithm`).
 - **Rule:** Search tree metrics (`nodesExpanded`, `nodesGenerated`, `solutionDepth`, `solutionMoves`, `status`) are mathematically deterministic functions of the puzzle state and algorithm. Repetitions of the same case $\times$ algorithm yield bit-for-bit identical counters and must **not** be treated as independent degrees of freedom or separate puzzle instances.
-- **Aggregations:** Mean, median, minimum, maximum, and interquartile range (IQR) computed across unique sampled cases within each exact-distance bucket $d \in [1 \dots 8]$.
+- **Sampling Scope:** For depth 1, the sample is exhaustive ($12/12$ cases). For depths 2–8, the sample is a fixed-seed, deterministic subset sampled without replacement ($30$ cases per depth). It is descriptive of the sampled strata and must not be characterized as a statistically certified population representation.
 
-### 4.2. Observational Timing Metrics
-- **Analysis Unit:** Process replicate $\times$ canonical case $\times$ algorithm.
-- **Within-Process Aggregation:** For multi-repetition timing suites (`measuredRuns > 1`), compute the median `elapsedMs` over the measured repetitions for that specific case and algorithm.
-- **Cross-Process Aggregation:** Compute the median case-level timing across the 3 independent process replicates (`timing-r1`, `timing-r2`, `timing-r3`), then summarize by exact depth.
-- **Timer Resolution Constraint:** The production solver uses `Date.now()` integer-millisecond timing. If the median timing for an algorithm $\times$ depth cell is $0\text{ ms}$, the cell is classified as `TIMER_RESOLUTION_LIMITED`. Speedup ratios involving `TIMER_RESOLUTION_LIMITED` cells must not be calculated or published.
+### 4.2. Quartile & Spread Algorithm
+To ensure deterministic analysis without ambiguity across tooling, all quartiles ($Q_1, Q_3$) and interquartile ranges ($\text{IQR} = Q_3 - Q_1$) across structural counters and timing medians are calculated via the following convention:
+1. Sort values in ascending numerical order: $x_1 \le x_2 \le \dots \le x_n$.
+2. Compute median $M = \text{median}(X)$.
+3. **If $n$ is even:**
+   - $\text{Lower half} = x_1 \dots x_{n/2}$
+   - $\text{Upper half} = x_{n/2 + 1} \dots x_n$
+   - $Q_1 = \text{median}(\text{Lower half})$
+   - $Q_3 = \text{median}(\text{Upper half})$
+4. **If $n$ is odd:**
+   - Exclude the single middle value ($x_{(n+1)/2}$) from both halves.
+   - $\text{Lower half} = x_1 \dots x_{(n-1)/2}$
+   - $\text{Upper half} = x_{(n+3)/2} \dots x_n$
+   - $Q_1 = \text{median}(\text{Lower half})$
+   - $Q_3 = \text{median}(\text{Upper half})$
+5. $\text{IQR} = Q_3 - Q_1$.
+
+### 4.3. Exact Two-Stage Observational Timing Procedure
+- **Stage 1 (Within-Process Median):** For each process replicate $r \in \{r_1, r_2, r_3\}$, unique `caseId`, and `algorithm`, take the median of the 5 measured `elapsedMs` repetitions:
+  $$\text{timing}_{\text{rep}}(r, \text{caseId}, \text{alg}) = \text{median}_{k=1 \dots 5}(\text{elapsedMs}_{r, \text{caseId}, \text{alg}, k})$$
+- **Stage 2 (Cross-Process Case Median):** For each unique `caseId` and `algorithm`, take the median of the 3 process-level medians:
+  $$\text{FINAL\_CASE\_TIMING\_MS}(\text{caseId}, \text{alg}) = \text{median}_{r \in \{r_1, r_2, r_3\}}(\text{timing}_{\text{rep}}(r, \text{caseId}, \text{alg}))$$
+- **Stage 3 (Depth-Strata Summary):** For each `algorithm` and `exactDepth`, summarize the 8 $\text{FINAL\_CASE\_TIMING\_MS}$ values using:
+  - `caseCount` ($8$)
+  - `medianElapsedMs`
+  - `Q1`, `Q3`, `IQR`
+  - `minElapsedMs`, `maxElapsedMs`
+  - `zeroMsCaseCount`: Number of cases where $\text{FINAL\_CASE\_TIMING\_MS} == 0$.
+  - `zeroMsCaseFraction`: $\frac{\text{zeroMsCaseCount}}{\text{caseCount}}$.
+  - `timerResolutionStatus`: If cell `medianElapsedMs == 0`, mark as `TIMER_RESOLUTION_LIMITED`.
+- **Constraint:** Speedup ratios involving a `TIMER_RESOLUTION_LIMITED` timing cell must not be computed or published.
+
+### 4.4. Paired Case Comparison Rules
+- Comparisons between algorithms are paired strictly on identical `caseId` instances.
+- **Normalized Node Metrics:**
+  - $\text{normalizedExpanded} = \frac{\text{algorithm.nodesExpanded}}{\text{BFS.nodesExpanded}}$ (defined only when $\text{BFS.nodesExpanded} > 0$)
+  - $\text{normalizedGenerated} = \frac{\text{algorithm.nodesGenerated}}{\text{BFS.nodesGenerated}}$ (defined only when $\text{BFS.nodesGenerated} > 0$)
+- **Reduction Factors:**
+  - $\text{reductionFactorExpanded} = \frac{\text{BFS.nodesExpanded}}{\text{algorithm.nodesExpanded}}$ (defined only when both values $> 0$)
+  - $\text{reductionFactorGenerated} = \frac{\text{BFS.nodesGenerated}}{\text{algorithm.nodesGenerated}}$ (defined only when both values $> 0$)
+- **Reporting Rule:** The report must clearly distinguish between the *median of per-case paired ratios* and the *ratio of aggregate group means*. They must never be conflated.
+
+### 4.5. Prohibition on Inferential Significance Claims
+- `PHASE5C_V1_ANALYSIS: DESCRIPTIVE`.
+- The analysis presents descriptive statistics and exact empirical distributions for the evaluated suites.
+- No p-values, null-hypothesis tests, or population inference confidence intervals may be generated or claimed.
 
 ---
 
@@ -72,7 +113,7 @@ This document formalizes the complete Phase 5C experiment design, statistical an
 | **Suite ID** | `phase5c-structural-depth1-v1` | `phase5c-structural-depth2-8-v1` |
 | **Seed** | `phase5c-structural-d1-v1` | `phase5c-structural-d2-8-v1` |
 | **Exact Depths** | `[1]` | `[2, 3, 4, 5, 6, 7, 8]` |
-| **Cases Per Depth** | `12` (100% of depth-1 bucket) | `30` per depth |
+| **Cases Per Depth** | `12` (100% of depth-1 bucket) | `30` per depth (deterministic seeded subset) |
 | **Algorithms** | `["BFS", "BIDIRECTIONAL_BFS", "IDA_STAR"]` | `["BFS", "BIDIRECTIONAL_BFS", "IDA_STAR"]` |
 | **Warmup Runs** | `0` | `0` |
 | **Measured Runs** | `1` | `1` |
@@ -82,7 +123,7 @@ This document formalizes the complete Phase 5C experiment design, statistical an
 | **Total Solver Invocations** | 36 | 630 |
 
 - **Structural Total:** 222 unique canonical cases, 666 measured solver trials.
-- **Coverage:** Evaluates 100% of depth 1 ($12/12$), $27.0\%$ of depth 2 ($30/111$), $3.6\%$ of depth 3 ($30/822$), and representative samples ($30$ cases each) for depths 4 through 8.
+- **Coverage:** Evaluates 100% of depth 1 ($12/12$), $27.0\%$ of depth 2 ($30/111$), $3.6\%$ of depth 3 ($30/822$), $0.78\%$ of depth 4 ($30/3863$), $0.26\%$ of depth 5 ($30/11706$), $0.18\%$ of depth 6 ($30/16410$), $0.37\%$ of depth 7 ($30/8196$), and $8.55\%$ of depth 8 ($30/351$).
 
 ### 5.2. Timing Benchmark Matrix (Process-Replicated Observational Timing)
 
@@ -117,7 +158,7 @@ This document formalizes the complete Phase 5C experiment design, statistical an
 
 ---
 
-## 6. Pilot Calibration Evidence
+## 6. Pilot Calibration Evidence & Feasibility Estimate
 
 To validate workload feasibility and audit timer resolution prior to freezing the experiment design, a single disposable pilot calibration run was executed in an isolated temporary directory outside the repository.
 
@@ -148,12 +189,13 @@ To validate workload feasibility and audit timer resolution prior to freezing th
 - **Complete Wall-Clock Time:** $10.12\text{ seconds}$
 - **Host Environment:** Windows x64, Node v22.17.1, 13th Gen Intel Core i5-13600K (20 logical cores).
 
-### 6.3. Feasibility Estimation
+### 6.3. Feasibility Estimation (Rough & Non-Predictive)
 - **Pilot Invocations:** $96$
 - **Proposed Final Invocations:** $4,698$
 - **Linear Invocation Scale Factor:** $\frac{4698}{96} = 48.9375$
 - **Naive Linear Full Runtime Estimate:** $10.12\text{ s} \times 48.9375 \approx 495.25\text{ seconds}$ ($\approx 8.25\text{ minutes}$).
 - **Feasibility Classification:** `FEASIBLE_FOR_REVIEW` ($495.25\text{ s} \le 7200\text{ s}$).
+- **Caveat:** This calculation is a rough, non-predictive feasibility check. It does not model five separate Node process startup costs, repeated canonical 41,472-state corpus BFS constructions, differences in state search difficulty across larger sample sizes, OS background scheduling, or thermal throttling. It must not be treated as a deterministic execution SLA.
 
 ### 6.4. Timer Resolution Audit (Zero-Millisecond Analysis)
 The pilot recorded $21 / 48$ trials ($43.75\%$) with `elapsedMs == 0`:
@@ -164,11 +206,42 @@ The pilot recorded $21 / 48$ trials ($43.75\%$) with `elapsedMs == 0`:
 | **Bidirectional BFS** | $2/2$ ($0\text{ ms}$) | $1/2$ ($0, 1\text{ ms}$) | $1/2$ ($0, 1\text{ ms}$) | $2/2$ ($0\text{ ms}$) | $0/2$ ($2, 3\text{ ms}$) | $0/2$ ($3\text{ ms}$) | $0/2$ ($18, 20\text{ ms}$) | $0/2$ ($31, 35\text{ ms}$) | **$6/16$** ($37.5\%$) |
 | **IDA\* (H2 PDB)** | $2/2$ ($0\text{ ms}$) | $1/2$ ($0, 1\text{ ms}$) | $2/2$ ($0\text{ ms}$) | $1/2$ ($0, 1\text{ ms}$) | $2/2$ ($0\text{ ms}$) | $1/2$ ($0, 1\text{ ms}$) | $2/2$ ($0\text{ ms}$) | $1/2$ ($0, 1\text{ ms}$) | **$12/16$** ($75.0\%$) |
 
-- **Empirical Takeaway:** IDA* is so efficient on this domain (expanding at most 49 nodes at depth 8) that $75\%$ of its executions complete in $< 1\text{ ms}$ and register as $0\text{ ms}$ under `Date.now()`. This finding proves that deterministic node counters (`nodesExpanded`, `nodesGenerated`) must serve as the primary scientific metric of algorithm efficiency.
+- **Empirical Takeaway:** In the two sampled depth-8 pilot cases, the maximum observed IDA* `nodesExpanded` value was 49. Because IDA* search completes rapidly at this scale, $75\%$ of its pilot trial executions were recorded as $0\text{ ms}$ at the `Date.now()`-based integer-millisecond measurement resolution. This empirical observation strongly supports the decision to treat deterministic node counters (`nodesExpanded`, `nodesGenerated`) as the primary scientific efficiency metrics and classify cells with median $0\text{ ms}$ as `TIMER_RESOLUTION_LIMITED`.
 
 ---
 
-## 7. Artifact & Directory Layout (To Freeze)
+## 7. Execution Environment & Worktree Protocol
+
+### 7.1. Execution Conditions
+All five final Phase 5C CLI executions (`structural-depth1`, `structural-depth2-8`, `timing-r1`, `timing-r2`, `timing-r3`) must be executed under the following strict protocol:
+- `SERIAL_EXECUTION: YES` (runs executed sequentially one after another; never concurrently).
+- `CONCURRENT_BENCHMARKS: NO`.
+- `PHYSICAL_MACHINE: SAME`.
+- `REPOSITORY_COMMIT: SAME EXACT COMMIT`.
+- `NODE_VERSION: SAME`.
+- `TOOLCHAIN / LOCKFILE: SAME`.
+- `PRODUCTION_SOURCE_CHANGE_BETWEEN_RUNS: NO`.
+- `CONFIG_MUTATION_BETWEEN_TIMING_REPLICATES: NO`.
+
+### 7.2. Dependency & Worktree Preparation
+- Final research execution must occur in its own clean dedicated execution worktree.
+- Dependencies must be prepared via standard `npm ci` using the committed `package-lock.json`.
+- Copied `node_modules` trees, ad-hoc symlinks, or cross-worktree package junction hacks are strictly prohibited for final data collection.
+- *Note:* The planning pilot used local temporary dependency scaffolding solely for pre-flight calibration; pilot numbers are not part of the final research dataset.
+
+### 7.3. Environment Metadata Logging
+The research report and reproducibility record must log:
+- Git repository commit SHA
+- Node.js runtime version
+- Host operating system and platform
+- System architecture
+- CPU model and clock/family identifier
+- Total logical processor cores
+- ISO-8601 execution timestamp for each raw report
+
+---
+
+## 8. Artifact & Directory Layout (To Freeze)
 
 The future Phase 5C execution task will populate the following frozen tracked directory structure:
 
@@ -200,41 +273,81 @@ scripts/
 └── analyze-phase5c.mjs                             # Node-standard-library deterministic analysis script
 ```
 
+### 8.1. Raw Data Immutability
+- Once generated and verified, all raw JSON and CSV files in `docs/research/phase5c/raw/` are immutable scientific records.
+- If an execution fails any verification gate, the entire run attempt is invalid and must be discarded according to the stop policy; individual rows must never be hand-edited or selectively overwritten.
+
+### 8.2. Analysis Script Contract (`scripts/analyze-phase5c.mjs`)
+- Uses strictly Node.js standard library modules (`node:fs`, `node:path`). No external npm dependencies.
+- **Inputs:** Strictly the five committed raw JSON files in `docs/research/phase5c/raw/` (CSV files serve as tabular cross-checks).
+- **Behavior:** Deterministic, pure data extraction and statistical reduction. Performs zero solver calls, zero corpus rebuilds, zero resampling, zero configuration mutations, zero row mutations, zero network requests, and zero silent data filtering.
+- **Error Behavior:** Exits with non-zero exit code on missing inputs, schema errors, unexpected trial counts, `LIMIT_REACHED` presence, optimality mismatches, or deterministic timing replicate discrepancies.
+
+### 8.3. Reproducibility Record Schema (`reproducibility-check.json`)
+The analysis script will emit `reproducibility-check.json` documenting:
+```json
+{
+  "schemaVersion": "1",
+  "repositoryCommit": "<commit-sha>",
+  "suiteId": "phase5c-timing-v1",
+  "seed": "phase5c-timing-v1",
+  "replicates": [
+    "docs/research/phase5c/raw/timing-r1.json",
+    "docs/research/phase5c/raw/timing-r2.json",
+    "docs/research/phase5c/raw/timing-r3.json"
+  ],
+  "caseSequenceIdentical": true,
+  "deterministicProjectionIdentical": true,
+  "expectedCases": 64,
+  "expectedTrialsPerReplicate": 960,
+  "deterministicMismatches": 0,
+  "reproducibilityPassed": true
+}
+```
+
 ---
 
-## 8. Deterministic Reproducibility & Verification Gates
+## 9. Structural & Timing Report Schema Contracts
 
-### 8.1. Bit-for-Bit Determinism Invariant
-Between the 3 independent process runs (`timing-r1`, `timing-r2`, `timing-r3`), the following fields must match bit-for-bit:
-- `cases` (caseId, stateKey, exactDepth in exact identical sequence)
-- `trials.caseId`
-- `trials.exactDepth`
-- `trials.algorithm`
-- `trials.repetitionIndex`
-- `trials.status`
-- `trials.solutionDepth`
-- `trials.solutionMoves`
-- `trials.nodesExpanded`
-- `trials.nodesGenerated`
-- `trials.limitReason`
+### 9.1. Structural Summary Table Schema (`structural-by-depth.csv`)
+For each `algorithm × exactDepth`, the derived structural table contains:
+- `algorithm`
+- `exactDepth`
+- `caseCount` (unique sampled cases)
+- `canonicalBucketSize` (total states in distance bucket: $12, 111, 822, 3863, 11706, 16410, 8196, 351$)
+- `coverageFraction` ($\frac{\text{caseCount}}{\text{canonicalBucketSize}}$)
+- `meanNodesExpanded`, `medianNodesExpanded`, `minNodesExpanded`, `maxNodesExpanded`, `Q1NodesExpanded`, `Q3NodesExpanded`, `iqrNodesExpanded`
+- `meanNodesGenerated`, `medianNodesGenerated`, `minNodesGenerated`, `maxNodesGenerated`, `Q1NodesGenerated`, `Q3NodesGenerated`, `iqrNodesGenerated`
 
-### 8.2. Correctness & Quality Stop Policy
-If any final Phase 5C trial produces:
-1. `status === "LIMIT_REACHED"` (resource limit reached on canonical case);
-2. `solutionDepth !== exactDepth` (optimality violation);
-3. Unhandled exception or CLI exit code $\ne 0$;
-4. Mismatch in deterministic search metrics between timing replicates $r_1, r_2, r_3$;
-
-**The research run is immediately declared INVALID and execution must STOP.** No source modifications may be performed during a research execution task.
+### 9.2. Timing Summary Table Schema (`timing-by-depth.csv`)
+For each `algorithm × exactDepth`, the derived timing table contains:
+- `algorithm`
+- `exactDepth`
+- `caseCount` ($8$)
+- `medianElapsedMs`
+- `Q1ElapsedMs`, `Q3ElapsedMs`, `iqrElapsedMs`
+- `minElapsedMs`, `maxElapsedMs`
+- `zeroMsCaseCount` (number of cases where case median across replicates equals 0)
+- `zeroMsCaseFraction` ($\frac{\text{zeroMsCaseCount}}{8}$)
+- `timerResolutionStatus` (`OK` or `TIMER_RESOLUTION_LIMITED`)
 
 ---
 
-## 9. Next Steps & Execution Discipline
+## 10. Future Phase 5C Acceptance Criteria & Quality Stop Policy
 
-1. **Independent Review:** Review and accept this candidate experiment plan (`PHASE_5C_EXPERIMENT_PLAN.md`).
-2. **Phase 5C Execution Task (Separate Prompt):**
-   - Author configs in `docs/research/phase5c/configs/`.
-   - Execute CLI runs serially to produce raw artifacts in `docs/research/phase5c/raw/`.
-   - Implement `scripts/analyze-phase5c.mjs` (using Node standard library only).
-   - Generate derived tables in `docs/research/phase5c/derived/`.
-   - Author the final research report `docs/research/PHASE_5_CLASSICAL_SOLVER_BENCHMARK_REPORT.md`.
+The final Phase 5C execution task must satisfy all nine explicit acceptance gates:
+
+| Gate Identifier | Pass Requirement |
+| :--- | :--- |
+| **`RESEARCH_DATASET_GATE`** | All five raw JSON/CSV reports exist with exact expected trial counts (36, 630, 960, 960, 960). |
+| **`ALL_SOLVED_GATE`** | Exactly 0 trials reach `LIMIT_REACHED`; 100% of trials finish with status `SOLVED`. |
+| **`OPTIMALITY_GATE`** | Every solved trial satisfies $\text{solutionDepth} \equiv \text{exactDepth}$ without exception. |
+| **`REPRODUCIBILITY_GATE`** | `reproducibility-check.json` confirms bit-for-bit identity of deterministic projections across `timing-r1`, `timing-r2`, `timing-r3`. |
+| **`RAW_ARTIFACT_INTEGRITY_GATE`** | Raw files are present, valid, conform to RFC-4180 / JSON v1 schemas, and are left unmutated by analysis. |
+| **`STRUCTURAL_ANALYSIS_GATE`** | `structural-by-depth.csv` correctly aggregates all 222 structural cases across all 8 exact depths. |
+| **`TIMING_RESOLUTION_GATE`** | `timing-by-depth.csv` reports two-stage case medians, zero-ms counts/fractions, and `TIMER_RESOLUTION_LIMITED` classifications. |
+| **`METRIC_SEPARATION_GATE`** | Final research report uses deterministic node counters as primary evidence and labels `elapsedMs` as observational. |
+| **`REPORT_TRACEABILITY_GATE`** | Every table, figure, and quantitative claim in `PHASE_5_CLASSICAL_SOLVER_BENCHMARK_REPORT.md` is strictly traceable to committed raw/derived CSVs. |
+
+### Quality Stop Policy
+If any final research trial produces a `LIMIT_REACHED` outcome, an optimality violation, a CLI runtime crash, or a discrepancy across deterministic timing replicate fields, **the research execution is immediately declared INVALID and execution must STOP**. No ad-hoc parameter tweaks or source fixes may be made during a data collection task.
