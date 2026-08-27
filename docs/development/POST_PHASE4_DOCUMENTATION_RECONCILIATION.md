@@ -45,8 +45,8 @@ NO
 | `docs/README.md` | `CURRENT_SUPPORTING` | STALE — updated file tree and quick navigator to include missing Phase 3/4 plans, ADR-0005 transition plan, and reconciliation record |
 | `docs/architecture/GEAR_CUBE_STATE_MODEL.md` | `REFERENCE_SPECIFICATION` | No drift — discrete state model intact |
 | `docs/architecture/KINEMATIC_CONTRACT.md` | `REFERENCE_SPECIFICATION` | STALE — clarified presentation material decoupling and noted VisualSkin as deferred/future presentation extension |
-| `docs/architecture/PUZZLE_CONTRACTS.md` | `REFERENCE_SPECIFICATION` | STALE — synchronized with accepted `@gearcube/solvers` production contracts (`START_SEARCH`, `requestId`, `SearchTelemetry`, `SolveSuccess`, `SolveLimitReached`); removed obsolete `START_SOLVE`/`CANCEL_SOLVE`; demoted benchmark contracts to non-normative placeholder |
-| `docs/architecture/SYSTEM_ARCHITECTURE.md` | `CURRENT_AUTHORITATIVE` | STALE — updated Section 3.4 to Phase 4 Complete; added `@gearcube/solvers` dependency; clarified terminate-based worker cancellation; removed premature interchangeable visual skin implementation claim |
+| `docs/architecture/PUZZLE_CONTRACTS.md` | `REFERENCE_SPECIFICATION` | STALE — synchronized with accepted `@gearcube/solvers` production contracts (`START_SEARCH`, `requestId`, `SearchTelemetry`, `SolveSuccess`, `SolveLimitReached`); removed obsolete `START_SOLVE`/`CANCEL_SOLVE`; demoted benchmark contracts to non-normative placeholder; removed stale Phase 0-era note |
+| `docs/architecture/SYSTEM_ARCHITECTURE.md` | `CURRENT_AUTHORITATIVE` | STALE — updated Section 3.4 to Phase 4 Complete; added `@gearcube/solvers` dependency; clarified terminate-based worker cancellation; removed premature visual skin implementation claims; unfroze Phase 5 benchmark dependency boundary in axioms, diagram, and Section 3.6 |
 | `docs/characterization/OBSERVATION_TEMPLATE.md` | `CHARACTERIZATION_RECORD` | No drift — preserved |
 | `docs/characterization/PHYSICAL_CHARACTERIZATION_PROTOCOL.md` | `CHARACTERIZATION_RECORD` | No drift — preserved |
 | `docs/decisions/ADR-0001-FOUNDATION.md` | `ADR_DECISION_RECORD` | No drift — preserved |
@@ -70,7 +70,7 @@ NO
 | `docs/development/ROADMAP.md` | `CURRENT_AUTHORITATIVE` | No drift — already updated during Phase 4E acceptance |
 | `docs/development/TEST_STRATEGY.md` | `CURRENT_AUTHORITATIVE` | No drift — already updated during Phase 4E acceptance |
 | `docs/operations/DEPLOYMENT.md` | `CURRENT_SUPPORTING` | STALE — removed obsolete Zustand reference in bundle comment |
-| `docs/project/PROJECT_BLUEPRINT.md` | `CURRENT_AUTHORITATIVE` | STALE — updated Phase 4 to Implemented & Accepted; clarified Phase 5 benchmark dependency boundary as `PHASE5_PREFLIGHT_DECISION_REQUIRED`; clarified visual skin status |
+| `docs/project/PROJECT_BLUEPRINT.md` | `CURRENT_AUTHORITATIVE` | STALE — updated Phase 4 to Implemented & Accepted; distinguished current vs deferred features in Modes 1-3; corrected AI grouping in scope diagram; aligned Solve Mode data flow with explicit-search / cancel lifecycle; qualified sub-1ms performance target; unfroze benchmark dependency and fixture ownership |
 | `docs/reference/STANDARD_GEAR_CUBE_SPEC.md` | `REFERENCE_SPECIFICATION` | No drift — preserved |
 
 ---
@@ -90,13 +90,16 @@ NO
 | `ACCEPTANCE_OR_AUDIT_RECORD` | 5 |
 | **TOTAL PRIMARY CLASSIFICATIONS** | **32** |
 
-### Stale Current-State Findings
+### Stale Current-State Findings Across Audit
 
 | Metric | Count |
 | :--- | :--- |
 | `STALE_CURRENT_STATE_FINDINGS` | 8 |
+| `INDEPENDENT_REVIEW_RESIDUAL_DOCS` | 3 |
 
 *Files with Stale Findings Reconciled:* `README.md`, `docs/README.md`, `docs/architecture/SYSTEM_ARCHITECTURE.md`, `docs/architecture/PUZZLE_CONTRACTS.md`, `docs/architecture/KINEMATIC_CONTRACT.md`, `docs/development/DEVELOPMENT_GUIDE.md`, `docs/operations/DEPLOYMENT.md`, `docs/project/PROJECT_BLUEPRINT.md`.
+
+*Residual Documents Reconciled in Final Repair:* `SYSTEM_ARCHITECTURE.md`, `PROJECT_BLUEPRINT.md`, `PUZZLE_CONTRACTS.md`.
 
 ---
 
@@ -104,12 +107,14 @@ NO
 
 1. **Solver & Worker Contracts Synchronized:** `docs/architecture/PUZZLE_CONTRACTS.md` now matches the production `@gearcube/solvers` implementation (`START_SEARCH`, `requestId`, `SearchTelemetry`, `SolveSuccess`, `SolveLimitReached`). Obsolete pseudo-APIs (`START_SOLVE`, `CANCEL_SOLVE`, `PROGRESS`, `COMPLETE`, `ERROR`, `timeoutMs`, `heuristicWeight`, `IDDFS`, `A_STAR`, `PATTERN_DATABASE`, `NEURAL_GUIDED`) have been replaced or demoted.
 2. **Worker Termination Contract Clarified:** Host-driven `worker.terminate()` is the sole cancellation mechanism. No in-band `CANCEL_SOLVE` or `CANCEL_SEARCH` message exists in production.
-3. **Core API Public Names Aligned:** `PuzzleCoreAPI` in `PUZZLE_CONTRACTS.md` uses accepted public exports (`applyMove`, `isSolved`, `equalsGearCubeState`, `serializeLogicalState`, `deserializeLogicalState`, `isGearCubeState`).
+3. **Core API Public Names Aligned:** `PuzzleCoreAPI` in `PUZZLE_CONTRACTS.md` uses accepted public exports (`applyMove`, `isSolved`, `equalsGearCubeState`, `serializeLogicalState`, `deserializeLogicalState`, `isGearCubeState`). Stale Phase 0-era "No source code files are created in this phase" wording has been removed.
 4. **Renderer Topology Verified:** Presentation and 3D rendering live directly in `apps/web/src/components/**`, not `packages/renderer`.
 5. **Visual Skin Status Corrected:** Modular `VisualSkin` theme switching is classified as a `DEFERRED / FUTURE PRESENTATION CAPABILITY`. Current production uses fixed procedural geometries and palette helpers in `apps/web/src/components/cube/materials.ts`.
-6. **Phase 5 Benchmark Contracts Demoted:** Benchmark interfaces in `PUZZLE_CONTRACTS.md` are explicitly labeled as `NON-NORMATIVE HISTORICAL / CONCEPTUAL PLACEHOLDER (PHASE5_PREFLIGHT_DECISION_REQUIRED)`. No benchmark schemas or dependencies are frozen prior to Phase 5 preflight.
-7. **Phase 5 Dependency Boundary Neutralized:** `docs/project/PROJECT_BLUEPRINT.md` notes the benchmark dependency boundary as `PHASE5_PREFLIGHT_DECISION_REQUIRED` with candidate options noted without premature commitment.
-8. **Documentation Index Completed:** `docs/README.md` now indexes all tracked development documents including `ADR_0005_CANONICAL_MOVE_TRANSITION_PLAN.md` and `POST_PHASE4_DOCUMENTATION_RECONCILIATION.md`.
+6. **Phase 5 Benchmark Contracts Demoted:** Benchmark interfaces in `PUZZLE_CONTRACTS.md` are explicitly labeled as `NON-NORMATIVE HISTORICAL / CONCEPTUAL PLACEHOLDER (PHASE5_PREFLIGHT_DECISION_REQUIRED)`. No benchmark schemas, metrics, or seed semantics are frozen prior to Phase 5 preflight.
+7. **Phase 5 Dependency Boundary & Scope Neutralized:** In `SYSTEM_ARCHITECTURE.md` (axioms, Mermaid, Section 3.6) and `PROJECT_BLUEPRINT.md` (module table, Research Mode), the benchmark dependency boundary, fixture generation ownership, metric schema, and export format are explicitly marked as `PHASE5_PREFLIGHT_DECISION_REQUIRED` rather than frozen contracts.
+8. **Solve Mode Lifecycle & Feature Separation Aligned:** `PROJECT_BLUEPRINT.md` separates implemented Solve features (BFS, BiBFS, IDA*, playback controls) from deferred extensions (Auto-Step speed slider, 3D move annotations) and future Phase 6 AI. Data flow reflects the accepted architecture where external mutations cancel active search before mutating state, and solver requests occur only on explicit user solve action.
+9. **Performance Targets Qualified:** Unqualified sub-1ms latency and 60 FPS claims are formatted as proposed performance targets pending Phase 5 measurement methodology.
+10. **Documentation Index Completed:** `docs/README.md` indexes all tracked development documents including `ADR_0005_CANONICAL_MOVE_TRANSITION_PLAN.md` and `POST_PHASE4_DOCUMENTATION_RECONCILIATION.md`.
 
 ---
 
@@ -156,4 +161,4 @@ All modifications were strictly constrained to tracked Markdown (`*.md`) documen
 - `AUTHORITATIVE_MAIN`: `124ad0d0da025222fed0b4e21db82c7b5102b01e`
 - Phases 0–4: `CLOSED / COMPLETED / ACCEPTED ON MAIN`
 - Phase 5: `NOT STARTED`
-- `NEXT_RECOMMENDED_TASK`: Independent final repository-wide documentation review.
+- `NEXT_RECOMMENDED_TASK`: Independent final documentation acceptance review.

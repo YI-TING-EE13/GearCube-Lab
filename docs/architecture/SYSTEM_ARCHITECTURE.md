@@ -13,7 +13,7 @@ GearCube Lab is architected around strict unidirectional layer isolation. The do
 1. **Unidirectional Dependency Direction:**
    $$\text{UI} \longrightarrow \text{Renderer} \longrightarrow \text{Kinematics} \longrightarrow \text{Core}$$
    $$\text{Solvers} \longrightarrow \text{Core}$$
-   $$\text{Benchmark} \longrightarrow \text{Solvers} \longrightarrow \text{Core}$$
+   *(Phase 5 Benchmark dependency boundary is not yet frozen; candidate directions such as $\text{Benchmark} \longrightarrow \text{Solvers} \longrightarrow \text{Core}$ vs. direct $\text{Benchmark} \longrightarrow \text{Core}$ are subject to `PHASE5_PREFLIGHT_DECISION_REQUIRED`.)*
 2. **Zero Core Framework Coupling:**
    The Puzzle Domain Core has zero dependencies on React, Three.js, R3F, Zustand, Web APIs, DOM, or ML frameworks.
 3. **Renderer Independence:**
@@ -41,7 +41,7 @@ graph TD
     subgraph ComputeSpace [Solver Subsystem (Implemented) & Research Subsystems (Future)]
         WorkerAdapter[Browser Worker Adapter<br/>apps/web/src/workers/solver.worker.ts]
         SolverEngine[Pure Solver Engine<br/>Pure TS Algorithms — packages/solvers]
-        Benchmark[Research & Benchmark Harness<br/>Deterministic Seed Suites — packages/benchmark — Phase 5]
+        Benchmark[Research & Benchmark Harness<br/>packages/benchmark — Phase 5 Not Started]
     end
 
     subgraph FutureSubsystems [Offline Research & Vision Ingestion — Future]
@@ -61,8 +61,7 @@ graph TD
     SolverEngine -->|Evaluates States & Legal Moves| Core
     WorkerAdapter -->|Streams Progress & Terminal Results| UI
 
-    Benchmark -->|Evaluates Search Algorithms| SolverEngine
-    Benchmark -->|Collects Performance Metrics| UI
+    Benchmark -.->|Candidate Boundary (TBD Phase 5 Preflight)| SolverEngine
 
     MLTraining -.->|Exports Weights / ONNX / JSON| SolverEngine
     VisionPipeline -.->|Validates & Ingests Reconstructed State| Core
@@ -116,10 +115,9 @@ graph TD
 - **Prohibited Dependencies:** Must not access DOM, window, Three.js, React, or browser Worker global objects directly. Depends only on `@gearcube/core`.
 
 ### 3.6. Research & Benchmark Harness (`packages/benchmark` — Phase 5 — Not Started)
-- **Responsibilities:**
-  - Executes batch automated search runs across predefined scramble seed suites.
-  - Gathers statistical telemetry: time-to-solution, memory footprint, branch pruning factor, solution optimality.
-  - Exports deterministic benchmark data in JSON and CSV formats for research documentation.
+- **Status & Scope:** `PROPOSED OBJECTIVES / NOT FROZEN` (`PHASE5_PREFLIGHT_DECISION_REQUIRED`).
+- **Broad Objective:** Provide a reproducible comparative solver research and evaluation harness.
+- **Unresolved Preflight Decisions:** Exact fixture generation ownership, sampling methodology, metric schemas (time, memory, nodes), export formats (JSON/CSV), package dependency boundaries, and CLI vs. browser UI integration are explicitly deferred to Phase 5 preflight before any implementation begins.
 
 ### 3.7. Offline ML Research Pipeline (`ml/` — Future Phase 6)
 - **Responsibilities:**

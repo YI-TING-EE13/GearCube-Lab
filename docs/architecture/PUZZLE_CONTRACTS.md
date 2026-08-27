@@ -13,14 +13,14 @@ Before specifying the interface definitions, we define four strictly separated d
 | :--- | :--- | :--- |
 | **1. Discrete Legal Puzzle State** | The pure combinatorial permutation and orientation of physical components. Sole source of truth for graph search and solvers. | Discrete steps (on move completion) |
 | **2. Continuous 3D Animation State** | Time-varying Euler angles, quaternions, and continuous mesh transformations during move execution. | Continuous (rendering loop; proposed 60 FPS target) |
-| **3. Visual Skin** | Material properties, PBR textures, wireframe modes, and lighting schemes. Zero impact on mechanics. | On user selection |
+| **3. Visual Presentation Materials** | Material properties, PBR textures, procedural geometries, and face sticker mappings (fixed in current implementation; multi-skin theme selection is deferred to future presentation phases). Zero impact on mechanics. | Defined per presentation theme |
 | **4. Kinematic Parameters** | Physical linkage formulas, gear tooth ratios, and intermediate slice angular coupling functions. | Defined per puzzle model specification |
 
 ---
 
 ## 2. Discrete Domain Core Contracts
 
-*(The following TypeScript interfaces are conceptual definitions for documentation purposes, specified in detail in [`GEAR_CUBE_STATE_MODEL.md`](GEAR_CUBE_STATE_MODEL.md). No source code files are created in this phase.)*
+*(The following TypeScript interfaces are documentation-facing representations of the accepted Core contracts, specified in detail in [`GEAR_CUBE_STATE_MODEL.md`](GEAR_CUBE_STATE_MODEL.md). Actual public source exports live in `packages/core`, which serves as the authoritative source for literal exported names.)*
 
 ```typescript
 /** Canonical outer face identifiers */

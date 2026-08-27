@@ -70,28 +70,29 @@
 
 ### Mode 1: Play Mode
 - Full 3D camera orbital controls (rotate, pan, zoom).
-- Face rotation controls (initial button-based directional turns, followed in later phases by direct raycast drag interaction).
+- Face rotation controls (button-based directional turns implemented & accepted; direct raycast drag interaction is DEFERRED / FUTURE).
 - Scramble generator supporting configurable scramble depth ($N$ random legal moves) with deterministic pseudo-random seeds.
 - Comprehensive move history timeline with interactive undo, redo, and jump-to-step capabilities.
 - Reset to canonical solved state.
 
 ### Mode 2: Solve Mode
-- Algorithm selection dropdown (primary baselines: BFS, Bidirectional BFS, IDA*; optional candidates: IDDFS, A*, Pattern Database, Neural-Guided Search).
-- Real-time search progress indicators (nodes evaluated, current search depth, elapsed time).
-- Solution playback controls (Play, Pause, Step Forward, Step Backward, Auto-Step Speed slider).
-- 3D visual move annotations (directional rotation arrows, highlighted face slices).
+- Algorithm selection (implemented & accepted: BFS, Bidirectional BFS, IDA* with H2 PDB heuristic; optional classical candidates such as IDDFS, A*, Pattern Databases are deferred; Neural-Guided Search is FUTURE PHASE 6).
+- Real-time search progress indicators (nodes evaluated, current search depth/bounds, elapsed time).
+- Solution playback controls (implemented & accepted: Play, Pause, Step Forward, Step Backward; Auto-Step Speed slider is DEFERRED / FUTURE).
+- 3D visual move annotations (directional rotation arrows, highlighted face slices are DEFERRED / FUTURE presentation enhancements).
 
-### Mode 3: Research & Benchmarking Mode
-- Batch benchmark runner executing test suites across standardized seed suites.
-- Comparative metrics logging: solution length, execution time (ms), total nodes generated, peak memory usage, and heuristic branching factor.
-- Export benchmark results in deterministic JSON and CSV formats.
+### Mode 3: Research & Benchmarking Mode (Phase 5 — Not Started)
+- Candidate product requirements (all schemas, seed semantics, metrics, memory measurement, and export formats are `PHASE5_PREFLIGHT_DECISION_REQUIRED`):
+  - Batch benchmark runner executing test suites across standardized seed suites (candidate).
+  - Comparative metrics logging: solution length, execution time (ms), total nodes generated, peak memory usage, and heuristic branching factor (candidate).
+  - Export benchmark results in deterministic JSON and CSV formats (candidate).
 
 ---
 
 ## 8. Non-Functional Requirements
 
 - **Performance:** Target a responsive 3D rendering loop (proposed target: 60 FPS on standard desktop browsers, pending implementation and benchmark validation). Expensive solver workloads run in Web Workers so that solving does not directly block UI interaction.
-- **Responsiveness:** Discrete move operations and state validation must execute in $< 1 \text{ ms}$.
+- **Responsiveness:** Proposed Performance Target: Discrete move operations and state validation execute in $< 1 \text{ ms}$ (pending Phase 5 measurement methodology and reference environment).
 - **Modularity:** Core domain logic must have zero dependencies on DOM, React, Three.js, or Web APIs.
 - **Portability:** Static web application deployable to modern CDN static hosting providers (GitHub Pages, Cloudflare Pages).
 - **Accessibility:** Full keyboard shortcut navigation support and respect for OS-level `prefers-reduced-motion` settings.
@@ -122,11 +123,13 @@
 |  [ Puzzle Domain Core (Pure TypeScript Engine — packages/core) ]                  |
 |        ^           |                                                              |
 |        |           v (Discrete State & Legal Moves)                               |
-|  [ Solver Engine (Web Worker: Classical Search / AI Inference) - Implemented (Phase 4) ]         |
+|  [ Classical Solver Worker (BFS / BiBFS / IDA*) — Implemented & Accepted (Phase 4) ]              |
 |                                                                                   |
-|  [ Research & Benchmark Harness (Headless Runner & Telemetry Exporter) - Phase 5 Not Started ] |
+|  [ Research & Benchmark Harness (Headless Runner & Telemetry Exporter) — Phase 5 Not Started ]   |
 |                                                                                   |
-|  [ Vision State Ingestion (Webcam Stream & Face Recognition) - Phase 7 Not Started ]           |
+|  [ AI / Neural Search (Web Worker Inference) — Future (Phase 6) ]                                 |
+|                                                                                   |
+|  [ Vision State Ingestion (Webcam Stream & Face Recognition) — Phase 7 Not Started ]             |
 +-----------------------------------------------------------------------------------+
 ```
 
@@ -154,7 +157,7 @@ $$\text{Presentation Layer (UI/3D)} \longrightarrow \text{Domain Core Contracts}
 | `packages/kinematics` | Continuous trajectory generation, coupled gear angles, static piece placement projection | Depends only on `@gearcube/core` | Implemented & Accepted |
 | `apps/web` | Web application container hosting React UI components, R3F/Three.js 3D viewport, procedural piece geometries, MoveControls, single authoritative `GearCubeSessionState`, Play Mode history/undo/redo/scramble/keyboard (Phase 3), Solve Mode UI/playback/Worker adapter (Phase 4) | Internal: `@gearcube/core`, `@gearcube/kinematics`, `@gearcube/solvers`; External: React, R3F, Three.js presentation stack (no Zustand requirement) | Implemented & Accepted (Phases 1–4) |
 | `packages/solvers` | Classical graph search (primary: BFS, Bidirectional BFS, IDA* with H2 two-slice PDB heuristic; optional/deferred: IDDFS, A*, Pattern Databases), heuristic estimators | Depends only on `@gearcube/core` | Implemented & Accepted (Phase 4) |
-| `packages/benchmark` | Deterministic benchmark harness, seed generation, statistical metric export | Dependency boundary: `PHASE5_PREFLIGHT_DECISION_REQUIRED` (candidates: `benchmark -> solvers -> core` or direct `benchmark -> core` only where fixture/state generation demonstrably requires it) | Not Started (Phase 5) |
+| `packages/benchmark` | Future comparative solver research harness (fixture/state generation ownership: `PHASE5_PREFLIGHT_DECISION_REQUIRED`) | Dependency boundary: `PHASE5_PREFLIGHT_DECISION_REQUIRED` (candidates: `benchmark -> solvers -> core` or direct `benchmark -> core` only where fixture/state generation demonstrably requires it) | Not Started (Phase 5) |
 | `ml/` (Python) | PyTorch model architectures, offline self-play/dataset generation, heuristic export | Python (version selected based on ML dependency compatibility) managed exclusively via `uv` | Planned (Phase 6) |
 | `packages/vision` | Webcam video capture, color segmentation, state consistency validation, and correction | Browser WebRTC / Canvas APIs; depends on `@gearcube/core` | Planned (Phase 7) |
 
@@ -162,13 +165,13 @@ $$\text{Presentation Layer (UI/3D)} \longrightarrow \text{Domain Core Contracts}
 
 ## 13. Data Flow
 
-1. **User Action:** User clicks "Rotate Front Face Clockwise ($180^\circ$)".
-2. **UI Dispatch:** UI dispatches `applyMove(currentState, { face: 'F', direction: 'CW' })` to the Domain Core.
-3. **Core Validation:** Domain Core validates move legality, generates the immutable next `GearCubeState`, and computes the state hash.
-4. **Kinematic Translation:** Kinematic Engine computes the continuous rotational trajectory (including driving gear and intermediate gear rotations).
-5. **Renderer Execution:** 3D Renderer animates the gear meshes along the kinematic trajectory.
-6. **State Synchronization:** Upon animation completion, UI state store updates the active puzzle state.
-7. **Solver Notification:** If Solve Mode is active, the Solver Worker receives the new `GearCubeState` to evaluate optimal solution branches.
+1. **User Action (Play Mode):** User clicks a face rotation button or presses a mapped shortcut key. Any active search or playback is cancelled first, then UI dispatches `applyMove(currentState, move)` to Domain Core.
+2. **Core Validation:** Domain Core validates move legality, generates the immutable next `GearCubeState`, updates `SpatialFrame`, and computes canonical state hashes.
+3. **Kinematic Translation:** Kinematic Engine converts `(fromView, move, toView)` into continuous component trajectories parameterized by mechanical progress $p \in [0, 1]$.
+4. **Renderer Execution:** 3D Renderer animates procedural piece meshes smoothly along calculated kinematic keyframe trajectories.
+5. **State Synchronization:** Upon animation completion ($p = 1.0$), UI session store commits the canonical puzzle state.
+6. **Explicit Solver Request (Solve Mode):** When user explicitly requests a solve, a single search request with the current canonical state snapshot is dispatched to the background Solver Web Worker. The Worker executes the selected algorithm (BFS, Bidirectional BFS, or IDA*) and streams telemetry back to the UI.
+7. **Playback & Stale-Result Guarding:** Solver results are accepted only if session/state guards match the current puzzle state. Playback controls (Play, Pause, Step Forward, Step Backward) advance solution moves sequentially through the canonical transition pipeline. External state mutations (manual moves, scrambles, undo/redo) cancel active search and reset playback state.
 
 ---
 
@@ -264,8 +267,8 @@ All inter-module communication is governed by immutable TypeScript interfaces de
 | Metric | Target Requirement | Verification Method |
 | :--- | :--- | :--- |
 | **3D Rendering Frame Rate** | Proposed Target: $60 \text{ FPS}$ ($\ge 55 \text{ FPS}$) on standard desktop hardware (Future Phase 5 benchmark target) | Chrome DevTools Performance Profiler |
-| **Move Application Latency** | $< 1 \text{ ms}$ per discrete transition | Vitest benchmark test suite |
-| **State Hashing Throughput** | $\ge 500,000 \text{ states/sec}$ | Node.js micro-benchmarks |
+| **Move Application Latency** | Proposed Target: $< 1 \text{ ms}$ per discrete transition (pending Phase 5 measurement methodology) | Vitest benchmark / timing tests |
+| **State Hashing Throughput** | Proposed Target: $\ge 500,000 \text{ states/sec}$ (pending Phase 5 measurement methodology) | Node.js micro-benchmarks |
 | **Worker UI Interactivity** | Main thread remains responsive during solve (Future Phase 5 sustained benchmark target; Phase 4 verifies non-blocking actionability) | Playwright Chromium E2E / manual UI drag test |
 | **Initial Bundle Load Size** | $< 500 \text{ KB}$ gzipped (excluding 3D models) | Vite build analyzer |
 
