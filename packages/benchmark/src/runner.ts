@@ -11,6 +11,7 @@ import type {
   AlgorithmSummary,
   AlgorithmSummaryByDepth,
   BenchmarkReport,
+  BenchmarkSuiteConfig,
   BenchmarkSummary,
   BenchmarkTrialResult,
   EnvironmentProvenance,
@@ -50,12 +51,11 @@ function dispatchSolver(
   }
 }
 
-function executeBenchmarkSuite(
-  configInput: unknown,
+function executeValidatedBenchmarkSuite(
+  config: BenchmarkSuiteConfig,
   environment: EnvironmentProvenance,
   corpus: ExactDistanceCorpus,
 ): BenchmarkReport {
-  const config = validateBenchmarkSuiteConfig(configInput);
   validateConfigCorpusCapacity(config, (depth) => corpus.getStatesAtDepth(depth).length);
 
   const cases = sampleBenchmarkCases(config, corpus);
@@ -200,15 +200,16 @@ function executeBenchmarkSuite(
 
 /**
  * Executes a deterministic benchmark suite across configured algorithms and exact-distance cases.
- * Always builds and uses the canonical Phase 5A exact-distance corpus.
+ * Statically validates configuration input BEFORE constructing the canonical 41,472-state corpus.
  * Returns a complete, lossless BenchmarkReport.
  */
 export function runBenchmarkSuite(
   configInput: unknown,
   environment: EnvironmentProvenance,
 ): BenchmarkReport {
+  const config = validateBenchmarkSuiteConfig(configInput);
   const corpus = buildExactDistanceCorpus();
-  return executeBenchmarkSuite(configInput, environment, corpus);
+  return executeValidatedBenchmarkSuite(config, environment, corpus);
 }
 
 /**
@@ -220,5 +221,6 @@ export function runBenchmarkSuiteWithCorpusForTesting(
   environment: EnvironmentProvenance,
   corpus: ExactDistanceCorpus,
 ): BenchmarkReport {
-  return executeBenchmarkSuite(configInput, environment, corpus);
+  const config = validateBenchmarkSuiteConfig(configInput);
+  return executeValidatedBenchmarkSuite(config, environment, corpus);
 }

@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeAll } from 'vitest';
 import { runBenchmarkSuite, runBenchmarkSuiteWithCorpusForTesting } from '../src/runner.js';
 import { buildExactDistanceCorpus, type ExactDistanceCorpus } from '../src/corpus.js';
+import { BenchmarkConfigError } from '../src/config.js';
 import type { BenchmarkReport, BenchmarkSuiteConfig, EnvironmentProvenance } from '../src/types.js';
 
 describe('Phase 5B Classical Solver Benchmark Runner Gates', () => {
@@ -34,6 +35,14 @@ describe('Phase 5B Classical Solver Benchmark Runner Gates', () => {
       expect(report.cases.length).toBe(1);
       expect(report.trials.length).toBe(1);
       expect(report.trials[0]?.status).toBe('SOLVED');
+    });
+
+    it('rejects statically invalid configuration before corpus or trial execution', () => {
+      const invalidConfig = {
+        schemaVersion: '2', // Invalid
+        suiteId: 'invalid-suite',
+      };
+      expect(() => runBenchmarkSuite(invalidConfig, mockEnv)).toThrow(BenchmarkConfigError);
     });
   });
 
