@@ -16,12 +16,14 @@
     "test": "vitest run",
     "typecheck": "npm run typecheck --workspaces --if-present",
     "check:core-deps": "node scripts/check-core-deps.mjs",
+    "benchmark": "tsx packages/benchmark/src/cli.ts",
     "verify": "npm run typecheck && npm run check:core-deps && npm test && npm run build",
     "test:e2e": "playwright test"
   },
   "devDependencies": {
     "@playwright/test": "1.62.1",
     "@types/node": "22.17.2",
+    "tsx": "4.23.12",
     "typescript": "5.8.3",
     "vitest": "4.1.11"
   }

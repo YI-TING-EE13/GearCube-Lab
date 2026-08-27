@@ -22,3 +22,19 @@ export {
   createBenchmarkCaseId,
   type ExactDistanceCorpus,
 } from './corpus.js';
+
+export { hashSeed } from './hash.js';
+
+export { createMulberry32 } from './prng.js';
+
+export { sampleBenchmarkCases } from './sampler.js';
+
+export {
+  runBenchmarkSuite,
+  type RunBenchmarkSuiteOptions,
+} from './runner.js';
+
+export {
+  serializeBenchmarkReportJson,
+  serializeBenchmarkReportCsv,
+} from './export.js';

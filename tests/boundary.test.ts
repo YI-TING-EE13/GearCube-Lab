@@ -322,7 +322,7 @@ describe('Phase 4D Web Worker Infrastructure & Package Boundary Gate', () => {
   });
 });
 
-describe('Phase 5A Benchmark Package Boundary & Architectural Invariants', () => {
+describe('Phase 5 Benchmark Package Boundary & Architectural Invariants', () => {
   const benchmarkRoot = path.resolve(process.cwd(), 'packages/benchmark');
   const benchmarkSrc = path.join(benchmarkRoot, 'src');
 
@@ -366,7 +366,7 @@ describe('Phase 5A Benchmark Package Boundary & Architectural Invariants', () =>
     expect(pkg.devDependencies).toBeUndefined();
   });
 
-  it('verifies benchmark tsconfig strictly excludes DOM and ambient Node types', () => {
+  it('verifies benchmark tsconfig strictly excludes DOM, ambient Node types, and cli.ts', () => {
     const tsconfigPath = path.join(benchmarkRoot, 'tsconfig.json');
     expect(fs.existsSync(tsconfigPath)).toBe(true);
 
@@ -377,10 +377,21 @@ describe('Phase 5A Benchmark Package Boundary & Architectural Invariants', () =>
     expect(lib.some((l: string) => l.toUpperCase().includes('DOM'))).toBe(false);
     expect(tsconfig.compilerOptions?.types).toEqual([]);
     expect(tsconfig.include).toEqual(['src/**/*']);
+    expect(tsconfig.exclude).toEqual(['src/cli.ts']);
   });
 
-  it('verifies all packages/benchmark/src modules import ONLY @gearcube/core, @gearcube/solvers, and internal relative paths', () => {
-    const files = collectTsFiles(benchmarkSrc);
+  it('verifies benchmark tsconfig.node.json enables ambient Node types for cli.ts', () => {
+    const tsconfigNodePath = path.join(benchmarkRoot, 'tsconfig.node.json');
+    expect(fs.existsSync(tsconfigNodePath)).toBe(true);
+
+    const tsconfigNode = JSON.parse(fs.readFileSync(tsconfigNodePath, 'utf8'));
+    expect(tsconfigNode.extends).toBe('../../tsconfig.base.json');
+    expect(tsconfigNode.compilerOptions?.types).toEqual(['node']);
+    expect(tsconfigNode.include).toEqual(['src/cli.ts']);
+  });
+
+  it('verifies all browser-safe packages/benchmark/src modules import ONLY @gearcube/core, @gearcube/solvers, and internal relative paths', () => {
+    const files = collectTsFiles(benchmarkSrc).filter((f) => !f.endsWith('cli.ts'));
     expect(files.length).toBeGreaterThan(0);
 
     const forbiddenImports: Array<{ file: string; spec: string; reason: string }> = [];
@@ -396,7 +407,16 @@ describe('Phase 5A Benchmark Package Boundary & Architectural Invariants', () =>
         }
 
         if (spec.startsWith('./') || spec.startsWith('../')) {
-          // Verify relative import resolves strictly within packages/benchmark
+          // Verify relative import resolves strictly within packages/benchmark and does NOT import cli.ts
+          if (spec.includes('cli')) {
+            forbiddenImports.push({
+              file: path.relative(process.cwd(), filePath),
+              spec,
+              reason: 'Browser-safe module must not import Node CLI adapter',
+            });
+            continue;
+          }
+
           const resolvedPath = path.resolve(path.dirname(filePath), spec);
           const relativeToBenchmark = path.relative(benchmarkRoot, resolvedPath);
           if (relativeToBenchmark.startsWith('..') || path.isAbsolute(relativeToBenchmark)) {
@@ -413,7 +433,7 @@ describe('Phase 5A Benchmark Package Boundary & Architectural Invariants', () =>
         forbiddenImports.push({
           file: path.relative(process.cwd(), filePath),
           spec,
-          reason: 'External import other than @gearcube/core or @gearcube/solvers is strictly forbidden in packages/benchmark',
+          reason: 'External import other than @gearcube/core or @gearcube/solvers is strictly forbidden in browser-safe benchmark engine',
         });
       }
     }
@@ -436,6 +456,16 @@ describe('Phase 5A Benchmark Package Boundary & Architectural Invariants', () =>
     }
   });
 
+  it('verifies sampler.ts contains NO Math.random, Date, or localeCompare calls', () => {
+    const samplerPath = path.join(benchmarkSrc, 'sampler.ts');
+    expect(fs.existsSync(samplerPath)).toBe(true);
+
+    const content = fs.readFileSync(samplerPath, 'utf8');
+    expect(content.includes('Math.random')).toBe(false);
+    expect(content.includes('Date')).toBe(false);
+    expect(content.includes('localeCompare')).toBe(false);
+  });
+
   it('verifies benchmark root entry exports NO Node built-ins or CLI implementations', async () => {
     const rootIndex = path.join(benchmarkSrc, 'index.ts');
     expect(fs.existsSync(rootIndex)).toBe(true);
@@ -444,5 +474,14 @@ describe('Phase 5A Benchmark Package Boundary & Architectural Invariants', () =>
     expect(content.includes('node:fs')).toBe(false);
     expect(content.includes('node:path')).toBe(false);
     expect(content.includes('cli')).toBe(false);
+  });
+
+  it('verifies root devDependencies includes pinned tsx@4.23.12 and @gearcube/benchmark does not depend on it', () => {
+    const rootPkg = JSON.parse(fs.readFileSync(path.resolve(process.cwd(), 'package.json'), 'utf8'));
+    expect(rootPkg.devDependencies?.tsx).toBe('4.23.12');
+
+    const benchPkg = JSON.parse(fs.readFileSync(path.join(benchmarkRoot, 'package.json'), 'utf8'));
+    expect(benchPkg.dependencies?.tsx).toBeUndefined();
+    expect(benchPkg.devDependencies?.tsx).toBeUndefined();
   });
 });
