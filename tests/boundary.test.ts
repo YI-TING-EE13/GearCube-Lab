@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import fs from 'node:fs';
 import path from 'node:path';
+import { builtinModules } from 'node:module';
 import * as coreBootstrap from '@gearcube/core';
 import { extractModuleSpecifiers, checkCorePurity, PROHIBITED_MODULE_PATTERNS } from '../scripts/check-core-deps.mjs';
 
@@ -559,23 +560,50 @@ describe('Phase 5D Browser Research Mode Boundary & Architectural Invariants', (
   it('BROWSER_SAFE_BENCHMARK_IMPORT_GATE: verifies apps/web consumes @gearcube/benchmark ONLY via package-root specifier', () => {
     const files = collectWebTsFiles(webSrc);
     expect(files.length).toBeGreaterThan(0);
-    const forbiddenBenchmarkImports: Array<{ file: string; spec: string }> = [];
+    const forbiddenBenchmarkImports: Array<{ file: string; spec: string; reason: string }> = [];
+    const benchmarkRoot = path.resolve(process.cwd(), 'packages/benchmark');
 
     for (const filePath of files) {
       const content = fs.readFileSync(filePath, 'utf8');
       const specs = extractModuleSpecifiers(content);
       for (const spec of specs) {
-        if (spec.includes('benchmark')) {
-          if (spec === '@gearcube/benchmark') {
-            continue;
-          }
-          if (spec.startsWith('./') || spec.startsWith('../')) {
-            continue;
-          }
+        // Exact package root import is allowed
+        if (spec === '@gearcube/benchmark') {
+          continue;
+        }
+
+        // Package subpath import (e.g. @gearcube/benchmark/cli, @gearcube/benchmark/src/runner) is forbidden
+        if (spec.startsWith('@gearcube/benchmark/')) {
           forbiddenBenchmarkImports.push({
             file: path.relative(process.cwd(), filePath).replace(/\\/g, '/'),
             spec,
+            reason: 'Package subpath import is forbidden; only package root @gearcube/benchmark is allowed',
           });
+          continue;
+        }
+
+        // Non-relative specifiers referring directly to packages/benchmark
+        if (spec.includes('packages/benchmark') || spec.includes('benchmark/src')) {
+          forbiddenBenchmarkImports.push({
+            file: path.relative(process.cwd(), filePath).replace(/\\/g, '/'),
+            spec,
+            reason: 'Direct reference to packages/benchmark is forbidden',
+          });
+          continue;
+        }
+
+        // Relative import: resolve and ensure it does NOT escape into packages/benchmark
+        if (spec.startsWith('./') || spec.startsWith('../')) {
+          const resolvedPath = path.resolve(path.dirname(filePath), spec);
+          const relativeToBenchmark = path.relative(benchmarkRoot, resolvedPath);
+          if (!relativeToBenchmark.startsWith('..') && !path.isAbsolute(relativeToBenchmark)) {
+            forbiddenBenchmarkImports.push({
+              file: path.relative(process.cwd(), filePath).replace(/\\/g, '/'),
+              spec,
+              reason: 'Relative import escapes into packages/benchmark boundary',
+            });
+          }
+          continue;
         }
       }
     }
@@ -587,19 +615,23 @@ describe('Phase 5D Browser Research Mode Boundary & Architectural Invariants', (
     const files = collectWebTsFiles(webSrc);
     const prohibitedSpecs: Array<{ file: string; spec: string }> = [];
 
+    const nodeBuiltinSpecifiers = new Set([
+      ...builtinModules,
+      ...builtinModules.map((m) => `node:${m}`),
+    ]);
+
     for (const filePath of files) {
       const content = fs.readFileSync(filePath, 'utf8');
       const specs = extractModuleSpecifiers(content);
       for (const spec of specs) {
+        const baseSpec = spec.split('/')[0];
         if (
+          nodeBuiltinSpecifiers.has(spec) ||
+          nodeBuiltinSpecifiers.has(baseSpec) ||
           spec.startsWith('node:') ||
-          spec === 'fs' ||
-          spec === 'path' ||
-          spec === 'os' ||
-          spec === 'child_process' ||
-          spec === 'process' ||
           spec.includes('cli.ts') ||
-          spec.includes('cli.js')
+          spec.includes('cli.js') ||
+          spec === 'cli'
         ) {
           prohibitedSpecs.push({
             file: path.relative(process.cwd(), filePath).replace(/\\/g, '/'),
@@ -700,7 +732,7 @@ describe('Phase 5D Browser Research Mode Boundary & Architectural Invariants', (
     expect(content.includes('solver.worker.ts')).toBe(false);
   });
 
-  it('NO_FAKE_PROGRESS_PROTOCOL_GATE: verifies protocol message types are strictly limited and contain no fake progress fields', () => {
+  it('NO_FAKE_PROGRESS_PROTOCOL_GATE: verifies protocol message types are strictly limited to exact 4 discriminants and contain no progress/abort terms', () => {
     const protocolPath = path.join(
       webSrc,
       'components',
@@ -710,38 +742,68 @@ describe('Phase 5D Browser Research Mode Boundary & Architectural Invariants', (
     expect(fs.existsSync(protocolPath)).toBe(true);
 
     const content = fs.readFileSync(protocolPath, 'utf8');
-    const forbiddenProtocolTerms = [
-      'BENCHMARK_PROGRESS',
-      'PROGRESS',
-      'CANCEL_BENCHMARK',
-      'RESET_BENCHMARK',
-      'percentage',
-      'eta',
-      'progressIntervalNodes',
-      'AbortSignal',
-    ];
 
-    for (const term of forbiddenProtocolTerms) {
-      expect(content.includes(term)).toBe(false);
-    }
+    // Exact message discriminants check
+    const discriminantMatches = [...content.matchAll(/readonly\s+type:\s*['"]([^'"]+)['"]/g)].map(
+      (m) => m[1]
+    );
+    const uniqueDiscriminants = new Set(discriminantMatches);
+    const expectedDiscriminants = new Set([
+      'START_BENCHMARK',
+      'BENCHMARK_STARTED',
+      'BENCHMARK_COMPLETE',
+      'BENCHMARK_ERROR',
+    ]);
 
-    expect(content.includes('START_BENCHMARK')).toBe(true);
-    expect(content.includes('BENCHMARK_STARTED')).toBe(true);
-    expect(content.includes('BENCHMARK_COMPLETE')).toBe(true);
-    expect(content.includes('BENCHMARK_ERROR')).toBe(true);
+    expect(uniqueDiscriminants).toEqual(expectedDiscriminants);
+
+    // Forbidden progress/abort terms check (case-insensitive identifier / word boundary)
+    const forbiddenTermsRegex = /\b(?:progress|percentage|eta|progressIntervalNodes|AbortSignal)\b/i;
+    expect(forbiddenTermsRegex.test(content)).toBe(false);
   });
 
-  it('WORKER_SIDE_SERIALIZATION_GATE: verifies benchmark.worker.ts serializes JSON and CSV worker-side and does not post full report object', () => {
-    const workerPath = path.join(webSrc, 'workers', 'benchmark.worker.ts');
-    const content = fs.readFileSync(workerPath, 'utf8');
+  it('WORKER_SIDE_SERIALIZATION_GATE: verifies benchmark.worker.ts serializes JSON/CSV worker-side, BenchmarkCompleteMessage shape is exact, and BenchmarkReport is not imported in protocol', () => {
+    const protocolPath = path.join(
+      webSrc,
+      'components',
+      'research',
+      'benchmark-worker-protocol.ts'
+    );
+    const protocolContent = fs.readFileSync(protocolPath, 'utf8');
 
-    expect(content.includes('runBenchmarkSuite')).toBe(true);
-    expect(content.includes('serializeBenchmarkReportJson')).toBe(true);
-    expect(content.includes('serializeBenchmarkReportCsv')).toBe(true);
-    expect(content.includes('jsonText')).toBe(true);
-    expect(content.includes('csvText')).toBe(true);
-    expect(content.includes('postMessage')).toBe(true);
-    expect(content.includes('report: report')).toBe(false);
+    // Protocol must NOT import or reference BenchmarkReport (prevents full-report structured cloning)
+    expect(protocolContent.includes('BenchmarkReport')).toBe(false);
+
+    // Exact BenchmarkCompleteMessage property shape check
+    const match = protocolContent.match(
+      /export\s+interface\s+BenchmarkCompleteMessage\s*\{([\s\S]*?)\}/
+    );
+    expect(match).toBeDefined();
+    const body = match![1];
+    const propNames = [...body.matchAll(/readonly\s+([a-zA-Z0-9_$]+)\s*:/g)]
+      .map((m) => m[1])
+      .sort();
+
+    expect(propNames).toEqual([
+      'csvText',
+      'environment',
+      'jsonText',
+      'requestId',
+      'summary',
+      'type',
+      'validatedConfig',
+    ]);
+
+    // Worker source checks
+    const workerPath = path.join(webSrc, 'workers', 'benchmark.worker.ts');
+    const workerContent = fs.readFileSync(workerPath, 'utf8');
+
+    expect(workerContent.includes('runBenchmarkSuite')).toBe(true);
+    expect(workerContent.includes('serializeBenchmarkReportJson')).toBe(true);
+    expect(workerContent.includes('serializeBenchmarkReportCsv')).toBe(true);
+    expect(workerContent.includes('jsonText')).toBe(true);
+    expect(workerContent.includes('csvText')).toBe(true);
+    expect(workerContent.includes('postMessage')).toBe(true);
   });
 
   it('HOST_SIDE_CANCELLATION_BOUNDARY: verifies cancellation is host-side worker termination and not an in-band protocol message', () => {
