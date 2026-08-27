@@ -1,16 +1,28 @@
 # PHASE_5D_IMPLEMENTATION_PLAN.md — Browser Research Mode Architecture & Implementation Plan
 
-> **Document Status:** `PHASE5D_IMPLEMENTATION_PLAN_CANDIDATE`
+> **Document Status:** `PHASE5D_IMPLEMENTATION_PLAN_ACCEPTED`
 > **Authoritative Main Baseline:** `6505f41101d716207b39a242ac5a837c4681ebdb`
 > **Branch:** `phase/5d-research-mode-plan`
 > **Phase 5 Preflight Status:** `COMPLETED / ACCEPTED ON MAIN`
 > **Phase 5A Status:** `COMPLETED / ACCEPTED ON MAIN`
 > **Phase 5B Status:** `COMPLETED / ACCEPTED ON MAIN`
 > **Phase 5C Status:** `COMPLETED / ACCEPTED ON MAIN`
-> **Phase 5D Planning:** `CANDIDATE`
+> **Phase 5D Planning:** `COMPLETED / ACCEPTED`
 > **Phase 5D Implementation:** `NOT STARTED`
 > **Phase 5 Overall Status:** `IN PROGRESS`
 > **Phase 5D Accepted:** `NO`
+
+---
+
+## Acceptance Record
+
+- **Authoritative Main Baseline:** `6505f41101d716207b39a242ac5a837c4681ebdb`
+- **Initial Plan Candidate:** `0680b5355bf95e2e9028098516324917469dbf24`
+- **Accepted Technical Plan:** `0920e12765db446eedc657af6bd2901e189e37fc`
+- **Independent Final Plan Review:** `PASS`
+- **Benchmark Engine API Change Required:** `NO`
+- **Phase 5D Implementation:** `NOT STARTED`
+- **Phase 5D Overall Accepted:** `NO`
 
 ---
 
