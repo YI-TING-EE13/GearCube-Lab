@@ -341,11 +341,12 @@ export type WorkerOutboundMessage =
 
 ---
 
-## 6. Research & Benchmark Harness Contracts (PHASE 5 PREFLIGHT ACCEPTED CONTRACTS)
+## 6. Research & Benchmark Harness Contracts (Phase 5 In Progress)
 
 > [!NOTE]
-> **Phase 5 Preflight Accepted Contracts:** The interfaces below define the frozen and accepted preflight contracts for `@gearcube/benchmark` pursuant to [`docs/development/PHASE_5_IMPLEMENTATION_PLAN.md`](../development/PHASE_5_IMPLEMENTATION_PLAN.md).
-> Implementation has **not** started. Literal public package exports will be created in `packages/benchmark` in Phase 5A/5B according to these accepted contracts.
+> **Phase 5 Accepted Contracts:** The interfaces below define the accepted contracts for `@gearcube/benchmark` pursuant to [`docs/development/PHASE_5_IMPLEMENTATION_PLAN.md`](../development/PHASE_5_IMPLEMENTATION_PLAN.md).
+> Phase 5A has materialized these type contracts in `packages/benchmark/src/types.ts` along with `BenchmarkSuiteConfig` runtime validation (`config.ts`), stable state-derived case identity (`d${exactDepth}:${stateKey}`), and the independent Core-only exact-distance corpus builder (`corpus.ts`).
+> Phase 5B runtime runner, sampling, and export behaviors remain pending implementation.
 
 ```typescript
 /**

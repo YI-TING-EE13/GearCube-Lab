@@ -51,9 +51,9 @@
       └─ 4E: Solve Mode UI, Playback & Playwright Browser Acceptance (Completed & Accepted)
       │
       ▼
-[ Phase 5: Research & Benchmarking Harness ] (Preflight Accepted / Implementation Not Started)
+[ Phase 5: Research & Benchmarking Harness ] (In Progress)
       ├─ 5 Preflight: Preflight Contract Freeze & Methodology (Completed & Accepted)
-      ├─ 5A: Benchmark Package Bootstrap, Schemas & Exact-Distance Corpus (Not Started)
+      ├─ 5A: Benchmark Package Bootstrap, Schemas & Exact-Distance Corpus (Completed & Accepted)
       ├─ 5B: Headless Runner, Deterministic Sampling, CLI & Exporters (Not Started)
       ├─ 5C: Classical Comparative Research Runs & Report (Not Started)
       └─ 5D: Browser Research Mode, Dedicated Worker & E2E Acceptance (Not Started)
@@ -291,32 +291,33 @@ Phase 0B is partitioned into four dependency-ordered subphases:
 
 ---
 
-### Phase 5: Research & Benchmarking Harness (Preflight Accepted / Implementation Not Started)
-- **Status:** `PREFLIGHT ACCEPTED / IMPLEMENTATION NOT STARTED`
+### Phase 5: Research & Benchmarking Harness (In Progress)
+- **Status:** `IN PROGRESS` (Phase 5 Preflight and Phase 5A `COMPLETED & ACCEPTED`; Phases 5B–5D `NOT STARTED`)
 - **Objective:** Build an empirical research harness to conduct deterministic comparative evaluations of solving algorithms (BFS, Bidirectional BFS, IDA* with pattern databases, and future learned heuristics) across exact-distance-stratified benchmark suites.
 - **Prerequisites:** Completion and acceptance of Phase 4 (`COMPLETED & ACCEPTED ON MAIN`).
 - **In-Scope:** `packages/benchmark` (pure TS engine), independent Core-only exact-distance corpus builder, deterministic FNV-1a + Mulberry32 stratified sampling, algorithm orchestration runner, Node CLI adapter, JSON/CSV exporters, comparative research report, and browser Research Mode with dedicated background Web Worker in `apps/web`.
 - **Out-of-Scope:** Neural network training (Phase 6), computer vision (Phase 7).
 - **Subphase Decomposition:**
   - **Phase 5 Preflight:** Architecture, contract freeze, metric classification, and subphase gates ([`docs/development/PHASE_5_IMPLEMENTATION_PLAN.md`](./PHASE_5_IMPLEMENTATION_PLAN.md)) — **Status:** `COMPLETED & ACCEPTED`.
-  - **Phase 5A:** Benchmark Package Bootstrap, Schemas & Exact-Distance Corpus (`packages/benchmark/src/types.ts`, `corpus.ts`, exhaustive 41,472 traversal) — **Status:** `NOT STARTED`.
+  - **Phase 5A:** Benchmark Package Bootstrap, Schemas & Exact-Distance Corpus (`packages/benchmark/src/types.ts`, `config.ts`, `corpus.ts`, exhaustive 41,472 traversal) — **Status:** `COMPLETED & ACCEPTED`.
   - **Phase 5B:** Headless Runner, Deterministic Sampling, CLI & Exporters (`sampler.ts`, `runner.ts`, `export.ts`, `cli.ts`) — **Status:** `NOT STARTED`.
   - **Phase 5C:** Classical Comparative Research Runs & Report (`docs/research/PHASE_5_CLASSICAL_SOLVER_BENCHMARK_REPORT.md`) — **Status:** `NOT STARTED`.
   - **Phase 5D:** Browser Research Mode, Dedicated Worker & E2E Acceptance (`apps/web/src/workers/benchmark.worker.ts`, `ResearchPanel.tsx`, Playwright E2E) — **Status:** `NOT STARTED`.
 - **Deliverables:**
-  - Pure benchmark engine package (`@gearcube/benchmark`).
-  - Node CLI runner for automated/headless execution and JSON/CSV artifact exports.
-  - Comparative research dataset and report evaluating BFS vs. BiBFS vs. IDA*.
-  - Browser Research Mode panel with off-main-thread execution and file downloads.
+  - Pure benchmark engine package (`@gearcube/benchmark` — Phase 5A foundation complete).
+  - Node CLI runner for automated/headless execution and JSON/CSV artifact exports (Phase 5B).
+  - Comparative research dataset and report evaluating BFS vs. BiBFS vs. IDA* (Phase 5C).
+  - Browser Research Mode panel with off-main-thread execution and file downloads (Phase 5D).
 - **Verification:** Seeded benchmark test runs producing bit-for-bit identical search metrics (node counts, paths, depths, statuses) across repeat runs; independent exact-distance corpus discovering 41,472 states and diameter 8; Playwright browser E2E tests.
 - **Acceptance Gate Criteria (`PHASE_5_PASS`):**
-  - [ ] `packages/benchmark` package boundary strictly depends only on `@gearcube/core` and `@gearcube/solvers` with a browser-safe root engine entry.
-  - [ ] Independent Core-only corpus builder verifies exactly 41,472 reachable states, canonical diameter 8, and the exact 0..8 distance histogram without calling production solvers.
-  - [ ] State-derived case identity (`d${exactDepth}:${stateKey}`) and FNV-1a + Mulberry32 stratified sampling yield bit-for-bit reproducible case selections.
-  - [ ] Bit-for-bit identical deterministic search metrics (`nodesExpanded`, `nodesGenerated`, `solutionDepth`, `solutionMoves`, `status`, `limitReason`) verified across repeat runs.
-  - [ ] Optimality verified for all solved cases (`solutionDepth === exactDepth`) across BFS, BiBFS, and IDA*.
-  - [ ] Lossless JSON export and 14-column RFC-4180 CSV export match frozen schemas with measured trials only.
-  - [ ] Browser Research Mode executes via dedicated Web Worker without blocking UI interaction, verified by automated Playwright tests and Chrome DevTools acceptance.
+  - [x] `packages/benchmark` package boundary strictly depends only on `@gearcube/core` and `@gearcube/solvers` with a browser-safe root engine entry (Phase 5A).
+  - [x] Independent Core-only corpus builder verifies exactly 41,472 reachable states, canonical diameter 8, and the exact 0..8 distance histogram without calling production solvers (Phase 5A).
+  - [x] State-derived case identity (`d${exactDepth}:${stateKey}`) implemented and verified (Phase 5A).
+  - [ ] Stratified sampling from exact-distance buckets with deterministic seeds produces bit-for-bit reproducible case selections (Phase 5B).
+  - [ ] Bit-for-bit identical deterministic search metrics (`nodesExpanded`, `nodesGenerated`, `solutionDepth`, `solutionMoves`, `status`, `limitReason`) verified across repeat runs (Phase 5B).
+  - [ ] Optimality verified for all solved cases (`solutionDepth === exactDepth`) across BFS, BiBFS, and IDA* (Phase 5B).
+  - [ ] Lossless JSON export and 14-column RFC-4180 CSV export match frozen schemas with measured trials only (Phase 5B).
+  - [ ] Browser Research Mode executes via dedicated Web Worker without blocking UI interaction, verified by automated Playwright tests and Chrome DevTools acceptance (Phase 5D).
 
 ---
 

@@ -6,10 +6,10 @@
 
 ## Project Status
 
-**Current Status:** `Phase 4 Complete — Classical Solver Infrastructure Implemented & Accepted`
+**Current Status:** `Phase 5 In Progress — Phase 5A Benchmark Foundation & Exact-Distance Corpus Implemented & Accepted`
 
 > [!IMPORTANT]
-> **Phases 0–4 are implemented and accepted.** The discrete core, 3D kinematics, Play Mode UI (Phase 3), and full Classical Solver infrastructure with Solve Mode (Phase 4) are all complete. Phase 5 (Research & Benchmarking Harness) has not yet started. All implementation adheres to the canonical architecture contracts defined in [`docs/`](docs/README.md).
+> **Phases 0–4 and Phase 5 Preflight / Phase 5A are implemented and accepted.** The discrete core, 3D kinematics, Play Mode UI (Phase 3), full Classical Solver infrastructure with Solve Mode (Phase 4), and Phase 5A Benchmark Foundation (`@gearcube/benchmark` package, v1 schemas, config validation, and 41,472-state exact-distance corpus) are complete. Phases 5B–5D (sampling, runner, CLI, exports, and browser Research Mode) are not yet started. All implementation adheres to the canonical architecture contracts defined in [`docs/`](docs/README.md).
 
 ---
 
@@ -20,11 +20,12 @@
 - **Play Mode UI (Implemented & Accepted):** Interactive face controls, move history timeline with undo/redo, deterministic seeded scramble generator, keyboard shortcuts, and responsive layout.
 - **Classical Search Solvers (Implemented & Accepted — Phase 4):** Web Worker-isolated search algorithms (BFS, Bidirectional BFS, IDA* with H2 two-slice PDB heuristic) providing optimal solution paths without blocking the UI.
 - **Solve Mode UI & Playback (Implemented & Accepted — Phase 4E):** Algorithm selection, search progress telemetry, solution playback with play/pause/step-forward/step-backward, stale-result protection, and responsive browser layout.
+- **Benchmark Foundation & Exact-Distance Corpus (Implemented & Accepted — Phase 5A):** Pure `@gearcube/benchmark` package, materialized v1 benchmark schemas, `BenchmarkSuiteConfig` runtime validation, stable state-derived case identity (`d${exactDepth}:${stateKey}`), and independent Core-only exact-distance corpus discovering all 41,472 reachable states and diameter 8.
 
 ## Planned Capabilities (Future Phases)
 
 - **Modular Visual Skins (Deferred / Future Presentation):** Support for interchangeable material schemes, wireframe views, or custom visual themes without altering puzzle mechanics.
-- **Empirical Research & Benchmark Harness (Phase 5 — Not Started):** Deterministic, headless comparative evaluation framework to measure search node expansions, branch pruning efficiency, and execution time.
+- **Empirical Research & Benchmark Harness (Phases 5B–5D — Pending):** Deterministic stratified sampling (FNV-1a + Mulberry32 PRNG), headless Node CLI runner, telemetry JSON/CSV exporters, comparative research report, and browser Research Mode with dedicated background Web Worker.
 - **AI-Guided Search (Phase 6 — Not Started):** Offline PyTorch-trained neural heuristics and value networks integrated into guided tree search.
 - **Computer Vision State Ingestion (Phase 7 — Not Started):** Local-first camera capture to recognize physical cube faces, reconstruct a candidate discrete state, validate consistency/reachability, allow user corrections, and generate step-by-step 3D visual solving guidance.
 

@@ -3,21 +3,29 @@
 > **Document Status:** `PHASE5_PREFLIGHT_ACCEPTED`
 > **Authoritative Main Baseline:** `11eb3f3bfa33e3e9802ff81c8cc4bf6580ed360a`
 > **Accepted Technical Head:** `762849e34c691982986813f4d3fd318b73a4fa42`
-> **Branch:** `phase/5-benchmark-preflight`
-> **Implementation Started:** `NO`
+> **Branch:** `phase/5a-benchmark-bootstrap`
+> **Implementation Started:** `YES`
 > **Phase 5 Accepted:** `NO`
 > **Phase 5 Preflight Accepted:** `YES`
-> **Phase 5A Status:** `NOT STARTED`
+> **Phase 5A Status:** `COMPLETED & ACCEPTED`
+> **Phase 5B Status:** `NOT STARTED`
 
 ---
 
 ## Acceptance Record
 
+### Phase 5 Preflight Acceptance
 - **INITIAL_PREFLIGHT_CANDIDATE:** `b7c99c9170eb3e49396a28b10cf30cb58a97fde2`
 - **PREFLIGHT_REPAIR:** `762849e34c691982986813f4d3fd318b73a4fa42`
 - **INDEPENDENT_REVIEW:** `PASS`
 - **PHASE5_PREFLIGHT_STATUS:** `COMPLETED & ACCEPTED`
-- **PHASE5_IMPLEMENTATION_STATUS:** `NOT STARTED`
+
+### Phase 5A Implementation Acceptance
+- **PHASE5A_IMPLEMENTATION:** `e31f0f0ab1b42f71301b90f09b9b53bc6ca2f64e`
+- **PHASE5A_INDEPENDENT_REVIEW:** `PASS`
+- **PHASE5A_EXACT_HEAD_REVALIDATION:** `PASS`
+- **PHASE5A_ACCEPTED:** `YES`
+- **PHASE5B_STATUS:** `NOT STARTED`
 
 ---
 
