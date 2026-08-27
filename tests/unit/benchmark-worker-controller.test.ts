@@ -402,7 +402,7 @@ describe('Phase 5D Download Filename Sanitization & Generation Contract', () => 
   });
 
   it('returns fallback suite for unicode-only string that becomes empty after filtering', () => {
-    expect(sanitizeBenchmarkSuiteIdForFilename('')).toBe('suite');
+    expect(sanitizeBenchmarkSuiteIdForFilename('測試')).toBe('suite');
   });
 
   it('returns fallback suite for empty string', () => {
