@@ -21,7 +21,7 @@
 - **Classical Search Solvers (Implemented & Accepted — Phase 4):** Web Worker-isolated search algorithms (BFS, Bidirectional BFS, IDA* with H2 two-slice PDB heuristic) providing optimal solution paths without blocking the UI.
 - **Solve Mode UI & Playback (Implemented & Accepted — Phase 4E):** Algorithm selection, search progress telemetry, solution playback with play/pause/step-forward/step-backward, stale-result protection, and responsive browser layout.
 - **Benchmark Foundation, Sampler, Runner & CLI (Implemented & Accepted — Phases 5A & 5B):** Pure `@gearcube/benchmark` package, materialized v1 benchmark schemas, typed `BenchmarkConfigError` runtime validation, 41,472-state exact-distance corpus, deterministic FNV-1a hash and Mulberry32 PRNG, stratified sampling, headless solver comparison runner (BFS, BiBFS, IDA*), warm-up/measured separation, deterministic search metric reporting, lossless JSON exporter, 14-column RFC-4180 CSV exporter, and headless Node CLI (`npm run benchmark -- --config <config.json> [--json <path>] [--csv <path>]`).
-- **Classical Solver Comparative Benchmark Research & Report (Implemented & Accepted — Phase 5C):** Empirical comparative evaluation across exact distance strata 1..8 (222 unique structural cases, 64 timing cases across 3 replicates; 3,546 measured rows, 4,698 solver invocations), verifying 100% optimal solutions ($d^*(\\sigma) = \\text{exactDepth}$), deterministic pruning statistics (BiBFS: 21.84× reduction at depth 8; IDA* with $H_2$: 939.90× reduction at depth 8 vs. BFS), observational runtime scaling, and reproducible deterministic projections ([report](docs/research/PHASE_5_CLASSICAL_SOLVER_BENCHMARK_REPORT.md)).
+- **Classical Solver Comparative Benchmark Research & Report (Implemented & Accepted — Phase 5C):** Empirical comparative evaluation across exact distance strata 1..8 (222 unique structural cases, 64 timing cases across 3 replicates; 3,546 measured rows, 4,698 solver invocations), verifying 100% optimal solutions ($d^*(\sigma) = \text{exactDepth}$), deterministic pruning statistics (BiBFS: 21.84× reduction at depth 8; IDA* with $H_2$: 939.90× reduction at depth 8 vs. BFS), observational runtime scaling, and reproducible deterministic projections ([report](docs/research/PHASE_5_CLASSICAL_SOLVER_BENCHMARK_REPORT.md)).
 - **Browser Research Mode & Web Worker (Implemented & Accepted — Phase 5D):** Interactive browser Research Mode UI with workspace mode toggle (`PLAY` / `RESEARCH`), validated configuration form, dedicated background Web Worker (`benchmark.worker.ts`), BFS/BiBFS/IDA* search execution, tabular summary metrics, client-side JSON/CSV export downloads, host-side cancellation, and responsive layout across desktop, tablet, and mobile viewports.
 
 ## Planned Capabilities (Future Phases)
@@ -36,7 +36,7 @@
 
 GearCube Lab strictly enforces a unidirectional dependency hierarchy:
 
-$$\\text{UI / Renderer / Solvers / Research} \\longrightarrow \\text{Core Contracts}$$
+$$\text{UI / Renderer / Solvers / Research} \longrightarrow \text{Core Contracts}$$
 
 ```
                 +---------------------------------------+

@@ -90,7 +90,7 @@
 ## 8. Non-Functional Requirements
 
 - **Performance:** Target a responsive 3D rendering loop (proposed target: 60 FPS on standard desktop browsers, pending implementation and benchmark validation). Expensive solver workloads run in Web Workers so that solving does not directly block UI interaction.
-- **Responsiveness:** Proposed Performance Target: Discrete move operations and state validation execute in $< 1 \text{ ms}$ (pending Phase 5 measurement methodology and reference environment).
+- **Responsiveness:** Proposed Performance Target: Discrete move operations and state validation execute in $< 1 \text{ ms}$ (proposed / non-binding target; Phase 5 research/browser acceptance does not establish a universal sub-ms or FPS guarantee).
 - **Modularity:** Core domain logic must have zero dependencies on DOM, React, Three.js, or Web APIs.
 - **Portability:** Static web application deployable to modern CDN static hosting providers (GitHub Pages, Cloudflare Pages).
 - **Accessibility:** Full keyboard shortcut navigation support and respect for OS-level `prefers-reduced-motion` settings.
@@ -153,7 +153,7 @@ $$\text{Presentation Layer (UI/3D)} \longrightarrow \text{Domain Core Contracts}
 | :--- | :--- | :--- | :--- |
 | `packages/core` | Discrete state models, move definitions, legality checks, canonical serialization, and materialized piece views | Zero external dependencies (no React, no Three.js, no DOM) | Implemented & Accepted |
 | `packages/kinematics` | Continuous trajectory generation, coupled gear angles, static piece placement projection | Depends only on `@gearcube/core` | Implemented & Accepted |
-| `apps/web` | Web application container hosting React UI components, R3F/Three.js 3D viewport, procedural piece geometries, MoveControls, single authoritative `GearCubeSessionState`, Play Mode history/undo/redo/scramble/keyboard (Phase 3), Solve Mode UI/playback/Worker adapter (Phase 4) | Internal: `@gearcube/core`, `@gearcube/kinematics`, `@gearcube/solvers`; External: React, R3F, Three.js presentation stack (no Zustand requirement) | Implemented & Accepted (Phases 1–4) |
+| `apps/web` | Web application container hosting React UI components, R3F/Three.js 3D viewport, procedural piece geometries, MoveControls, single authoritative `GearCubeSessionState`, Play Mode history/undo/redo/scramble/keyboard (Phase 3), Solve Mode UI/playback/Worker adapter (Phase 4), and Browser Research Mode panel / benchmark Worker adapter (Phase 5D) | Internal: `@gearcube/core`, `@gearcube/kinematics`, `@gearcube/solvers`, `@gearcube/benchmark`; External: React, R3F, Three.js presentation stack (no Zustand requirement) | Implemented & Accepted (Phases 1–5D Technically Accepted; Formal Candidate) |
 | `packages/solvers` | Classical graph search (primary: BFS, Bidirectional BFS, IDA* with H2 two-slice PDB heuristic; optional/deferred: IDDFS, A*, Pattern Databases), heuristic estimators | Depends only on `@gearcube/core` | Implemented & Accepted (Phase 4) |
 | `packages/benchmark` | Pure benchmark engine, independent Core-only exact-distance corpus builder, deterministic stratified sampling, comparative solver runner, JSON/CSV exports, and Node CLI adapter | Depends directly on `@gearcube/core` and `@gearcube/solvers`; zero UI/DOM runtime dependencies | Implemented & Accepted — Phase 5 |
 | `ml/` (Python) | PyTorch model architectures, offline self-play/dataset generation, heuristic export | Python (version selected based on ML dependency compatibility) managed exclusively via `uv` | Planned (Phase 6) |
@@ -170,6 +170,7 @@ $$\text{Presentation Layer (UI/3D)} \longrightarrow \text{Domain Core Contracts}
 5. **State Synchronization:** Upon animation completion ($p = 1.0$), UI session store commits the canonical puzzle state.
 6. **Explicit Solver Request (Solve Mode):** When user explicitly requests a solve, a single search request with the current canonical state snapshot is dispatched to the background Solver Web Worker. The Worker executes the selected algorithm (BFS, Bidirectional BFS, or IDA*) and streams telemetry back to the UI.
 7. **Playback & Stale-Result Guarding:** Solver results are accepted only if session/state guards match the current puzzle state. Playback controls (Play, Pause, Step Forward, Step Backward) advance solution moves sequentially through the canonical transition pipeline. External state mutations (manual moves, scrambles, undo/redo) cancel active search and reset playback state.
+8. **Browser Research Flow (Research Mode):** User configures benchmark suite in `ResearchPanel`. Form performs main-thread static validation (`validateBenchmarkSuiteConfig`). On submit, `GearCubeViewport` dispatches execution to `useBenchmarkWorker`, spawning a dedicated background `benchmark.worker.ts`. The Worker invokes `runBenchmarkSuite` via `@gearcube/benchmark` and serializes summary, JSON, and CSV strings entirely off-main-thread. Controlled UI displays summary tables and provides client-side Blob downloads. Cancellation terminates the background Worker host-side. Research execution is strictly decoupled from the 3D cube and history timeline.
 
 ---
 

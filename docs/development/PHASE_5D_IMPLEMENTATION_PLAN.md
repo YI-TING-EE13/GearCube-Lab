@@ -60,7 +60,7 @@
   - Zero `stopPropagation()` or `preventDefault()` event hacks used.
   - Permanent Playwright Gate 4 assertion (`totalBenchmarkWorkersCreated === 1`) permanently guards against cancellation restart regressions.
 - **RAW_WEBGL_ORACLE_RECORD:**
-  - Gate 10 verified exact visual state preservation across the full Research Mode lifecycle using raw WebGL `gl.readPixels()` decoded RGBA bitmap comparison (`differingPixels: 0`, `maxChannelDelta: 0`, `diffBoundingBox: null`).
+  - Gate 10 verified exact visual state preservation across the full Research Mode lifecycle using direct `HTMLCanvasElement` bitmap capture via `canvas.toDataURL('image/png')`, followed by decoded `ImageData` RGBA comparison (`differingPixels: 0`, `maxChannelDelta: 0`, `diffBoundingBox: null`).
 - **BENCHMARK_ENGINE_API_CHANGE:** `NO`
 - **PHASE5C_EVIDENCE_MUTATION:** `NO`
 - **PHASE5D_TECHNICAL_ACCEPTANCE:** `PASS`
@@ -83,7 +83,7 @@ Required agent governance skills (`$governance-task-planning`, `$architecture-co
 
 ---
 
-## 2. Current Source Inventory & Architectural Baseline
+## 2. Planning-Time Source Inventory & Architectural Baseline (Historical)
 
 ### 2.1. Benchmark Engine Inspection (`@gearcube/benchmark`)
 Inspection of `packages/benchmark/src/` confirms:
@@ -99,7 +99,7 @@ Inspection of `packages/benchmark/src/` confirms:
    No refactoring or modification of `@gearcube/benchmark` source is required.
 
 ### 2.2. Web Application Inspection (`apps/web`)
-1. **Dependencies (`apps/web/package.json`):** Currently depends on `@gearcube/core`, `@gearcube/kinematics`, and `@gearcube/solvers`. Does **not** yet depend on `@gearcube/benchmark`.
+1. **Dependencies (`apps/web/package.json`):** At the Phase 5D planning baseline, `apps/web` depended on `@gearcube/core`, `@gearcube/kinematics`, and `@gearcube/solvers`, and did **not** yet depend on `@gearcube/benchmark`. (Final accepted implementation adds `"@gearcube/benchmark": "0.0.0"` to `apps/web/package.json`).
 2. **Solve Worker Precedent (`apps/web/src/workers/solver.worker.ts`, `useSolverWorker.ts`, `solver-worker-controller.ts`):**
    - Single-job-per-instance Web Worker lifecycle.
    - Host-side `worker.terminate()` for cancellation.
@@ -138,9 +138,9 @@ Inspection of `packages/benchmark/src/` confirms:
 graph TD
     subgraph BrowserMainThread [Browser UI / Main Thread — apps/web]
         ModeToggle[Workspace Mode State & Toggle<br/>mode: 'PLAY' | 'RESEARCH']
-        Viewport[GearCubeViewport.tsx]
+        Viewport[GearCubeViewport.tsx<br/>Owns WorkspaceMode & useBenchmarkWorker]
         PlayUI[Play / Solve Overlays<br/>MoveControls, SolvePanel, PlaybackControls]
-        ResearchUI[ResearchPanel.tsx<br/>ConfigForm, SummaryTable, DownloadButtons]
+        ResearchUI[ResearchPanel.tsx<br/>Controlled UI: ConfigForm, Summary, Downloads]
         Controller[benchmark-worker-controller.ts<br/>Pure State Transitions & Reduction]
         Hook[useBenchmarkWorker.ts<br/>React Lifecycle & Worker Instance Management]
         StaticValidator[validateBenchmarkSuiteConfig<br/>@gearcube/benchmark (Layer 1)]
@@ -158,8 +158,10 @@ graph TD
     Viewport --> ModeToggle
     Viewport -->|mode === 'PLAY'| PlayUI
     Viewport -->|mode === 'RESEARCH'| ResearchUI
+    Viewport --> Hook
     ResearchUI --> StaticValidator
-    ResearchUI --> Hook
+    ResearchUI -->|validated config callback| Viewport
+    Viewport -->|start / cancel benchmark| Hook
     Hook --> Controller
     Hook -->|new Worker(...)| DedicatedWorkerThread
     Hook -->|START_BENCHMARK { config, requestId }| WorkerAdapter
@@ -546,7 +548,7 @@ export const LONG_CANCEL_CONFIG: BenchmarkSuiteConfig = {
 | `PLAY_RESEARCH_ISOLATION_GATE` | Benchmark runs do not mutate interactive cube state or history | Playwright state preservation test |
 | `MODE_SWITCH_LIFECYCLE_GATE` | Mode switching cancels active worker and restores presentation cleanly | Playwright mode transition test |
 | `RESPONSIVE_RESEARCH_LAYOUT_GATE` | Zero horizontal overflow across Desktop, Tablet, and Mobile viewports | Playwright viewport assertions |
-| `PLAYWRIGHT_RESEARCH_E2E_GATE` | All 13 Research Mode E2E scenarios pass | `npm run test:e2e` |
+| `PLAYWRIGHT_RESEARCH_E2E_GATE` | 12 / 12 Research Mode Playwright tests pass (covering all planned scenario gates) | `npm run test:e2e` |
 | `ZERO_BROWSER_ERROR_GATE` | Zero page errors and zero console error logs | Playwright error collectors |
 | `REGRESSION_GATE` | Existing Play Mode and Solve Mode tests remain green | `tests/e2e/solve-mode.spec.ts` & unit tests |
 | `INTERACTIVE_BROWSER_GATE` | Live browser verification of UX and rendering | DevTools inspection (conditional) |

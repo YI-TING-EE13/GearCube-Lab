@@ -267,7 +267,7 @@
     - `RESULT_SUMMARY_GATE`: Renders exact metadata cards (`Suite ID`, `Sampled Cases`, `Measured Trials`, `Platform: browser`), per-algorithm summary metrics, and by-depth table.
     - `JSON_CSV_DOWNLOAD_GATES`: Client-side Blob generation triggers valid JSON and 14-column RFC-4180 CSV downloads with sanitized filenames.
     - `PLAY_RESEARCH_ISOLATION_GATE`: Play session history, move state, and 3D cube visual state preserved without mutation across Research Mode entry and benchmark execution.
-    - `RAW_WEBGL_CANVAS_ORACLE_GATE`: Exact decoded RGBA bitmap equality (`gl.readPixels()`) proves identical WebGL canvas rendering pre- and post-Research Mode lifecycle (`differingPixels: 0`, `maxChannelDelta: 0`, `diffBoundingBox: null`).
+    - `RAW_WEBGL_CANVAS_ORACLE_GATE`: Exact decoded RGBA bitmap equality via direct `HTMLCanvasElement` capture (`canvas.toDataURL('image/png')` drawn to a temporary 2D canvas and compared via `getImageData()`) proves identical WebGL canvas rendering pre- and post-Research Mode lifecycle (`differingPixels: 0`, `maxChannelDelta: 0`, `diffBoundingBox: null`).
     - `MODE_SWITCH_CANCELLATION_GATE`: Switching to Play mode during an active benchmark terminates the background Worker and restores clean presentation.
     - `RESPONSIVE_RESEARCH_LAYOUT_GATE`: Verified layout bounds and non-overflow across Desktop (1280x800), Tablet (768x1024), and Mobile (375x667) viewports in `tests/e2e/research-mode.spec.ts`.
     - *Verification Snapshot (Technical Head `8bc1d51`):* 52 boundary tests, 32 controller unit tests, 12 Research Mode E2E tests, 40 total Playwright E2E tests, and 444 workspace tests passing.
@@ -297,18 +297,18 @@
     - **HALF_TURN_LOCKED:** only staged-face Finish and Reverse buttons/shortcuts are actionable; unrelated face moves, history, mode toggle, and scramble buttons are disabled; seed text input remains enabled and editable.
   - Responsive layout: primary controls remain accessible and non-overlapping across desktop, tablet portrait, and mobile portrait viewports with zero horizontal document overflow and verified vertical clearance between timeline scrubber and bottom move panel during both IDLE and HALF_TURN_LOCKED states.
   - Zero unhandled console/runtime errors (`pageerror` and error-level console messages).
-- **Assertion Principle:** `PLAYWRIGHT_PIXEL_PERFECT_ASSERTIONS: NO` and `RENDERER_PIXELS_USED_AS_STATE_ORACLE: NO` (assertions verify DOM interactions, disabled states, and text/attribute state indicators; not WebGL canvas pixels).
+- **Assertion Principle:** `PLAYWRIGHT_PIXEL_PERFECT_ASSERTIONS: NO` and `RENDERER_PIXELS_USED_AS_STATE_ORACLE: NO` (general Play and Solve Mode interaction tests verify DOM interactions, disabled states, and text/attribute state indicators rather than full-compositor pixel screenshots; Phase 5D includes a single supplemental raw WebGL `HTMLCanvasElement` bitmap comparison oracle strictly for verifying Play/Research visual state preservation without modifying general UI assertion principles).
 - **Complementary Acceptance Roles:**
   - **Playwright E2E (`npm run test:e2e`):** Repeatable, repository-owned deterministic regression suite covering automated DOM interaction flows and error-free execution.
   - **Chrome DevTools MCP:** Interactive live browser acceptance covering 3D WebGL rendering, orbit controls, zoom gestures, pointer overlay isolation, and visual layout checks.
 
-### Level 10: Performance & Responsiveness Regression (Future Phase 5)
+### Level 10: Performance & Responsiveness Regression (Deferred / Future Performance Characterization)
 - **Scope:** Production Web Bundle
-- **Focus:** Quantitative frame budget and compute latency benchmarking against proposed performance targets.
-- **Invariants Tested:**
+- **Focus:** Quantitative frame budget and compute latency benchmarking against proposed non-binding performance targets.
+- **Invariants / Targets (Non-Binding):**
   - 3D rendering responsiveness targets $\ge 55 \text{ FPS}$ during continuous rotation animations on reference testing profiles.
   - UI main thread responsiveness stays $< 16 \text{ ms}$ during active solver worker execution.
-- **Phase 4 Preflight Note:** Quantitative FPS and $< 16 \text{ ms}$ latency measurements belong to Phase 5 performance and benchmark testing. Phase 4 correctness acceptance proves Web Worker thread isolation, main-thread actionability during active search, and stale-result protection.
+- **Characterization Note:** Phase 5 benchmark and browser research acceptance established thread isolation, asynchronous non-blocking worker execution, and responsive UI interaction during active search. Phase 5 acceptance does NOT establish a universal FPS guarantee, $< 16 \text{ ms}$ guarantee, or sub-millisecond execution guarantee across uncalibrated hardware environments.
 
 ### Level 11: ML Model Evaluation & Reproducibility (Python / PyTorch — Future Phase 6)
 - **Scope:** `ml/`
