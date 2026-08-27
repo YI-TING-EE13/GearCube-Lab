@@ -1,0 +1,14 @@
+{
+  "schemaVersion": "1",
+  "suiteId": "phase5c-structural-depth1-v1",
+  "seed": "phase5c-structural-d1-v1",
+  "exactDepths": [1],
+  "casesPerDepth": 12,
+  "algorithms": [
+    "BFS",
+    "BIDIRECTIONAL_BFS",
+    "IDA_STAR"
+  ],
+  "warmupRuns": 0,
+  "measuredRuns": 1
+}

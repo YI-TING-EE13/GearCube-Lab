@@ -1,0 +1,14 @@
+{
+  "schemaVersion": "1",
+  "suiteId": "phase5c-timing-v1",
+  "seed": "phase5c-timing-v1",
+  "exactDepths": [1, 2, 3, 4, 5, 6, 7, 8],
+  "casesPerDepth": 8,
+  "algorithms": [
+    "BFS",
+    "BIDIRECTIONAL_BFS",
+    "IDA_STAR"
+  ],
+  "warmupRuns": 2,
+  "measuredRuns": 5
+}
