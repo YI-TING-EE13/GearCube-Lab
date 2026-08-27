@@ -1,14 +1,16 @@
 # PHASE_5_IMPLEMENTATION_PLAN.md — Research & Benchmarking Harness
 
-> **Document Status:** `PHASE5_PREFLIGHT_ACCEPTED`
-> **Authoritative Main Baseline:** `11eb3f3bfa33e3e9802ff81c8cc4bf6580ed360a`
-> **Accepted Technical Head:** `762849e34c691982986813f4d3fd318b73a4fa42`
-> **Branch:** `phase/5a-benchmark-bootstrap`
+> **Document Status:** `PHASE5B_ACCEPTED`
+> **Authoritative Main Baseline:** `a576616253d6afeb95ed0c31c3ac50ccb561e666`
+> **Accepted Technical Head:** `d3989cde79087811506ed0295d8411739301db92`
+> **Branch:** `phase/5b-benchmark-runner-cli`
 > **Implementation Started:** `YES`
 > **Phase 5 Accepted:** `NO`
 > **Phase 5 Preflight Accepted:** `YES`
 > **Phase 5A Status:** `COMPLETED & ACCEPTED`
-> **Phase 5B Status:** `NOT STARTED`
+> **Phase 5B Status:** `COMPLETED & ACCEPTED`
+> **Phase 5C Status:** `NOT STARTED`
+> **Phase 5D Status:** `NOT STARTED`
 
 ---
 
@@ -25,7 +27,15 @@
 - **PHASE5A_INDEPENDENT_REVIEW:** `PASS`
 - **PHASE5A_EXACT_HEAD_REVALIDATION:** `PASS`
 - **PHASE5A_ACCEPTED:** `YES`
-- **PHASE5B_STATUS:** `NOT STARTED`
+
+### Phase 5B Implementation Acceptance
+- **PHASE5B_INITIAL_IMPLEMENTATION:** `c53344c9a1ae4f18ee6a6c3b6b56748efaa8e7b7`
+- **PHASE5B_REPAIR_1:** `68cd6e96a5bb5c0e29be6c4d00f002d5bcf005d8`
+- **PHASE5B_ACCEPTED_TECHNICAL_HEAD:** `d3989cde79087811506ed0295d8411739301db92`
+- **PHASE5B_INDEPENDENT_REVIEW:** `PASS`
+- **PHASE5B_ACCEPTED:** `YES`
+- **PHASE5C_STATUS:** `NOT STARTED`
+- **PHASE5D_STATUS:** `NOT STARTED`
 
 ---
 
@@ -382,21 +392,23 @@ graph TD
   - `CASE_ID_STABILITY_GATE`: Case IDs use state-derived `d${exactDepth}:${stateKey}`.
   - `CONFIG_VALIDATION_GATE`: Config validator enforces v1 schema constraints.
 
-### 9.2. Phase 5B: Headless Runner, Deterministic Sampling, CLI & Exporters
-- **Deliverables:** `src/sampler.ts`, `src/runner.ts`, `src/export.ts`, `src/cli.ts`, `tests/sampler.test.ts`, `tests/runner.test.ts`, `tests/export.test.ts`, `tests/cli.test.ts`.
+### 9.2. Phase 5B: Headless Runner, Deterministic Sampling, CLI & Exporters (Completed & Accepted)
+- **Deliverables:** `src/hash.ts`, `src/prng.ts`, `src/sampler.ts`, `src/runner.ts`, `src/export.ts`, `src/cli.ts`, `tests/sampler.test.ts`, `tests/runner.test.ts`, `tests/export.test.ts`, `tests/cli.test.ts`.
 - **Acceptance Gates:**
-  - `SEED_HASH_EXACTNESS_GATE`: `FNV1A_UTF16_CODE_UNITS_32` verified across edge cases.
-  - `PRNG_EXACTNESS_GATE`: `MULBERRY32_EXACT` verified against test vectors.
-  - `SAMPLING_ALGORITHM_GATE`: Partial Fisher-Yates produces exact expected samples.
+  - `SEED_HASH_EXACTNESS_GATE`: `FNV1A_UTF16_CODE_UNITS_32` verified across edge cases without normalization.
+  - `PRNG_EXACTNESS_GATE`: `MULBERRY32_EXACT` verified against exact bit-for-bit test vectors.
+  - `CONTINUOUS_PRNG_STREAM_GATE`: Continuous Mulberry32 PRNG stream across depth buckets without reset proven via distinguishing golden vectors.
+  - `SAMPLING_ALGORITHM_GATE`: Partial Fisher-Yates produces exact expected samples in ordinal key order.
   - `REPEATED_RUN_DETERMINISM_GATE`: Identical suite config + seed yields bit-for-bit identical search metrics.
   - `OPTIMALITY_GATE`: `solutionDepth === exactDepth` for all solved canonical cases.
   - `SOLVER_RESULT_ALIGNMENT_GATE`: Results mapped to `SOLVED` and `LIMIT_REACHED` discriminated union.
   - `MEASURED_TRIAL_ONLY_REPORT_GATE`: Warmups discarded; reports contain measured trials only.
   - `MOVE_EXPORT_ENCODING_GATE`: Canonical `Move[]` in JSON; valid `<FACE>_<DIRECTION>` tokens in CSV.
-  - `CSV_ESCAPING_GATE`: RFC-4180 compliant CSV output.
+  - `CSV_ESCAPING_GATE`: Exact 14-column RFC-4180 compliant CSV output.
   - `JSON_EXPORT_ROUNDTRIP_GATE`: Lossless JSON report round-trip.
-  - `BROWSER_SAFE_ENTRY_GATE`: Root entry imports zero Node built-ins.
-  - `CLI_EXIT_SEMANTICS_GATE`: Exit 0 on completed suite; non-zero on validation/runtime failure.
+  - `BROWSER_SAFE_ENTRY_GATE`: Root entry imports zero Node built-ins; CLI isolated to `cli.ts`.
+  - `CLI_EXIT_SEMANTICS_GATE`: Exit 0 on completed suite (including LIMIT_REACHED); exit 2 on typed `BenchmarkConfigError` or CLI usage errors; exit 1 on filesystem export or unhandled runtime failures.
+  - `STATIC_CONFIG_VALIDATION_GATE`: Static config validation executes before canonical 41,472-state corpus construction.
 
 ### 9.3. Phase 5C: Classical Comparative Research Runs & Report
 - **Deliverables:** Evaluation datasets and `docs/research/PHASE_5_CLASSICAL_SOLVER_BENCHMARK_REPORT.md`.

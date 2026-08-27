@@ -345,8 +345,16 @@ export type WorkerOutboundMessage =
 
 > [!NOTE]
 > **Phase 5 Accepted Contracts:** The interfaces below define the accepted contracts for `@gearcube/benchmark` pursuant to [`docs/development/PHASE_5_IMPLEMENTATION_PLAN.md`](../development/PHASE_5_IMPLEMENTATION_PLAN.md).
-> Phase 5A has materialized these type contracts in `packages/benchmark/src/types.ts` along with `BenchmarkSuiteConfig` runtime validation (`config.ts`), stable state-derived case identity (`d${exactDepth}:${stateKey}`), and the independent Core-only exact-distance corpus builder (`corpus.ts`).
-> Phase 5B runtime runner, sampling, and export behaviors remain pending implementation.
+> - **Phase 5A & 5B Materialization:** All type contracts (`BenchmarkSuiteConfig`, `BenchmarkCase`, `BenchmarkTrialResult`, `BenchmarkReport`), typed `BenchmarkConfigError` validation, canonical 41,472-state exact-distance corpus builder (`buildExactDistanceCorpus`), deterministic hashing (`hashSeed`), PRNG (`createMulberry32`), stratified sampling (`sampleBenchmarkCases`), headless runner (`runBenchmarkSuite`), lossless JSON exporter (`serializeBenchmarkReportJson`), and 14-column CSV exporter (`serializeBenchmarkReportCsv`) are fully implemented and accepted.
+> - **Canonical Public Runner Signature:**
+>   ```typescript
+>   export function runBenchmarkSuite(
+>     configInput: unknown,
+>     environment: EnvironmentProvenance,
+>   ): BenchmarkReport;
+>   ```
+> - **Corpus & Boundary Invariant:** The production `runBenchmarkSuite` runner always constructs and uses the canonical Core-only exact-distance corpus internally. No production corpus override is exposed from the package root public API. Static configuration validation executes before corpus construction.
+> - **Phases 5C & 5D:** Comparative research dataset/report (Phase 5C) and browser Web Worker / UI panel (Phase 5D) remain pending.
 
 ```typescript
 /**
