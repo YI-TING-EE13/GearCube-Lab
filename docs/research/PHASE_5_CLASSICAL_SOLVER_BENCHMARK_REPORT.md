@@ -22,11 +22,11 @@ Across a frozen benchmark suite comprising **222 unique structural cases** (666 
 
 - **Soundness & Optimality (100%)**: All 3,546 measured trials completed with status `SOLVED`, zero search limits reached, zero optimality violations, and exact solution move lengths matching the verified shortest-path depth ($d^*(\sigma) = \text{exactDepth}$).
 - **Deterministic Search-Tree Pruning**:
-  - Uninformed forward BFS exhibits steep exponential growth in search effort, expanding a median of 41,324 nodes (generating 495,888 nodes) at depth 8.
-  - Bidirectional BFS substantially reduces state expansion, expanding a median of 1,892 nodes at depth 8 (a median paired reduction factor of **21.84×** vs. BFS).
-  - IDA\* with $H_2$ achieves drastic pruning at deep strata, expanding a median of only 44 nodes at depth 8 (a median paired reduction factor of **939.90×** vs. BFS).
+  - Within the sampled structural strata, BFS search effort increased sharply with exact depth, expanding a median of 41,324 nodes (generating 495,888 nodes) at depth 8.
+  - BiBFS reduced median expanded-node counts relative to BFS at every measured depth, expanding a median of 1,892 nodes at depth 8 (a median paired reduction factor of **21.84×** vs. BFS).
+  - IDA\* with $H_2$ achieved substantial state-expansion reductions at deeper strata, expanding a median of 44 nodes at depth 8 (a median paired reduction factor of **939.90×** vs. BFS).
 - **Observational Execution Time**: Runtime measurements exhibit consistent rank-ordering with deterministic node counters at resolved depths. However, integer-millisecond timer quantization ($\text{Date.now()}$) renders shallow and highly pruned search cells ($< 1\text{ ms}$) `TIMER_RESOLUTION_LIMITED`.
-- **Bit-for-Bit Deterministic Reproducibility**: Three separate, independent CLI execution replicates produced identical case sequences, identical search-tree expansions, and identical optimal move sequences.
+- **Deterministic Reproducibility**: The deterministic projection was identical across all three timing process replicates, with zero mismatches; `elapsedMs` and `executionTimestamp` were intentionally excluded from this equality contract.
 
 ---
 
@@ -59,7 +59,7 @@ The environment metadata recorded in the committed raw JSON reports is:
 | **Architecture** | `x64` |
 | **Node.js Version** | `v22.17.1` |
 | **CPU Model** | `13th Gen Intel(R) Core(TM) i5-13600K` |
-| **Logical Coores** | `20` |
+| **Logical Cores** | `20` |
 
 ### Benchmark Execution Timestamps (UTC)
 
@@ -201,16 +201,16 @@ Paired reduction factors were computed on matching cases ($\text{reductionFactor
 | **7** | 33.61× | 3.83 | 3,961.06× | 566.65 |
 | **8** | **21.84×** | 0.07 | **939.90×** | 334.89 |
 
-*Note*: Paired reduction factors for $\text{nodesGenerated}$ are mathematically identical because branching factors are constant ($\times 12$).
+*Note*: In the committed Phase 5C structural counters, $\text{nodesGenerated} = 12 \times \text{nodesExpanded}$ for all three measured implementations, so the paired generated-node reduction factors are numerically identical to the expanded-node reduction factors.
 
 ### Search Efficiency Findings
 
-1. **Depths 1–2**: Bidirectional BFS and IDA\* are tied in median node expansions (1 node at depth 1, 2 nodes at depth 2).
-2. **Depths 3–7**: IDA\* exhibits orders-of-magnitude lower node expansion than BiBFS, reaching a peak median reduction factor of **3,961.06×** at depth 7.
+1. **Depths 1–2**: Bidirectional BFS and IDA\* tie on median node expansions (1 node at depth 1, 2 nodes at depth 2).
+2. **Depths 3–8**: IDA\* has lower median node expansions than BiBFS in the sampled structural data, with IDA\* reaching a peak median paired reduction factor vs. BFS of **3,961.06×** at depth 7.
 3. **Depth 8**:
-   - BiBFS median reduction factor drops to **21.84×** as the bidirectional frontier expands to 1,892 nodes.
-   - IDA\* median reduction factor is **939.90×** as median expansions increase to 44 nodes.
-   - Reduction factors are non-monotonic due to topological narrowing of the state space graph at depth 8 (diameter boundary containing only 351 states).
+   - BiBFS median reduction factor relative to BFS is **21.84×** (expanding a median of 1,892 nodes).
+   - IDA\* median reduction factor relative to BFS is **939.90×** (expanding a median of 44 nodes).
+   - The paired reduction factors are non-monotonic across depth. The depth-8 change coincides with the smaller canonical depth-8 bucket (351 states), but Phase 5C does not establish a causal explanation.
 
 ---
 
@@ -235,7 +235,7 @@ $$\text{elapsedMs}_{5\text{ runs}} \xrightarrow{\text{median}} \text{PROCESS\_CA
 ### Timer Quantization Analysis
 
 The JavaScript execution engine provides millisecond-resolution integer timestamps via `Date.now()`. Consequently:
-- Sub-millisecond executions record as $0\text{ ms}$.
+- Fast executions can be recorded as $0\text{ ms}$ because `Date.now()` has integer-millisecond resolution; a $0\text{ ms}$ observation does not imply zero execution duration.
 - IDA\* recorded a median of $0\text{ ms}$ for all depths 1 through 7 ($8/8$ cases per depth recorded $0\text{ ms}$).
 - BiBFS recorded a median of $0\text{ ms}$ for depths 1 through 3 ($7/8$ cases at depth 1, $8/8$ at depth 2, $7/8$ at depth 3 recorded $0\text{ ms}$).
 - Speedup ratios involving `TIMER_RESOLUTION_LIMITED` cells ($0\text{ ms}$) cannot be mathematically computed and are omitted to avoid undefined division.
@@ -253,11 +253,6 @@ Cross-process determinism was verified across the three independent timing runs 
   "executionBaselineCommit": "1fcc48dffcc10a59dbb9fe1eb1e5d7e2ce123ba6",
   "suiteId": "phase5c-timing-v1",
   "seed": "phase5c-timing-v1",
-  "replicates": [
-    "docs/research/phase5c/raw/timing-r1.json",
-    "docs/research/phase5c/raw/timing-r2.json",
-    "docs/research/phase5c/raw/timing-r3.json"
-  ],
   "configContractMatched": true,
   "caseSequenceIdentical": true,
   "deterministicProjectionIdentical": true,
@@ -270,6 +265,7 @@ Cross-process determinism was verified across the three independent timing runs 
 
 - **Case Sequence Identity**: Identical across all 3 replicates ($64/64$ cases).
 - **Deterministic Field Equality**: Identical on `caseId`, `exactDepth`, `algorithm`, `repetitionIndex`, `status`, `solutionDepth`, `solutionMoves`, `nodesExpanded`, `nodesGenerated`, and `limitReason` across all 960 trials per replicate ($0$ mismatches).
+- **Exclusions**: `elapsedMs` and `executionTimestamp` were intentionally excluded from the deterministic projection equality contract.
 
 ---
 
@@ -281,7 +277,7 @@ Cross-process determinism was verified across the three independent timing runs 
 | **RESEARCH_DATASET_GATE** | Exact 222 structural / 64 timing cases | 3,546 measured rows, 4,698 solver invocations | **PASS** |
 | **ALL_SOLVED_GATE** | 100% trials solved without limits | 3,546 / 3,546 solved, 0 limit reached | **PASS** |
 | **OPTIMALITY_GATE** | solutionDepth == exactDepth | 0 optimality violations across all trials | **PASS** |
-| **REPRODUCIBILITY_GATE** | Bit-for-bit determinism across replicates | 0 mismatches across 3 CLI replicates | **PASS** |
+| **REPRODUCIBILITY_GATE** | Deterministic projection identity across replicates | 0 mismatches across 3 CLI replicates | **PASS** |
 | **RAW_ARTIFACT_INTEGRITY_GATE** | Immutable raw JSON/CSV SHA-256 hashes | All 10 raw file hashes match accepted record | **PASS** |
 | **STRUCTURAL_ANALYSIS_GATE** | Traceable paired reduction statistics | Derived CSV matches raw data 1:1 | **PASS** |
 | **TIMING_RESOLUTION_GATE** | Two-stage median with quantization labeling | `TIMER_RESOLUTION_LIMITED` labeled | **PASS** |
@@ -295,8 +291,8 @@ Cross-process determinism was verified across the three independent timing runs 
 ## 12. Limitations
 
 1. **Stratified Sampling**: Depths 2 through 8 are evaluated on fixed-seed deterministic samples ($N=30$), not exhaustive populations.
-2. **Platform Specificity**: Observational timing reflects a single host hardware platform (Intel Core i5-13600K, Windows 11, Node.js v22.17.1).
-3. **Timer Quantization**: `Date.now()` integer-millisecond timing obscures runtime variations below 1 ms.
+2. **Platform Specificity**: Observational timing reflects a single host hardware platform (Intel Core i5-13600K, Windows (`win32`), Node.js v22.17.1).
+3. **Timer Quantization**: Fast executions can be recorded as 0 ms because `Date.now()` has integer-millisecond resolution; a 0 ms observation does not imply zero execution duration.
 4. **Repeated Timing Invocations**: Timing repetitions ($5 \times 3 = 15$) represent repeated measurements on the same puzzle states, not additional distinct states.
 5. **No Per-Trial Memory Tracking**: Benchmark schema v1 tracks search-tree node counts; heap memory footprint was not measured per trial.
 6. **Descriptive Scope**: Analysis is purely descriptive; no inferential confidence intervals or $p$-values are asserted.
@@ -306,10 +302,10 @@ Cross-process determinism was verified across the three independent timing runs 
 
 ## 13. Conclusions
 
-1. **BFS Scalability**: Uninformed forward BFS is viable only for shallow depths ($\le 4$) in memory/time-constrained environments, expanding over 41,000 nodes at depth 8.
-2. **BiBFS Practicality**: Bidirectional BFS provides consistent orders-of-magnitude reduction (21.84× to 110.40×) over forward BFS without requiring precomputed heuristic tables.
-3. **IDA\* Dominance with $H_2$**: Informed IDA\* search guided by the 12-edge Pattern Database heuristic provides the highest search efficiency on the Gear Cube, expanding $\le 44$ median nodes across all depths and solving diameter states (depth 8) in $\approx 1\text{ ms}$.
-4. **Methodological Rigor**: The frozen execution baseline, deterministic PRNG stream, and separate structural/timing suites successfully prevented metric contamination and produced bit-for-bit reproducible results.
+1. **BFS Scalability**: Within the sampled structural strata, BFS search effort increased sharply with exact depth, reaching a median of 41,324 expanded nodes and 495,888 generated nodes at depth 8.
+2. **BiBFS Practicality**: BiBFS reduced median expanded-node counts relative to BFS at every measured depth, with paired median reduction factors ranging from 6.50× to 110.40× across depths 1–8, without requiring precomputed heuristic tables.
+3. **IDA\* Efficiency with $H_2$**: In the sampled structural strata, informed IDA\* search guided by the 12-edge Pattern Database heuristic tied BiBFS at depths 1–2 and had lower median $\text{nodesExpanded}$ and $\text{nodesGenerated}$ at depths 3–8 (expanding $\le 44$ median nodes across all measured depths). For the eight timing-sampled depth-8 cases, IDA\* had a median observational `elapsedMs` of 1 ms on the recorded execution environment. This does not establish universal superiority over every Gear Cube state or arbitrary search implementation.
+4. **Methodological Rigor**: The frozen execution baseline, deterministic PRNG stream, and separate structural/timing suites successfully prevented metric contamination and produced reproducible deterministic projections.
 
 ---
 
