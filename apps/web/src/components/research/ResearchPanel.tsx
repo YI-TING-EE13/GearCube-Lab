@@ -412,6 +412,9 @@ export const ResearchPanel: React.FC<ResearchPanelProps> = ({
               {CANONICAL_DEPTHS.map((depth) => (
                 <label key={depth} className="research-checkbox-label">
                   <input
+                    id={`research-depth-${depth}`}
+                    name="exactDepths"
+                    value={String(depth)}
                     type="checkbox"
                     checked={exactDepths.includes(depth)}
                     onChange={() => handleDepthToggle(depth)}
@@ -430,6 +433,9 @@ export const ResearchPanel: React.FC<ResearchPanelProps> = ({
               {CANONICAL_ALGORITHMS.map((algo) => (
                 <label key={algo} className="research-checkbox-label">
                   <input
+                    id={`research-algorithm-${algo}`}
+                    name="algorithms"
+                    value={algo}
                     type="checkbox"
                     checked={algorithms.includes(algo)}
                     onChange={() => handleAlgorithmToggle(algo)}

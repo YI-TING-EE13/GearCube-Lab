@@ -811,4 +811,56 @@ test.describe('GearCube Browser Research Mode End-to-End Suite', () => {
       }
     }
   });
+
+  test('13. PUBLIC_READINESS_HYGIENE_GATE: favicon loads and Research checkbox form semantics are stable', async ({ page }) => {
+    // A. Favicon link element verification
+    const iconLinks = page.locator('link[rel~="icon"]');
+    await expect(iconLinks).toHaveCount(1);
+
+    const iconType = await iconLinks.getAttribute('type');
+    expect(iconType).toBe('image/svg+xml');
+
+    const iconHref = await iconLinks.getAttribute('href');
+    expect(iconHref).toBe('/favicon.svg');
+
+    // B. Direct HTTP retrieval of the resolved favicon asset
+    const response = await page.request.get(iconHref!);
+    expect(response.status()).toBe(200);
+
+    const contentType = response.headers()['content-type'] || '';
+    expect(contentType).toContain('image/svg+xml');
+
+    // C. Form semantics verification in Research Mode
+    await enterResearchMode(page);
+
+    // 1. Depth checkboxes 1..8
+    for (let depth = 1; depth <= 8; depth++) {
+      const depthCb = page.locator(`#research-depth-${depth}`);
+      await expect(depthCb).toHaveCount(1);
+      await expect(depthCb).toHaveAttribute('name', 'exactDepths');
+      await expect(depthCb).toHaveAttribute('value', String(depth));
+
+      // Accessible visible label verification
+      const label = page.locator('label.research-checkbox-label', { has: depthCb });
+      await expect(label).toContainText(`Depth ${depth}`);
+    }
+
+    // 2. Algorithm checkboxes
+    const expectedAlgos = [
+      { id: 'research-algorithm-BFS', val: 'BFS', label: 'Breadth-First Search (BFS)' },
+      { id: 'research-algorithm-BIDIRECTIONAL_BFS', val: 'BIDIRECTIONAL_BFS', label: 'Bidirectional BFS' },
+      { id: 'research-algorithm-IDA_STAR', val: 'IDA_STAR', label: 'IDA*' },
+    ];
+
+    for (const alg of expectedAlgos) {
+      const algoCb = page.locator(`#${alg.id}`);
+      await expect(algoCb).toHaveCount(1);
+      await expect(algoCb).toHaveAttribute('name', 'algorithms');
+      await expect(algoCb).toHaveAttribute('value', alg.val);
+
+      // Accessible visible label verification
+      const label = page.locator('label.research-checkbox-label', { has: algoCb });
+      await expect(label).toContainText(alg.label);
+    }
+  });
 });
