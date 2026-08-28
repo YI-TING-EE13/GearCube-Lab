@@ -66,4 +66,11 @@ jobs:
         run: npx playwright install --with-deps ${{ matrix.browser }}
 
       - name: Run browser E2E (${{ matrix.browser }})
-        run: npx playwright test --project=${{ matrix.browser }}
+        shell: bash
+        run: |
+          if [ "${{ matrix.browser }}" = "firefox" ]; then
+            command -v xvfb-run
+            xvfb-run npx playwright test --project=firefox --headed
+          else
+            npx playwright test --project="${{ matrix.browser }}"
+          fi
