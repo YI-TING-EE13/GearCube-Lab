@@ -24,7 +24,7 @@ It combines a 3D playable puzzle with mechanically coupled gear kinematics, mult
 
 ### Prerequisites
 
-- **Node.js:** `>=22.12.0 <23`
+- **Node.js:** `>=22.12.0 <23` (CI baseline: Node.js 22.17.1)
 - **npm:** Standard with Node.js
 
 ### Installation & Launch
@@ -62,9 +62,9 @@ The **Play** workspace is the default interactive puzzle environment.
   - **Zoom:** Scroll the mouse wheel or pinch on a trackpad/touchscreen.
   - *Note:* Drag-to-turn direct mesh manipulation is not currently implemented; use on-screen controls or keyboard shortcuts.
 - **Turn Interaction Modes:**
-  - **TWO_STEP (Default):** Each canonical $180^\circ$ face turn is completed via two staged $90^\circ$ physical half-turns. At the physical midpoint, orthogonal face turns are mechanically locked; only the active face can be completed (**Finish**) or reversed back to baseline (**Reverse**).
+  - **TWO_STEP (Default):** Each canonical $180^\circ$ face turn is completed via two staged $90^\circ$ physical half-turns. At the midpoint, all other face controls are locked; the active face can be finished in the same direction or reversed to baseline.
   - **DIRECT_180:** Each canonical face move executes as a single continuous $180^\circ$ interaction.
-  - Switch between modes at any time using the **Direct 180°** toggle button in the Face Controls panel.
+  - When the cube is idle, use the **Direct 180°** toggle in Face Controls to switch between `TWO_STEP` and `DIRECT_180`.
 - **Face Move Controls:**
   - 12 on-screen buttons trigger Clockwise (↻) and Counter-Clockwise (↺) moves for all six faces (**U, D, F, B, R, L**).
 - **Scramble & History:**
@@ -83,7 +83,7 @@ The **Solver** panel allows you to find optimal solution paths from the current 
   1. Manipulate or scramble the cube to an unsolved state.
   2. Select your desired algorithm from the dropdown.
   3. Click **Solve**. Search executes inside a dedicated background Web Worker, keeping the 3D viewport responsive.
-  4. Real-time telemetry displays elapsed time, nodes expanded, and current search depth.
+  4. During search, the Solver panel reports nodes expanded and elapsed time; IDA*-style telemetry also shows the current depth threshold when available.
 - **Solution Playback:**
   - When solved, the **Playback** controls appear on the right overlay.
   - Click **▶ Play** for continuous animated execution, **⏸ Pause** to hold, or **⏮ Step Back** / **Step Fwd ⏭** to inspect moves individually.
@@ -104,9 +104,9 @@ The **Research** workspace provides an isolated environment for conducting repro
   - **Measured Runs:** Number of timed measurement runs per trial.
   - **Limits (Optional):** Optional constraints on `Max Nodes` and `Max Depth`.
 - **Execution & Export:**
-  - Click **Run Benchmark** to start the background benchmark worker. A live progress bar indicates progress across depth strata.
+  - Click **Run Benchmark** to start the background benchmark worker. While the benchmark is active, the Research panel shows a running status and provides a Cancel Benchmark action.
   - Click **Cancel Benchmark** at any time to terminate the worker immediately.
-  - View summary metrics including solve rate, mean duration, and node expansion statistics per algorithm and depth.
+  - Upon completion, the panel displays summary metrics including solved and limit counts, mean nodes expanded, and median elapsed time at the algorithm level, as well as by-depth trial counts, solved/limit counts, median nodes expanded/generated, and median elapsed time.
   - Click **Download JSON** for the full structured `BenchmarkReport` or **Download CSV** for 14-column tabular trial records.
   - *Note:* Browser benchmark timings reflect the execution speed of your local browser JavaScript engine and hardware.
 
@@ -139,13 +139,13 @@ GearCube Lab supports full keyboard interaction in the Play workspace:
 | `npm run build` | Typecheck and build production distribution for web application |
 | `npm run preview` | Serve built production distribution locally |
 | `npm run verify` | Full verification gate: typecheck, pure core boundary check, Vitest unit suite, and production build |
-| `npm test` | Run fast Vitest test suite across all workspace packages |
+| `npm test` | Run the Vitest test suite across repository packages/workspaces |
 | `npm run test:e2e` | Run Playwright end-to-end browser test suite (Chromium) |
 | `npm run benchmark -- --config <path>` | Execute headless CLI benchmark suite |
 
 ### CI Verification
 
-The project includes an automated GitHub Actions verification workflow running on hosted Ubuntu with Node.js 22.17.1, validating dependencies (`npm ci`), workspace integrity (`npm run verify`), and full browser end-to-end testing with Playwright (`npm run test:e2e`).
+The project includes an automated GitHub Actions verification workflow running on hosted Ubuntu with Node.js 22.17.1, performing `npm ci` and `npm run verify`, installing Chromium for Playwright, and executing the current Chromium E2E suite (`npm run test:e2e`).
 
 ---
 
@@ -157,32 +157,13 @@ You can execute reproducible benchmark experiments headlessly via Node.js using 
 npm run benchmark -- --config <config.json> [--json <output.json>] [--csv <output.csv>]
 ```
 
-### Example Benchmark Configuration (`config.json`)
-
-```json
-{
-  "schemaVersion": "1",
-  "suiteId": "cli-sample-benchmark",
-  "seed": "GearCube-Lab",
-  "exactDepths": [1, 2, 3, 4],
-  "casesPerDepth": 2,
-  "algorithms": [
-    "BFS",
-    "BIDIRECTIONAL_BFS",
-    "IDA_STAR"
-  ],
-  "warmupRuns": 0,
-  "measuredRuns": 1
-}
-```
-
-The CLI prints live progress to `stderr` and outputs structured JSON or CSV files to the specified paths upon completion.
+With `--json` and/or `--csv`, the CLI writes those report files. If no output-file flag is supplied, the JSON report is written to `stdout`. Usage, validation, execution, and export errors are written to `stderr`.
 
 ---
 
 ## Tested Environment & Browser Status
 
-- **Runtime Baseline:** Node.js `>=22.12.0 <23` (tested on Node 22.17.1 and 22.17.2).
+- **Runtime Baseline:** Node.js `>=22.12.0 <23` (CI baseline: Node.js 22.17.1).
 - **Chromium:** Automated baseline; fully verified via Playwright E2E and interactive browser acceptance.
 - **Firefox & WebKit:** Not yet qualified. Formal cross-browser qualification is scheduled for Phase 8D; browser support claims will be updated once empirical test evidence is recorded.
 
@@ -191,7 +172,7 @@ The CLI prints live progress to `stderr` and outputs structured JSON or CSV file
 ## Known Limitations & Deferred Work
 
 - **No Drag-to-Turn Manipulation:** Direct pointer dragging on cube pieces to initiate face turns is not currently implemented; manipulation is handled through the on-screen buttons and keyboard shortcuts.
-- **Browser Automation Scope:** Automated E2E test coverage currently targets Chromium. Cross-browser test coverage for Firefox and WebKit is in progress.
+- **Browser Automation Scope:** Automated E2E test coverage currently targets Chromium. Firefox and WebKit qualification is planned for Phase 8D.
 - **AI / Neural Search Track (Phase 6):** Offline PyTorch-trained neural heuristics and learned value networks remain a deferred optional research track.
 - **Physical Model & Vision Track (Phase 7):** Camera capture, color/sticker extraction, state reconstruction, and physical guidance remain a deferred optional expansion track.
 - **Reference Puzzle Model:** The puzzle model implements the canonical combinatorial and mechanical rules of the Standard / Original Gear Cube designed by Oskar van Deventer, rather than a physical-replica scan of third-party retail variants.
