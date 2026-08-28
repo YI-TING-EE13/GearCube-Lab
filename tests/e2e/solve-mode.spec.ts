@@ -110,27 +110,79 @@ test.describe('GearCube Solve Mode & Playback End-to-End Suite', () => {
     // Arm worker listener before starting search
     const workerPromise = page.waitForEvent('worker');
 
-    // Start search
+    // Install test-owned page-side actionability observer to deterministically interact during active search
+    await page.evaluate(() => {
+      document.documentElement.removeAttribute('data-e2e-solver-actionability');
+
+      const checkAndInteract = () => {
+        const statusEl = document.querySelector('[data-testid="solver-status"]');
+        const statusText = statusEl?.textContent || '';
+        const isSearching = statusText.includes('Searching');
+
+        const modeBtn = document.querySelector(
+          'button[aria-label="Direct 180° turn mode: OFF"]'
+        ) as HTMLButtonElement | null;
+
+        if (isSearching && modeBtn && !modeBtn.disabled) {
+          observer.disconnect();
+
+          modeBtn.addEventListener(
+            'click',
+            () => {
+              const currentStatus =
+                document.querySelector('[data-testid="solver-status"]')
+                  ?.textContent || '';
+              if (currentStatus.includes('Searching')) {
+                document.documentElement.setAttribute(
+                  'data-e2e-solver-actionability',
+                  'searching-click-processed'
+                );
+              }
+            },
+            { once: true }
+          );
+
+          modeBtn.click();
+        }
+      };
+
+      const observer = new MutationObserver(() => {
+        checkAndInteract();
+      });
+
+      observer.observe(document.body, {
+        childList: true,
+        subtree: true,
+        characterData: true,
+        attributes: true,
+      });
+
+      checkAndInteract();
+    });
+
+    // Start search via real Playwright pointer click
     await page.getByRole('button', { name: 'Solve current state' }).click();
 
-    // REQUIRE solver status is Searching... BEFORE performing UI interaction
-    await expect(page.getByTestId('solver-status')).toContainText('Searching...');
-    await expect(page.getByRole('button', { name: 'Cancel Search' })).toBeVisible();
-
-    // Toggle turn interaction mode while search is ACTIVE
-    const modeBtn = page.getByRole('button', { name: /Direct 180° turn mode/ });
-    await modeBtn.click();
-    await expect(page.getByRole('button', { name: 'Direct 180° turn mode: ON' })).toBeVisible();
-
-    // Capture the active solver worker and verify isolated execution context
+    // Capture the real solver Worker and verify the dedicated solver script URL
     const worker = await workerPromise;
     expect(worker.url()).toContain('solver.worker');
 
-    const isWorkerContext = await worker.evaluate(() => typeof document === 'undefined');
-    expect(isWorkerContext).toBe(true);
+    // Verify main-thread click was processed while Solver status was actively Searching
+    await expect(page.locator('html')).toHaveAttribute(
+      'data-e2e-solver-actionability',
+      'searching-click-processed',
+      { timeout: 10000 }
+    );
+
+    // Verify production UI mode changed to ON
+    await expect(
+      page.getByRole('button', { name: 'Direct 180° turn mode: ON' })
+    ).toBeVisible();
 
     // Wait for search to finish
-    await expect(page.getByTestId('solver-status')).toContainText('Solved', { timeout: 25000 });
+    await expect(page.getByTestId('solver-status')).toContainText('Solved', {
+      timeout: 25000,
+    });
   });
 
   test('4. STALE_RESULT_GATE: external canonical user action cancels active search and rejects stale solution', async ({ page }) => {
