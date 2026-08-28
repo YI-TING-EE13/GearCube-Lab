@@ -1,6 +1,6 @@
 # ROADMAP.md — Project Lifecycle & Dependency-Ordered Milestones
 
-> **Current Milestone:** `Phase 8 — Product Completion & Public-Test Readiness (Plan Accepted; Implementation Not Started)`
+> **Current Milestone:** `Phase 8 — Product Completion & Public-Test Readiness (Phases 8A, 8B, 8C, 8D Completed & Accepted; Phase 8E In Progress)`
 > **Next Milestone:** `Post-Phase 8 Maintenance & Deferred Research Tracks`
 > **Previous Milestone:** `Phase 5 — Research & Benchmarking Harness (Completed & Accepted)`
 > **Deferred Tracks:** `Phase 6 (Neural AI Search)` & `Phase 7 (Physical Model & Vision Expansion)` (Deferred / Optional Tracks)
@@ -63,7 +63,7 @@
       ├───────────────────────────────────────────────────────┐
       ▼                                                       ▼
 [ Phase 8: Product Completion & Public-Test Readiness ]   [ Phase 6: Neural Heuristic & AI-Guided Search ]
-(Active Mainline — Plan Accepted / Implementation Not Started)         (DEFERRED / OPTIONAL RESEARCH TRACK)
+(Active Mainline — 8A–8D Accepted / 8E In Progress)         (DEFERRED / OPTIONAL RESEARCH TRACK)
       ├─ 8A: Repository & Tooling Foundation                  │
       ├─ 8B: First-Time User Onboarding                       ▼
       ├─ 8C: UX, Accessibility & Console Hygiene          [ Phase 7: Physical Model & Vision Expansion ]
@@ -345,19 +345,19 @@ Phase 0B is partitioned into four dependency-ordered subphases:
 
 ---
 
-### Phase 8: Product Completion & Public-Test Readiness (Active Mainline — Plan Accepted / Implementation Not Started)
-- **Status:** `PLAN ACCEPTED (Implementation Not Started)` ([`docs/development/PHASE_8_IMPLEMENTATION_PLAN.md`](./PHASE_8_IMPLEMENTATION_PLAN.md))
+### Phase 8: Product Completion & Public-Test Readiness (Active Mainline — 8A–8D Accepted / 8E In Progress)
+- **Status:** `IN PROGRESS` ([`docs/development/PHASE_8_IMPLEMENTATION_PLAN.md`](./PHASE_8_IMPLEMENTATION_PLAN.md))
 - **Objective:** Establish complete repository onboarding, self-contained tooling, console and accessibility hygiene, browser compatibility qualification, and clean-machine verification so that an unrelated technically capable user can clone, install, launch, understand, and test GearCube Lab without developer-specific assistance.
 - **Prerequisites:** Completion of Phase 5 (Completed & Accepted on Main).
 - **Target Condition:** `PUBLIC_TEST_READY` (Candidate).
-- **In-Scope:**
-  - **Phase 8A (Repository & Tooling Foundation):** Canonical `"preview"` scripts in root and `apps/web` package manifests; GitHub Actions continuous integration workflow (`.github/workflows/verify.yml`).
-  - **Phase 8B (First-Time User Onboarding):** Comprehensive `README.md` rewrite covering prerequisites, quickstart, build/preview/test commands, Play Mode guide (3D camera, face controls, two-step mode, scramble, history, keyboard shortcuts), Solve Mode guide, Research Mode guide, CLI benchmark instructions, limitations, and browser support.
-  - **Phase 8C (UX, Accessibility & Console Hygiene):** Repository-owned favicon asset resolving 404 console errors; form input `id`/`name` attributes in `ResearchPanel.tsx`; zero unexpected app-owned console errors or page exceptions.
-  - **Phase 8D (Browser Compatibility Qualification):** Qualification and truth-in-documentation across Chromium, Firefox, and WebKit; selective addition of stable browser projects to Playwright matrix.
-  - **Phase 8E (Public Repository Presentation & Docs Finalization):** Synchronization across all canonical docs (`README.md`, `docs/README.md`, `ROADMAP.md`, `PROJECT_BLUEPRINT.md`, `SYSTEM_ARCHITECTURE.md`, `TEST_STRATEGY.md`, `DEPLOYMENT.md`); formalization of licensing policy (`LICENSE_POLICY: UNRESOLVED / HUMAN DECISION REQUIRED`).
-  - **Phase 8F (Clean-Clone Release-Style Acceptance):** Disposable fresh-clone verification (`npm ci`, `npm run verify`, `npm run test:e2e`, `npm run build`, `npm run preview`, `npm run dev`, security vulnerability audit, secret candidate scan, artifact scan, multi-viewport interactive browser smoke test).
-  - **Phase 8G (Public-Test-Ready Formal Acceptance):** Acceptance record review, independent ChatGPT review, and fast-forward promotion to `main`.
+- **Subphase Status & Decomposition:**
+  - **Phase 8A (Repository & Tooling Foundation):** Canonical `"preview"` scripts in root and `apps/web` package manifests; GitHub Actions continuous integration workflow (`.github/workflows/verify.yml`) — **Status:** `COMPLETED & ACCEPTED`.
+  - **Phase 8B (First-Time User Onboarding):** Comprehensive `README.md` rewrite covering prerequisites, quickstart, build/preview/test commands, Play Mode guide (3D camera, face controls, two-step mode, scramble, history, keyboard shortcuts), Solve Mode guide, Research Mode guide, CLI benchmark instructions, limitations, and browser support — **Status:** `COMPLETED & ACCEPTED`.
+  - **Phase 8C (UX, Accessibility & Console Hygiene):** Repository-owned favicon asset resolving 404 console errors; form input `id`/`name` attributes in `ResearchPanel.tsx`; zero unexpected app-owned console errors or page exceptions — **Status:** `COMPLETED & ACCEPTED`.
+  - **Phase 8D (Browser Compatibility Qualification):** Qualification across Chromium, Firefox, and WebKit (41 / 41 passing on all three engines; 123 project-test executions total; hosted Linux CI runs Firefox headed under Xvfb with CI WebGL2 preference; Safari not separately verified) — **Status:** `COMPLETED & ACCEPTED`.
+  - **Phase 8E (Public Repository Presentation & Docs Finalization):** Synchronization across canonical docs; licensing policy formalization (`LICENSE_POLICY: UNRESOLVED / HUMAN DECISION REQUIRED`) — **Status:** `IN PROGRESS (Current Candidate)`.
+  - **Phase 8F (Clean-Clone Release-Style Acceptance):** Disposable fresh-clone verification (`npm ci`, `npm run verify`, `npm run test:e2e`, `npm run build`, `npm run preview`, `npm run dev`, security vulnerability audit, secret candidate scan, artifact scan, multi-viewport interactive browser smoke test) — **Status:** `SCHEDULED / NOT STARTED`.
+  - **Phase 8G (Public-Test-Ready Formal Acceptance):** Acceptance record review, independent ChatGPT review, and fast-forward promotion to `main` — **Status:** `SCHEDULED / NOT STARTED`.
 - **Out-of-Scope:** Feature expansion (drag-to-turn, new puzzle geometries, Daiso remodel, AI/neural heuristics, computer vision, accounts, databases, cloud sync, persistence).
 - **Acceptance Gate Criteria (`PHASE_8_PASS`):**
   - [ ] All 22 Phase 8 hard gates defined in [`docs/development/PHASE_8_IMPLEMENTATION_PLAN.md`](./PHASE_8_IMPLEMENTATION_PLAN.md) pass without exception.

@@ -140,12 +140,12 @@ GearCube Lab supports full keyboard interaction in the Play workspace:
 | `npm run preview` | Serve built production distribution locally |
 | `npm run verify` | Full verification gate: typecheck, pure core boundary check, Vitest unit suite, and production build |
 | `npm test` | Run the Vitest test suite across repository packages/workspaces |
-| `npm run test:e2e` | Run Playwright end-to-end browser test suite (Chromium) |
+| `npm run test:e2e` | Run Playwright end-to-end browser test suite across configured projects (Chromium, Firefox, WebKit) |
 | `npm run benchmark -- --config <path>` | Execute headless CLI benchmark suite |
 
 ### CI Verification
 
-The project includes an automated GitHub Actions verification workflow running on hosted Ubuntu with Node.js 22.17.1, performing `npm ci` and `npm run verify`, installing Chromium for Playwright, and executing the current Chromium E2E suite (`npm run test:e2e`).
+The project includes an automated GitHub Actions verification workflow running on hosted Ubuntu with Node.js 22.17.1. It performs workspace verification (`npm ci` and `npm run verify`) followed by a parallel browser test matrix executing the full 41-test Playwright suite independently across Chromium, Firefox, and WebKit (123 project-test executions total). On hosted Linux CI, Firefox executes headed under Xvfb with a CI-only WebGL2 enablement preference.
 
 ---
 
@@ -164,15 +164,16 @@ With `--json` and/or `--csv`, the CLI writes those report files. If no output-fi
 ## Tested Environment & Browser Status
 
 - **Runtime Baseline:** Node.js `>=22.12.0 <23` (CI baseline: Node.js 22.17.1).
-- **Chromium:** Automated baseline; fully verified via Playwright E2E and interactive browser acceptance.
-- **Firefox & WebKit:** Not yet qualified. Formal cross-browser qualification is scheduled for Phase 8D; browser support claims will be updated once empirical test evidence is recorded.
+- **Chromium:** Automated and verified via Playwright browser suite (41 / 41).
+- **Firefox:** Automated and verified via Playwright browser suite (41 / 41). On GitHub-hosted Ubuntu CI, Firefox E2E runs headed under Xvfb with a CI-only WebGL2 enablement preference.
+- **WebKit:** Automated and verified through Playwright browser suite (41 / 41). Safari has not been separately verified.
 
 ---
 
 ## Known Limitations & Deferred Work
 
 - **No Drag-to-Turn Manipulation:** Direct pointer dragging on cube pieces to initiate face turns is not currently implemented; manipulation is handled through the on-screen buttons and keyboard shortcuts.
-- **Browser Automation Scope:** Automated E2E test coverage currently targets Chromium. Firefox and WebKit qualification is planned for Phase 8D.
+- **Browser Automation Scope:** Automated E2E test coverage covers Chromium, Firefox, and WebKit (41 logical tests × 3 browser projects = 123 project-test executions). Native Safari has not been separately verified.
 - **AI / Neural Search Track (Phase 6):** Offline PyTorch-trained neural heuristics and learned value networks remain a deferred optional research track.
 - **Physical Model & Vision Track (Phase 7):** Camera capture, color/sticker extraction, state reconstruction, and physical guidance remain a deferred optional expansion track.
 - **Reference Puzzle Model:** The puzzle model implements the canonical combinatorial and mechanical rules of the Standard / Original Gear Cube designed by Oskar van Deventer, rather than a physical-replica scan of third-party retail variants.
@@ -184,9 +185,12 @@ With `--json` and/or `--csv`, the CLI writes those report files. If no output-fi
 ```
 Phases 0–5: Completed & Accepted
 Active Mainline: Phase 8 (Product Completion & Public-Test Readiness)
-  - Phase 8A (Repository & Tooling Foundation): Completed / Accepted
-  - Phase 8B (First-Time User Onboarding): Current Candidate
-  - Phases 8C–8G: Scheduled
+  - Phase 8A (Repository & Tooling Foundation): Completed & Accepted
+  - Phase 8B (First-Time User Onboarding): Completed & Accepted
+  - Phase 8C (UX, Accessibility & Console Hygiene): Completed & Accepted
+  - Phase 8D (Browser Compatibility Qualification): Completed & Accepted
+  - Phase 8E (Public Repository Presentation & Docs Finalization): In Progress (Current Candidate)
+  - Phases 8F–8G: Scheduled
 Deferred Tracks:
   - Phase 6 (AI-Guided Search): Deferred Optional Research
   - Phase 7 (Physical Model & Vision Expansion): Deferred Optional Expansion
@@ -260,4 +264,4 @@ All autonomous coding agents and human contributors must follow the instructions
 
 ## License
 
-Licensing policy is not yet finalized for the public-test candidate; formal license selection and license documentation are scheduled for Phase 8E.
+Licensing terms have not yet been finalized for the public-test candidate; licensing policy remains unresolved pending human decision.

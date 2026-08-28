@@ -273,11 +273,13 @@
     - *Verification Snapshot (Technical Head `8bc1d51`):* 52 boundary tests, 32 controller unit tests, 12 Research Mode E2E tests, 40 total Playwright E2E tests, and 444 workspace tests passing.
 
 ### Level 9: Browser End-to-End Tests (Playwright — Available / Implemented)
-- **Scope:** Whole Web Application (`playwright.config.ts`, `tests/e2e/play-mode.spec.ts`)
-- **Focus:** User interaction flows and state validation in real headless browser environments.
+- **Scope:** Whole Web Application (`playwright.config.ts`, `tests/e2e/play-mode.spec.ts`, `tests/e2e/solve-mode.spec.ts`, `tests/e2e/research-mode.spec.ts`)
+- **Focus:** User interaction flows and state validation in real browser environments.
 - **Infrastructure Architecture:**
   - Pinned `@playwright/test@1.62.1` devDependency at repository root.
-  - Project configuration: `chromium` only (desktop, tablet portrait, mobile portrait viewports).
+  - Permanent project matrix: `chromium`, `firefox`, and `webkit` (desktop, tablet portrait, mobile portrait viewports).
+  - Test inventory: 41 canonical logical tests × 3 browser projects = 123 project-test executions.
+  - On GitHub-hosted Linux CI, Firefox E2E runs headed under Xvfb with a CI-only WebGL2 enablement preference. WebKit is verified via Playwright automation; Safari has not been separately verified.
   - Dedicated isolated webServer: `npm run dev --workspace=@gearcube/web -- --port 4173 --strictPort --host 127.0.0.1` on `http://127.0.0.1:4173` with `reuseExistingServer: false`.
   - Execution command: `npm run test:e2e` (`playwright test`).
 - **Invariants Tested (Behavioral / DOM-Level Assertions):**

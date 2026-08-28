@@ -48,7 +48,7 @@ When camera-based cube reconstruction is introduced in Phase 7:
 
 ---
 
-## 4. Build & Distribution Artifacts (Future Phase 8)
+## 4. Build & Distribution Artifacts (Phase 8)
 
 *(The following output layout represents the target build structure once Vite bundling is configured.)*
 
@@ -69,7 +69,7 @@ dist/
 
 Before declaring production deployment complete in Phase 8:
 - [ ] Static bundle builds successfully with zero TypeScript compiler errors (`npm run build`).
-- [ ] Application loads and renders 3D viewport on desktop Chrome, Firefox, Safari, and Edge.
+- [ ] Application loads and renders 3D viewport on desktop Chromium, Firefox, and WebKit (Safari not separately verified).
 - [ ] Solver Web Worker spawns and communicates over HTTPS without CORS or MIME type violations.
 - [ ] Zero network requests to third-party tracking or telemetry services without opt-in.
 - [ ] Lighthouse audit scores: Performance $\ge 90$, Accessibility $\ge 95$, Best Practices $\ge 95$.
