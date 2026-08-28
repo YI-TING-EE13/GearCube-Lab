@@ -247,6 +247,8 @@ test.describe('GearCube Play Mode End-to-End Suite', () => {
     // Press 'u' -> finish step
     await page.keyboard.press('u');
     await expect(page.getByRole('button', { name: 'Step 1: U+' })).toBeVisible();
+    await expect(page.getByText('Turning')).toHaveCount(0);
+    await expect(page.getByRole('button', { name: /U Counter-Clockwise/ })).toBeEnabled();
 
     // Press 'Shift+u' -> first step of U CCW
     await page.keyboard.press('Shift+u');
@@ -256,6 +258,8 @@ test.describe('GearCube Play Mode End-to-End Suite', () => {
     // Press 'Shift+u' -> finish step
     await page.keyboard.press('Shift+u');
     await expect(page.getByRole('button', { name: 'Step 2: U-' })).toBeVisible();
+    await expect(page.getByText('Turning')).toHaveCount(0);
+    await expect(page.getByRole('button', { name: /U Clockwise/ })).toBeEnabled();
 
     // Test unsupported modifiers (Control+u, Meta+u, Alt+u) - should not trigger actions
     await page.keyboard.press('Control+u');
