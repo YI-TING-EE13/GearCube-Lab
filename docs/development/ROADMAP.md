@@ -1,9 +1,9 @@
 # ROADMAP.md — Project Lifecycle & Dependency-Ordered Milestones
 
-> **Current Milestone:** `Phase 8 — Product Completion & Public-Test Readiness (Planning / Preflight Complete; Implementation Not Started)`
+> **Current Milestone:** `Phase 8 — Product Completion & Public-Test Readiness (Plan Accepted; Implementation Not Started)`
 > **Next Milestone:** `Post-Phase 8 Maintenance & Deferred Research Tracks`
 > **Previous Milestone:** `Phase 5 — Research & Benchmarking Harness (Completed & Accepted)`
-> **Deferred Tracks:** `Phase 6 (Neural AI Search)` & `Phase 7 (Computer Vision)` (Deferred / Optional Research Tracks)
+> **Deferred Tracks:** `Phase 6 (Neural AI Search)` & `Phase 7 (Physical Model & Vision Expansion)` (Deferred / Optional Tracks)
 
 ---
 
@@ -63,10 +63,10 @@
       ├───────────────────────────────────────────────────────┐
       ▼                                                       ▼
 [ Phase 8: Product Completion & Public-Test Readiness ]   [ Phase 6: Neural Heuristic & AI-Guided Search ]
-(Active Mainline — Planning / Preflight Complete)         (DEFERRED / OPTIONAL RESEARCH TRACK)
+(Active Mainline — Plan Accepted / Implementation Not Started)         (DEFERRED / OPTIONAL RESEARCH TRACK)
       ├─ 8A: Repository & Tooling Foundation                  │
       ├─ 8B: First-Time User Onboarding                       ▼
-      ├─ 8C: UX, Accessibility & Console Hygiene          [ Phase 7: Computer Vision State Ingestion ]
+      ├─ 8C: UX, Accessibility & Console Hygiene          [ Phase 7: Physical Model & Vision Expansion ]
       ├─ 8D: Browser Compatibility Qualification          (DEFERRED / OPTIONAL EXPANSION TRACK)
       ├─ 8E: Public Repository Presentation
       ├─ 8F: Clean-Clone Release-Style Acceptance
@@ -336,17 +336,17 @@ Phase 0B is partitioned into four dependency-ordered subphases:
 
 ---
 
-### Phase 7: Computer Vision State Ingestion (Deferred / Optional Expansion Track)
-- **Status:** `DEFERRED / OPTIONAL PHYSICAL / VISION EXPANSION` (Not required for current public-test readiness; does not block Phase 8).
-- **Objective:** Enable webcam capture of physical Gear Cubes, automatic face segmentation, sticker color recognition, candidate state consistency validation, user correction, and 3D guided solving.
+### Phase 7: Physical Model & Vision Expansion (Deferred / Optional Future Expansion)
+- **Status:** `DEFERRED / OPTIONAL PHYSICAL MODEL & VISION EXPANSION` (Not required for current public-test readiness; does not block Phase 8).
+- **Objective:** Advance physical appearance modeling, physical-reference validation, webcam capture of physical Gear Cubes, automatic face segmentation, sticker color recognition, candidate state consistency validation, user correction, and 3D guided solving.
 - **Prerequisites:** Optional future milestone.
-- **In-Scope (When Activated):** `packages/vision`, WebRTC camera interface, color calibration tool, candidate state validator, user-correction interface, guided step-by-step UI.
-- **Deliverables (Deferred):** Browser camera scanner modal, interactive state verification and correction screen.
+- **In-Scope (When Activated):** Physical model refinement, `packages/vision`, WebRTC camera interface, color calibration tool, candidate state validator, user-correction interface, guided step-by-step UI.
+- **Deliverables (Deferred):** Physical model assets, browser camera scanner modal, interactive state verification and correction screen.
 
 ---
 
-### Phase 8: Product Completion & Public-Test Readiness (Active Mainline — Planning Candidate)
-- **Status:** `PLANNING / PREFLIGHT COMPLETE (Implementation Not Started)` ([`docs/development/PHASE_8_IMPLEMENTATION_PLAN.md`](./PHASE_8_IMPLEMENTATION_PLAN.md))
+### Phase 8: Product Completion & Public-Test Readiness (Active Mainline — Plan Accepted / Implementation Not Started)
+- **Status:** `PLAN ACCEPTED (Implementation Not Started)` ([`docs/development/PHASE_8_IMPLEMENTATION_PLAN.md`](./PHASE_8_IMPLEMENTATION_PLAN.md))
 - **Objective:** Establish complete repository onboarding, self-contained tooling, console and accessibility hygiene, browser compatibility qualification, and clean-machine verification so that an unrelated technically capable user can clone, install, launch, understand, and test GearCube Lab without developer-specific assistance.
 - **Prerequisites:** Completion of Phase 5 (Completed & Accepted on Main).
 - **Target Condition:** `PUBLIC_TEST_READY` (Candidate).

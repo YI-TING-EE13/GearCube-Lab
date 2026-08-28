@@ -1,15 +1,17 @@
 # Phase 8 — Product Completion & Public-Test Readiness Implementation Plan
 
-> **Document Status:** `PHASE8_IMPLEMENTATION_PLAN_CANDIDATE`
+> **Document Status:** `PHASE8_IMPLEMENTATION_PLAN_ACCEPTED`
 > **Authoritative Main Baseline:** `616d7f18388f25f62067f1eb192b672a4881bb20`
 > **Planning Branch:** `phase/8-product-readiness-plan`
 > **Phases 0–5 Status:** `COMPLETED & ACCEPTED ON MAIN`
 > **Phase 6 Status:** `DEFERRED / OPTIONAL RESEARCH TRACK`
-> **Phase 7 Status:** `DEFERRED / OPTIONAL PHYSICAL / VISION EXPANSION`
+> **Phase 7 Status:** `DEFERRED / OPTIONAL PHYSICAL MODEL & VISION EXPANSION`
 > **Phase 8 Strategy:** `APPROVED DIRECTION`
+> **Phase 8 Plan Status:** `PHASE8_PLAN_ACCEPTED`
+> **Independent Plan Review:** `PASS`
 > **Phase 8 Implementation:** `NOT STARTED`
 > **Phase 8 Accepted:** `NO`
-> **Target Condition:** `PUBLIC_TEST_READY` (Candidate pending independent ChatGPT review)
+> **Target Condition:** `PUBLIC_TEST_READY` (Future implementation acceptance target)
 
 ---
 
@@ -20,7 +22,7 @@ Phase 8 shifts GearCube Lab from progressive subsystem R&D into a self-contained
 ### 1.1. Product Strategy Rebaseline
 - **Phases 0–5 (Completed & Accepted):** The discrete domain core, 3D kinematics and rendering, interactive Play Mode UI (history, undo/redo, seeded scramble), classical graph search solvers (BFS, BiBFS, IDA* with H2 two-slice PDB) with Solve Mode UI & solution playback, pure benchmark engine, 41,472-state exact-distance corpus, headless CLI, published comparative empirical research report, and browser Research Mode with background Web Worker execution are fully implemented, accepted, and merged into `main`.
 - **Phase 6 (Neural Heuristic & AI-Guided Search):** `DEFERRED / OPTIONAL RESEARCH TRACK`. Not required for public-test readiness; does not block Phase 8; no implementation may begin during Phase 8.
-- **Phase 7 (Computer Vision State Ingestion):** `DEFERRED / OPTIONAL PHYSICAL / VISION EXPANSION`. Not required for public-test readiness; does not block Phase 8; no implementation may begin during Phase 8.
+- **Phase 7 (Physical Model & Vision Expansion):** `DEFERRED / OPTIONAL PHYSICAL MODEL & VISION EXPANSION`. Not required for public-test readiness; does not block Phase 8; no implementation may begin during Phase 8.
 - **Phase 8 (Product Completion & Public-Test Readiness):** `ACTIVE PRODUCT MAINLINE`. The immediate goal is to ensure an unrelated technically capable user can clone the public repository, install dependencies, launch GearCube Lab, understand the basic operating model, use Play / Solve / Research, and exercise the complete current system without developer-specific knowledge.
 
 ### 1.2. Public-Test Readiness Boundary
@@ -74,7 +76,7 @@ The following authoritative classification governs Phase 8:
 - **`[P3-01]` Three.js `THREE.Clock` Deprecation Warning:** Upstream warning from Three.js/R3F internals; no direct repository use of `THREE.Clock` exists. Do not perform framework upgrades solely for this warning.
 - **`[P3-02]` Community Health Files (`CONTRIBUTING.md`, `SECURITY.md`, `CODE_OF_CONDUCT.md`):** Optional unless future open-source contributor workflows require them.
 - **`[P3-03]` Phase 6 AI / Neural Search:** Deferred to optional future research track.
-- **`[P3-04]` Phase 7 Computer Vision:** Deferred to optional future expansion track.
+- **`[P3-04]` Phase 7 Physical Model & Vision Expansion:** Deferred to optional future expansion track.
 
 ---
 
@@ -152,7 +154,7 @@ Phase 8 is strictly a **completion, onboarding, robustness, compatibility, and v
 - **Objective:** Transform `README.md` into an intuitive, comprehensive guide for a stranger who has never seen the repository.
 - **Planned Implementation:**
   1. **What GearCube Lab is:** High-level project summary and key capabilities.
-  2. **Product Status:** Current public-test-ready status and implemented capabilities overview.
+  2. **Product Status:** Current readiness status and implemented capabilities overview.
   3. **Prerequisites:** Explicit Node version (`>=22.12.0 <23`) and `npm`.
   4. **Quick Start:** `git clone`, `cd gearcube-lab`, `npm ci`, `npm run dev`.
   5. **Production Build & Preview:** `npm run build`, `npm run preview`.

@@ -96,7 +96,7 @@ Throughout all documents in `docs/`, technical specifications and mechanical ass
 - **Phase 2 Graphics & Kinematics Plan:** [`docs/development/PHASE_2_IMPLEMENTATION_PLAN.md`](development/PHASE_2_IMPLEMENTATION_PLAN.md)
 - **Phase 3 Interactive UI, History & Scramble Plan (Accepted):** [`docs/development/PHASE_3_IMPLEMENTATION_PLAN.md`](development/PHASE_3_IMPLEMENTATION_PLAN.md)
 - **Phase 4 Classical Solver Infrastructure Plan (Accepted):** [`docs/development/PHASE_4_IMPLEMENTATION_PLAN.md`](development/PHASE_4_IMPLEMENTATION_PLAN.md)
-- **Phase 8 Product Completion & Public-Test Readiness Plan (Plan Candidate):** [`docs/development/PHASE_8_IMPLEMENTATION_PLAN.md`](development/PHASE_8_IMPLEMENTATION_PLAN.md)
+- **Phase 8 Product Completion & Public-Test Readiness Plan (Accepted):** [`docs/development/PHASE_8_IMPLEMENTATION_PLAN.md`](development/PHASE_8_IMPLEMENTATION_PLAN.md)
 - **Phase 5 Research & Benchmarking Harness Plan (Completed & Accepted):** [`docs/development/PHASE_5_IMPLEMENTATION_PLAN.md`](development/PHASE_5_IMPLEMENTATION_PLAN.md)
 - **Phase 5D Browser Research Mode Plan (Implementation Accepted):** [`docs/development/PHASE_5D_IMPLEMENTATION_PLAN.md`](development/PHASE_5D_IMPLEMENTATION_PLAN.md)
 - **Phase 5C Experiment Plan — Accepted:** [`docs/research/PHASE_5C_EXPERIMENT_PLAN.md`](research/PHASE_5C_EXPERIMENT_PLAN.md)

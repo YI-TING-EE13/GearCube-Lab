@@ -312,9 +312,9 @@ The project roadmap is structured into dependency-ordered phases (detailed in [`
 - **Phase 3:** Interactive UI, History, Undo/Redo, Keyboard Controls, and Responsive Layout *(Accepted)*
 - **Phase 4:** Classical Solver Infrastructure (Web Worker, BFS / Bidirectional BFS / IDA*, Solve Mode UI & Playback) *(Implemented & Accepted)*
 - **Phase 5:** Research Benchmark Framework & Empirical Evaluation *(Completed & Accepted — Phases 5A–5D Accepted)*
-- **Phase 8:** Product Completion & Public-Test Readiness *(Active Product Mainline — Preflight Complete; Implementation Plan Candidate)*
+- **Phase 8:** Product Completion & Public-Test Readiness *(Active Product Mainline — Plan Accepted; Implementation Not Started)*
 - **Phase 6:** Neural Heuristic & AI-Guided Search *(Deferred / Optional Research Track)*
-- **Phase 7:** Camera-Based Physical State Reconstruction & Guided Solver *(Deferred / Optional Expansion Track)*
+- **Phase 7:** Physical Model & Vision Expansion *(Deferred / Optional Future Expansion)*
 
 ---
 

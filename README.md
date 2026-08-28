@@ -6,7 +6,7 @@
 
 ## Project Status
 
-**Current Status:** `Phases 0–5 Completed & Accepted — Active Mainline: Phase 8 (Product Completion & Public-Test Readiness Planning Candidate)`
+**Current Status:** `Phases 0–5 Completed & Accepted — Active Mainline: Phase 8 (Product Completion & Public-Test Readiness — Plan Accepted / Implementation Not Started)`
 
 > [!IMPORTANT]
 > **Phases 0–5 are fully implemented and accepted.** The discrete core, 3D kinematics, Play Mode UI (Phase 3), full Classical Solver infrastructure with Solve Mode (Phase 4), Phase 5A/5B Headless Benchmark Infrastructure, Phase 5C Classical Solver Comparative Benchmark Research & Report ([`docs/research/PHASE_5_CLASSICAL_SOLVER_BENCHMARK_REPORT.md`](docs/research/PHASE_5_CLASSICAL_SOLVER_BENCHMARK_REPORT.md)), and Phase 5D Browser Research Mode are complete and verified across unit, boundary, automated Playwright browser, and interactive Chrome DevTools acceptance suites. The active product mainline is **Phase 8: Product Completion & Public-Test Readiness** ([`docs/development/PHASE_8_IMPLEMENTATION_PLAN.md`](docs/development/PHASE_8_IMPLEMENTATION_PLAN.md)).
@@ -26,10 +26,10 @@
 
 ## Active Mainline & Future Tracks
 
-- **Product Completion & Public-Test Readiness (Phase 8 — Active Product Mainline Plan Candidate):** Onboarding guide in README, canonical preview workflows, CI automation, accessibility/console hygiene, cross-browser qualification, and clean-clone verification ([`docs/development/PHASE_8_IMPLEMENTATION_PLAN.md`](docs/development/PHASE_8_IMPLEMENTATION_PLAN.md)).
+- **Product Completion & Public-Test Readiness (Phase 8 — Active Mainline Plan Accepted / Implementation Not Started):** Onboarding guide in README, canonical preview workflows, CI automation, accessibility/console hygiene, cross-browser qualification, and clean-clone verification ([`docs/development/PHASE_8_IMPLEMENTATION_PLAN.md`](docs/development/PHASE_8_IMPLEMENTATION_PLAN.md)).
 - **Modular Visual Skins (Deferred / Future Presentation):** Support for interchangeable material schemes, wireframe views, or custom visual themes without altering puzzle mechanics.
 - **AI-Guided Search (Phase 6 — Deferred / Optional Future Research Track):** Offline PyTorch-trained neural heuristics and value networks integrated into guided tree search.
-- **Computer Vision State Ingestion (Phase 7 — Deferred / Optional Future Expansion Track):** Local-first camera capture to recognize physical cube faces, reconstruct a candidate discrete state, validate consistency/reachability, allow user corrections, and generate step-by-step 3D visual solving guidance.
+- **Physical Model & Vision Expansion (Phase 7 — Deferred / Optional Future Expansion Track):** Physical appearance modeling, local-first camera capture to recognize physical cube faces, reconstruct a candidate discrete state, validate consistency/reachability, allow user corrections, and generate step-by-step 3D visual solving guidance.
 
 ---
 
