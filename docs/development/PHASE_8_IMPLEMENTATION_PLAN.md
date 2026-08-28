@@ -17,7 +17,7 @@
 
 ## 1. Executive Summary & Strategy Rebaseline Context
 
-Phase 8 shifts GearCube Lab from progressive subsystem R&D into a self-contained, reproducible, robust, and accessible public-test-ready repository. 
+Phase 8 shifts GearCube Lab from progressive subsystem R&D into a self-contained, reproducible, robust, and accessible public-test-ready repository.
 
 ### 1.1. Product Strategy Rebaseline
 - **Phases 0–5 (Completed & Accepted):** The discrete domain core, 3D kinematics and rendering, interactive Play Mode UI (history, undo/redo, seeded scramble), classical graph search solvers (BFS, BiBFS, IDA* with H2 two-slice PDB) with Solve Mode UI & solution playback, pure benchmark engine, 41,472-state exact-distance corpus, headless CLI, published comparative empirical research report, and browser Research Mode with background Web Worker execution are fully implemented, accepted, and merged into `main`.
