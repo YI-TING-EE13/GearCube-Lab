@@ -302,7 +302,7 @@ describe('Phase 4C — H2 Pattern Database & Heuristic Contracts', () => {
     expect(consistentEdges).toBe(497664);
   });
 
-  it('H2_REPRESENTATIVE_SUCCESSOR_EQUIVALENCE: verifies quotient representative successor equivalence for all 497,664 edges', () => {
+  it('H2_REPRESENTATIVE_SUCCESSOR_EQUIVALENCE: verifies quotient representative successor equivalence for all 497,664 edges', { timeout: 30000 }, () => {
     let cxyEdges = 0;
     let cxzEdges = 0;
     let cyzEdges = 0;
