@@ -71,13 +71,9 @@ test.describe('GearCube Solve Mode & Playback End-to-End Suite', () => {
     // Click Solve
     await page.getByRole('button', { name: 'Solve current state' }).click();
 
-    // Capture the real browser Web Worker
+    // Capture the real browser Web Worker and verify worker script URL
     const worker = await workerPromise;
     expect(worker.url()).toContain('solver.worker');
-
-    // Verify worker execution context (isolated from DOM document)
-    const isWorkerContext = await worker.evaluate(() => typeof document === 'undefined');
-    expect(isWorkerContext).toBe(true);
 
     // Wait for solve completion
     await expect(page.getByTestId('solver-solution-summary')).toBeVisible({ timeout: 15000 });
@@ -111,12 +107,25 @@ test.describe('GearCube Solve Mode & Playback End-to-End Suite', () => {
     // Select BFS algorithm
     await page.getByLabel('Solver Algorithm').selectOption('BFS');
 
+    // Arm worker listener before starting search
+    const workerPromise = page.waitForEvent('worker');
+
     // Start search
     await page.getByRole('button', { name: 'Solve current state' }).click();
 
     // REQUIRE solver status is Searching... BEFORE performing UI interaction
     await expect(page.getByTestId('solver-status')).toContainText('Searching...');
     await expect(page.getByRole('button', { name: 'Cancel Search' })).toBeVisible();
+
+    // Capture the active solver worker and verify isolated execution context while actively searching
+    const worker = await workerPromise;
+    expect(worker.url()).toContain('solver.worker');
+
+    const isWorkerContext = await worker.evaluate(() => typeof document === 'undefined');
+    expect(isWorkerContext).toBe(true);
+
+    // Require solver status is STILL Searching...
+    await expect(page.getByTestId('solver-status')).toContainText('Searching...');
 
     // Toggle turn interaction mode while search is ACTIVE
     const modeBtn = page.getByRole('button', { name: /Direct 180° turn mode/ });

@@ -336,13 +336,9 @@ test.describe('GearCube Browser Research Mode End-to-End Suite', () => {
 
     await page.getByTestId('research-run-button').click();
 
-    // Capture the dedicated benchmark worker
+    // Capture the dedicated benchmark worker and verify worker script URL
     const worker: Worker = await workerPromise;
     expect(worker.url()).toMatch(/benchmark\.worker/);
-
-    // Verify worker execution context (isolated from DOM document)
-    const isWorkerContext = await worker.evaluate(() => typeof document === 'undefined');
-    expect(isWorkerContext).toBe(true);
 
     // Wait for completion
     await expect(page.getByTestId('research-status')).toHaveText('Completed', { timeout: 30000 });
@@ -352,22 +348,38 @@ test.describe('GearCube Browser Research Mode End-to-End Suite', () => {
     await enterResearchMode(page);
     await configureLongCancellationSuite(page);
 
+    // Arm worker listener before starting long-running benchmark
+    const workerPromise = page.waitForEvent('worker');
+
+    // Register a one-shot click listener on the research button to verify main-thread event processing
+    const researchBtn = page.getByTestId('workspace-mode-research');
+    await researchBtn.evaluate((element) => {
+      element.addEventListener(
+        'click',
+        () => {
+          element.setAttribute('data-e2e-click-observed', 'true');
+        },
+        { once: true }
+      );
+    });
+
     await page.getByTestId('research-run-button').click();
 
     // Observe ACTIVE status
     await expect(page.getByTestId('research-status')).toHaveText('Running benchmark...');
 
-    // Obtain workspace-mode-research button and ensure it is not currently focused
-    const researchBtn = page.getByTestId('workspace-mode-research');
-    await page.evaluate(() => (document.activeElement as HTMLElement | null)?.blur());
-    const isAlreadyFocused = await researchBtn.evaluate((el) => el === document.activeElement);
-    expect(isAlreadyFocused).toBe(false);
+    // Capture the dedicated benchmark worker and verify isolated execution context while actively running
+    const worker: Worker = await workerPromise;
+    expect(worker.url()).toMatch(/benchmark\.worker/);
 
-    // Perform a real Playwright click to prove main-thread interaction
+    const isWorkerContext = await worker.evaluate(() => typeof document === 'undefined');
+    expect(isWorkerContext).toBe(true);
+
+    // Perform a real Playwright pointer click to prove main-thread interaction
     await researchBtn.click();
 
-    // Require observable DOM effect: research button received focus
-    await expect(researchBtn).toBeFocused();
+    // Require observable DOM effect: click event was received and processed on main thread
+    await expect(researchBtn).toHaveAttribute('data-e2e-click-observed', 'true');
 
     // Require benchmark is STILL ACTIVE on the Worker thread
     await expect(page.getByTestId('research-status')).toHaveText('Running benchmark...');
