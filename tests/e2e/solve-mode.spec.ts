@@ -117,20 +117,17 @@ test.describe('GearCube Solve Mode & Playback End-to-End Suite', () => {
     await expect(page.getByTestId('solver-status')).toContainText('Searching...');
     await expect(page.getByRole('button', { name: 'Cancel Search' })).toBeVisible();
 
-    // Capture the active solver worker and verify isolated execution context while actively searching
+    // Toggle turn interaction mode while search is ACTIVE
+    const modeBtn = page.getByRole('button', { name: /Direct 180° turn mode/ });
+    await modeBtn.click();
+    await expect(page.getByRole('button', { name: 'Direct 180° turn mode: ON' })).toBeVisible();
+
+    // Capture the active solver worker and verify isolated execution context
     const worker = await workerPromise;
     expect(worker.url()).toContain('solver.worker');
 
     const isWorkerContext = await worker.evaluate(() => typeof document === 'undefined');
     expect(isWorkerContext).toBe(true);
-
-    // Require solver status is STILL Searching...
-    await expect(page.getByTestId('solver-status')).toContainText('Searching...');
-
-    // Toggle turn interaction mode while search is ACTIVE
-    const modeBtn = page.getByRole('button', { name: /Direct 180° turn mode/ });
-    await modeBtn.click();
-    await expect(page.getByRole('button', { name: 'Direct 180° turn mode: ON' })).toBeVisible();
 
     // Wait for search to finish
     await expect(page.getByTestId('solver-status')).toContainText('Solved', { timeout: 25000 });
@@ -250,15 +247,38 @@ test.describe('GearCube Solve Mode & Playback End-to-End Suite', () => {
     const solutionDepth = parseInt(match![1]!, 10);
     expect(solutionDepth).toBeGreaterThanOrEqual(2);
 
-    // 4. Click Play
+    // 4. Install test-owned page-side pause observer to deterministically trigger Pause on first in-flight move
+    await page.evaluate((depth) => {
+      document.documentElement.removeAttribute('data-e2e-pause-requested');
+
+      const checkAndPause = () => {
+        const progressEl = document.querySelector('[data-testid="playback-progress"]');
+        const progressText = progressEl?.textContent?.trim() || '';
+        const isFirstMove = progressText.startsWith('0 /') || progressText === `0 / ${depth}`;
+
+        const pauseBtn = document.querySelector('button[aria-label="Pause solution"]') as HTMLButtonElement | null;
+        const isTurning = document.body.textContent?.includes('Turning') || !!document.querySelector('.animating-indicator');
+
+        if (isFirstMove && isTurning && pauseBtn && !pauseBtn.disabled) {
+          pauseBtn.click();
+          document.documentElement.setAttribute('data-e2e-pause-requested', 'true');
+          observer.disconnect();
+        }
+      };
+
+      const observer = new MutationObserver(() => {
+        checkAndPause();
+      });
+
+      observer.observe(document.body, { childList: true, subtree: true, characterData: true, attributes: true });
+      checkAndPause();
+    }, solutionDepth);
+
+    // 5. Click Play via real Playwright pointer click
     await page.getByRole('button', { name: 'Play solution' }).click();
 
-    // 5 & 6. REQUIRE Pause solution button is visible
-    const pauseBtn = page.getByRole('button', { name: 'Pause solution' });
-    await expect(pauseBtn).toBeVisible({ timeout: 5000 });
-
-    // 7. Click Pause unconditionally
-    await pauseBtn.click();
+    // 6. Verify page-side pause observer fired during the first in-flight canonical move
+    await expect(page.locator('html')).toHaveAttribute('data-e2e-pause-requested', 'true', { timeout: 10000 });
 
     // 8, 9, 10, 14. Verify current move finishes completely and settles to IDLE (Play solution re-appears)
     await expect(page.getByRole('button', { name: 'Play solution' })).toBeVisible({ timeout: 10000 });

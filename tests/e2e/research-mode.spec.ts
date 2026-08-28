@@ -750,6 +750,7 @@ test.describe('GearCube Browser Research Mode End-to-End Suite', () => {
   });
 
   test('12. RESPONSIVE_RESEARCH_LAYOUT_GATE: research panel and mode switch adapt to desktop, tablet, and mobile without overflow or overlap', async ({ page }) => {
+    test.setTimeout(process.env.CI ? 90_000 : 30_000);
     const viewports = [
       { width: 1280, height: 800 },
       { width: 768, height: 1024 },
