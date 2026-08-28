@@ -1,15 +1,15 @@
 # GearCube Lab
 
-> Interactive 3D simulation, kinematic modeling, and classical/neural solver research for the Gear Cube puzzle.
+> Interactive 3D simulation, kinematic modeling, and classical solver benchmark research for the Gear Cube puzzle.
 
 ---
 
 ## Project Status
 
-**Current Status:** `Phase 5 Completed & Accepted`
+**Current Status:** `Phases 0–5 Completed & Accepted — Active Mainline: Phase 8 (Product Completion & Public-Test Readiness Planning Candidate)`
 
 > [!IMPORTANT]
-> **Phases 0–5 are technically implemented and accepted.** The discrete core, 3D kinematics, Play Mode UI (Phase 3), full Classical Solver infrastructure with Solve Mode (Phase 4), Phase 5A/5B Headless Benchmark Infrastructure, Phase 5C Classical Solver Comparative Benchmark Research & Report ([`docs/research/PHASE_5_CLASSICAL_SOLVER_BENCHMARK_REPORT.md`](docs/research/PHASE_5_CLASSICAL_SOLVER_BENCHMARK_REPORT.md)), and Phase 5D Browser Research Mode are complete and verified across unit, boundary, automated Playwright browser, and interactive Chrome DevTools acceptance suites. All implementation adheres to the canonical architecture contracts defined in [`docs/`](docs/README.md).
+> **Phases 0–5 are fully implemented and accepted.** The discrete core, 3D kinematics, Play Mode UI (Phase 3), full Classical Solver infrastructure with Solve Mode (Phase 4), Phase 5A/5B Headless Benchmark Infrastructure, Phase 5C Classical Solver Comparative Benchmark Research & Report ([`docs/research/PHASE_5_CLASSICAL_SOLVER_BENCHMARK_REPORT.md`](docs/research/PHASE_5_CLASSICAL_SOLVER_BENCHMARK_REPORT.md)), and Phase 5D Browser Research Mode are complete and verified across unit, boundary, automated Playwright browser, and interactive Chrome DevTools acceptance suites. The active product mainline is **Phase 8: Product Completion & Public-Test Readiness** ([`docs/development/PHASE_8_IMPLEMENTATION_PLAN.md`](docs/development/PHASE_8_IMPLEMENTATION_PLAN.md)).
 
 ---
 
@@ -24,11 +24,12 @@
 - **Classical Solver Comparative Benchmark Research & Report (Implemented & Accepted — Phase 5C):** Empirical comparative evaluation across exact distance strata 1..8 (222 unique structural cases, 64 timing cases across 3 replicates; 3,546 measured rows, 4,698 solver invocations), verifying 100% optimal solutions ($d^*(\sigma) = \text{exactDepth}$), deterministic pruning statistics (BiBFS: 21.84× reduction at depth 8; IDA* with $H_2$: 939.90× reduction at depth 8 vs. BFS), observational runtime scaling, and reproducible deterministic projections ([report](docs/research/PHASE_5_CLASSICAL_SOLVER_BENCHMARK_REPORT.md)).
 - **Browser Research Mode & Web Worker (Implemented & Accepted — Phase 5D):** Interactive browser Research Mode UI with workspace mode toggle (`PLAY` / `RESEARCH`), validated configuration form, dedicated background Web Worker (`benchmark.worker.ts`), BFS/BiBFS/IDA* search execution, tabular summary metrics, client-side JSON/CSV export downloads, host-side cancellation, and responsive layout across desktop, tablet, and mobile viewports.
 
-## Planned Capabilities (Future Phases)
+## Active Mainline & Future Tracks
 
+- **Product Completion & Public-Test Readiness (Phase 8 — Active Product Mainline Plan Candidate):** Onboarding guide in README, canonical preview workflows, CI automation, accessibility/console hygiene, cross-browser qualification, and clean-clone verification ([`docs/development/PHASE_8_IMPLEMENTATION_PLAN.md`](docs/development/PHASE_8_IMPLEMENTATION_PLAN.md)).
 - **Modular Visual Skins (Deferred / Future Presentation):** Support for interchangeable material schemes, wireframe views, or custom visual themes without altering puzzle mechanics.
-- **AI-Guided Search (Phase 6 — Not Started):** Offline PyTorch-trained neural heuristics and value networks integrated into guided tree search.
-- **Computer Vision State Ingestion (Phase 7 — Not Started):** Local-first camera capture to recognize physical cube faces, reconstruct a candidate discrete state, validate consistency/reachability, allow user corrections, and generate step-by-step 3D visual solving guidance.
+- **AI-Guided Search (Phase 6 — Deferred / Optional Future Research Track):** Offline PyTorch-trained neural heuristics and value networks integrated into guided tree search.
+- **Computer Vision State Ingestion (Phase 7 — Deferred / Optional Future Expansion Track):** Local-first camera capture to recognize physical cube faces, reconstruct a candidate discrete state, validate consistency/reachability, allow user corrections, and generate step-by-step 3D visual solving guidance.
 
 ---
 

@@ -1,8 +1,9 @@
 # ROADMAP.md — Project Lifecycle & Dependency-Ordered Milestones
 
-> **Current Milestone:** `Phase 5 — Research & Benchmarking Harness (Completed & Accepted)`
-> **Next Milestone:** `Phase 6 — Neural Heuristic & AI-Guided Search (Not Started)`
-> **Previous Milestone:** `Phase 4 — Classical Solver Infrastructure (Completed & Accepted)`
+> **Current Milestone:** `Phase 8 — Product Completion & Public-Test Readiness (Planning / Preflight Complete; Implementation Not Started)`
+> **Next Milestone:** `Post-Phase 8 Maintenance & Deferred Research Tracks`
+> **Previous Milestone:** `Phase 5 — Research & Benchmarking Harness (Completed & Accepted)`
+> **Deferred Tracks:** `Phase 6 (Neural AI Search)` & `Phase 7 (Computer Vision)` (Deferred / Optional Research Tracks)
 
 ---
 
@@ -59,14 +60,17 @@
       ├─ 5C: Classical Comparative Research Runs & Report (Completed & Accepted)
       └─ 5D: Browser Research Mode, Dedicated Worker & E2E Acceptance (Completed & Accepted)
       │
-      ▼
-[ Phase 6: Neural Heuristic & AI-Guided Search ]
-      │
-      ▼
-[ Phase 7: Computer Vision State Ingestion ]
-      │
-      ▼
-[ Phase 8: System Polish, Verification & v1.0 Release ]
+      ├───────────────────────────────────────────────────────┐
+      ▼                                                       ▼
+[ Phase 8: Product Completion & Public-Test Readiness ]   [ Phase 6: Neural Heuristic & AI-Guided Search ]
+(Active Mainline — Planning / Preflight Complete)         (DEFERRED / OPTIONAL RESEARCH TRACK)
+      ├─ 8A: Repository & Tooling Foundation                  │
+      ├─ 8B: First-Time User Onboarding                       ▼
+      ├─ 8C: UX, Accessibility & Console Hygiene          [ Phase 7: Computer Vision State Ingestion ]
+      ├─ 8D: Browser Compatibility Qualification          (DEFERRED / OPTIONAL EXPANSION TRACK)
+      ├─ 8E: Public Repository Presentation
+      ├─ 8F: Clean-Clone Release-Style Acceptance
+      └─ 8G: Public-Test-Ready Formal Acceptance
 ```
 
 ---
@@ -323,44 +327,38 @@ Phase 0B is partitioned into four dependency-ordered subphases:
 
 ---
 
-### Phase 6: Neural Heuristic & AI-Guided Search
+### Phase 6: Neural Heuristic & AI-Guided Search (Deferred / Optional Research Track)
+- **Status:** `DEFERRED / OPTIONAL RESEARCH TRACK` (Not required for current public-test readiness; does not block Phase 8).
 - **Objective:** Develop an offline PyTorch training pipeline (`ml/`) to train neural value heuristics and integrate them into browser-based search.
-- **Prerequisites:** Completion of Phase 5.
-- **In-Scope:** Python training scripts managed with `uv` (Python version selected based on ML dependency compatibility), dataset generation, ONNX/JSON weight export, neural search worker.
-- **Out-of-Scope:** Real-time webcam state capture.
-- **Deliverables:**
-  - `ml/train.py`, `ml/model.py`
-  - Exported neural weights integrated into `packages/solvers`
-  - Research evaluation comparing classical Pattern Databases vs. Neural Heuristics.
-- **Verification:** Python test suite (`pytest`), benchmark comparison metrics.
-- **Acceptance Gate Criteria (`PHASE_6_PASS`):**
-  - [ ] Neural heuristic achieves $> 90\%$ branch reduction compared to uninformed search.
-  - [ ] Model weights load and evaluate within browser memory budgets ($< 20 \text{ MB}$).
+- **Prerequisites:** Optional future milestone following Phase 5.
+- **In-Scope (When Activated):** Python training scripts managed with `uv` (Python version selected based on ML dependency compatibility), dataset generation, ONNX/JSON weight export, neural search worker.
+- **Deliverables (Deferred):** `ml/train.py`, `ml/model.py`, exported neural weights, comparative research report.
 
 ---
 
-### Phase 7: Computer Vision State Ingestion
+### Phase 7: Computer Vision State Ingestion (Deferred / Optional Expansion Track)
+- **Status:** `DEFERRED / OPTIONAL PHYSICAL / VISION EXPANSION` (Not required for current public-test readiness; does not block Phase 8).
 - **Objective:** Enable webcam capture of physical Gear Cubes, automatic face segmentation, sticker color recognition, candidate state consistency validation, user correction, and 3D guided solving.
-- **Prerequisites:** Completion of Phase 6.
-- **In-Scope:** `packages/vision`, WebRTC camera interface, color calibration tool, candidate state validator, user-correction interface, guided step-by-step UI.
-- **Deliverables:**
-  - Browser camera scanner modal.
-  - Interactive state verification and manual correction screen.
-- **Verification:** Test image suite with varying lighting conditions; validation rejection of invalid candidate states.
-- **Acceptance Gate Criteria (`PHASE_7_PASS`):**
-  - [ ] Successfully recognizes and solves physically scrambled Gear Cube from camera input.
-  - [ ] Zero camera stream images persisted or uploaded to external servers.
+- **Prerequisites:** Optional future milestone.
+- **In-Scope (When Activated):** `packages/vision`, WebRTC camera interface, color calibration tool, candidate state validator, user-correction interface, guided step-by-step UI.
+- **Deliverables (Deferred):** Browser camera scanner modal, interactive state verification and correction screen.
 
 ---
 
-### Phase 8: System Polish, Verification & v1.0 Release
-- **Objective:** Final end-to-end integration, performance optimization, accessibility audit, complete documentation synchronization, and v1.0 release packaging.
-- **Prerequisites:** Completion of Phase 7.
-- **In-Scope:** Full test pyramid execution, production build bundling, Lighthouse audit, final documentation sign-off.
-- **Deliverables:**
-  - Production static bundle.
-  - Comprehensive research summary paper / report in `docs/research/`.
-- **Verification:** 100% automated test pass rate across Vitest and Playwright; Lighthouse performance score $\ge 95$.
+### Phase 8: Product Completion & Public-Test Readiness (Active Mainline — Planning Candidate)
+- **Status:** `PLANNING / PREFLIGHT COMPLETE (Implementation Not Started)` ([`docs/development/PHASE_8_IMPLEMENTATION_PLAN.md`](./PHASE_8_IMPLEMENTATION_PLAN.md))
+- **Objective:** Establish complete repository onboarding, self-contained tooling, console and accessibility hygiene, browser compatibility qualification, and clean-machine verification so that an unrelated technically capable user can clone, install, launch, understand, and test GearCube Lab without developer-specific assistance.
+- **Prerequisites:** Completion of Phase 5 (Completed & Accepted on Main).
+- **Target Condition:** `PUBLIC_TEST_READY` (Candidate).
+- **In-Scope:**
+  - **Phase 8A (Repository & Tooling Foundation):** Canonical `"preview"` scripts in root and `apps/web` package manifests; GitHub Actions continuous integration workflow (`.github/workflows/verify.yml`).
+  - **Phase 8B (First-Time User Onboarding):** Comprehensive `README.md` rewrite covering prerequisites, quickstart, build/preview/test commands, Play Mode guide (3D camera, face controls, two-step mode, scramble, history, keyboard shortcuts), Solve Mode guide, Research Mode guide, CLI benchmark instructions, limitations, and browser support.
+  - **Phase 8C (UX, Accessibility & Console Hygiene):** Repository-owned favicon asset resolving 404 console errors; form input `id`/`name` attributes in `ResearchPanel.tsx`; zero unexpected app-owned console errors or page exceptions.
+  - **Phase 8D (Browser Compatibility Qualification):** Qualification and truth-in-documentation across Chromium, Firefox, and WebKit; selective addition of stable browser projects to Playwright matrix.
+  - **Phase 8E (Public Repository Presentation & Docs Finalization):** Synchronization across all canonical docs (`README.md`, `docs/README.md`, `ROADMAP.md`, `PROJECT_BLUEPRINT.md`, `SYSTEM_ARCHITECTURE.md`, `TEST_STRATEGY.md`, `DEPLOYMENT.md`); formalization of licensing policy (`LICENSE_POLICY: UNRESOLVED / HUMAN DECISION REQUIRED`).
+  - **Phase 8F (Clean-Clone Release-Style Acceptance):** Disposable fresh-clone verification (`npm ci`, `npm run verify`, `npm run test:e2e`, `npm run build`, `npm run preview`, `npm run dev`, security vulnerability audit, secret candidate scan, artifact scan, multi-viewport interactive browser smoke test).
+  - **Phase 8G (Public-Test-Ready Formal Acceptance):** Acceptance record review, independent ChatGPT review, and fast-forward promotion to `main`.
+- **Out-of-Scope:** Feature expansion (drag-to-turn, new puzzle geometries, Daiso remodel, AI/neural heuristics, computer vision, accounts, databases, cloud sync, persistence).
 - **Acceptance Gate Criteria (`PHASE_8_PASS`):**
-  - [ ] All milestone criteria from Phases 0A–7 verified.
-  - [ ] Formal v1.0 release tag ready.
+  - [ ] All 22 Phase 8 hard gates defined in [`docs/development/PHASE_8_IMPLEMENTATION_PLAN.md`](./PHASE_8_IMPLEMENTATION_PLAN.md) pass without exception.
+  - [ ] Repository verified ready for external public testing.

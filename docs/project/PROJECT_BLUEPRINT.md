@@ -304,7 +304,7 @@ Refer to [`docs/development/TEST_STRATEGY.md`](../development/TEST_STRATEGY.md) 
 
 ## 27. Development Phases
 
-The project roadmap is structured into 9 sequential phases (detailed in [`docs/development/ROADMAP.md`](../development/ROADMAP.md)):
+The project roadmap is structured into dependency-ordered phases (detailed in [`docs/development/ROADMAP.md`](../development/ROADMAP.md) and [`docs/development/PHASE_8_IMPLEMENTATION_PLAN.md`](../development/PHASE_8_IMPLEMENTATION_PLAN.md)):
 - **Phase 0A:** Project Governance & Canonical Design Baseline *(Accepted)*
 - **Phase 0B:** Physical Mechanism Characterization & Puzzle Contract Synthesis *(Accepted)*
 - **Phase 1:** Discrete Gear Cube Core & State Engine *(Accepted)*
@@ -312,9 +312,9 @@ The project roadmap is structured into 9 sequential phases (detailed in [`docs/d
 - **Phase 3:** Interactive UI, History, Undo/Redo, Keyboard Controls, and Responsive Layout *(Accepted)*
 - **Phase 4:** Classical Solver Infrastructure (Web Worker, BFS / Bidirectional BFS / IDA*, Solve Mode UI & Playback) *(Implemented & Accepted)*
 - **Phase 5:** Research Benchmark Framework & Empirical Evaluation *(Completed & Accepted — Phases 5A–5D Accepted)*
-- **Phase 6:** Neural Heuristic & AI-Guided Search *(Planned)*
-- **Phase 7:** Camera-Based Physical State Reconstruction & Guided Solver *(Planned)*
-- **Phase 8:** Integration, Polish, Reproducibility, and v1.0 Release *(Planned)*
+- **Phase 8:** Product Completion & Public-Test Readiness *(Active Product Mainline — Preflight Complete; Implementation Plan Candidate)*
+- **Phase 6:** Neural Heuristic & AI-Guided Search *(Deferred / Optional Research Track)*
+- **Phase 7:** Camera-Based Physical State Reconstruction & Guided Solver *(Deferred / Optional Expansion Track)*
 
 ---
 
