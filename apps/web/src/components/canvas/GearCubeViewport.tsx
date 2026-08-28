@@ -5,7 +5,7 @@
  * TimelineScrubber, ScramblePanel, SolvePanel, PlaybackControls, and ResearchPanel overlays.
  */
 
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import { isSolved, serializeLogicalState, type Move } from '@gearcube/core';
@@ -82,6 +82,8 @@ export const GearCubeViewport: React.FC = () => {
   const [seed, setSeed] = useState<string>('GearCube-Lab');
   const [selectedAlgorithm, setSelectedAlgorithm] = useState<SolverAlgorithm>('IDA_STAR');
   const [playbackMetadata, setPlaybackMetadata] = useState<SolutionPlaybackMetadata | null>(null);
+  const solverAcceptanceTokenRef = useRef<object | null>(null);
+  const currentAcceptanceToken = solverAcceptanceTokenRef.current;
 
   const { state: solverWorkerState, startSearch, cancelSearch } = useSolverWorker();
   const {
@@ -100,6 +102,7 @@ export const GearCubeViewport: React.FC = () => {
     if (!isSessionIdle(app.session)) {
       return;
     }
+    solverAcceptanceTokenRef.current = null;
     cancelSearch();
     setPlaybackMetadata(null);
     setWorkspaceMode('RESEARCH');
@@ -124,6 +127,7 @@ export const GearCubeViewport: React.FC = () => {
   const handleTriggerMove = useCallback(
     (move: Move) => {
       if (workspaceMode !== 'PLAY') return;
+      solverAcceptanceTokenRef.current = null;
       cancelSearch();
       setPlaybackMetadata(null);
       setApp((prev) => startPlayMove(prev, move, performance.now()));
@@ -145,6 +149,7 @@ export const GearCubeViewport: React.FC = () => {
 
   const handleUndo = useCallback(() => {
     if (workspaceMode !== 'PLAY') return;
+    solverAcceptanceTokenRef.current = null;
     cancelSearch();
     setPlaybackMetadata(null);
     setApp((prev) => undoPlay(prev));
@@ -152,6 +157,7 @@ export const GearCubeViewport: React.FC = () => {
 
   const handleRedo = useCallback(() => {
     if (workspaceMode !== 'PLAY') return;
+    solverAcceptanceTokenRef.current = null;
     cancelSearch();
     setPlaybackMetadata(null);
     setApp((prev) => redoPlay(prev));
@@ -159,6 +165,7 @@ export const GearCubeViewport: React.FC = () => {
 
   const handleResetBaseline = useCallback(() => {
     if (workspaceMode !== 'PLAY') return;
+    solverAcceptanceTokenRef.current = null;
     cancelSearch();
     setPlaybackMetadata(null);
     setApp((prev) => backToBaselinePlay(prev));
@@ -167,6 +174,7 @@ export const GearCubeViewport: React.FC = () => {
   const handleScrub = useCallback(
     (index: number) => {
       if (workspaceMode !== 'PLAY') return;
+      solverAcceptanceTokenRef.current = null;
       cancelSearch();
       setPlaybackMetadata(null);
       setApp((prev) => scrubPlay(prev, index));
@@ -176,6 +184,7 @@ export const GearCubeViewport: React.FC = () => {
 
   const handleScramble = useCallback(() => {
     if (workspaceMode !== 'PLAY') return;
+    solverAcceptanceTokenRef.current = null;
     cancelSearch();
     setPlaybackMetadata(null);
     setApp((prev) => applyScrambleToPlay(prev, seed));
@@ -185,21 +194,30 @@ export const GearCubeViewport: React.FC = () => {
   const handleSolve = useCallback(() => {
     if (workspaceMode !== 'PLAY') return;
     if (!isSessionIdle(app.session)) return;
+    const token = {};
+    solverAcceptanceTokenRef.current = token;
     setPlaybackMetadata(null);
     startSearch(selectedAlgorithm, app.session.currentState);
   }, [workspaceMode, app.session, selectedAlgorithm, startSearch]);
 
   const handleCancelSearch = useCallback(() => {
+    solverAcceptanceTokenRef.current = null;
     cancelSearch();
   }, [cancelSearch]);
 
   // Defensive Solution Acceptance Gate (active only in PLAY mode)
   useEffect(() => {
-    if (workspaceMode === 'PLAY' && solverWorkerState.status === 'SOLVED') {
+    if (
+      workspaceMode === 'PLAY' &&
+      solverWorkerState.status === 'SOLVED' &&
+      currentAcceptanceToken !== null &&
+      solverAcceptanceTokenRef.current === currentAcceptanceToken
+    ) {
       if (
         isSessionIdle(app.session) &&
         serializeLogicalState(app.session.currentState) === solverWorkerState.searchStartStateKey
       ) {
+        solverAcceptanceTokenRef.current = null;
         setPlaybackMetadata((prev) => {
           if (prev && prev.solutionStartStateKey === solverWorkerState.searchStartStateKey) {
             return prev;
@@ -212,7 +230,13 @@ export const GearCubeViewport: React.FC = () => {
         });
       }
     }
-  }, [workspaceMode, solverWorkerState, app.session, app.history.cursorIndex]);
+  }, [
+    workspaceMode,
+    solverWorkerState,
+    app.session,
+    app.history.cursorIndex,
+    currentAcceptanceToken,
+  ]);
 
   // Playback Control Handlers
   const handlePlay = useCallback(() => {
