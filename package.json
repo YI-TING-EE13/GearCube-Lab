@@ -13,6 +13,7 @@
   "scripts": {
     "dev": "npm run dev --workspace=@gearcube/web",
     "build": "npm run build --workspace=@gearcube/web",
+    "preview": "npm run preview --workspace=@gearcube/web",
     "test": "vitest run",
     "typecheck": "npm run typecheck --workspaces --if-present",
     "check:core-deps": "node scripts/check-core-deps.mjs",
