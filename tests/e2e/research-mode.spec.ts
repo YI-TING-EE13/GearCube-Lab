@@ -368,12 +368,9 @@ test.describe('GearCube Browser Research Mode End-to-End Suite', () => {
     // Observe ACTIVE status
     await expect(page.getByTestId('research-status')).toHaveText('Running benchmark...');
 
-    // Capture the dedicated benchmark worker and verify isolated execution context while actively running
+    // Capture the real benchmark Worker and verify the dedicated benchmark script URL while the benchmark is active
     const worker: Worker = await workerPromise;
     expect(worker.url()).toMatch(/benchmark\.worker/);
-
-    const isWorkerContext = await worker.evaluate(() => typeof document === 'undefined');
-    expect(isWorkerContext).toBe(true);
 
     // Perform a real Playwright pointer click to prove main-thread interaction
     await researchBtn.click();

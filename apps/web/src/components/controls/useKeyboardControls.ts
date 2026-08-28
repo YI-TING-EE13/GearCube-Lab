@@ -1,4 +1,4 @@
-﻿import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import type { Face, Direction, Move } from '@gearcube/core';
 import type { StagedMoveSession } from '../cube/animation';
 
@@ -160,31 +160,26 @@ export function isActionAllowed(
 }
 
 /**
- * React hook to bind keyboard event listener to window.
+ * React hook to bind keyboard event listener to window with a stable listener lifecycle.
  */
-export function useKeyboardControls({
-  isIdle,
-  isAnimating,
-  stagedMove,
-  canUndo,
-  canRedo,
-  onTriggerMove,
-  onUndo,
-  onRedo,
-}: KeyboardControlsOptions): void {
+export function useKeyboardControls(options: KeyboardControlsOptions): void {
+  const latestOptionsRef = useRef<KeyboardControlsOptions>(options);
+  latestOptionsRef.current = options;
+
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {
+      const current = latestOptionsRef.current;
       const action = resolveKeyboardAction(event);
       if (!action) {
         return;
       }
 
       const allowed = isActionAllowed(action, {
-        isIdle,
-        isAnimating,
-        stagedMove,
-        canUndo,
-        canRedo,
+        isIdle: current.isIdle,
+        isAnimating: current.isAnimating,
+        stagedMove: current.stagedMove,
+        canUndo: current.canUndo,
+        canRedo: current.canRedo,
       });
 
       if (!allowed) {
@@ -194,11 +189,11 @@ export function useKeyboardControls({
       event.preventDefault();
 
       if (action.type === 'MOVE') {
-        onTriggerMove(action.move);
+        current.onTriggerMove(action.move);
       } else if (action.type === 'UNDO') {
-        onUndo();
+        current.onUndo();
       } else if (action.type === 'REDO') {
-        onRedo();
+        current.onRedo();
       }
     }
 
@@ -206,5 +201,5 @@ export function useKeyboardControls({
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [isIdle, isAnimating, stagedMove, canUndo, canRedo, onTriggerMove, onUndo, onRedo]);
+  }, []);
 }
