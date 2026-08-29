@@ -346,11 +346,11 @@ Phase 0B is partitioned into four dependency-ordered subphases:
 
 ---
 
-### Phase 8: Product Completion & Public-Test Readiness (Active Mainline — 8A–8F Accepted / 8G Qualified)
-- **Status:** `QUALIFIED (8A–8F COMPLETED & ACCEPTED; 8G FINAL ACCEPTANCE QUALIFIED)` ([`docs/development/PHASE_8_IMPLEMENTATION_PLAN.md`](./PHASE_8_IMPLEMENTATION_PLAN.md), [`docs/development/PHASE_8_ACCEPTANCE_RECORD.md`](./PHASE_8_ACCEPTANCE_RECORD.md))
+### Phase 8: Product Completion & Public-Test Readiness (Completed & Accepted)
+- **Status:** `COMPLETED & ACCEPTED ON MAIN` ([`docs/development/PHASE_8_IMPLEMENTATION_PLAN.md`](./PHASE_8_IMPLEMENTATION_PLAN.md), [`docs/development/PHASE_8_ACCEPTANCE_RECORD.md`](./PHASE_8_ACCEPTANCE_RECORD.md))
 - **Objective:** Establish complete repository onboarding, self-contained tooling, console and accessibility hygiene, browser compatibility qualification, and clean-machine verification so that an unrelated technically capable user can clone, install, launch, understand, and test GearCube Lab without developer-specific assistance.
 - **Prerequisites:** Completion of Phase 5 (Completed & Accepted on Main).
-- **Target Condition:** `PUBLIC_TEST_READY` (Becomes authoritative when the final Phase 8 acceptance record commit is fast-forward promoted to `main`).
+- **Target Condition:** `PUBLIC_TEST_READY: YES` (Authoritative on `main` at `c92a2832dfcb8affaaa14725001ec7dcb15d2800`).
 - **Subphase Status & Decomposition:**
   - **Phase 8A (Repository & Tooling Foundation):** Canonical `"preview"` scripts in root and `apps/web` package manifests; GitHub Actions continuous integration workflow (`.github/workflows/verify.yml`) — **Status:** `COMPLETED & ACCEPTED`.
   - **Phase 8B (First-Time User Onboarding):** Comprehensive `README.md` rewrite covering prerequisites, quickstart, build/preview/test commands, Play Mode guide (3D camera, face controls, two-step mode, scramble, history, keyboard shortcuts), Solve Mode guide, Research Mode guide, CLI benchmark instructions, limitations, and browser support — **Status:** `COMPLETED & ACCEPTED`.
@@ -358,9 +358,30 @@ Phase 0B is partitioned into four dependency-ordered subphases:
   - **Phase 8D (Browser Compatibility Qualification):** Qualification across Chromium, Firefox, and WebKit (41 / 41 passing on all three engines; 123 project-test executions total; hosted Linux CI runs Firefox headed under Xvfb with CI WebGL2 preference; Safari not separately verified) — **Status:** `COMPLETED & ACCEPTED`.
   - **Phase 8E (Public Repository Presentation & Docs Finalization):** Synchronization across canonical docs, Actions modernization to v7, and formal adoption of the MIT License (`LICENSE_POLICY: MIT / HUMAN APPROVED`) — **Status:** `COMPLETED & ACCEPTED`.
   - **Phase 8F (Clean-Clone Release-Style Acceptance):** Disposable fresh-clone verification (`npm ci`, `npm run verify`, `npm run test:e2e` against production preview, `npm run build`, `npm run preview`, `npm run dev`, security vulnerability audit, secret candidate scan, artifact scan, multi-viewport interactive browser smoke test, headless CLI verification) — **Status:** `COMPLETED & ACCEPTED`.
-  - **Phase 8G (Public-Test-Ready Formal Acceptance):** Acceptance record review, independent ChatGPT review, and fast-forward promotion to `main` — **Status:** `FINAL ACCEPTANCE QUALIFIED`.
+  - **Phase 8G (Public-Test-Ready Formal Acceptance):** Acceptance record review, independent ChatGPT review, and fast-forward promotion to `main` — **Status:** `COMPLETED & ACCEPTED`.
 - **Out-of-Scope:** Feature expansion (drag-to-turn, new puzzle geometries, Daiso remodel, AI/neural heuristics, computer vision, accounts, databases, cloud sync, persistence).
 - **Acceptance Gate Criteria (`PHASE_8_PASS`):**
   - [x] All 22 Phase 8 hard gates defined in [`docs/development/PHASE_8_IMPLEMENTATION_PLAN.md`](./PHASE_8_IMPLEMENTATION_PLAN.md) pass without exception.
   - [x] Formal acceptance record authored in [`docs/development/PHASE_8_ACCEPTANCE_RECORD.md`](./PHASE_8_ACCEPTANCE_RECORD.md).
-  - [x] Candidate qualified for fast-forward promotion to `main`.
+  - [x] Candidate fast-forward promoted to `main`.
+
+---
+
+### Phase 9: GitHub Pages Deployment & Public Hosting (Active Mainline)
+- **Status:** `ACTIVE MAINLINE (9A & 9B COMPLETED & ACCEPTED; 9C IN PROGRESS)`
+- **Objective:** Establish the automated deployment infrastructure, dynamic subpath routing, and verification gates required to host GearCube Lab on GitHub Pages, execute the first verified live deployment, and finalize public-facing hosting documentation.
+- **Prerequisites:** Completion and acceptance of Phase 8 (`PUBLIC_TEST_READY: YES` on `main`).
+- **Target Condition:** `LIVE_GITHUB_PAGES: YES`, `PUBLIC_HOSTING: ACTIVE`.
+- **Subphase Status & Decomposition:**
+  - **Phase 9A (GitHub Pages Deployment Foundation & Subpath Qualification):** Dynamic Vite base resolution via `actions/configure-pages`, verification-gated `.github/workflows/deploy-pages.yml` workflow, and subpath worker/asset bundle qualification — **Status:** `COMPLETED & ACCEPTED`.
+  - **Phase 9B (First Live GitHub Pages Deployment):** Enabling GitHub Pages workflow mode, fast-forward promotion to `main` (`febe270621892fc5b985af24600ef0fa4be61e36`), automated deployment execution via `workflow_run`, and multi-browser live acceptance testing on `https://yi-ting-ee13.github.io/GearCube-Lab/` — **Status:** `COMPLETED & ACCEPTED`.
+  - **Phase 9C (Public Hosting Documentation & Deployment Closeout):** Updating `README.md` with Play Online links, updating `docs/README.md`, synchronizing `DEPLOYMENT.md` with live evidence, and closing out `ROADMAP.md` — **Status:** `IN PROGRESS`.
+- **Deliverables:**
+  - Deployment workflow `.github/workflows/deploy-pages.yml` with strict qualification gates (`Verify` success, `main` push, attempt 1, exact SHA checkout, stale-main protection).
+  - Live public site at `https://yi-ting-ee13.github.io/GearCube-Lab/`.
+  - Synchronized documentation in `README.md`, `docs/README.md`, `docs/operations/DEPLOYMENT.md`, and `docs/development/ROADMAP.md`.
+- **Verification:**
+  - 100% test pass on `main` Verify workflow (123 / 123 E2E across Chromium, Firefox, WebKit).
+  - Successful `Deploy GitHub Pages` workflow run.
+  - Live HTTPS reachability (HTTP 200) and live functional smoke testing across Play, Solve, and Research modes in Chromium, Firefox, and WebKit.
+  - Zero asset 404s, zero worker 404s, zero third-party requests, and zero console errors on live site.

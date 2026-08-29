@@ -20,7 +20,17 @@ It combines a 3D playable puzzle with mechanically coupled gear kinematics, mult
 
 ---
 
-## Quick Start
+## Play Online
+
+GearCube Lab is available as a static GitHub Pages web application (no installation or repository cloning required):
+
+https://yi-ting-ee13.github.io/GearCube-Lab/
+
+---
+
+## Quick Start (Local Development)
+
+To run, build, or develop GearCube Lab locally:
 
 ### Prerequisites
 
@@ -195,21 +205,21 @@ With `--json` and/or `--csv`, the CLI writes those report files. If no output-fi
 ## Project Status
 
 ```
-Phases 0–5: Completed & Accepted
-Active Mainline: Phase 8 (Product Completion & Public-Test Readiness)
-  - Phase 8A (Repository & Tooling Foundation): Completed & Accepted
-  - Phase 8B (First-Time User Onboarding): Completed & Accepted
-  - Phase 8C (UX, Accessibility & Console Hygiene): Completed & Accepted
-  - Phase 8D (Browser Compatibility Qualification): Completed & Accepted
-  - Phase 8E (Public Repository Presentation & Docs Finalization): Completed & Accepted
-  - Phase 8F (Clean-Clone Release-Style Acceptance): Completed & Accepted
-  - Phase 8G (Public-Test-Ready Formal Acceptance): Final Acceptance Qualified
+Phases 0–8: Completed & Accepted
+Active Mainline: Phase 9 (GitHub Pages Deployment & Public Hosting)
+  - Phase 9A (GitHub Pages Deployment Foundation & Subpath Qualification): Completed & Accepted
+  - Phase 9B (First Live GitHub Pages Deployment): Completed & Accepted
+  - Phase 9C (Public Hosting Documentation & Deployment Closeout): In Progress
 Deferred Tracks:
   - Phase 6 (AI-Guided Search): Deferred Optional Research
   - Phase 7 (Physical Model & Vision Expansion): Deferred Optional Expansion
+
+PUBLIC_TEST_READY: YES
+LIVE_GITHUB_PAGES: YES
+PUBLIC_HOSTING: ACTIVE
 ```
 
-*Note: The PUBLIC_TEST_READY status becomes authoritative when the final Phase 8 acceptance-record commit is fast-forward promoted to `main`.*
+*Note: The canonical public site is hosted at `https://yi-ting-ee13.github.io/GearCube-Lab/` via verification-gated GitHub Actions.*
 
 For complete phase history, specifications, and gating criteria, refer to [`ROADMAP.md`](docs/development/ROADMAP.md), [`PHASE_8_IMPLEMENTATION_PLAN.md`](docs/development/PHASE_8_IMPLEMENTATION_PLAN.md), and [`PHASE_8_ACCEPTANCE_RECORD.md`](docs/development/PHASE_8_ACCEPTANCE_RECORD.md).
 

@@ -1,74 +1,125 @@
 # DEPLOYMENT.md — Production Hosting & Deployment Strategy
 
-> **Document Status:** `DECIDED` (Strategy Defined; Deployment Execution Not Yet Performed)
-> **Target Architecture:** Static HTTPS Web Application & Client-Side Edge Distribution
+> **Document Status:** `ACTIVE / DEPLOYED` (Live GitHub Pages Deployment Verified)
+> **Live Public URL:** https://yi-ting-ee13.github.io/GearCube-Lab/
+> **Target Architecture:** Static HTTPS Web Application on GitHub Pages via Verification-Gated GitHub Actions
 
 ---
 
 ## 1. Deployment Philosophy & Target Environment
 
-GearCube Lab is architected as a **100% static, client-side web application** for all initial simulation, classical solving, and research benchmarking phases (Phases 0 through 5).
+GearCube Lab is architected as a **100% static, client-side web application** across all simulation, classical solving, and research benchmarking workspaces (Phases 0 through 5, qualified for public testing in Phase 8 and live deployment in Phase 9).
 
 ### Key Deployment Characteristics:
-- **Zero Server Infrastructure:** The core application requires no backend API server, database, or server-side compute. All state mutations, 3D rendering, and graph searches execute within the user's browser.
-- **Static HTTPS Hosting:** Can be deployed to any static CDN host supporting modern web standards (e.g., GitHub Pages, Cloudflare Pages, Vercel Static, Netlify, AWS S3 + CloudFront).
-- **Web Worker Support:** The hosting environment and bundling configuration must deliver Web Worker scripts as standard ES modules with appropriate MIME types (`application/javascript`).
-
-> [!NOTE]
-> Hosting providers are not yet permanently selected. Any modern static HTTPS provider meeting the requirements below is compatible.
+- **Zero Server Infrastructure:** The core application requires no backend API server, database, or server-side compute. All state transitions, 3D animations, and search algorithms execute locally within the user's browser.
+- **GitHub Pages Static Hosting:** The live public application is hosted as a GitHub Pages site served securely over HTTPS.
+- **Web Worker Support:** Both the classical solver engine (`solver.worker.ts`) and the research benchmarking harness (`benchmark.worker.ts`) are compiled as dedicated Web Worker bundles, delivered with proper MIME types (`application/javascript`), and executed off the main UI thread.
 
 ---
 
-## 2. Browser & Security Requirements
+## 2. Dynamic Subpath Base Configuration
 
-### 2.1. HTTPS Enforcement
-- **Mandatory HTTPS:** Secure context (`https://`) is strictly required in production to support:
-  - Web Workers and modern WebGL2 rendering contexts.
-  - WebRTC `navigator.mediaDevices.getUserMedia` for the future Phase 7 webcam state scanner.
+- **Local Development:** Normal local development (`npm run dev`) and local preview (`npm run preview`) serve from the standard root base (`/`).
+- **GitHub Pages Subpath:** In the GitHub Pages deployment workflow, the repository base path is dynamically resolved via `actions/configure-pages` (`steps.pages.outputs.base_path` -> `/GearCube-Lab`) and normalized to `/GearCube-Lab/`.
+- **Vite Build Contract:** The base path is passed dynamically via CLI (`npm run build --workspace=@gearcube/web -- --base="/GearCube-Lab/"`), preserving a clean, unmutated `vite.config.ts`.
 
-### 2.2. Cross-Origin & Isolation Headers
-If high-resolution timers (`performance.now()`) or shared memory (`SharedArrayBuffer`) are evaluated for advanced parallel solvers in future phases, the hosting server should configure the following response headers:
-```http
-Cross-Origin-Opener-Policy: same-origin
-Cross-Origin-Embedder-Policy: require-corp
+---
+
+## 3. Verification-Gated Continuous Deployment Workflow
+
+Production deployment is fully automated and strictly gated by the canonical test suite via `.github/workflows/deploy-pages.yml`.
+
+### 3.1. Control-Flow Architecture
+
+```text
+main branch push
+      ↓
+Verify Workflow (.github/workflows/verify.yml)
+      ├─ Workspace verify (typecheck, boundary checks, Vitest 444/444)
+      └─ Parallel Playwright E2E matrix (Chromium 41/41, Firefox 41/41, WebKit 41/41)
+      ↓ (attempt 1 == success)
+Deploy GitHub Pages Workflow (.github/workflows/deploy-pages.yml via workflow_run)
+      ├─ Checkout exact verified SHA (github.event.workflow_run.head_sha)
+      ├─ Stale-main guard (verifies origin/main equals verified SHA)
+      ├─ Setup Node.js 22.17.1 & npm ci
+      ├─ Configure GitHub Pages & Build with dynamic base (/GearCube-Lab/)
+      ├─ Upload Pages artifact (apps/web/dist)
+      └─ Deploy to github-pages environment
 ```
 
-### 2.3. Zero-Secret Posture
-- Under no circumstances will private API keys, proprietary tokens, or backend credentials be bundled into client-side production JavaScript.
-- All puzzle solving, state manipulation, and heuristic evaluations are open and local-first.
+### 3.2. Hard Qualification Gate
 
----
+The deployment workflow runs only when the triggering `Verify` workflow satisfies all four conditions:
+```yaml
+if: >
+  github.event.workflow_run.conclusion == 'success' &&
+  github.event.workflow_run.head_branch == 'main' &&
+  github.event.workflow_run.event == 'push' &&
+  github.event.workflow_run.run_attempt == 1
+```
 
-## 3. Camera & Vision Security Posture (Future Phase 7)
-
-When camera-based cube reconstruction is introduced in Phase 7:
-1. **Explicit User Consent:** The browser's native permission modal must be triggered only when the user explicitly clicks "Scan Physical Cube".
-2. **Local-First Processing:** Image frames from the camera feed are processed strictly in-memory via HTML5 canvas/WebGL and discarded immediately.
-3. **No Automatic Persistence:** Captured images must never be transmitted to external servers or persisted to permanent cloud storage by default.
+- Non-main branches (`phase/**`), pull requests, manual workflow dispatches, failed Verify runs, cancelled runs, and rerun attempts ($>1$) **never** trigger deployment.
+- **Exact Verified Checkout:** `actions/checkout` checks out `github.event.workflow_run.head_sha`.
+- **Stale-Main Protection:** A pre-build step queries `git ls-remote origin refs/heads/main` to ensure `main` has not advanced past the tested commit, preventing stale deployments.
+- **Zero-Secret Posture:** The workflow uses only standard GitHub Actions OIDC tokens (`pages: write`, `id-token: write`). No custom PATs or repository secrets are required.
+- **No `gh-pages` Branch:** Deployments use official GitHub Pages artifact uploads; `dist/` is never committed to Git history.
 
 ---
 
 ## 4. Build & Static Distribution Layout
 
-The production bundle generated by `npm run build` (in `apps/web/dist`) compiles to the following static distribution structure:
+The production bundle generated in `apps/web/dist` compiles to the following static distribution structure:
 
 ```text
 dist/
-├── index.html                  # Main HTML entry point
-├── favicon.svg                 # SVG favicon asset
+├── index.html                               # Main HTML entry point (base-prefixed)
+├── favicon.svg                              # SVG favicon asset
 └── assets/
-    ├── index-[hash].js         # Application client bundle (React / Three.js / R3F)
-    ├── index-[hash].css        # Application stylesheets
-    └── solver.worker-[hash].js # Dedicated Web Worker bundle
+    ├── index-[hash].js                      # Application client bundle (React / Three.js / R3F)
+    ├── index-[hash].css                     # Application stylesheets
+    ├── solver.worker-[hash].js              # Dedicated classical solver Web Worker bundle
+    └── benchmark.worker-[hash].js           # Dedicated research benchmark Web Worker bundle
 ```
+
+All asset references in `index.html` and worker bundle instantiations resolve beneath `/GearCube-Lab/assets/`. Zero unresolved raw TypeScript worker URLs remain in production artifacts.
 
 ---
 
-## 5. Future Production Deployment Validation Checklist (Post-Phase 8)
+## 5. Browser & Security Posture
 
-If/when formal public hosting and production web deployment are pursued following Phase 8 public-test readiness, the deployment candidate should satisfy:
-- [ ] Static bundle builds successfully with zero TypeScript compiler errors (`npm run build`).
-- [ ] Application loads and renders 3D viewport on target desktop browsers (Chromium, Firefox, WebKit; Safari not separately verified).
-- [ ] Solver Web Worker spawns and communicates over HTTPS without CORS or MIME type violations.
-- [ ] Zero network requests to third-party tracking or telemetry services without opt-in.
-- [ ] Lighthouse audit targets: Performance $\ge 90$, Accessibility $\ge 95$, Best Practices $\ge 95$.
+### 5.1. HTTPS Enforcement
+- **Mandatory HTTPS:** Secure context (`https://`) is enforced on GitHub Pages, ensuring proper permissions for Web Workers and WebGL2 contexts.
+
+### 5.2. Browser Compatibility Baseline
+- **Automated Verification:** Verified continuously via automated test suites across Chromium, Firefox, and WebKit (123 / 123 E2E tests passing). On hosted Linux CI, Firefox executes headed under Xvfb with a CI WebGL2 preference.
+- **Safari Qualification Notice:** Native Safari has not been separately verified.
+
+### 5.3. Zero-Secret & Privacy Posture
+- Under no circumstances are private API keys, proprietary tokens, or backend credentials bundled into client-side JavaScript.
+- Zero network requests are made to third-party telemetry, tracking, or analytics services.
+
+### 5.4. Camera & Vision Posture (Future Phase 7)
+When camera-based puzzle reconstruction is introduced in Phase 7:
+1. **Explicit User Consent:** Native permission modals trigger only upon explicit user action.
+2. **Local-First Processing:** Video frames are processed in-memory via HTML5 canvas/WebGL and discarded immediately.
+3. **No Automatic Persistence:** Captured images are never transmitted to external servers.
+
+---
+
+## 6. Live Deployment Record & Qualification Evidence
+
+### 6.1. Deployment Metadata
+- **Initial Live Deployment SHA:** `febe270621892fc5b985af24600ef0fa4be61e36`
+- **Main Verify Workflow Run:** `33254251003` (`conclusion: success`, Attempt 1, 123 / 123 E2E passed)
+- **Deploy GitHub Pages Workflow Run:** `33254681960` (`conclusion: success`)
+- **Hosting Target:** GitHub Pages (`environment: github-pages`, Deployment ID `6156109027`)
+- **Authoritative Public URL:** https://yi-ting-ee13.github.io/GearCube-Lab/
+
+### 6.2. Live Acceptance Smoke Results
+- **Public Reachability:** HTTPS 200 OK with valid security headers (`Strict-Transport-Security`).
+- **Initial 3D Render:** 3D viewport canvas rendered cleanly across Chromium, Firefox, and WebKit.
+- **Play Mode:** Two-step $90^\circ$ physical half-turn, move completion, and timeline undo to baseline verified.
+- **Solve Mode:** Deterministic scramble, real Solver Worker execution over HTTPS, solution generation, and animated playback to solved state verified.
+- **Research Mode:** Stratified benchmark suite execution in real Benchmark Worker, result summary table rendering, and structured JSON / CSV report downloads verified.
+- **Responsive Viewports:** Clean layout and zero document horizontal overflow verified across desktop ($1280 \times 800$), tablet ($768 \times 1024$), and mobile ($375 \times 667$).
+- **Network & Console Hygiene:** 0 asset 404s, 0 worker 404s, 0 MIME errors, 0 CORS errors, 0 third-party requests, and 0 console/page errors.

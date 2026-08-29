@@ -1,6 +1,8 @@
 # GearCube Lab Documentation Index
 
 Welcome to the canonical documentation tree for **GearCube Lab**.
+The live application is publicly hosted at [https://yi-ting-ee13.github.io/GearCube-Lab/](https://yi-ting-ee13.github.io/GearCube-Lab/).
+
 This directory contains the definitive specifications, architectural contracts, development protocols, and decision records for the project.
 
 ---
@@ -45,7 +47,7 @@ docs/
 │   ├── PHASE_5C_EXPERIMENT_PLAN.md     # Phase 5C Experiment Plan — Accepted
 │   └── PHASE_5_CLASSICAL_SOLVER_BENCHMARK_REPORT.md # Phase 5C Classical Solver Benchmark Report — Accepted
 ├── operations/
-│   └── DEPLOYMENT.md                   # Static HTTPS hosting, Web Worker rules, & security posture
+│   └── DEPLOYMENT.md                   # Static HTTPS hosting (GitHub Pages), Web Worker rules, & security posture
 ├── decisions/
 │   ├── ADR-0001-FOUNDATION.md          # Architecture Decision Record: Core foundations & tech stack
 │   ├── ADR-0002-STANDARD-GEAR-CUBE-REFERENCE.md # Decision Record: Standard Gear Cube model adoption
