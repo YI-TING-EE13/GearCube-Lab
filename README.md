@@ -264,4 +264,6 @@ All autonomous coding agents and human contributors must follow the instructions
 
 ## License
 
-Licensing terms have not yet been finalized for the public-test candidate; licensing policy remains unresolved pending human decision.
+GearCube Lab is licensed under the [MIT License](LICENSE).
+
+Copyright (c) 2026 YI-TING-EE13.

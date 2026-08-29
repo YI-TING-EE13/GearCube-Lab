@@ -62,7 +62,7 @@ The following authoritative classification governs Phase 8:
 
 ### P1 — Required Before Public-Test-Ready
 - **`[P1-01]` Missing External-User Onboarding & Quick Start:** `README.md` lacks explicit prerequisites (Node `>=22.12.0 <23`, `npm`), step-by-step commands (`git clone`, `npm ci`, `npm run dev`, `npm run build`, `npm run verify`), 3D camera controls guide, face controls / two-step staging guide, solver playback guide, research mode guide, and CLI benchmark instructions.
-- **`[P1-02]` Unresolved Open-Source Licensing Policy:** No `LICENSE` file currently exists. *Policy Decision:* The absence of a license does not prevent local technical execution, but final `PUBLIC_TEST_READY` acceptance requires an explicit human-approved licensing decision. Antigravity must not select a license autonomously (`LICENSE_POLICY: UNRESOLVED / HUMAN DECISION REQUIRED`).
+- **`[P1-02]` Open-Source Licensing Policy:** Formalization of the human-approved licensing decision (`LICENSE_POLICY: MIT / HUMAN APPROVED`). The repository provides the standard MIT `LICENSE` file and synchronized license terms.
 - **`[P1-03]` Roadmap Alignment & Strategy Rebaseline:** Canonical documentation across `ROADMAP.md`, `PROJECT_BLUEPRINT.md`, and `SYSTEM_ARCHITECTURE.md` historically showed Phase 6 and 7 as preceding Phase 8 and must be rebaselined to reflect Phase 6/7 deferred and Phase 8 active mainline.
 
 ### P2 — High-Value Completion & Quality Work
@@ -124,7 +124,7 @@ Phase 8 is strictly a **completion, onboarding, robustness, compatibility, and v
   │
   ├─ Phase 8E: Public Repository Presentation & Documentation Finalization
   │     ├─ Final synchronization across all canonical docs (README, docs/README, ROADMAP, BLUEPRINT, SYSTEM_ARCHITECTURE, TEST_STRATEGY, DEPLOYMENT)
-  │     └─ License decision formalization (LICENSE_POLICY: UNRESOLVED / HUMAN DECISION REQUIRED)
+  │     └─ License decision formalization (LICENSE_POLICY: MIT / HUMAN APPROVED)
   │
   ├─ Phase 8F: Clean-Clone Release-Style Acceptance
   │     ├─ Disposable clean-clone execution across all verification commands
@@ -188,7 +188,7 @@ Phase 8 is strictly a **completion, onboarding, robustness, compatibility, and v
 - **Objective:** Bring all canonical documentation into exact alignment with Phase 8A–8D implementation.
 - **Planned Implementation:**
   1. Synchronize `README.md`, `docs/README.md`, `ROADMAP.md`, `PROJECT_BLUEPRINT.md`, `SYSTEM_ARCHITECTURE.md`, `TEST_STRATEGY.md`, and `DEPLOYMENT.md`.
-  2. Formalize licensing decision once human decision is provided (`LICENSE_POLICY: UNRESOLVED / HUMAN DECISION REQUIRED` in planning).
+  2. Formalize the human-approved licensing decision (`LICENSE_POLICY: MIT / HUMAN APPROVED`) and adopt the standard MIT `LICENSE` file.
   3. Document known limitations, tested environments, and CI status badges/instructions.
   4. (Optional) Embed lightweight screenshots or demo GIFs if available.
 - **Verification:** `git diff --check`, full documentation link audit, strategy consistency audit.
