@@ -130,6 +130,18 @@ GearCube Lab supports full keyboard interaction in the Play workspace:
 
 ## Development & Verification
 
+### End-to-End Browser Setup
+
+Running `npm ci` installs Node.js and workspace dependencies, but does not download the Playwright-managed browser binaries required for browser automation.
+
+Before running the Playwright E2E test suite for the first time locally, install the browser binaries:
+
+```bash
+npx playwright install
+```
+
+*Note:* If the repository's Playwright dependency is updated in the future, rerun this command to ensure matching browser binaries. On supported Linux environments where system-level browser dependencies are missing, use `npx playwright install --with-deps`.
+
 ### Common Scripts
 
 | Command | Purpose |
@@ -140,7 +152,7 @@ GearCube Lab supports full keyboard interaction in the Play workspace:
 | `npm run preview` | Serve built production distribution locally |
 | `npm run verify` | Full verification gate: typecheck, pure core boundary check, Vitest unit suite, and production build |
 | `npm test` | Run the Vitest test suite across repository packages/workspaces |
-| `npm run test:e2e` | Run Playwright end-to-end browser test suite across configured projects (Chromium, Firefox, WebKit) |
+| `npm run test:e2e` | Run Playwright E2E browser test suite across Chromium, Firefox, and WebKit (requires browser binaries installed via `npx playwright install`) |
 | `npm run benchmark -- --config <path>` | Execute headless CLI benchmark suite |
 
 ### CI Verification
