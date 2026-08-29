@@ -37,12 +37,12 @@ All verification gates were executed against the accepted implementation candida
 | **Workspace Verification (`verify`)** | Pure core purity + typecheck + unit suite + build | 35 / 35 files, 444 / 444 tests, clean build | `PASS` |
 | **Permanent Browser E2E (`test:e2e`)** | Production preview serving, 3 browser projects | 123 / 123 tests (Chromium 41, Firefox 41, WebKit 41), 0 retries | `PASS` |
 | **E2E Serving Mode** | Production build + Vite preview (`http://127.0.0.1:4173`) | `npm run build && npm run preview` | `PASS` |
-| **Playwright Web Server Timeout** | Default standard timeout (30,000 ms) | Startup ready in ~4s | `PASS` |
+| **Playwright Web Server Timeout** | Project-configured timeout (30,000 ms) | Startup ready in ~4s | `PASS` |
 | **Production Build Inspection** | Distinct bundled worker assets in `dist/assets` | `benchmark.worker-*.js`, `solver.worker-*.js` emitted | `PASS` |
 | **Dependency Security Audit** | `npm audit` | 0 vulnerabilities (0 critical, 0 high, 0 mod, 0 low) | `PASS` |
 | **Tracked Secret Scan** | `git ls-files` pattern scan | 0 confirmed secrets | `PASS` |
 | **Developer Local Path Scan** | `git ls-files` path leakage scan | 0 confirmed accidental path leaks | `PASS` |
-| **Tracked Artifact Hygiene** | `git ls-files -ci --exclude-standard` | 0 untracked ignored files | `PASS` |
+| **Tracked Artifact Hygiene** | `git ls-files -ci --exclude-standard` | No tracked files matched ignore rules | `PASS` |
 | **Markdown Relative Links** | Link resolution across all repository `.md` files | 0 broken relative links (38 files scanned) | `PASS` |
 
 ---
