@@ -189,8 +189,9 @@ Active Mainline: Phase 8 (Product Completion & Public-Test Readiness)
   - Phase 8B (First-Time User Onboarding): Completed & Accepted
   - Phase 8C (UX, Accessibility & Console Hygiene): Completed & Accepted
   - Phase 8D (Browser Compatibility Qualification): Completed & Accepted
-  - Phase 8E (Public Repository Presentation & Docs Finalization): In Progress (Current Candidate)
-  - Phases 8F–8G: Scheduled
+  - Phase 8E (Public Repository Presentation & Docs Finalization): Completed & Accepted
+  - Phase 8F (Clean-Clone Release-Style Acceptance): Ready to Start
+  - Phase 8G (Public-Test-Ready Formal Acceptance): Scheduled
 Deferred Tracks:
   - Phase 6 (AI-Guided Search): Deferred Optional Research
   - Phase 7 (Physical Model & Vision Expansion): Deferred Optional Expansion
