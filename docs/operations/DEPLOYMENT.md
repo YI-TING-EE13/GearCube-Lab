@@ -27,7 +27,7 @@ GearCube Lab is architected as a **100% static, client-side web application** ac
 
 ## 3. Verification-Gated Continuous Deployment Workflow
 
-Production deployment is fully automated and strictly gated by the canonical test suite via `.github/workflows/deploy-pages.yml`.
+The public GitHub Pages deployment is fully automated and strictly gated by the canonical test suite via `.github/workflows/deploy-pages.yml`.
 
 ### 3.1. Control-Flow Architecture
 
@@ -61,7 +61,10 @@ if: >
 - Non-main branches (`phase/**`), pull requests, manual workflow dispatches, failed Verify runs, cancelled runs, and rerun attempts ($>1$) **never** trigger deployment.
 - **Exact Verified Checkout:** `actions/checkout` checks out `github.event.workflow_run.head_sha`.
 - **Stale-Main Protection:** A pre-build step queries `git ls-remote origin refs/heads/main` to ensure `main` has not advanced past the tested commit, preventing stale deployments.
-- **Zero-Secret Posture:** The workflow uses only standard GitHub Actions OIDC tokens (`pages: write`, `id-token: write`). No custom PATs or repository secrets are required.
+- **Zero-Secret Posture:** The deployment workflow relies only on GitHub-provided credentials:
+  - `GITHUB_TOKEN` with bounded repository/Pages permissions (`contents: read`, `pages: write`);
+  - GitHub OIDC identity-token capability enabled by `id-token: write` for the official Pages deployment flow.
+  No custom PAT or repository deployment secret is required.
 - **No `gh-pages` Branch:** Deployments use official GitHub Pages artifact uploads; `dist/` is never committed to Git history.
 
 ---
@@ -87,8 +90,10 @@ All asset references in `index.html` and worker bundle instantiations resolve be
 
 ## 5. Browser & Security Posture
 
-### 5.1. HTTPS Enforcement
-- **Mandatory HTTPS:** Secure context (`https://`) is enforced on GitHub Pages, ensuring proper permissions for Web Workers and WebGL2 contexts.
+### 5.1. HTTPS Hosting
+- **Transport Security:** GitHub Pages serves the public application over HTTPS, providing authenticated and encrypted transport and a secure browser context.
+- **Worker & WebGL2 Verification:** The currently deployed Web Worker and WebGL2 functionality has been verified successfully over the public HTTPS site. Ordinary Web Workers and WebGL2 do not inherently require HTTPS, but benefit from standard origin isolation and secure delivery.
+- **Future Camera Context:** Future camera functionality in Phase 7 using `navigator.mediaDevices.getUserMedia()` strictly requires a secure context (HTTPS, with trustworthy local-development origins treated according to browser rules).
 
 ### 5.2. Browser Compatibility Baseline
 - **Automated Verification:** Verified continuously via automated test suites across Chromium, Firefox, and WebKit (123 / 123 E2E tests passing). On hosted Linux CI, Firefox executes headed under Xvfb with a CI WebGL2 preference.

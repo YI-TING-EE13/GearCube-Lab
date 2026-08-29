@@ -205,11 +205,10 @@ With `--json` and/or `--csv`, the CLI writes those report files. If no output-fi
 ## Project Status
 
 ```
-Phases 0–8: Completed & Accepted
-Active Mainline: Phase 9 (GitHub Pages Deployment & Public Hosting)
+Phases 0–9: Completed & Accepted
   - Phase 9A (GitHub Pages Deployment Foundation & Subpath Qualification): Completed & Accepted
   - Phase 9B (First Live GitHub Pages Deployment): Completed & Accepted
-  - Phase 9C (Public Hosting Documentation & Deployment Closeout): In Progress
+  - Phase 9C (Public Hosting Documentation & Deployment Closeout): Completed & Accepted
 Deferred Tracks:
   - Phase 6 (AI-Guided Search): Deferred Optional Research
   - Phase 7 (Physical Model & Vision Expansion): Deferred Optional Expansion

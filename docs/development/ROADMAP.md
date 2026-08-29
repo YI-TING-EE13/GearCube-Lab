@@ -367,15 +367,15 @@ Phase 0B is partitioned into four dependency-ordered subphases:
 
 ---
 
-### Phase 9: GitHub Pages Deployment & Public Hosting (Active Mainline)
-- **Status:** `ACTIVE MAINLINE (9A & 9B COMPLETED & ACCEPTED; 9C IN PROGRESS)`
+### Phase 9: GitHub Pages Deployment & Public Hosting (Completed & Accepted)
+- **Status:** `COMPLETED & ACCEPTED` (Phase 9A, Phase 9B & Phase 9C `COMPLETED & ACCEPTED`)
 - **Objective:** Establish the automated deployment infrastructure, dynamic subpath routing, and verification gates required to host GearCube Lab on GitHub Pages, execute the first verified live deployment, and finalize public-facing hosting documentation.
 - **Prerequisites:** Completion and acceptance of Phase 8 (`PUBLIC_TEST_READY: YES` on `main`).
 - **Target Condition:** `LIVE_GITHUB_PAGES: YES`, `PUBLIC_HOSTING: ACTIVE`.
 - **Subphase Status & Decomposition:**
   - **Phase 9A (GitHub Pages Deployment Foundation & Subpath Qualification):** Dynamic Vite base resolution via `actions/configure-pages`, verification-gated `.github/workflows/deploy-pages.yml` workflow, and subpath worker/asset bundle qualification — **Status:** `COMPLETED & ACCEPTED`.
   - **Phase 9B (First Live GitHub Pages Deployment):** Enabling GitHub Pages workflow mode, fast-forward promotion to `main` (`febe270621892fc5b985af24600ef0fa4be61e36`), automated deployment execution via `workflow_run`, and multi-browser live acceptance testing on `https://yi-ting-ee13.github.io/GearCube-Lab/` — **Status:** `COMPLETED & ACCEPTED`.
-  - **Phase 9C (Public Hosting Documentation & Deployment Closeout):** Updating `README.md` with Play Online links, updating `docs/README.md`, synchronizing `DEPLOYMENT.md` with live evidence, and closing out `ROADMAP.md` — **Status:** `IN PROGRESS`.
+  - **Phase 9C (Public Hosting Documentation & Deployment Closeout):** Updating `README.md` with Play Online links, updating `docs/README.md`, synchronizing `DEPLOYMENT.md` with live evidence, and closing out `ROADMAP.md` — **Status:** `COMPLETED & ACCEPTED`.
 - **Deliverables:**
   - Deployment workflow `.github/workflows/deploy-pages.yml` with strict qualification gates (`Verify` success, `main` push, attempt 1, exact SHA checkout, stale-main protection).
   - Live public site at `https://yi-ting-ee13.github.io/GearCube-Lab/`.
