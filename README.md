@@ -202,14 +202,16 @@ Active Mainline: Phase 8 (Product Completion & Public-Test Readiness)
   - Phase 8C (UX, Accessibility & Console Hygiene): Completed & Accepted
   - Phase 8D (Browser Compatibility Qualification): Completed & Accepted
   - Phase 8E (Public Repository Presentation & Docs Finalization): Completed & Accepted
-  - Phase 8F (Clean-Clone Release-Style Acceptance): Ready to Start
-  - Phase 8G (Public-Test-Ready Formal Acceptance): Scheduled
+  - Phase 8F (Clean-Clone Release-Style Acceptance): Completed & Accepted
+  - Phase 8G (Public-Test-Ready Formal Acceptance): Final Acceptance Qualified
 Deferred Tracks:
   - Phase 6 (AI-Guided Search): Deferred Optional Research
   - Phase 7 (Physical Model & Vision Expansion): Deferred Optional Expansion
 ```
 
-For complete phase history, specifications, and gating criteria, refer to [`ROADMAP.md`](docs/development/ROADMAP.md) and [`PHASE_8_IMPLEMENTATION_PLAN.md`](docs/development/PHASE_8_IMPLEMENTATION_PLAN.md).
+*Note: The PUBLIC_TEST_READY status becomes authoritative when the final Phase 8 acceptance-record commit is fast-forward promoted to `main`.*
+
+For complete phase history, specifications, and gating criteria, refer to [`ROADMAP.md`](docs/development/ROADMAP.md), [`PHASE_8_IMPLEMENTATION_PLAN.md`](docs/development/PHASE_8_IMPLEMENTATION_PLAN.md), and [`PHASE_8_ACCEPTANCE_RECORD.md`](docs/development/PHASE_8_ACCEPTANCE_RECORD.md).
 
 ---
 
@@ -262,6 +264,7 @@ Comprehensive architectural designs, mathematical models, testing strategies, an
 | [`SYSTEM_ARCHITECTURE.md`](docs/architecture/SYSTEM_ARCHITECTURE.md) | Layered architectural contracts, thread boundaries, and invariants |
 | [`ROADMAP.md`](docs/development/ROADMAP.md) | Phase roadmap from Phase 0 to Phase 8 with hard gating criteria |
 | [`PHASE_8_IMPLEMENTATION_PLAN.md`](docs/development/PHASE_8_IMPLEMENTATION_PLAN.md) | Exact implementation plan for product completion and public-test readiness |
+| [`PHASE_8_ACCEPTANCE_RECORD.md`](docs/development/PHASE_8_ACCEPTANCE_RECORD.md) | Formal Phase 8 public-test-readiness acceptance record and qualification evidence |
 | [`TEST_STRATEGY.md`](docs/development/TEST_STRATEGY.md) | 12-level testing pyramid, property invariants, and verification gates |
 | [`DEVELOPMENT_GUIDE.md`](docs/development/DEVELOPMENT_GUIDE.md) | Developer guidelines, toolchain conventions, and coding standards |
 | [`DEPLOYMENT.md`](docs/operations/DEPLOYMENT.md) | Static hosting architecture, Web Worker requirements, and deployment strategy |

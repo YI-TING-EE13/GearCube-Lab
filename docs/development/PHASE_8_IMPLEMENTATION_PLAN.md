@@ -9,9 +9,11 @@
 > **Phase 8 Strategy:** `APPROVED DIRECTION`
 > **Phase 8 Plan Status:** `PHASE8_PLAN_ACCEPTED`
 > **Independent Plan Review:** `PASS`
-> **Phase 8 Implementation:** `NOT STARTED`
-> **Phase 8 Accepted:** `NO`
-> **Target Condition:** `PUBLIC_TEST_READY` (Future implementation acceptance target)
+> **Phase 8 Implementation:** `COMPLETED`
+> **Phase 8 Formal Acceptance:** `QUALIFIED`
+> **Accepted Implementation Baseline:** `3e407caa4f02700422df33e1872a489d4a138ebf`
+> **Target Condition:** `PUBLIC_TEST_READY` (Effective upon final fast-forward promotion of the acceptance-record commit to `main`)
+> **Acceptance Record:** [`docs/development/PHASE_8_ACCEPTANCE_RECORD.md`](./PHASE_8_ACCEPTANCE_RECORD.md)
 
 ---
 
@@ -217,30 +219,30 @@ Phase 8 is strictly a **completion, onboarding, robustness, compatibility, and v
 
 ## 7. Comprehensive Acceptance Gates
 
-| Gate Identifier | Description | Required Status | Planning State |
+| Gate Identifier | Description | Required Status | Final State |
 | :--- | :--- | :--- | :--- |
-| `FRESH_CLONE_GATE` | Repository clones cleanly into a fresh temporary directory | `PASS` | `PENDING_IMPLEMENTATION` |
-| `DEPENDENCY_INSTALL_GATE` | `npm ci` succeeds with exit code 0 and zero lockfile drift | `PASS` | `PENDING_IMPLEMENTATION` |
-| `VERIFY_GATE` | `npm run verify` passes (typecheck, core-purity, all unit/boundary/reachability tests, clean build) | `PASS` | `PENDING_IMPLEMENTATION` |
-| `FULL_E2E_GATE` | `npm run test:e2e` passes across all automated browser suites | `PASS` | `PENDING_IMPLEMENTATION` |
-| `BUILD_GATE` | `npm run build` generates production bundle in `dist/` without error | `PASS` | `PENDING_IMPLEMENTATION` |
-| `PREVIEW_GATE` | `npm run preview` serves production build locally and passes smoke tests | `PASS` | `PENDING_IMPLEMENTATION` |
-| `DEV_START_GATE` | `npm run dev` launches development server with zero startup errors | `PASS` | `PENDING_IMPLEMENTATION` |
-| `PLAY_ACCEPTANCE_GATE` | Interactive face controls, TWO_STEP staging, history, undo/redo, and scrambler function flawlessly | `PASS` | `PENDING_IMPLEMENTATION` |
-| `SOLVE_ACCEPTANCE_GATE` | Solver executes IDA*/BiBFS/BFS, renders telemetry, and plays back solutions step-by-step | `PASS` | `PENDING_IMPLEMENTATION` |
-| `RESEARCH_ACCEPTANCE_GATE` | Browser Research Mode executes benchmarks via Worker, displays tables, and downloads JSON/CSV | `PASS` | `PENDING_IMPLEMENTATION` |
-| `RESPONSIVE_GATE` | Layout is fully actionable and non-overlapping across Desktop (1280x800), Tablet (768x1024), and Mobile (375x667) | `PASS` | `PENDING_IMPLEMENTATION` |
-| `CONSOLE_ERROR_GATE` | Zero unexpected app-owned console errors or 404 asset requests | `PASS` | `PENDING_IMPLEMENTATION` |
-| `PAGE_ERROR_GATE` | Zero unhandled runtime exceptions or page errors | `PASS` | `PENDING_IMPLEMENTATION` |
-| `NO_EXTERNAL_NETWORK_SURPRISE_GATE` | Zero unexpected external network requests initiated by application | `PASS` | `PENDING_IMPLEMENTATION` |
-| `SECRET_SCAN_GATE` | Zero genuine credentials, API keys, or private material in tracked repository files | `PASS` | `PENDING_IMPLEMENTATION` |
-| `TRACKED_ARTIFACT_GATE` | Zero accidental build artifacts, test results, logs, or editor state tracked by git | `PASS` | `PENDING_IMPLEMENTATION` |
-| `README_ONBOARDING_GATE` | `README.md` provides complete, accurate onboarding, prerequisites, quickstart, and feature guides | `PASS` | `PENDING_IMPLEMENTATION` |
-| `LICENSE_DECISION_GATE` | Explicit human licensing decision made and license terms recorded | `PASS` | `PENDING_IMPLEMENTATION` |
-| `DOCUMENTATION_SYNC_GATE` | All canonical documentation synchronized with Phase 8 implementation facts | `PASS` | `PENDING_IMPLEMENTATION` |
-| `BROWSER_SUPPORT_TRUTHFULNESS_GATE` | Documented browser support strictly reflects empirically verified engine matrix | `PASS` | `PENDING_IMPLEMENTATION` |
-| `INDEPENDENT_REVIEW_GATE` | ChatGPT completes independent review of Phase 8 implementation and acceptance records | `PASS` | `PENDING_IMPLEMENTATION` |
-| `FAST_FORWARD_PROMOTION_GATE` | Phase 8 promoted to authoritative `main` using fast-forward only | `PASS` | `PENDING_IMPLEMENTATION` |
+| `FRESH_CLONE_GATE` | Repository clones cleanly into a fresh temporary directory | `PASS` | `COMPLETED & ACCEPTED` |
+| `DEPENDENCY_INSTALL_GATE` | `npm ci` succeeds with exit code 0 and zero lockfile drift | `PASS` | `COMPLETED & ACCEPTED` |
+| `VERIFY_GATE` | `npm run verify` passes (typecheck, core-purity, all unit/boundary/reachability tests, clean build) | `PASS` | `COMPLETED & ACCEPTED` |
+| `FULL_E2E_GATE` | `npm run test:e2e` passes across all automated browser suites | `PASS` | `COMPLETED & ACCEPTED` |
+| `BUILD_GATE` | `npm run build` generates production bundle in `dist/` without error | `PASS` | `COMPLETED & ACCEPTED` |
+| `PREVIEW_GATE` | `npm run preview` serves production build locally and passes smoke tests | `PASS` | `COMPLETED & ACCEPTED` |
+| `DEV_START_GATE` | `npm run dev` launches development server with zero startup errors | `PASS` | `COMPLETED & ACCEPTED` |
+| `PLAY_ACCEPTANCE_GATE` | Interactive face controls, TWO_STEP staging, history, undo/redo, and scrambler function flawlessly | `PASS` | `COMPLETED & ACCEPTED` |
+| `SOLVE_ACCEPTANCE_GATE` | Solver executes IDA*/BiBFS/BFS, renders telemetry, and plays back solutions step-by-step | `PASS` | `COMPLETED & ACCEPTED` |
+| `RESEARCH_ACCEPTANCE_GATE` | Browser Research Mode executes benchmarks via Worker, displays tables, and downloads JSON/CSV | `PASS` | `COMPLETED & ACCEPTED` |
+| `RESPONSIVE_GATE` | Layout is fully actionable and non-overlapping across Desktop (1280x800), Tablet (768x1024), and Mobile (375x667) | `PASS` | `COMPLETED & ACCEPTED` |
+| `CONSOLE_ERROR_GATE` | Zero unexpected app-owned console errors or 404 asset requests | `PASS` | `COMPLETED & ACCEPTED` |
+| `PAGE_ERROR_GATE` | Zero unhandled runtime exceptions or page errors | `PASS` | `COMPLETED & ACCEPTED` |
+| `NO_EXTERNAL_NETWORK_SURPRISE_GATE` | Zero unexpected external network requests initiated by application | `PASS` | `COMPLETED & ACCEPTED` |
+| `SECRET_SCAN_GATE` | Zero genuine credentials, API keys, or private material in tracked repository files | `PASS` | `COMPLETED & ACCEPTED` |
+| `TRACKED_ARTIFACT_GATE` | Zero accidental build artifacts, test results, logs, or editor state tracked by git | `PASS` | `COMPLETED & ACCEPTED` |
+| `README_ONBOARDING_GATE` | `README.md` provides complete, accurate onboarding, prerequisites, quickstart, and feature guides | `PASS` | `COMPLETED & ACCEPTED` |
+| `LICENSE_DECISION_GATE` | Explicit human licensing decision made and license terms recorded | `PASS` | `COMPLETED & ACCEPTED` |
+| `DOCUMENTATION_SYNC_GATE` | All canonical documentation synchronized with Phase 8 implementation facts | `PASS` | `COMPLETED & ACCEPTED` |
+| `BROWSER_SUPPORT_TRUTHFULNESS_GATE` | Documented browser support strictly reflects empirically verified engine matrix | `PASS` | `COMPLETED & ACCEPTED` |
+| `INDEPENDENT_REVIEW_GATE` | ChatGPT completes independent review of Phase 8 implementation and acceptance records | `PASS` | `COMPLETED & ACCEPTED` |
+| `FAST_FORWARD_PROMOTION_GATE` | Phase 8 promoted to authoritative `main` using fast-forward only | `PASS` | `QUALIFIED (Pending Final Main Fast-Forward)` |
 
 ---
 
