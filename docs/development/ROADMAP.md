@@ -63,11 +63,12 @@
       ├───────────────────────────────────────────────────────┐
       ▼                                                       ▼
 [ Phase 8: Product Completion & Public-Test Readiness ]   [ Phase 6: Neural Heuristic & AI-Guided Search ]
-(Active Mainline — 8A–8E Accepted / 8F Ready to Start)      (DEFERRED / OPTIONAL RESEARCH TRACK)
+(Active Mainline — 8A–8E Accepted / 8F Ready to Start)    (DEFERRED / OPTIONAL RESEARCH TRACK)
       ├─ 8A: Repository & Tooling Foundation (Accepted)       │
       ├─ 8B: First-Time User Onboarding (Accepted)            ▼
       ├─ 8C: UX, Accessibility & Hygiene (Accepted)       [ Phase 7: Physical Model & Vision Expansion ]
-      ├─ 8D: Browser Compatibility Qualification (Accepted)(DEFERRED / OPTIONAL EXPANSION TRACK)
+      ├─ 8D: Browser Compatibility Qualification          (DEFERRED / OPTIONAL EXPANSION TRACK)
+      │     └─ Status: Accepted
       ├─ 8E: Public Repository Presentation (Accepted)
       ├─ 8F: Clean-Clone Release Acceptance (Ready)
       └─ 8G: Public-Test-Ready Formal Acceptance (Scheduled)
