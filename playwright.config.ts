@@ -44,6 +44,6 @@ export default defineConfig({
     command: 'npm run build --workspace=@gearcube/web && npm run preview --workspace=@gearcube/web -- --port 4173 --strictPort --host 127.0.0.1',
     url: 'http://127.0.0.1:4173',
     reuseExistingServer: false,
-    timeout: 60000,
+    timeout: 30000,
   },
 });
