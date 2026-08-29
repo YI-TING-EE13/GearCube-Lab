@@ -132,7 +132,7 @@ GearCube Lab supports full keyboard interaction in the Play workspace:
 
 ### End-to-End Browser Setup
 
-Running `npm ci` installs Node.js and workspace dependencies, but does not download the Playwright-managed browser binaries required for browser automation.
+Running `npm ci` installs the repository's Node.js package and workspace dependencies, but does not download the Playwright-managed browser binaries required for browser automation.
 
 Before running the Playwright E2E test suite for the first time locally, install the browser binaries:
 
