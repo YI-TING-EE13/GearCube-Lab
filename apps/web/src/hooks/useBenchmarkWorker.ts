@@ -77,8 +77,7 @@ export function useBenchmarkWorker(): UseBenchmarkWorkerResult {
 
       try {
         // 4. Construct fresh module Web Worker instance
-        const WorkerConstructor = Worker;
-        const worker = new WorkerConstructor(
+        const worker = new Worker(
           new URL('../workers/benchmark.worker.ts', import.meta.url),
           { type: 'module' }
         );

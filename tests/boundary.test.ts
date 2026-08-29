@@ -282,7 +282,7 @@ describe('Phase 4D Web Worker Infrastructure & Package Boundary Gate', () => {
     expect(fs.existsSync(workerPath)).toBe(true);
   });
 
-  it('verifies Worker construction occurs ONLY in useSolverWorker.ts', () => {
+  it('verifies Worker construction occurs ONLY in canonical worker lifecycle hooks', () => {
     const files = collectWebTsFiles(webSrc);
     const workerConstructionSites: string[] = [];
 
@@ -293,7 +293,10 @@ describe('Phase 4D Web Worker Infrastructure & Package Boundary Gate', () => {
       }
     }
 
-    expect(workerConstructionSites).toEqual(['apps/web/src/hooks/useSolverWorker.ts']);
+    expect(workerConstructionSites.sort()).toEqual([
+      'apps/web/src/hooks/useBenchmarkWorker.ts',
+      'apps/web/src/hooks/useSolverWorker.ts',
+    ]);
   });
 
   it('verifies solver runtime functions (solveBfs, solveBidirectionalBfs, solveIdaStar) are imported ONLY by solver.worker.ts', () => {
