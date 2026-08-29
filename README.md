@@ -271,7 +271,7 @@ Comprehensive architectural designs, mathematical models, testing strategies, an
 | [`docs/README.md`](docs/README.md) | Central documentation directory and reading index |
 | [`PROJECT_BLUEPRINT.md`](docs/project/PROJECT_BLUEPRINT.md) | Comprehensive 30-section project blueprint, specifications, and scope |
 | [`SYSTEM_ARCHITECTURE.md`](docs/architecture/SYSTEM_ARCHITECTURE.md) | Layered architectural contracts, thread boundaries, and invariants |
-| [`ROADMAP.md`](docs/development/ROADMAP.md) | Phase roadmap from Phase 0 to Phase 8 with hard gating criteria |
+| [`ROADMAP.md`](docs/development/ROADMAP.md) | Phase roadmap from Phase 0 through Phase 9 with hard gating criteria |
 | [`PHASE_8_IMPLEMENTATION_PLAN.md`](docs/development/PHASE_8_IMPLEMENTATION_PLAN.md) | Exact implementation plan for product completion and public-test readiness |
 | [`PHASE_8_ACCEPTANCE_RECORD.md`](docs/development/PHASE_8_ACCEPTANCE_RECORD.md) | Formal Phase 8 public-test-readiness acceptance record and qualification evidence |
 | [`TEST_STRATEGY.md`](docs/development/TEST_STRATEGY.md) | 12-level testing pyramid, property invariants, and verification gates |

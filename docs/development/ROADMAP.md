@@ -1,8 +1,8 @@
 # ROADMAP.md — Project Lifecycle & Dependency-Ordered Milestones
 
-> **Current Milestone:** `Phase 8 — Product Completion & Public-Test Readiness (Phases 8A–8F Completed & Accepted; Phase 8G Final Acceptance Qualified)`
-> **Next Milestone:** `Post-Phase 8 Maintenance & Deferred Research Tracks`
-> **Previous Milestone:** `Phase 5 — Research & Benchmarking Harness (Completed & Accepted)`
+> **Current Milestone:** `Phase 9 — GitHub Pages Deployment & Public Hosting (Completed & Accepted)`
+> **Next Milestone:** `Post-Phase 9 Maintenance & Deferred Research Tracks`
+> **Previous Milestone:** `Phase 8 — Product Completion & Public-Test Readiness (Completed & Accepted)`
 > **Deferred Tracks:** `Phase 6 (Neural AI Search)` & `Phase 7 (Physical Model & Vision Expansion)` (Deferred / Optional Tracks)
 
 ---
@@ -63,7 +63,7 @@
       ├───────────────────────────────────────────────────────┐
       ▼                                                       ▼
 [ Phase 8: Product Completion & Public-Test Readiness ]   [ Phase 6: Neural Heuristic & AI-Guided Search ]
-(Active Mainline — 8A–8F Accepted / 8G Qualified)         (DEFERRED / OPTIONAL RESEARCH TRACK)
+(Completed & Accepted)                                    (DEFERRED / OPTIONAL RESEARCH TRACK)
       ├─ 8A: Repository & Tooling Foundation (Accepted)       │
       ├─ 8B: First-Time User Onboarding (Accepted)            ▼
       ├─ 8C: UX, Accessibility & Hygiene (Accepted)       [ Phase 7: Physical Model & Vision Expansion ]
@@ -71,7 +71,14 @@
       │     └─ Status: Accepted
       ├─ 8E: Public Repository Presentation (Accepted)
       ├─ 8F: Clean-Clone Release Acceptance (Accepted)
-      └─ 8G: Formal Acceptance Qualification (Qualified)
+      └─ 8G: Formal Acceptance (Completed & Accepted)
+      │
+      ▼
+[ Phase 9: GitHub Pages Deployment & Public Hosting ]
+(Completed & Accepted)
+      ├─ 9A: Deployment Foundation & Subpath Qualification (Accepted)
+      ├─ 9B: First Live GitHub Pages Deployment (Accepted)
+      └─ 9C: Public Hosting Documentation & Deployment Closeout (Accepted)
 ```
 
 ---

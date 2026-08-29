@@ -26,7 +26,7 @@ docs/
 │   └── KINEMATIC_CONTRACT.md           # Continuous 3D physical kinematics & animation contract
 ├── development/
 │   ├── DEVELOPMENT_GUIDE.md            # Environment policies, coding standards, & workflows
-│   ├── ROADMAP.md                      # Dependency-ordered project lifecycle (Phases 0A–8) & gates
+│   ├── ROADMAP.md                      # Dependency-ordered project lifecycle (Phases 0A–9) & gates
 │   ├── TEST_STRATEGY.md                # 12-level testing pyramid, property invariants, & validation
 │   ├── PHASE_1A_IMPLEMENTATION_PLAN.md # Phase 1A project bootstrap & package boundary plan
 │   ├── PHASE_1B_IMPLEMENTATION_PLAN.md # Phase 1B canonical state / value types & validation plan
