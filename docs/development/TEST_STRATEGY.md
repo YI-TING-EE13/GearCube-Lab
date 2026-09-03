@@ -269,16 +269,16 @@
     - `PLAY_RESEARCH_ISOLATION_GATE`: Play session history, move state, and 3D cube visual state preserved without mutation across Research Mode entry and benchmark execution.
     - `RAW_WEBGL_CANVAS_ORACLE_GATE`: Exact decoded RGBA bitmap equality via direct `HTMLCanvasElement` capture (`canvas.toDataURL('image/png')` drawn to a temporary 2D canvas and compared via `getImageData()`) proves identical WebGL canvas rendering pre- and post-Research Mode lifecycle (`differingPixels: 0`, `maxChannelDelta: 0`, `diffBoundingBox: null`).
     - `MODE_SWITCH_CANCELLATION_GATE`: Switching to Play mode during an active benchmark terminates the background Worker and restores clean presentation.
-    - `RESPONSIVE_RESEARCH_LAYOUT_GATE`: Verified layout bounds and non-overflow across Desktop (1280x800), Tablet (768x1024), and Mobile (375x667) viewports in `tests/e2e/research-mode.spec.ts`.
+    - `RESPONSIVE_RESEARCH_LAYOUT_GATE`: Verified layout bounds and non-overflow across Desktop (1280x800), Tablet (768x1024), and Mobile (375x667) viewports in `tests/e2e/research-mode.spec.ts`; the M1 mode-stability gate adds short-landscape Research coverage.
     - *Verification Snapshot (Technical Head `8bc1d51`):* 52 boundary tests, 32 controller unit tests, 12 Research Mode E2E tests, 40 total Playwright E2E tests, and 444 workspace tests passing.
 
 ### Level 9: Browser End-to-End Tests (Playwright — Available / Implemented)
-- **Scope:** Whole Web Application (`playwright.config.ts`, `tests/e2e/play-mode.spec.ts`, `tests/e2e/solve-mode.spec.ts`, `tests/e2e/research-mode.spec.ts`)
+- **Scope:** Whole Web Application (`playwright.config.ts`, `tests/e2e/play-mode.spec.ts`, `tests/e2e/solve-mode.spec.ts`, `tests/e2e/research-mode.spec.ts`, `tests/e2e/responsive-navigation.spec.ts`)
 - **Focus:** User interaction flows and state validation in real browser environments.
 - **Infrastructure Architecture:**
   - Pinned `@playwright/test@1.62.1` devDependency at repository root.
-  - Permanent project matrix: `chromium`, `firefox`, and `webkit` (desktop, tablet portrait, mobile portrait viewports).
-  - Test inventory: 41 canonical logical tests × 3 browser projects = 123 project-test executions.
+  - Permanent project matrix: `chromium`, `firefox`, and `webkit` (desktop, tablet portrait, mobile portrait, and compact landscape coverage; Chromium also runs the touch-emulation gate).
+  - Test inventory: 43 canonical logical tests × 3 browser projects = 129 project-test executions.
   - On GitHub-hosted Linux CI, Firefox E2E runs headed under Xvfb with a CI-only WebGL2 enablement preference. WebKit is verified via Playwright automation; Safari has not been separately verified.
   - Dedicated isolated webServer: `npm run dev --workspace=@gearcube/web -- --port 4173 --strictPort --host 127.0.0.1` on `http://127.0.0.1:4173` with `reuseExistingServer: false`.
   - Execution command: `npm run test:e2e` (`playwright test`).
@@ -298,6 +298,8 @@
     - **Active Animation:** all move controls, history navigation, mode toggle, and scramble buttons are disabled.
     - **HALF_TURN_LOCKED:** only staged-face Finish and Reverse buttons/shortcuts are actionable; unrelated face moves, history, mode toggle, and scramble buttons are disabled; seed text input remains enabled and editable.
   - Responsive layout: primary controls remain accessible and non-overlapping across 1440x900, 768x1024, 1024x768, 375x667, 390x844, and 667x375 viewports with zero horizontal document overflow; compact Play controls can be stowed to restore canvas hit-testing and reopen in a scrollable drawer on short screens, including during IDLE and HALF_TURN_LOCKED states.
+  - M1 mode stability: Play/Solve/Research presentation remains usable through 390x844 ↔ 844x390 and 768x1024 ↔ 1024x768 transitions; closed controls remain hidden and non-focusable, Research remains internally scrollable, and Solve playback remains reachable.
+  - Touch emulation: Chromium with `hasTouch: true` exercises touch disclosure, canvas pointer input, and short-height drawer scrolling without treating emulation as real-device evidence.
   - Zero unhandled console/runtime errors (`pageerror` and error-level console messages).
 - **Assertion Principle:** `PLAYWRIGHT_PIXEL_PERFECT_ASSERTIONS: NO` and `RENDERER_PIXELS_USED_AS_STATE_ORACLE: NO` (general Play and Solve Mode interaction tests verify DOM interactions, disabled states, and text/attribute state indicators rather than full-compositor pixel screenshots; Phase 5D includes a single supplemental raw WebGL `HTMLCanvasElement` bitmap comparison oracle strictly for verifying Play/Research visual state preservation without modifying general UI assertion principles).
 - **Complementary Acceptance Roles:**

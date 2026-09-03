@@ -1550,6 +1550,10 @@ body,
     visibility: visible;
   }
 
+  .play-controls-drawer[data-open="false"] {
+    display: none;
+  }
+
   .play-controls-drawer-content {
     position: absolute;
     top: 52px;
