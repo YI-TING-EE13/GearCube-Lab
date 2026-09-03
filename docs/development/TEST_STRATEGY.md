@@ -297,7 +297,7 @@
   - Busy-state blocking:
     - **Active Animation:** all move controls, history navigation, mode toggle, and scramble buttons are disabled.
     - **HALF_TURN_LOCKED:** only staged-face Finish and Reverse buttons/shortcuts are actionable; unrelated face moves, history, mode toggle, and scramble buttons are disabled; seed text input remains enabled and editable.
-  - Responsive layout: primary controls remain accessible and non-overlapping across desktop, tablet portrait, and mobile portrait viewports with zero horizontal document overflow and verified vertical clearance between timeline scrubber and bottom move panel during both IDLE and HALF_TURN_LOCKED states.
+  - Responsive layout: primary controls remain accessible and non-overlapping across 1440x900, 768x1024, 1024x768, 375x667, 390x844, and 667x375 viewports with zero horizontal document overflow; compact Play controls can be stowed to restore canvas hit-testing and reopen in a scrollable drawer on short screens, including during IDLE and HALF_TURN_LOCKED states.
   - Zero unhandled console/runtime errors (`pageerror` and error-level console messages).
 - **Assertion Principle:** `PLAYWRIGHT_PIXEL_PERFECT_ASSERTIONS: NO` and `RENDERER_PIXELS_USED_AS_STATE_ORACLE: NO` (general Play and Solve Mode interaction tests verify DOM interactions, disabled states, and text/attribute state indicators rather than full-compositor pixel screenshots; Phase 5D includes a single supplemental raw WebGL `HTMLCanvasElement` bitmap comparison oracle strictly for verifying Play/Research visual state preservation without modifying general UI assertion principles).
 - **Complementary Acceptance Roles:**

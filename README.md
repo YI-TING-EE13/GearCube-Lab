@@ -77,6 +77,9 @@ The **Play** workspace is the default interactive puzzle environment.
   - When the cube is idle, use the **Direct 180°** toggle in Face Controls to switch between `TWO_STEP` and `DIRECT_180`.
 - **Face Move Controls:**
   - 12 on-screen buttons trigger Clockwise (↻) and Counter-Clockwise (↺) moves for all six faces (**U, D, F, B, R, L**).
+- **Responsive Controls:**
+  - On tablet and phone-sized viewports, use the controls toggle in the upper-right corner to open or stow the Play controls.
+  - When stowed, the HTML control layer is removed from the hit-test path so the canvas remains available for orbit and zoom gestures; when open, the controls are stacked in a scrollable drawer for short screens.
 - **Scramble & History:**
   - Enter any string into the **Seed** field and click **Scramble** to apply a deterministic scramble sequence.
   - Use **Undo**, **Redo**, or **Reset Baseline** in the top bar to navigate history, or click directly on any step in the timeline scrubber.

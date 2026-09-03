@@ -107,7 +107,7 @@ graph TD
 - **Responsibilities (Implemented & Accepted Features):**
   - Orchestrates interactive application UI, controls, and presentation lifecycle.
   - Manages single authoritative session state (`GearCubeSessionState` in `apps/web/src/components/cube/animation.ts`) via React local state / pure transition functions.
-  - Hosts implemented and accepted Phase 3 features (canonical move history timeline, undo/redo stacks, deterministic seeded scramble generator, keyboard controls, and responsive layout under `apps/web/src/components/**`) which wrap and reference canonical session snapshots without becoming a second puzzle authority.
+  - Hosts implemented and accepted Phase 3 features (canonical move history timeline, undo/redo stacks, deterministic seeded scramble generator, keyboard controls, and responsive layout under `apps/web/src/components/**`) which wrap and reference canonical session snapshots without becoming a second puzzle authority; compact Play viewports use a presentation-only disclosure drawer for the control overlays.
   - Dispatches canonical move requests to the Domain Core.
   - Hosts implemented and accepted Phase 4 features: initiates background solver Worker tasks (`apps/web/src/workers/solver.worker.ts`), renders Solve Mode controls (SolvePanel, PlaybackControls), algorithm selection, search progress telemetry, and solution playback controller with expected-prefix state guarding.
   - Hosts implemented and accepted Phase 5D features: top-level WorkspaceMode orchestration (`PLAY` / `RESEARCH`) and `useBenchmarkWorker` hook owned by `GearCubeViewport.tsx`, controlled presentation panel (`ResearchPanel.tsx`), and dedicated background benchmark Worker adapter (`apps/web/src/workers/benchmark.worker.ts`).

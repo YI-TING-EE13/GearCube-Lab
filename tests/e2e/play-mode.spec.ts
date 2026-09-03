@@ -419,12 +419,14 @@ test.describe('GearCube Play Mode End-to-End Suite', () => {
     await expect(page.getByRole('button', { name: 'Step 2: U+' })).toBeVisible();
   });
 
-  test('18. E2E_RESPONSIVE_LAYOUT_FLOW: desktop, tablet, and mobile layouts fit, bounds checked, zero overlap', async ({ page }) => {
+  test('18. E2E_RESPONSIVE_LAYOUT_FLOW: responsive controls fit, disclose, and preserve canvas interaction', async ({ page }) => {
     const viewports = [
       { name: 'Desktop', width: 1440, height: 900 },
       { name: 'Tablet Portrait', width: 768, height: 1024 },
+      { name: 'Tablet Landscape', width: 1024, height: 768 },
       { name: 'Mobile Standard', width: 375, height: 667 },
       { name: 'Mobile Tall', width: 390, height: 844 },
+      { name: 'Mobile Landscape', width: 667, height: 375 },
     ];
 
     for (const vp of viewports) {
@@ -453,34 +455,116 @@ test.describe('GearCube Play Mode End-to-End Suite', () => {
       expect(timelineBox, `timelineBox on ${vp.name}`).not.toBeNull();
 
       if (historyBox && scrambleBox && moveBox && timelineBox) {
-        // Verify all panels are within viewport bounds
-        expect(historyBox.x).toBeGreaterThanOrEqual(0);
-        expect(historyBox.y).toBeGreaterThanOrEqual(0);
-        expect(scrambleBox.x + scrambleBox.width).toBeLessThanOrEqual(vp.width + 1);
-        expect(moveBox.y + moveBox.height).toBeLessThanOrEqual(vp.height + 1);
-        expect(timelineBox.x).toBeGreaterThanOrEqual(0);
+        const isCompactViewport = vp.width <= 1024;
+        const drawer = page.getByTestId('play-controls-drawer');
+
+        if (isCompactViewport) {
+          // Compact controls are intentionally scrollable; verify the drawer and
+          // every control column stay horizontally inside the viewport.
+          const drawerBox = await drawer.boundingBox();
+          expect(drawerBox, `controls drawer on ${vp.name}`).not.toBeNull();
+          expect(drawerBox?.x).toBeGreaterThanOrEqual(0);
+          expect(drawerBox?.y).toBeGreaterThanOrEqual(0);
+          expect((drawerBox?.x ?? 0) + (drawerBox?.width ?? 0)).toBeLessThanOrEqual(vp.width + 1);
+          expect((drawerBox?.y ?? 0) + (drawerBox?.height ?? 0)).toBeLessThanOrEqual(vp.height + 1);
+          expect(historyBox.x).toBeGreaterThanOrEqual(0);
+          expect(scrambleBox.x + scrambleBox.width).toBeLessThanOrEqual(vp.width + 1);
+          expect(moveBox.x).toBeGreaterThanOrEqual(0);
+          expect(moveBox.x + moveBox.width).toBeLessThanOrEqual(vp.width + 1);
+          expect(timelineBox.x).toBeGreaterThanOrEqual(0);
+        } else {
+          // Desktop: all panels remain in their original overlay positions.
+          expect(historyBox.x).toBeGreaterThanOrEqual(0);
+          expect(historyBox.y).toBeGreaterThanOrEqual(0);
+          expect(scrambleBox.x + scrambleBox.width).toBeLessThanOrEqual(vp.width + 1);
+          expect(moveBox.y + moveBox.height).toBeLessThanOrEqual(vp.height + 1);
+          expect(timelineBox.x).toBeGreaterThanOrEqual(0);
+        }
 
         // C. Collision gates using rectsOverlap helper
-        if (vp.width > 900) {
+        if (!isCompactViewport) {
           // Desktop: Top panels do not collide; bottom panels do not collide
           expect(rectsOverlap(historyBox, scrambleBox), `History and Scramble must not overlap on ${vp.name}`).toBe(false);
           expect(rectsOverlap(timelineBox, moveBox), `Timeline and Move controls must not overlap on ${vp.name}`).toBe(false);
-        } else if (vp.width >= 641 && vp.width <= 900) {
-          // Tablet Portrait: Timeline scrubber is elevated above MoveControls panel
-          expect(rectsOverlap(timelineBox, moveBox), `Timeline scrubber and Move controls must not overlap on ${vp.name}`).toBe(false);
-        } else if (vp.width <= 640) {
-          // Mobile: Timeline scrubber is elevated above MoveControls panel (no vertical overlap)
+        } else {
+          // Compact: the drawer stacks controls instead of relying on viewport offsets.
           expect(rectsOverlap(timelineBox, moveBox), `Timeline scrubber and Move controls must not overlap on ${vp.name}`).toBe(false);
         }
       }
 
-      // D. Actionability checks via trial clicks / interactions
+      // D. Compact controls can be stowed without leaving an HTML layer over the cube.
+      if (vp.width <= 1024) {
+        const controlsToggle = page.getByTestId('play-controls-toggle');
+        const controlsDrawer = page.getByTestId('play-controls-drawer');
+        await expect(controlsToggle).toBeVisible();
+        await expect(controlsToggle).toHaveAttribute('aria-expanded', 'true');
+
+        await controlsToggle.click();
+        await expect(controlsToggle).toHaveAttribute('aria-expanded', 'false');
+        await expect(page.locator('.move-controls-panel')).toBeHidden();
+
+        const canvasPoint = await page.evaluate(() => {
+          const canvas = document.querySelector('canvas');
+          if (!canvas) {
+            return null;
+          }
+
+          canvas.dataset.responsivePointerDownCount = '0';
+          canvas.dataset.responsiveWheelCount = '0';
+          canvas.addEventListener('pointerdown', () => {
+            const count = Number(canvas.dataset.responsivePointerDownCount ?? 0);
+            canvas.dataset.responsivePointerDownCount = String(count + 1);
+          }, { capture: true });
+          canvas.addEventListener('wheel', () => {
+            const count = Number(canvas.dataset.responsiveWheelCount ?? 0);
+            canvas.dataset.responsiveWheelCount = String(count + 1);
+          }, { capture: true });
+
+          const rect = canvas.getBoundingClientRect();
+          const point = {
+            x: Math.round(rect.left + rect.width / 2),
+            y: Math.round(rect.top + rect.height / 2),
+          };
+          const target = document.elementFromPoint(point.x, point.y);
+          return {
+            point,
+            targetIsCanvas: target === canvas,
+          };
+        });
+
+        expect(canvasPoint, `canvas point on ${vp.name}`).not.toBeNull();
+        expect(canvasPoint?.targetIsCanvas, `canvas should be the hit target when controls are closed on ${vp.name}`).toBe(true);
+
+        if (canvasPoint) {
+          await page.mouse.move(canvasPoint.point.x, canvasPoint.point.y);
+          await page.mouse.down();
+          await page.mouse.up();
+          await page.mouse.wheel(0, 40);
+        }
+
+        const canvasEvents = await page.evaluate(() => {
+          const canvas = document.querySelector('canvas') as HTMLCanvasElement | null;
+          return {
+            pointerDownCount: Number(canvas?.dataset.responsivePointerDownCount ?? 0),
+            wheelCount: Number(canvas?.dataset.responsiveWheelCount ?? 0),
+          };
+        });
+        expect(canvasEvents.pointerDownCount, `canvas pointerdown on ${vp.name}`).toBeGreaterThan(0);
+        expect(canvasEvents.wheelCount, `canvas wheel on ${vp.name}`).toBeGreaterThan(0);
+
+        await controlsToggle.click();
+        await expect(controlsToggle).toHaveAttribute('aria-expanded', 'true');
+        await expect(controlsDrawer).toHaveAttribute('data-open', 'true');
+        await expect(page.locator('.move-controls-panel')).toBeVisible();
+      }
+
+      // E. Actionability checks via trial clicks / interactions
       await page.getByRole('button', { name: /U Clockwise/ }).click({ trial: true });
       await page.getByRole('button', { name: /Direct 180° turn mode/ }).click({ trial: true });
       await page.getByRole('button', { name: 'Generate scramble' }).click({ trial: true });
       await page.getByRole('button', { name: 'Timeline start baseline' }).click({ trial: true });
 
-      // E. Mobile HALF_TURN_LOCKED responsive gate
+      // F. Mobile HALF_TURN_LOCKED responsive gate
       if (vp.width <= 640) {
         // Enter half-turn locked state
         await page.getByRole('button', { name: /U Clockwise/ }).click();
