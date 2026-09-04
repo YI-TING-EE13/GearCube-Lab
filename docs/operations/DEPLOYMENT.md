@@ -36,7 +36,7 @@ main branch push
       ↓
 Verify Workflow (.github/workflows/verify.yml)
       ├─ Workspace verify (typecheck, boundary checks, Vitest 444/444)
-      └─ Parallel Playwright E2E matrix (Chromium 41/41, Firefox 41/41, WebKit 41/41)
+      └─ Parallel Playwright E2E matrix (50 logical tests; 148 applicable executions, 2 intentional skips)
       ↓ (attempt 1 == success)
 Deploy GitHub Pages Workflow (.github/workflows/deploy-pages.yml via workflow_run)
       ├─ Checkout exact verified SHA (github.event.workflow_run.head_sha)
@@ -96,8 +96,20 @@ All asset references in `index.html` and worker bundle instantiations resolve be
 - **Future Camera Context:** Future camera functionality in Phase 7 using `navigator.mediaDevices.getUserMedia()` strictly requires a secure context (HTTPS, with trustworthy local-development origins treated according to browser rules).
 
 ### 5.2. Browser Compatibility Baseline
-- **Automated Verification:** Verified continuously via automated test suites across Chromium, Firefox, and WebKit (123 / 123 E2E tests passing). On hosted Linux CI, Firefox executes headed under Xvfb with a CI WebGL2 preference.
+
+The current Playwright inventory contains 50 logical tests across Chromium, Firefox, and WebKit projects. The Chromium-only touch gate is intentionally skipped in Firefox and WebKit, yielding 150 project cases: 148 applicable executions and 2 intentional skips.
+
+| Browser project | Applicable executions | Intentional touch skips |
+| :--- | ---: | ---: |
+| Chromium | 50 | 0 |
+| Firefox | 49 | 1 |
+| WebKit | 49 | 1 |
+
+These are inventory counts, not a claim that every run passes. Exact qualification evidence belongs to the corresponding `Verify` workflow run for the tested commit; inspect `verify` and all three browser jobs. See [TEST_STRATEGY.md](../development/TEST_STRATEGY.md) for maintained test coverage.
+
+- **Hosted Firefox:** On hosted Linux CI, Firefox executes headed under Xvfb with a CI WebGL2 preference.
 - **Safari Qualification Notice:** Native Safari has not been separately verified.
+- **Hardware Qualification Notice:** Browser viewport and touch emulation do not constitute real-device mobile/tablet verification; that verification has not been performed.
 
 ### 5.3. Zero-Secret & Privacy Posture
 - Under no circumstances are private API keys, proprietary tokens, or backend credentials bundled into client-side JavaScript.
@@ -111,7 +123,9 @@ When camera-based puzzle reconstruction is introduced in Phase 7:
 
 ---
 
-## 6. Live Deployment Record & Qualification Evidence
+## 6. Historical Initial Live Deployment Record & Qualification Evidence
+
+The following record preserves the initial Phase 9 live deployment and its acceptance results, including the then-current 123-case suite. It does not describe the current test inventory or the latest deployed commit; use Section 5.2 and the corresponding workflow run for current qualification.
 
 ### 6.1. Deployment Metadata
 - **Initial Live Deployment SHA:** `febe270621892fc5b985af24600ef0fa4be61e36`
