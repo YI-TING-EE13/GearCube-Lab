@@ -278,7 +278,7 @@
 - **Infrastructure Architecture:**
   - Pinned `@playwright/test@1.62.1` devDependency at repository root.
   - Permanent project matrix: `chromium`, `firefox`, and `webkit` (desktop, tablet portrait, mobile portrait, and compact landscape coverage; Chromium also runs the touch-emulation gate).
-  - Test inventory: 43 canonical logical tests × 3 browser projects = 129 project-test executions.
+  - Test inventory: 50 logical tests (26 Play, 9 Solve, 13 Research, 2 M1) × 3 browser projects = 150 project-test cases: 148 applicable executions and 2 intentional Chromium-only touch skips (Firefox/WebKit). This inventory is not a pass count.
   - On GitHub-hosted Linux CI, Firefox E2E runs headed under Xvfb with a CI-only WebGL2 enablement preference. WebKit is verified via Playwright automation; Safari has not been separately verified.
   - Dedicated isolated webServer: `npm run dev --workspace=@gearcube/web -- --port 4173 --strictPort --host 127.0.0.1` on `http://127.0.0.1:4173` with `reuseExistingServer: false`.
   - Execution command: `npm run test:e2e` (`playwright test`).
@@ -297,10 +297,24 @@
   - Busy-state blocking:
     - **Active Animation:** all move controls, history navigation, mode toggle, and scramble buttons are disabled.
     - **HALF_TURN_LOCKED:** only staged-face Finish and Reverse buttons/shortcuts are actionable; unrelated face moves, history, mode toggle, and scramble buttons are disabled; seed text input remains enabled and editable.
-  - Responsive layout: primary controls remain accessible and non-overlapping across 1440x900, 768x1024, 1024x768, 375x667, 390x844, and 667x375 viewports with zero horizontal document overflow; compact Play controls can be stowed to restore canvas hit-testing and reopen in a scrollable drawer on short screens, including during IDLE and HALF_TURN_LOCKED states.
+  - Responsive layout: six isolated `E2E_RESPONSIVE_LAYOUT_FLOW` cases cover 1440x900, 768x1024, 1024x768, 375x667, 390x844, and 667x375 with fresh pages and independent test budgets. Each preserves panel geometry, overflow, collision, and control actionability checks; repeated canvas interactions and half-turn animations no longer share one six-viewport timeout.
+  - Compact interaction: `E2E_RESPONSIVE_CANVAS_INPUT` at 667x375 proves close/reopen, unavailable closed controls, canvas hit-testing, actual pointer/wheel receipt, and Space-key disclosure. `E2E_RESPONSIVE_HALF_TURN` at 375x667 proves locked-layout bounds/non-overlap, editable seed, enabled Finish/Reverse controls, and reverse-to-IDLE without a history entry.
   - M1 mode stability: Play/Solve/Research presentation remains usable through 390x844 ↔ 844x390 and 768x1024 ↔ 1024x768 transitions; closed controls remain hidden and non-focusable, Research remains internally scrollable, and Solve playback remains reachable.
   - Touch emulation: Chromium with `hasTouch: true` exercises touch disclosure, canvas pointer input, and short-height drawer scrolling without treating emulation as real-device evidence.
   - Zero unhandled console/runtime errors (`pageerror` and error-level console messages).
+
+#### Responsive contract ownership
+
+| Contract | Maintained gate |
+| :--- | :--- |
+| A/B/C: viewport geometry, no-overflow, panel collision | Six Play `E2E_RESPONSIVE_LAYOUT_FLOW` cases; desktop retains overlay collision checks, compact cases bound the drawer and all four control columns. |
+| D/E/F: drawer disclosure, canvas hit target, pointer/wheel actionability | Play `E2E_RESPONSIVE_CANVAS_INPUT` retains actual input at 667x375; M1 mode/resize additionally checks hit targets and hidden-control focus after transitions. |
+| G: narrow HALF_TURN controls and cancellation | Play `E2E_RESPONSIVE_HALF_TURN` at 375x667 replaces the repeated equivalent phone animations. |
+| H/J: resize/orientation and Play/Solve/Research transitions | `RESPONSIVE_M1_MODE_RESIZE_GATE` remains unchanged, including Enter-key disclosure, hidden focus, Research scrolling, and Solve playback reachability. |
+| I: touch input and drawer scrolling | Chromium-only `TOUCH_EMULATION_GATE` remains unchanged. |
+
+Repeated compact disclosure/hit checks in the old six-viewport loop are consolidated into the representative input gate and the stronger M1 transition gate. No viewport, console gate, timeout, or retry policy is removed or relaxed.
+
 - **Assertion Principle:** `PLAYWRIGHT_PIXEL_PERFECT_ASSERTIONS: NO` and `RENDERER_PIXELS_USED_AS_STATE_ORACLE: NO` (general Play and Solve Mode interaction tests verify DOM interactions, disabled states, and text/attribute state indicators rather than full-compositor pixel screenshots; Phase 5D includes a single supplemental raw WebGL `HTMLCanvasElement` bitmap comparison oracle strictly for verifying Play/Research visual state preservation without modifying general UI assertion principles).
 - **Complementary Acceptance Roles:**
   - **Playwright E2E (`npm run test:e2e`):** Repeatable, repository-owned deterministic regression suite covering automated DOM interaction flows and error-free execution.
