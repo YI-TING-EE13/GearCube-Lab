@@ -78,6 +78,7 @@ const AnimatedGearCubeScene: React.FC<AnimatedGearCubeSceneProps> = ({
 
 export const GearCubeViewport: React.FC = () => {
   const [workspaceMode, setWorkspaceMode] = useState<WorkspaceMode>('PLAY');
+  const [isPlayControlsOpen, setIsPlayControlsOpen] = useState(true);
   const [app, setApp] = useState<PlayApplicationState>(createInitialPlayApplicationState);
   const [seed, setSeed] = useState<string>('GearCube-Lab');
   const [selectedAlgorithm, setSelectedAlgorithm] = useState<SolverAlgorithm>('IDA_STAR');
@@ -367,7 +368,7 @@ export const GearCubeViewport: React.FC = () => {
   });
 
   return (
-    <div className={`canvas-container workspace-mode-${workspaceMode.toLowerCase()}`} style={{ width: '100vw', height: '100vh', position: 'relative' }}>
+    <div className={`canvas-container workspace-mode-${workspaceMode.toLowerCase()}`}>
       <Canvas
         camera={{
           position: [3.5, 3.0, 4.5],
@@ -426,66 +427,93 @@ export const GearCubeViewport: React.FC = () => {
       {/* Mode-Conditional UI Clusters */}
       {workspaceMode === 'PLAY' && (
         <>
-          {/* Top Bar: History Navigation & Scramble Controls */}
-          <div className="top-overlay-bar">
-            <HistoryControls
-              canUndo={hasUndo}
-              canRedo={hasRedo}
-              canResetBaseline={canReset}
-              isBusy={isBusy}
-              onUndo={handleUndo}
-              onRedo={handleRedo}
-              onResetBaseline={handleResetBaseline}
-            />
+          {/* Compact screens keep the toggle outside the drawer so it remains reachable when controls are stowed. */}
+          <button
+            type="button"
+            className="play-controls-toggle"
+            onClick={() => setIsPlayControlsOpen((open) => !open)}
+            aria-expanded={isPlayControlsOpen}
+            aria-controls="play-controls-drawer"
+            aria-label={isPlayControlsOpen ? 'Close play controls menu' : 'Open play controls menu'}
+            title={isPlayControlsOpen ? 'Close play controls menu' : 'Open play controls menu'}
+            data-testid="play-controls-toggle"
+          >
+            <span className="play-controls-toggle-icon" aria-hidden="true">
+              {isPlayControlsOpen ? '×' : '☰'}
+            </span>
+          </button>
 
-            <ScramblePanel
-              seed={seed}
-              isBusy={isBusy}
-              onSeedChange={setSeed}
-              onScramble={handleScramble}
-            />
+          <div
+            id="play-controls-drawer"
+            className="play-controls-drawer"
+            data-open={isPlayControlsOpen}
+            role="region"
+            aria-label="Play controls"
+            data-testid="play-controls-drawer"
+          >
+            <div className="play-controls-drawer-content">
+              {/* Top Bar: History Navigation & Scramble Controls */}
+              <div className="top-overlay-bar">
+                <HistoryControls
+                  canUndo={hasUndo}
+                  canRedo={hasRedo}
+                  canResetBaseline={canReset}
+                  isBusy={isBusy}
+                  onUndo={handleUndo}
+                  onRedo={handleRedo}
+                  onResetBaseline={handleResetBaseline}
+                />
+
+                <ScramblePanel
+                  seed={seed}
+                  isBusy={isBusy}
+                  onSeedChange={setSeed}
+                  onScramble={handleScramble}
+                />
+              </div>
+
+              {/* Left/Bottom-Left: Timeline Scrubber */}
+              <TimelineScrubber
+                entries={history.entries}
+                cursorIndex={history.cursorIndex}
+                isBusy={isBusy}
+                onScrub={handleScrub}
+              />
+
+              {/* Right Side Overlay: Solve Panel & Playback Controls */}
+              <div className="right-overlay-cluster">
+                <SolvePanel
+                  isSolved={isCubeSolved}
+                  isSessionBusy={isBusy}
+                  solverState={solverWorkerState}
+                  selectedAlgorithm={selectedAlgorithm}
+                  onSelectAlgorithm={setSelectedAlgorithm}
+                  onSolve={handleSolve}
+                  onCancel={handleCancelSearch}
+                />
+
+                <PlaybackControls
+                  playbackMetadata={playbackMetadata}
+                  isSessionBusy={isBusy}
+                  canStepBack={canStepBack}
+                  onPlay={handlePlay}
+                  onPause={handlePause}
+                  onStepForward={handleStepForward}
+                  onStepBackward={handleStepBackward}
+                />
+              </div>
+
+              {/* 12-Move Control Overlay with Phase 2E Turn Interaction Mode Support */}
+              <MoveControls
+                interactionMode={session.interactionMode}
+                isIdle={isIdle}
+                isAnimating={isAnimating}
+                stagedMove={session.stagedMove}
+                onTriggerMove={handleTriggerMove}
+                onChangeInteractionMode={handleChangeInteractionMode}
+              />
+            </div>
           </div>
-
-          {/* Left/Bottom-Left: Timeline Scrubber */}
-          <TimelineScrubber
-            entries={history.entries}
-            cursorIndex={history.cursorIndex}
-            isBusy={isBusy}
-            onScrub={handleScrub}
-          />
-
-          {/* Right Side Overlay: Solve Panel & Playback Controls */}
-          <div className="right-overlay-cluster">
-            <SolvePanel
-              isSolved={isCubeSolved}
-              isSessionBusy={isBusy}
-              solverState={solverWorkerState}
-              selectedAlgorithm={selectedAlgorithm}
-              onSelectAlgorithm={setSelectedAlgorithm}
-              onSolve={handleSolve}
-              onCancel={handleCancelSearch}
-            />
-
-            <PlaybackControls
-              playbackMetadata={playbackMetadata}
-              isSessionBusy={isBusy}
-              canStepBack={canStepBack}
-              onPlay={handlePlay}
-              onPause={handlePause}
-              onStepForward={handleStepForward}
-              onStepBackward={handleStepBackward}
-            />
-          </div>
-
-          {/* 12-Move Control Overlay with Phase 2E Turn Interaction Mode Support */}
-          <MoveControls
-            interactionMode={session.interactionMode}
-            isIdle={isIdle}
-            isAnimating={isAnimating}
-            stagedMove={session.stagedMove}
-            onTriggerMove={handleTriggerMove}
-            onChangeInteractionMode={handleChangeInteractionMode}
-          />
         </>
       )}
 

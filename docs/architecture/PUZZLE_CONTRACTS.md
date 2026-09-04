@@ -354,7 +354,7 @@ export type WorkerOutboundMessage =
 >   ): BenchmarkReport;
 >   ```
 > - **Corpus & Boundary Invariant:** The production `runBenchmarkSuite` runner always constructs and uses the canonical Core-only exact-distance corpus internally. No production corpus override is exposed from the package root public API. Static configuration validation executes before corpus construction.
-> - **Phase 5C & 5D Status:** Comparative research dataset and report (Phase 5C) are completed and accepted (see [`docs/research/PHASE_5_CLASSICAL_SOLVER_BENCHMARK_REPORT.md`](../research/PHASE_5_CLASSICAL_SOLVER_BENCHMARK_REPORT.md)); browser Web Worker / Research Mode UI (Phase 5D) remains NOT STARTED.
+> - **Phase 5C & 5D Status:** Comparative research dataset and report (Phase 5C) are completed and accepted (see [`docs/research/PHASE_5_CLASSICAL_SOLVER_BENCHMARK_REPORT.md`](../research/PHASE_5_CLASSICAL_SOLVER_BENCHMARK_REPORT.md)); the browser Web Worker and Research Mode UI (Phase 5D) are implemented and accepted.
 
 ```typescript
 /**

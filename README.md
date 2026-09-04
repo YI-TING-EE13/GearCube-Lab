@@ -77,6 +77,9 @@ The **Play** workspace is the default interactive puzzle environment.
   - When the cube is idle, use the **Direct 180°** toggle in Face Controls to switch between `TWO_STEP` and `DIRECT_180`.
 - **Face Move Controls:**
   - 12 on-screen buttons trigger Clockwise (↻) and Counter-Clockwise (↺) moves for all six faces (**U, D, F, B, R, L**).
+- **Responsive Controls:**
+  - On tablet and phone-sized viewports, use the controls toggle in the upper-right corner to open or stow the Play controls.
+  - When stowed, the HTML control layer is removed from the hit-test path so the canvas remains available for orbit and zoom gestures; when open, the controls are stacked in a scrollable drawer for short screens.
 - **Scramble & History:**
   - Enter any string into the **Seed** field and click **Scramble** to apply a deterministic scramble sequence.
   - Use **Undo**, **Redo**, or **Reset Baseline** in the top bar to navigate history, or click directly on any step in the timeline scrubber.
@@ -167,7 +170,7 @@ npx playwright install
 
 ### CI Verification
 
-The project includes an automated GitHub Actions verification workflow running on hosted Ubuntu with Node.js 22.17.1. It performs workspace verification (`npm ci` and `npm run verify`) followed by a parallel browser test matrix executing the full 41-test Playwright suite independently across Chromium, Firefox, and WebKit (123 project-test executions total). On hosted Linux CI, Firefox executes headed under Xvfb with a CI-only WebGL2 enablement preference.
+The project includes an automated GitHub Actions verification workflow running on hosted Ubuntu with Node.js 22.17.1. It performs workspace verification (`npm ci` and `npm run verify`) followed by a parallel browser matrix with 50 logical Playwright tests: 150 project-test cases, comprising 148 applicable executions and 2 intentional skips for the Chromium-only touch gate. On hosted Linux CI, Firefox executes headed under Xvfb with a CI-only WebGL2 enablement preference.
 
 ---
 
@@ -186,16 +189,17 @@ With `--json` and/or `--csv`, the CLI writes those report files. If no output-fi
 ## Tested Environment & Browser Status
 
 - **Runtime Baseline:** Node.js `>=22.12.0 <23` (CI baseline: Node.js 22.17.1).
-- **Chromium:** Automated and verified via Playwright browser suite (41 / 41).
-- **Firefox:** Automated and verified via Playwright browser suite (41 / 41). On GitHub-hosted Ubuntu CI, Firefox E2E runs headed under Xvfb with a CI-only WebGL2 enablement preference.
-- **WebKit:** Automated and verified through Playwright browser suite (41 / 41). Safari has not been separately verified.
+- **Chromium:** Configured for the full Playwright suite, including touch emulation.
+- **Firefox:** Configured for non-touch Playwright coverage; hosted Ubuntu CI uses headed Firefox under Xvfb with a CI-only WebGL2 enablement preference.
+- **WebKit:** Configured for non-touch Playwright coverage. Native Safari has not been separately verified.
+- **Qualification evidence:** Browser results apply to the exact tested commit. Inspect all four jobs in the PR's Verify run; configured coverage or a local pass is not formal acceptance.
 
 ---
 
 ## Known Limitations & Deferred Work
 
 - **No Drag-to-Turn Manipulation:** Direct pointer dragging on cube pieces to initiate face turns is not currently implemented; manipulation is handled through the on-screen buttons and keyboard shortcuts.
-- **Browser Automation Scope:** Automated E2E test coverage covers Chromium, Firefox, and WebKit (41 logical tests × 3 browser projects = 123 project-test executions). Native Safari has not been separately verified.
+- **Browser Automation Scope:** Chromium, Firefox, and WebKit are configured for automated E2E qualification. The touch-emulation gate is Chromium-only and does not represent real-device verification. Native Safari has not been separately verified.
 - **AI / Neural Search Track (Phase 6):** Offline PyTorch-trained neural heuristics and learned value networks remain a deferred optional research track.
 - **Physical Model & Vision Track (Phase 7):** Camera capture, color/sticker extraction, state reconstruction, and physical guidance remain a deferred optional expansion track.
 - **Reference Puzzle Model:** The puzzle model implements the canonical combinatorial and mechanical rules of the Standard / Original Gear Cube designed by Oskar van Deventer, rather than a physical-replica scan of third-party retail variants.
