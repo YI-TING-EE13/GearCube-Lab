@@ -1,7 +1,8 @@
 # DEVELOPMENT_GUIDE.md — Engineering Standards & Development Workflows
 
-> **Document Status:** `DECIDED`
+> **Document Status:** `ACTIVE / CURRENT`
 > **Applicability:** All human engineers and AI coding agents contributing to GearCube Lab.
+> **Current Toolchain Contract:** Node.js `>=22.12.0 <23` (CI baseline: `22.17.1`)
 
 ---
 
@@ -11,7 +12,7 @@ GearCube Lab relies on modern, strict, and reproducible development tooling:
 
 - **TypeScript / Node Environment:**
   - Standard JavaScript/TypeScript package manager: `npm` (initial low-complexity default).
-  - Target Node.js version: Active LTS (v20+ or v22+).
+  - Target Node.js version: `>=22.12.0 <23`. Node.js 20 is outside the supported repository contract.
   - Bundler & Dev Server: **Vite** for rapid hot module replacement and optimized static distribution.
 - **Python / Machine Learning Environment:**
   - Environment & Dependency Manager: **`uv`** exclusively. All virtual environments, tool invocations, and dependencies in `ml/` must be managed via `uv run` and `uv pip`.
@@ -58,7 +59,7 @@ All TypeScript configuration files must enforce maximum compiler strictness:
 - **Domain Core (`packages/core`):** Exactly zero external runtime dependencies.
 - **Kinematics Engine (`packages/kinematics`):** Pure mathematical module depending solely on `@gearcube/core`.
 - **Solvers (`packages/solvers` — Implemented & Accepted in Phase 4):** Pure combinatorial search algorithms with zero UI/rendering dependencies. Depends only on `@gearcube/core`.
-- **Web Application (`apps/web`):** Project-internal workspace dependencies are `@gearcube/core`, `@gearcube/kinematics`, and `@gearcube/solvers`. External dependencies are kept minimal, focused on React 19 and Three.js/R3F presentation stack with zero external state management libraries (no Zustand requirement).
+- **Web Application (`apps/web`):** Project-internal workspace dependencies are `@gearcube/core`, `@gearcube/kinematics`, `@gearcube/solvers`, and `@gearcube/benchmark`. External dependencies are kept minimal, focused on React 19 and Three.js/R3F presentation stack with zero external state management libraries (no Zustand requirement).
 - Always commit lockfiles (`package-lock.json`, `uv.lock`) once dependencies are modified.
 
 ---
@@ -100,8 +101,9 @@ All TypeScript configuration files must enforce maximum compiler strictness:
 # TypeScript / Node workflows (Available)
 npm run dev              # Start Vite local development server
 npm run build            # Compile production static bundle
-npm run test             # Run full Vitest test suite
+npm test                 # Run full Vitest test suite
 npm run typecheck        # Run tsc --noEmit across workspaces
+npm run check:core-deps  # Verify pure-core dependency boundary
 npm run verify           # Full CI validation: typecheck + core purity + tests + build
 
 # Browser E2E workflow (Available — implemented in Phase 3C, extended in Phase 4E)

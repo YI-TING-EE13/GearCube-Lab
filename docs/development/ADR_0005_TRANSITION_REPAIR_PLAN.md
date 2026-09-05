@@ -5,6 +5,8 @@
 > **Target Worktree:** Clean dedicated cross-phase repair worktree (e.g. `..\GearCube-Lab-adr0005-transition-repair`)
 > **Baseline Commit:** `db3ad11baab5d4ba56de6b90e3228c9200bf62a4`
 > **Applicability:** Pure TypeScript Domain Core (`packages/core`), Transition Tables (`transition-data.ts`), and Phase 1C Transition Unit Tests (`transitions.test.ts`)
+> **Lifecycle:** `HISTORICAL IMPLEMENTATION PLAN / COMPLETED`
+> **Current Authority:** The accepted transition decision, current state model, and [`ROADMAP.md`](ROADMAP.md) govern current behavior; this plan preserves the pre-acceptance repair sequence.
 
 ---
 

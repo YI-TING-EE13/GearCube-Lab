@@ -1,6 +1,6 @@
 # TEST_STRATEGY.md — Comprehensive Verification & Test Strategy
 
-> **Document Status:** `DECIDED`
+> **Document Status:** `ACTIVE / CURRENT`
 > **Applicability:** All testing suites, invariant assertions, and verification gates across the repository lifecycle.
 
 ---
@@ -251,7 +251,8 @@
     - `ALL_SOLVED_GATE`: 100% of measured trials solved with 0 limit reached.
     - `OPTIMALITY_GATE`: Zero optimality violations (`solutionDepth === exactDepth`).
     - `REPRODUCIBILITY_GATE`: Zero deterministic projection mismatches across 3 independent CLI replicates.
-    - `RAW_ARTIFACT_INTEGRITY_GATE`: All 10 raw JSON/CSV artifact SHA-256 hashes immutable.
+    - `RAW_ARTIFACT_INTEGRITY_GATE`: `scripts/analyze-phase5c.mjs` validates exact Git-byte SHA-256 values for 5 raw JSON files and 5 raw CSV files, plus the 3 committed config JSON files, before derived-output mutation.
+    - `DERIVED_OUTPUT_TRANSACTION_GATE`: The Phase 5C analyzer stages all three derived outputs, preserves the prior set, and restores it byte-for-byte after an injected pre-install or partial-install failure.
     - `STRUCTURAL_ANALYSIS_GATE`: Traceable paired reduction statistics deterministically recomputed and validated.
     - `TIMING_RESOLUTION_GATE`: Two-stage median with integer-ms quantization labeling (`TIMER_RESOLUTION_LIMITED`).
     - `METRIC_SEPARATION_GATE`: Deterministic search metrics strictly separated from observational execution times.
@@ -270,7 +271,8 @@
     - `RAW_WEBGL_CANVAS_ORACLE_GATE`: Exact decoded RGBA bitmap equality via direct `HTMLCanvasElement` capture (`canvas.toDataURL('image/png')` drawn to a temporary 2D canvas and compared via `getImageData()`) proves identical WebGL canvas rendering pre- and post-Research Mode lifecycle (`differingPixels: 0`, `maxChannelDelta: 0`, `diffBoundingBox: null`).
     - `MODE_SWITCH_CANCELLATION_GATE`: Switching to Play mode during an active benchmark terminates the background Worker and restores clean presentation.
     - `RESPONSIVE_RESEARCH_LAYOUT_GATE`: Verified layout bounds and non-overflow across Desktop (1280x800), Tablet (768x1024), and Mobile (375x667) viewports in `tests/e2e/research-mode.spec.ts`; the M1 mode-stability gate adds short-landscape Research coverage.
-    - *Verification Snapshot (Technical Head `8bc1d51`):* 52 boundary tests, 32 controller unit tests, 12 Research Mode E2E tests, 40 total Playwright E2E tests, and 444 workspace tests passing.
+    - *Historical verification snapshot (Technical Head `8bc1d51`):* 52 boundary tests, 32 controller unit tests, 12 Research Mode E2E tests, 40 total Playwright E2E tests, and 444 workspace tests passing at that accepted head.
+  - **Maintained current Vitest inventory:** 36 test files / 452 tests, including the Phase 5C integrity and transaction regression suite. This is an inventory baseline; exact qualification evidence belongs to the run for the tested commit.
 
 ### Level 9: Browser End-to-End Tests (Playwright — Available / Implemented)
 - **Scope:** Whole Web Application (`playwright.config.ts`, `tests/e2e/play-mode.spec.ts`, `tests/e2e/solve-mode.spec.ts`, `tests/e2e/research-mode.spec.ts`, `tests/e2e/responsive-navigation.spec.ts`)
@@ -280,7 +282,7 @@
   - Permanent project matrix: `chromium`, `firefox`, and `webkit` (desktop, tablet portrait, mobile portrait, and compact landscape coverage; Chromium also runs the touch-emulation gate).
   - Test inventory: 50 logical tests (26 Play, 9 Solve, 13 Research, 2 M1) × 3 browser projects = 150 project-test cases: 148 applicable executions and 2 intentional Chromium-only touch skips (Firefox/WebKit). This inventory is not a pass count.
   - On GitHub-hosted Linux CI, Firefox E2E runs headed under Xvfb with a CI-only WebGL2 enablement preference. WebKit is verified via Playwright automation; Safari has not been separately verified.
-  - Dedicated isolated webServer: `npm run dev --workspace=@gearcube/web -- --port 4173 --strictPort --host 127.0.0.1` on `http://127.0.0.1:4173` with `reuseExistingServer: false`.
+  - Dedicated isolated webServer: `npm run build --workspace=@gearcube/web && npm run preview --workspace=@gearcube/web -- --port 4173 --strictPort --host 127.0.0.1` on `http://127.0.0.1:4173` with `reuseExistingServer: false`. Playwright qualifies the built preview, not the Vite development server.
   - Execution command: `npm run test:e2e` (`playwright test`).
 - **Invariants Tested (Behavioral / DOM-Level Assertions):**
   - Viewport, controls, and canvas render cleanly on initial app load.

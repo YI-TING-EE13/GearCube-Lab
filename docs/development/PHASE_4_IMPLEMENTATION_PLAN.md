@@ -26,6 +26,8 @@
 > **Phase 4E Accepted Head:** `d9a9ca3cf72ca897e0d03865b0acdfe695010396`
 > **Authoritative Main Baseline:** `a0823edf29062d8b21a8dfa9c1011f34b1e71343` (Commit `Record Phase 4D acceptance` on `main`)
 > **Applicability:** Solvers Package (`packages/solvers`), Web Application (`apps/web`), Web Worker Infrastructure (`apps/web/src/workers`), Solve Mode UI, Solution Playback, Playwright Browser E2E Automation
+> **Lifecycle:** `HISTORICAL MILESTONE PLAN / ACCEPTED`
+> **Current Authority:** Current implementation topology and verification inventory are maintained in [`ROADMAP.md`](ROADMAP.md), [`TEST_STRATEGY.md`](TEST_STRATEGY.md), and [`SYSTEM_ARCHITECTURE.md`](../architecture/SYSTEM_ARCHITECTURE.md).
 
 ---
 
@@ -42,7 +44,7 @@ Phase 4 introduces the classical graph search and automated solving infrastructu
 4. **Interactive Solve Mode UI & Solution Playback:** UI controls in `apps/web` for algorithm selection, progress monitoring, and step-by-step or automated solution playback with expected-prefix state guarding delegating strictly through the single canonical application authority without calling frame-step functions directly.
 5. **End-to-End Test & Acceptance Strategy:** Independent depth 1..8 optimality validation against a Phase 4A test-only exact-distance oracle, pure controller/reducer unit tests in Node Vitest, and Playwright browser responsiveness tests.
 
-> **Preflight Acceptance Note:** The Phase 4 classical solver preflight specifications, package boundaries, 5-subphase decomposition (4A..4E), exact-distance oracle gates, lower-bound BiBFS stopping rule, and Web Worker lifecycle were independently reviewed and accepted at commit `996825befc021d322bf353f06347a7e09375af40`. Phase 4A implementation is unblocked; Phase 4 implementation has NOT started.
+> **Preflight Acceptance Note (historical):** The Phase 4 classical solver preflight specifications, package boundaries, 5-subphase decomposition (4A..4E), exact-distance oracle gates, lower-bound BiBFS stopping rule, and Web Worker lifecycle were independently reviewed and accepted at commit `996825befc021d322bf353f06347a7e09375af40`. At that preflight snapshot Phase 4A implementation was unblocked and Phase 4 implementation had NOT started; the later accepted implementation status is recorded above and in the current roadmap.
 
 ---
 

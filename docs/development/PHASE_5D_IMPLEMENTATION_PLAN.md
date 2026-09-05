@@ -12,6 +12,8 @@
 > **Phase 5D Implementation:** `COMPLETED & ACCEPTED`
 > **Phase 5 Overall Status:** `COMPLETED & ACCEPTED`
 > **Phase 5D Accepted:** `YES`
+> **Lifecycle:** `HISTORICAL MILESTONE ACCEPTANCE RECORD`
+> **Current Test Inventory:** 36 Vitest files / 452 tests (the acceptance counts below are as-of the accepted technical head).
 
 ---
 

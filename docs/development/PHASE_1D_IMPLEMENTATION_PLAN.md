@@ -5,6 +5,8 @@
 > **Baseline Commit:** `cc38c194e95656e2af03ce951c8df14d3c35cbdb` (`Adopt center orientation semantics`)
 > **Branch:** `phase/1d-frame-materialization-plan-repair`
 > **Applicability:** Pure TypeScript Domain Core (`packages/core`)
+> **Lifecycle:** `HISTORICAL MILESTONE PLAN / ACCEPTED`
+> **Current Authority:** The accepted Phase 1D result and current milestone state are maintained in [`ROADMAP.md`](ROADMAP.md) and [`GEAR_CUBE_STATE_MODEL.md`](../architecture/GEAR_CUBE_STATE_MODEL.md).
 
 ---
 

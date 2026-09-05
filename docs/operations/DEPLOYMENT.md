@@ -8,7 +8,7 @@
 
 ## 1. Deployment Philosophy & Target Environment
 
-GearCube Lab is architected as a **100% static, client-side web application** across all simulation, classical solving, and research benchmarking workspaces (Phases 0 through 5, qualified for public testing in Phase 8 and live deployment in Phase 9).
+GearCube Lab is architected as a **100% static, client-side web application** across the Play and Research workspaces, including the Solver panel and benchmark execution (Phases 0 through 5, qualified for public testing in Phase 8 and live deployment in Phase 9).
 
 ### Key Deployment Characteristics:
 - **Zero Server Infrastructure:** The core application requires no backend API server, database, or server-side compute. All state transitions, 3D animations, and search algorithms execute locally within the user's browser.
@@ -35,7 +35,7 @@ The public GitHub Pages deployment is fully automated and strictly gated by the 
 main branch push
       ↓
 Verify Workflow (.github/workflows/verify.yml)
-      ├─ Workspace verify (typecheck, boundary checks, Vitest 444/444)
+      ├─ Workspace verify (typecheck, boundary checks, Vitest 452/452)
       └─ Parallel Playwright E2E matrix (50 logical tests; 148 applicable executions, 2 intentional skips)
       ↓ (attempt 1 == success)
 Deploy GitHub Pages Workflow (.github/workflows/deploy-pages.yml via workflow_run)
@@ -128,7 +128,9 @@ When camera-based puzzle reconstruction is introduced in Phase 7:
 
 The following record preserves the initial Phase 9 live deployment and its acceptance results, including the then-current 123-case suite. It does not describe the current test inventory or the latest deployed commit; use Section 5.2 and the corresponding workflow run for current qualification.
 
-### 6.1. Deployment Metadata
+### 6.1. Deployment Metadata (Historical Initial Deployment Record)
+
+The run IDs and 123-test count in this subsection document the initial Phase 9 deployment qualification. They are preserved as historical evidence; the maintained current inventory is in [`TEST_STRATEGY.md`](../development/TEST_STRATEGY.md).
 - **Initial Live Deployment SHA:** `febe270621892fc5b985af24600ef0fa4be61e36`
 - **Main Verify Workflow Run:** `33254251003` (`conclusion: success`, Attempt 1, 123 / 123 E2E passed)
 - **Deploy GitHub Pages Workflow Run:** `33254681960` (`conclusion: success`)
@@ -139,7 +141,7 @@ The following record preserves the initial Phase 9 live deployment and its accep
 - **Public Reachability:** HTTPS 200 OK with valid security headers (`Strict-Transport-Security`).
 - **Initial 3D Render:** 3D viewport canvas rendered cleanly across Chromium, Firefox, and WebKit.
 - **Play Mode:** Two-step $90^\circ$ physical half-turn, move completion, and timeline undo to baseline verified.
-- **Solve Mode:** Deterministic scramble, real Solver Worker execution over HTTPS, solution generation, and animated playback to solved state verified.
+- **Solver in Play:** Deterministic scramble, real Solver Worker execution over HTTPS, solution generation, and animated playback to solved state verified.
 - **Research Mode:** Stratified benchmark suite execution in real Benchmark Worker, result summary table rendering, and structured JSON / CSV report downloads verified.
 - **Responsive Viewports:** Clean layout and zero document horizontal overflow verified across desktop ($1280 \times 800$), tablet ($768 \times 1024$), and mobile ($375 \times 667$).
 - **Network & Console Hygiene:** 0 asset 404s, 0 worker 404s, 0 MIME errors, 0 CORS errors, 0 third-party requests, and 0 console/page errors.

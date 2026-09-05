@@ -7,7 +7,10 @@
 > **Accepted Report Head**: `7552e61ffd79766b66d34ace0e510776aa8b9cb6`<br/>
 > **Independent Final Report Review**: `PASS`<br/>
 > **Phase 5C Overall Acceptance**: `ACCEPTED`<br/>
-> **Phase 5D**: `NOT STARTED`<br/>
+> **Phase 5D at report acceptance time**: `NOT STARTED`<br/>
+> **Current Phase 5D Status**: `COMPLETED / ACCEPTED` (see [`PHASE_5D_IMPLEMENTATION_PLAN.md`](../development/PHASE_5D_IMPLEMENTATION_PLAN.md))<br/>
+> **Lifecycle**: `RESEARCH / EMPIRICAL ACCEPTANCE RECORD`<br/>
+> **Current Authority**: Measured results and accepted evidence remain historical research records; current implementation and verification contracts live in the roadmap, test strategy, and repository source.
 > **Governance Note**: Required agent skills `$governance-task-planning` and `$technical-writing-editorial-review` were reported as `UNAVAILABLE_IN_CURRENT_AGENT_ENVIRONMENT`; explicit manual editorial and governance review procedures were executed.
 
 ---
@@ -280,7 +283,7 @@ Cross-process determinism was verified across the three independent timing runs 
 | **ALL_SOLVED_GATE** | 100% trials solved without limits | 3,546 / 3,546 solved, 0 limit reached | **PASS** |
 | **OPTIMALITY_GATE** | solutionDepth == exactDepth | 0 optimality violations across all trials | **PASS** |
 | **REPRODUCIBILITY_GATE** | Deterministic projection identity across replicates | 0 mismatches across 3 CLI replicates | **PASS** |
-| **RAW_ARTIFACT_INTEGRITY_GATE** | Immutable raw JSON/CSV SHA-256 hashes | All 10 raw file hashes match accepted record | **PASS** |
+| **RAW_ARTIFACT_INTEGRITY_GATE** | Immutable raw JSON/CSV SHA-256 hashes | All 10 raw artifacts (5 JSON + 5 CSV) match the accepted Git-byte record; the verifier separately checks 3 committed config hashes | **PASS** |
 | **STRUCTURAL_ANALYSIS_GATE** | Traceable paired reduction statistics | Derived structural statistics were deterministically recomputed from and independently validated against committed raw evidence | **PASS** |
 | **TIMING_RESOLUTION_GATE** | Two-stage median with quantization labeling | `TIMER_RESOLUTION_LIMITED` labeled | **PASS** |
 | **METRIC_SEPARATION_GATE** | Primary deterministic / secondary timing | Separate structural and timing tables | **PASS** |
