@@ -1,23 +1,24 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
+import { pathToFileURL } from 'node:url';
 
 /**
  * PHASE 5C DETERMINISTIC ANALYSIS SCRIPT
  *
  * Transaction / Fail-Safe Policy:
  * 1. Read-only validation phase:
- *    - Validates exact SHA-256 of all 5 raw JSON files and 3 config files.
+ *    - Validates exact SHA-256 of all 5 raw JSON files, 5 raw CSV files, and 3 config files.
  *    - Parses and validates committed config files against strict schema.
  *    - Validates report.config identity against committed configs for all 5 reports.
  *    - Validates structural and timing identity, invariants, and depth distributions.
  *    - Validates timing replicate case sequences and deterministic trial projections.
  * 2. In-memory computation phase:
  *    - Computes structural-by-depth CSV, timing-by-depth CSV, and reproducibility JSON completely in memory.
- * 3. Atomic write phase:
- *    - Writes each output to a .tmp file first.
- *    - Atomically renames .tmp files to canonical filenames.
- *    - If any error occurs during write or rename, all .tmp files and partial canonical targets are removed so no partial derived output is left behind.
+ * 3. Windows-safe output transaction:
+ *    - Writes new outputs into a private staging directory.
+ *    - Renames existing canonical outputs into a private backup directory before installing replacements.
+ *    - If any install fails, removes only installed replacements and restores every moved backup before surfacing the original error.
  */
 
 const EXPECTED_RAW_SHA256 = {
@@ -26,6 +27,14 @@ const EXPECTED_RAW_SHA256 = {
   'timing-r1.json': 'fa6746df41be905e1bd3457681b4fc3fb946be160e0e6b6d3d551b02b94ad955',
   'timing-r2.json': '49a5e72ec9131a81d8c76619cf3ed287153d440dbacf563992230f44e5cc7f8c',
   'timing-r3.json': '9f31f814dadbe13f685bc3b088ee04b38387b7525c9c8f46f5e6ca0c75161cd4',
+};
+
+const EXPECTED_RAW_CSV_SHA256 = {
+  'structural-depth1.csv': 'befeb0a3c3172c489d57261783cc8ba16684df1e47ba82fd9a98c07d1c3c7efe',
+  'structural-depth2-8.csv': '4cea8847996f0d8c2ebd516e0ee8475bad95ac61fdf0a1b7729dda58ca453a2e',
+  'timing-r1.csv': '0e6004fefd16aa8dfdc74a4c3858f533dad9dc6ee932acdb36c0e46203ce0085',
+  'timing-r2.csv': '39ca54955e8220fd2f0af84fcb98b8a3d051e58d0d4f56f15bcfb2adae1aa3b9',
+  'timing-r3.csv': '3a85ba331d3f72ec207c76d6da328dfae97b9619ae96fe9a444f11c112898d97',
 };
 
 const EXPECTED_CONFIG_SHA256 = {
@@ -61,6 +70,19 @@ const ALGORITHMS = ['BFS', 'BIDIRECTIONAL_BFS', 'IDA_STAR'];
 function computeSha256(filePath) {
   const content = fs.readFileSync(filePath);
   return crypto.createHash('sha256').update(content).digest('hex').toLowerCase();
+}
+
+function verifyExpectedHashes(directory, expectedHashes, artifactLabel) {
+  for (const [filename, expectedHash] of Object.entries(expectedHashes)) {
+    const filePath = path.join(directory, filename);
+    if (!fs.existsSync(filePath)) {
+      throw new Error(`Missing ${artifactLabel} file: ${filePath}`);
+    }
+    const actualHash = computeSha256(filePath);
+    if (actualHash !== expectedHash) {
+      throw new Error(`${artifactLabel} SHA256 mismatch for ${filename}: expected ${expectedHash}, got ${actualHash}`);
+    }
+  }
 }
 
 function computeMedian(sortedArr) {
@@ -117,38 +139,129 @@ function validateConfigObject(cfg, label) {
   if (!Number.isInteger(cfg.measuredRuns) || cfg.measuredRuns <= 0) throw new Error(`${label}: invalid measuredRuns`);
 }
 
+const DERIVED_OUTPUTS = [
+  { contentKey: 'structuralCsvContent', filename: 'structural-by-depth.csv' },
+  { contentKey: 'timingCsvContent', filename: 'timing-by-depth.csv' },
+  { contentKey: 'reproContent', filename: 'reproducibility-check.json' },
+];
+
+function movePath(sourcePath, targetPath, fsApi, onMoved) {
+  try {
+    fsApi.renameSync(sourcePath, targetPath);
+  } catch (error) {
+    // A test double or an interrupted filesystem operation may throw after the
+    // rename completed. Inspect both paths so rollback still tracks the move.
+    if (!fsApi.existsSync(sourcePath) && fsApi.existsSync(targetPath)) {
+      onMoved();
+    }
+    throw error;
+  }
+  onMoved();
+}
+
+/**
+ * Installs the three derived artifacts as one recoverable Windows-safe set.
+ * Existing targets move to a same-directory backup before any staged target is
+ * installed. The caller may provide a filesystem-shaped test double to inject
+ * failures without adding production-only failure switches.
+ */
+export function commitDerivedOutputs(outputs, derivedDir, fsApi = fs) {
+  const transactionDir = fsApi.mkdtempSync(path.join(derivedDir, '.phase5c-transaction-'));
+  const stagingDir = path.join(transactionDir, 'staged');
+  const backupDir = path.join(transactionDir, 'backup');
+  const targetPaths = new Map(
+    DERIVED_OUTPUTS.map(({ filename }) => [filename, path.join(derivedDir, filename)]),
+  );
+  const stagedPaths = new Map(
+    DERIVED_OUTPUTS.map(({ filename }) => [filename, path.join(stagingDir, filename)]),
+  );
+  const backupPaths = new Map(
+    DERIVED_OUTPUTS.map(({ filename }) => [filename, path.join(backupDir, filename)]),
+  );
+  const backedUp = new Set();
+  const installed = new Set();
+
+  const cleanupTransaction = () => {
+    try {
+      fsApi.rmSync(transactionDir, { recursive: true, force: true });
+    } catch (_) {
+      // The canonical set remains valid; cleanup is best effort after failure.
+    }
+  };
+
+  fsApi.mkdirSync(stagingDir, { recursive: true });
+  fsApi.mkdirSync(backupDir, { recursive: true });
+
+  try {
+    for (const { contentKey, filename } of DERIVED_OUTPUTS) {
+      fsApi.writeFileSync(stagedPaths.get(filename), outputs[contentKey], 'utf8');
+    }
+
+    // Move existing targets away first. Every later rename therefore targets an
+    // absent path and does not rely on POSIX overwrite semantics.
+    for (const { filename } of DERIVED_OUTPUTS) {
+      const targetPath = targetPaths.get(filename);
+      if (fsApi.existsSync(targetPath)) {
+        movePath(targetPath, backupPaths.get(filename), fsApi, () => backedUp.add(filename));
+      }
+    }
+
+    for (const { filename } of DERIVED_OUTPUTS) {
+      movePath(stagedPaths.get(filename), targetPaths.get(filename), fsApi, () => installed.add(filename));
+    }
+  } catch (error) {
+    let rollbackError;
+
+    try {
+      // Remove only replacements that were actually installed. An untouched
+      // pre-existing target must never be deleted during rollback.
+      for (const { filename } of DERIVED_OUTPUTS) {
+        const targetPath = targetPaths.get(filename);
+        if (installed.has(filename) && fsApi.existsSync(targetPath)) {
+          fsApi.unlinkSync(targetPath);
+        }
+      }
+
+      for (const { filename } of DERIVED_OUTPUTS) {
+        const backupPath = backupPaths.get(filename);
+        const targetPath = targetPaths.get(filename);
+        if (backedUp.has(filename) && fsApi.existsSync(backupPath)) {
+          if (fsApi.existsSync(targetPath)) fsApi.unlinkSync(targetPath);
+          movePath(backupPath, targetPath, fsApi, () => {});
+        }
+      }
+    } catch (restoreFailure) {
+      rollbackError = restoreFailure;
+    }
+
+    cleanupTransaction();
+    if (rollbackError) {
+      error.message = `${error.message}; rollback failed: ${rollbackError.message}`;
+    }
+    throw error;
+  }
+
+  cleanupTransaction();
+}
+
 function main() {
   const rawDir = path.join('docs', 'research', 'phase5c', 'raw');
   const configDir = path.join('docs', 'research', 'phase5c', 'configs');
   const derivedDir = path.join('docs', 'research', 'phase5c', 'derived');
 
   // ==========================================
-  // 1. Verify Raw Hashes
+  // 1. Verify all immutable research artifact hashes
   // ==========================================
-  for (const [filename, expectedHash] of Object.entries(EXPECTED_RAW_SHA256)) {
-    const filePath = path.join(rawDir, filename);
-    if (!fs.existsSync(filePath)) {
-      throw new Error(`Missing raw file: ${filePath}`);
-    }
-    const actualHash = computeSha256(filePath);
-    if (actualHash !== expectedHash) {
-      throw new Error(`Raw SHA256 mismatch for ${filename}: expected ${expectedHash}, got ${actualHash}`);
-    }
-  }
+  verifyExpectedHashes(rawDir, EXPECTED_RAW_SHA256, 'raw JSON');
+  verifyExpectedHashes(rawDir, EXPECTED_RAW_CSV_SHA256, 'raw CSV');
 
   // ==========================================
   // 2. Verify Config Hashes & Parse Committed Configs
   // ==========================================
   const committedConfigs = {};
-  for (const [filename, expectedHash] of Object.entries(EXPECTED_CONFIG_SHA256)) {
+  verifyExpectedHashes(configDir, EXPECTED_CONFIG_SHA256, 'config');
+  for (const filename of Object.keys(EXPECTED_CONFIG_SHA256)) {
     const filePath = path.join(configDir, filename);
-    if (!fs.existsSync(filePath)) {
-      throw new Error(`Missing config file: ${filePath}`);
-    }
-    const actualHash = computeSha256(filePath);
-    if (actualHash !== expectedHash) {
-      throw new Error(`Config SHA256 mismatch for ${filename}: expected ${expectedHash}, got ${actualHash}`);
-    }
     const rawText = fs.readFileSync(filePath, 'utf8');
     const parsed = JSON.parse(rawText);
     validateConfigObject(parsed, `committed config ${filename}`);
@@ -556,52 +669,25 @@ function main() {
   const reproContent = JSON.stringify(reproducibilityJson, null, 2) + '\n';
 
   // ==========================================
-  // 8. Atomic Output Transaction & Cleanup Policy
+  // 8. Windows-safe output transaction
   // ==========================================
-  const tempFiles = [];
-  const canonicalTargets = [
-    path.join(derivedDir, 'structural-by-depth.csv'),
-    path.join(derivedDir, 'timing-by-depth.csv'),
-    path.join(derivedDir, 'reproducibility-check.json'),
-  ];
-
-  try {
-    const structTmp = path.join(derivedDir, `structural-by-depth.csv.tmp.${Date.now()}`);
-    const timingTmp = path.join(derivedDir, `timing-by-depth.csv.tmp.${Date.now()}`);
-    const reproTmp = path.join(derivedDir, `reproducibility-check.json.tmp.${Date.now()}`);
-
-    tempFiles.push(structTmp, timingTmp, reproTmp);
-
-    fs.writeFileSync(structTmp, structuralCsvContent, 'utf8');
-    fs.writeFileSync(timingTmp, timingCsvContent, 'utf8');
-    fs.writeFileSync(reproTmp, reproContent, 'utf8');
-
-    // Atomically replace canonical outputs
-    fs.renameSync(structTmp, canonicalTargets[0]);
-    fs.renameSync(timingTmp, canonicalTargets[1]);
-    fs.renameSync(reproTmp, canonicalTargets[2]);
-  } catch (err) {
-    // Clean up all temporary files
-    for (const tf of tempFiles) {
-      if (fs.existsSync(tf)) {
-        try { fs.unlinkSync(tf); } catch (_) {}
-      }
-    }
-    // Clean up any partially-written canonical files to prevent partial derived output state
-    for (const ct of canonicalTargets) {
-      if (fs.existsSync(ct)) {
-        try { fs.unlinkSync(ct); } catch (_) {}
-      }
-    }
-    throw err;
-  }
+  commitDerivedOutputs(
+    {
+      structuralCsvContent,
+      timingCsvContent,
+      reproContent,
+    },
+    derivedDir,
+  );
 
   console.log('PHASE5C_ANALYSIS_COMPLETE: All 3 derived artifacts successfully validated and atomically generated.');
 }
 
-try {
-  main();
-} catch (err) {
-  console.error('ANALYSIS_FAILED:', err);
-  process.exit(1);
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+  try {
+    main();
+  } catch (err) {
+    console.error('ANALYSIS_FAILED:', err);
+    process.exit(1);
+  }
 }
