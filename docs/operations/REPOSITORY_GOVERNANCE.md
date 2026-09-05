@@ -112,7 +112,9 @@ These are inventory counts, not a claim that every listed case passed in every r
 ## Qualification boundaries
 
 - Playwright WebKit coverage is not native Safari qualification; native Safari has not been separately verified.
-- Browser viewport and touch emulation do not constitute real mobile or tablet hardware qualification; real-device testing has not been performed.
+- Hosted Playwright PR/main browser CI is desktop/browser automation. Browser viewport and touch emulation do not establish Android runtime or physical-device qualification.
+- M4 separately documents Android Chrome emulator qualification through actual Android Chrome and serial-specific direct CDP in two phone-class emulator environments. This is manual/on-demand evidence, not a required repository status check.
+- Physical Android/mobile hardware and tablet qualification remain unverified. Native Safari and iOS browser qualification remain unverified.
 - The automated baseline does not by itself establish production-ready, stable-release, or `v1` status.
 - This governance contract does not create a tag or release. Release state remains governed separately.
 
