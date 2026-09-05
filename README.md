@@ -287,7 +287,7 @@ Comprehensive architectural designs, mathematical models, testing strategies, an
 
 ## Governance
 
-All autonomous coding agents and human contributors must follow the instructions in [`AGENTS.md`](AGENTS.md) before making changes to this repository.
+All autonomous coding agents and human contributors must follow [`AGENTS.md`](AGENTS.md) and the maintained [main branch governance contract](docs/operations/REPOSITORY_GOVERNANCE.md) before making changes to this repository.
 
 ---
 
