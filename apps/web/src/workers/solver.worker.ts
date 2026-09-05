@@ -1,3 +1,13 @@
+/**
+ * @file solver.worker.ts
+ * @description One-shot browser Worker adapter for the canonical solver protocol.
+ * @remarks
+ * A Worker instance accepts one `START_SEARCH` job. The controller owns
+ * cancellation by terminating that instance; this adapter deliberately has no
+ * cancel message or long-lived puzzle state. Every response echoes `requestId`
+ * so the controller can discard stale progress or terminal messages.
+ */
+
 import {
   solveBfs,
   solveBidirectionalBfs,

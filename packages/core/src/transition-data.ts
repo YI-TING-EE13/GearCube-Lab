@@ -1,6 +1,17 @@
 /**
  * @file transition-data.ts
  * @description Checked-in deterministic frozen canonical transition lookup tables.
+ * @remarks
+ * This module is the static-data boundary for the canonical move algebra. Its
+ * values are the accepted reference-normalized tables documented by ADR-0005
+ * and checked by exhaustive transition tests; production behavior must not be
+ * used to regenerate or hand-tune them.
+ *
+ * Lookup dimensions are part of the internal contract: face keys use `Face`,
+ * corner rows index all 24 `CornerConfiguration` values, and slice rows retain
+ * the `InternalSliceName` and `Direction` ordering. The transition tests cover
+ * closure, inverse moves, 12-repeat identity, and equivalence with the
+ * independent normalization oracle.
  * @internal
  */
 
@@ -15,8 +26,10 @@ import type {
 export type InternalSliceName = 'X' | 'Y' | 'Z';
 
 /**
- * Precomputed corner configuration S_4 transpositions.
- * Maps Face -> current CornerConfiguration -> next CornerConfiguration.
+ * Precomputed corner-configuration transitions for canonical face moves.
+ *
+ * The first key is the moved face; each row then maps a current
+ * `CornerConfiguration` index in `[0..23]` to the next configuration index.
  */
 export const CORNER_TRANSITIONS: Readonly<
   Record<Face, readonly CornerConfiguration[]>
@@ -60,8 +73,12 @@ export const CORNER_TRANSITIONS: Readonly<
 });
 
 /**
- * Phase twist delta for each edge slice on canonical moves.
- * Increment is applied modulo 3.
+ * Phase-twist delta for each edge slice on canonical moves.
+ *
+ * The table is indexed by face, direction, and internal slice. The returned
+ * `SliceGearPhase` is added modulo 3 while applying the move, so clockwise and
+ * counter-clockwise entries are explicit inverses rather than inferred at
+ * runtime.
  */
 export const SLICE_DELTA_PHASES: Readonly<
   Record<
@@ -96,8 +113,11 @@ export const SLICE_DELTA_PHASES: Readonly<
 });
 
 /**
- * Permutation class transition for edge slices (X, Y, Z).
- * Maps Face -> Direction -> Slice -> CornerConfiguration -> current Class -> next Class.
+ * Permutation-class transitions for the three edge slices (X, Y, Z).
+ *
+ * The lookup path is `Face -> Direction -> InternalSliceName ->
+ * CornerConfiguration -> current SlicePermutationClass -> next class`. Each
+ * innermost row is a four-position permutation for one canonical state index.
  */
 export const SLICE_K_TRANSITIONS: Readonly<
   Record<

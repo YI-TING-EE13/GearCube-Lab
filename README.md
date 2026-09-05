@@ -196,7 +196,7 @@ With `--json` and/or `--csv`, the CLI writes those report files. If no output-fi
 - **Chromium:** Configured for the full Playwright suite, including touch emulation.
 - **Firefox:** Configured for non-touch Playwright coverage; hosted Ubuntu CI uses headed Firefox under Xvfb with a CI-only WebGL2 enablement preference.
 - **WebKit:** Configured for non-touch Playwright coverage. Native Safari has not been separately verified.
-- **Android Chrome Emulator Qualification:** M4 separately qualified the live Pages application in actual Android Chrome runtimes on two phone-class Android emulators: `Pixel_7` (Android 15/API 35, Chrome `124.0.6367.219`) and `Small_Phone` (Android 16/API 36, Chrome `151.0.7922.139`), using serial-specific direct CDP through ADB. This is separate from the hosted desktop browser matrix and Chromium touch emulation; it is not physical-device or tablet qualification.
+- **Android Chrome Emulator Qualification:** M4 separately qualified the live Pages application in actual Android Chrome runtimes on two x86_64 phone-class Android emulators on the same Windows host: `Pixel_7` (Android 15/API 35, Chrome `124.0.6367.219`) and `Small_Phone` (Android 16/API 36, Chrome `151.0.7922.139`), using serial-specific direct CDP through ADB. This is separate from the hosted desktop browser matrix and Chromium touch emulation; it is not physical-device or tablet qualification.
 - **Qualification evidence:** Browser results apply to the exact tested commit. Inspect all four jobs in the PR's Verify run; configured coverage or a local pass is not formal acceptance.
 
 ---
