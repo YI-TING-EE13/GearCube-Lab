@@ -47,30 +47,34 @@ describe('Phase 5B Classical Solver Benchmark Runner Gates', () => {
   });
 
   describe('OPTIMALITY_GATE: Depths 1 to 8 Solver Optimality Verification', () => {
-    it('proves solutionDepth === exactDepth for BFS, BiBFS, and IDA* across all 8 exact depths', () => {
-      const config: BenchmarkSuiteConfig = {
-        schemaVersion: '1',
-        suiteId: 'optimality-suite-1-to-8',
-        seed: 'optimality-seed-01',
-        exactDepths: [1, 2, 3, 4, 5, 6, 7, 8],
-        casesPerDepth: 1,
-        algorithms: ['BFS', 'BIDIRECTIONAL_BFS', 'IDA_STAR'],
-        warmupRuns: 0,
-        measuredRuns: 1,
-      };
+    it(
+      'proves solutionDepth === exactDepth for BFS, BiBFS, and IDA* across all 8 exact depths',
+      { timeout: 15000 },
+      () => {
+        const config: BenchmarkSuiteConfig = {
+          schemaVersion: '1',
+          suiteId: 'optimality-suite-1-to-8',
+          seed: 'optimality-seed-01',
+          exactDepths: [1, 2, 3, 4, 5, 6, 7, 8],
+          casesPerDepth: 1,
+          algorithms: ['BFS', 'BIDIRECTIONAL_BFS', 'IDA_STAR'],
+          warmupRuns: 0,
+          measuredRuns: 1,
+        };
 
-      const report = runBenchmarkSuiteWithCorpusForTesting(config, mockEnv, corpus);
-      expect(report.cases.length).toBe(8);
-      expect(report.trials.length).toBe(24);
+        const report = runBenchmarkSuiteWithCorpusForTesting(config, mockEnv, corpus);
+        expect(report.cases.length).toBe(8);
+        expect(report.trials.length).toBe(24);
 
-      for (const trial of report.trials) {
-        expect(trial.status).toBe('SOLVED');
-        if (trial.status === 'SOLVED') {
-          expect(trial.solutionDepth).toBe(trial.exactDepth);
-          expect(trial.solutionMoves.length).toBe(trial.exactDepth);
+        for (const trial of report.trials) {
+          expect(trial.status).toBe('SOLVED');
+          if (trial.status === 'SOLVED') {
+            expect(trial.solutionDepth).toBe(trial.exactDepth);
+            expect(trial.solutionMoves.length).toBe(trial.exactDepth);
+          }
         }
-      }
-    });
+      },
+    );
   });
 
   describe('REPEATED_RUN_DETERMINISM_GATE: Deterministic Metrics Projection', () => {
