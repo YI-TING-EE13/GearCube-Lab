@@ -109,7 +109,8 @@ These are inventory counts, not a claim that every run passes. Exact qualificati
 
 - **Hosted Firefox:** On hosted Linux CI, Firefox executes headed under Xvfb with a CI WebGL2 preference.
 - **Safari Qualification Notice:** Native Safari has not been separately verified.
-- **Hardware Qualification Notice:** Browser viewport and touch emulation do not constitute real-device mobile/tablet verification; that verification has not been performed.
+- **Android Emulator Qualification Notice:** Two Android phone-class emulator environments have been separately qualified against the live Pages site through actual Android Chrome using serial-specific direct CDP: `Pixel_7` on Android 15/API 35 with Chrome `124.0.6367.219`, and `Small_Phone` on Android 16/API 36 with Chrome `151.0.7922.139`. This evidence is distinct from desktop viewport and touch emulation and does not guarantee compatibility across all Android environments.
+- **Physical Device Qualification Notice:** Physical Android/mobile hardware and tablet qualification have not been performed. Native Safari and iOS browser qualification remain unverified.
 
 ### 5.3. Zero-Secret & Privacy Posture
 - Under no circumstances are private API keys, proprietary tokens, or backend credentials bundled into client-side JavaScript.

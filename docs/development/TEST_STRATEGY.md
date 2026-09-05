@@ -320,6 +320,22 @@ Repeated compact disclosure/hit checks in the old six-viewport loop are consolid
   - **Playwright E2E (`npm run test:e2e`):** Repeatable, repository-owned deterministic regression suite covering automated DOM interaction flows and error-free execution.
   - **Chrome DevTools MCP:** Interactive live browser acceptance covering 3D WebGL rendering, orbit controls, zoom gestures, pointer overlay isolation, and visual layout checks.
 
+### Android Emulator Runtime Qualification (M4 — Manual / On-Demand)
+
+This is a separate runtime qualification layer from the hosted Playwright CI matrix. It is manual/on-demand evidence, not an additional required GitHub status check and not a replacement for the automated desktop browser baseline.
+
+- **Accepted connection path:** Explicit Android emulator ADB serial → Android Chrome → `chrome_devtools_remote` → serial-specific ADB forward → Playwright `1.62.1` `chromium.connectOverCDP()`. The experimental Playwright `AndroidDevice` path was not the accepted path.
+- **Shared-host boundary:** Both environments ran on one Windows host in Android Emulator instances using host-backed graphics through the same NVIDIA RTX 3060 path. They are not independent hosts or physical devices.
+
+| Environment | Android runtime / profile | Chrome | Observed portrait metrics |
+| :--- | :--- | :--- | :--- |
+| Env A — `Pixel_7` | Android 15 / API 35, x86_64, phone-class | `124.0.6367.219` | About `412×783` CSS px, DPR `2.625` |
+| Env B — `Small_Phone` | Android 16 / API 36, x86_64, phone-class | `151.0.7922.139` | About `360×536` CSS px, DPR `2` |
+
+- **M4B live-runtime scope:** The live Pages site loaded through actual Android Chrome in both environments. Qualification covered portrait and landscape orientation, touch/coarse input, no blocking horizontal overflow in the qualified flows, WebGL2, rendered scene output, the canonical `U+` move, and undo back to solved. No application JavaScript, page, console, or network fatal errors were observed. These are Android emulator observations, not physical-device, tablet, or native Safari evidence.
+- **M4C deterministic scope:** Two fresh runs per environment exercised Play, Solver, and Research. Play used seed `abc`, preserved the Direct180 mode, began with the same 20-move preview (`B+ U+ L+ R+ F- L+...`), kept history at `0 / 0`, and remained unsolved. Solver used the real solver Worker; all four runs solved at depth 6, with playback `0 / 6`, full playback solved, and correct step-back/step-forward behavior. The observed move sequence `U F' U D R B` is observational only, not a frozen tie-break oracle; the contract is correctness, depth, and playback behavior.
+- **Research determinism:** The real Benchmark Worker ran `suiteId/seed = e2e-browser-fast`, depths `[1]`, 2 cases, warmup `0`, measured `1`, and BFS/BiBFS/IDA*. Across the four runs it completed 2 cases and 6 trials, with two trials per algorithm/depth, 2 solved, 0 limits, and the required schema/metadata. Timing values are observational and excluded from the deterministic contract.
+
 ### Level 10: Performance & Responsiveness Regression (Deferred / Future Performance Characterization)
 - **Scope:** Production Web Bundle
 - **Focus:** Quantitative frame budget and compute latency benchmarking against proposed non-binding performance targets.

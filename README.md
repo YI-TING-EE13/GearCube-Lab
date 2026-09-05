@@ -192,6 +192,7 @@ With `--json` and/or `--csv`, the CLI writes those report files. If no output-fi
 - **Chromium:** Configured for the full Playwright suite, including touch emulation.
 - **Firefox:** Configured for non-touch Playwright coverage; hosted Ubuntu CI uses headed Firefox under Xvfb with a CI-only WebGL2 enablement preference.
 - **WebKit:** Configured for non-touch Playwright coverage. Native Safari has not been separately verified.
+- **Android Chrome Emulator Qualification:** M4 separately qualified the live Pages application in actual Android Chrome runtimes on two phone-class Android emulators: `Pixel_7` (Android 15/API 35, Chrome `124.0.6367.219`) and `Small_Phone` (Android 16/API 36, Chrome `151.0.7922.139`), using serial-specific direct CDP through ADB. This is separate from the hosted desktop browser matrix and Chromium touch emulation; it is not physical-device or tablet qualification.
 - **Qualification evidence:** Browser results apply to the exact tested commit. Inspect all four jobs in the PR's Verify run; configured coverage or a local pass is not formal acceptance.
 
 ---
@@ -199,7 +200,8 @@ With `--json` and/or `--csv`, the CLI writes those report files. If no output-fi
 ## Known Limitations & Deferred Work
 
 - **No Drag-to-Turn Manipulation:** Direct pointer dragging on cube pieces to initiate face turns is not currently implemented; manipulation is handled through the on-screen buttons and keyboard shortcuts.
-- **Browser Automation Scope:** Chromium, Firefox, and WebKit are configured for automated E2E qualification. The touch-emulation gate is Chromium-only and does not represent real-device verification. Native Safari has not been separately verified.
+- **Browser Automation Scope:** Chromium, Firefox, and WebKit are configured for automated E2E qualification. The touch-emulation gate is Chromium-only and does not represent Android runtime or physical-device verification.
+- **Android / Physical Device Scope:** M4 qualifies two Android phone-class emulator environments through actual Android Chrome and serial-specific direct CDP. Physical Android/mobile hardware and tablet qualification remain unverified; native Safari and iOS browser qualification remain unverified.
 - **AI / Neural Search Track (Phase 6):** Offline PyTorch-trained neural heuristics and learned value networks remain a deferred optional research track.
 - **Physical Model & Vision Track (Phase 7):** Camera capture, color/sticker extraction, state reconstruction, and physical guidance remain a deferred optional expansion track.
 - **Reference Puzzle Model:** The puzzle model implements the canonical combinatorial and mechanical rules of the Standard / Original Gear Cube designed by Oskar van Deventer, rather than a physical-replica scan of third-party retail variants.
