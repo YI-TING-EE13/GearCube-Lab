@@ -60,7 +60,7 @@ e2e (firefox)
 e2e (webkit)
 ```
 
-A check rename requires ruleset and documentation reconciliation. A stale required context can block otherwise valid pull requests; an unreviewed new context can leave an expected gate outside the required contract. The `workflow_run` Pages deployment is intentionally not one of these pre-merge required checks, because making deployment a prerequisite for the Verify run would create a circular dependency.
+A check rename requires ruleset and documentation reconciliation. A stale required context can block otherwise valid pull requests; an unreviewed new context can leave an expected gate outside the required contract. The `workflow_run` Pages deployment is intentionally not one of these pre-merge required checks, because requiring that downstream deployment before the PR can merge would create a circular dependency: the merge creates the `main` push whose successful canonical Verify run is required to trigger that deployment.
 
 ## Approval and bypass policy
 
