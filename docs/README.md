@@ -47,7 +47,8 @@ docs/
 │   ├── PHASE_5C_EXPERIMENT_PLAN.md     # Phase 5C Experiment Plan — Accepted
 │   └── PHASE_5_CLASSICAL_SOLVER_BENCHMARK_REPORT.md # Phase 5C Classical Solver Benchmark Report — Accepted
 ├── operations/
-│   └── DEPLOYMENT.md                   # Static HTTPS hosting (GitHub Pages), Web Worker rules, & security posture
+│   ├── DEPLOYMENT.md                   # Static HTTPS hosting (GitHub Pages), Web Worker rules, & security posture
+│   └── REPOSITORY_GOVERNANCE.md        # Main branch protection, checks, qualification, & deployment contract
 ├── decisions/
 │   ├── ADR-0001-FOUNDATION.md          # Architecture Decision Record: Core foundations & tech stack
 │   ├── ADR-0002-STANDARD-GEAR-CUBE-REFERENCE.md # Decision Record: Standard Gear Cube model adoption
@@ -111,6 +112,7 @@ Throughout all documents in `docs/`, technical specifications and mechanical ass
 - **ADR-0005 Transition Repair Plan:** [`docs/development/ADR_0005_TRANSITION_REPAIR_PLAN.md`](development/ADR_0005_TRANSITION_REPAIR_PLAN.md)
 - **Developer Guidelines & Tooling:** [`docs/development/DEVELOPMENT_GUIDE.md`](development/DEVELOPMENT_GUIDE.md)
 - **Production Deployment & Security:** [`docs/operations/DEPLOYMENT.md`](operations/DEPLOYMENT.md)
+- **Main Branch Governance & Contribution Contract:** [`docs/operations/REPOSITORY_GOVERNANCE.md`](operations/REPOSITORY_GOVERNANCE.md)
 - **Foundational Architecture Decisions (ADR-0001):** [`docs/decisions/ADR-0001-FOUNDATION.md`](decisions/ADR-0001-FOUNDATION.md)
 - **Center Orientation Semantics Decision (ADR-0004 - Accepted):** [`docs/decisions/ADR-0004-CENTER-ORIENTATION-SEMANTICS.md`](decisions/ADR-0004-CENTER-ORIENTATION-SEMANTICS.md)
 - **Canonical Move Transition Algebra Decision (ADR-0005 - Accepted):** [`docs/decisions/ADR-0005-CANONICAL-MOVE-TRANSITION-ALGEBRA.md`](decisions/ADR-0005-CANONICAL-MOVE-TRANSITION-ALGEBRA.md)
