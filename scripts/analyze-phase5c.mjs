@@ -18,7 +18,9 @@ import { pathToFileURL } from 'node:url';
  * 3. Windows-safe output transaction:
  *    - Writes new outputs into a private staging directory.
  *    - Renames existing canonical outputs into a private backup directory before installing replacements.
- *    - If any install fails, removes only installed replacements and restores every moved backup before surfacing the original error.
+ *    - If any install fails, removes only installed replacements and attempts every moved backup independently.
+ *    - A complete rollback removes the transaction directory; an incomplete rollback
+ *      preserves it and surfaces the primary failure, rollback failures, and recovery path.
  */
 
 const EXPECTED_RAW_SHA256 = {
@@ -159,6 +161,34 @@ function movePath(sourcePath, targetPath, fsApi, onMoved) {
   onMoved();
 }
 
+function describeThrownValue(value) {
+  if (value instanceof Error) return value.message || value.name;
+  if (typeof value === 'string') return value;
+  try {
+    const serialized = JSON.stringify(value);
+    return serialized === undefined ? String(value) : serialized;
+  } catch (_) {
+    return String(value);
+  }
+}
+
+function createRollbackFailure(primaryFailure, rollbackFailures, transactionDir) {
+  const rollbackSummary = rollbackFailures
+    .map(({ filename, operation, error }) => `${operation} ${filename}: ${describeThrownValue(error)}`)
+    .join('; ');
+  const message = [
+    `Phase 5C derived output transaction failed: ${describeThrownValue(primaryFailure)}`,
+    `rollback failed: ${rollbackSummary}`,
+    `recovery directory preserved at ${transactionDir}`,
+  ].join('; ');
+
+  return new AggregateError(
+    [primaryFailure, ...rollbackFailures.map(({ error }) => error)],
+    message,
+    { cause: primaryFailure },
+  );
+}
+
 /**
  * Installs the three derived artifacts as one recoverable Windows-safe set.
  * Existing targets move to a same-directory backup before any staged target is
@@ -185,7 +215,8 @@ export function commitDerivedOutputs(outputs, derivedDir, fsApi = fs) {
     try {
       fsApi.rmSync(transactionDir, { recursive: true, force: true });
     } catch (_) {
-      // The canonical set remains valid; cleanup is best effort after failure.
+      // The canonical set remains valid; cleanup is best effort after commit or
+      // a fully successful rollback.
     }
   };
 
@@ -209,36 +240,61 @@ export function commitDerivedOutputs(outputs, derivedDir, fsApi = fs) {
     for (const { filename } of DERIVED_OUTPUTS) {
       movePath(stagedPaths.get(filename), targetPaths.get(filename), fsApi, () => installed.add(filename));
     }
-  } catch (error) {
-    let rollbackError;
+  } catch (primaryFailure) {
+    const rollbackFailures = [];
+    const restored = new Set();
 
-    try {
-      // Remove only replacements that were actually installed. An untouched
-      // pre-existing target must never be deleted during rollback.
-      for (const { filename } of DERIVED_OUTPUTS) {
+    const recordRollbackFailure = (filename, operation, error) => {
+      rollbackFailures.push({ filename, operation, error });
+    };
+
+    // Handle each artifact independently so one failed restore cannot prevent
+    // other backups from being restored or preserved for manual recovery.
+    for (const { filename } of DERIVED_OUTPUTS) {
+      try {
         const targetPath = targetPaths.get(filename);
+        const backupPath = backupPaths.get(filename);
+
+        // Remove only replacements that were actually installed. An untouched
+        // pre-existing target must never be deleted during rollback.
         if (installed.has(filename) && fsApi.existsSync(targetPath)) {
           fsApi.unlinkSync(targetPath);
         }
-      }
 
-      for (const { filename } of DERIVED_OUTPUTS) {
-        const backupPath = backupPaths.get(filename);
-        const targetPath = targetPaths.get(filename);
         if (backedUp.has(filename) && fsApi.existsSync(backupPath)) {
-          if (fsApi.existsSync(targetPath)) fsApi.unlinkSync(targetPath);
-          movePath(backupPath, targetPath, fsApi, () => {});
+          // A target that was not installed by this transaction is not safe to
+          // remove; leave the backup in place and surface the conflict.
+          if (fsApi.existsSync(targetPath)) {
+            throw new Error(`canonical target remains occupied: ${targetPath}`);
+          }
+          movePath(backupPath, targetPath, fsApi, () => restored.add(filename));
         }
+      } catch (rollbackFailure) {
+        recordRollbackFailure(filename, 'rollback', rollbackFailure);
       }
-    } catch (restoreFailure) {
-      rollbackError = restoreFailure;
     }
 
-    cleanupTransaction();
-    if (rollbackError) {
-      error.message = `${error.message}; rollback failed: ${rollbackError.message}`;
+    const fullyRestored = [...backedUp].every((filename) => (
+      restored.has(filename) && !fsApi.existsSync(backupPaths.get(filename))
+    ));
+
+    if (rollbackFailures.length === 0 && fullyRestored) {
+      cleanupTransaction();
+      throw primaryFailure;
     }
-    throw error;
+
+    if (rollbackFailures.length === 0 && !fullyRestored) {
+      recordRollbackFailure(
+        'transaction',
+        'rollback',
+        new Error('one or more backed-up artifacts were not fully restored'),
+      );
+    }
+
+    // Preserve the transaction directory whenever recovery is incomplete. It
+    // contains any backup bytes that could not be safely returned to canonical
+    // paths and gives an operator a concrete recovery location.
+    throw createRollbackFailure(primaryFailure, rollbackFailures, transactionDir);
   }
 
   cleanupTransaction();

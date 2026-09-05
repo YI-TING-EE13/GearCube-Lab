@@ -4,7 +4,7 @@
 > **Next Milestone:** `Post-Phase 9 Maintenance & Deferred Research Tracks`
 > **Previous Milestone:** `Phase 8 — Product Completion & Public-Test Readiness (Completed & Accepted)`
 > **Deferred Tracks:** `Phase 6 (Neural AI Search)` & `Phase 7 (Physical Model & Vision Expansion)` (Deferred / Optional Tracks)
-> **Current Verification Inventory:** 36 Vitest files / 452 tests; 50 logical Playwright tests, 150 project-test cases, 148 applicable executions, and 2 intentional skips. See [`TEST_STRATEGY.md`](TEST_STRATEGY.md) for the maintained inventory; milestone counts below are historical as-of snapshots.
+> **Current Verification Inventory:** 36 Vitest files / 454 tests; 50 logical Playwright tests, 150 project-test cases, 148 applicable executions, and 2 intentional skips. See [`TEST_STRATEGY.md`](TEST_STRATEGY.md) for the maintained inventory; milestone counts below are historical as-of snapshots.
 
 ---
 

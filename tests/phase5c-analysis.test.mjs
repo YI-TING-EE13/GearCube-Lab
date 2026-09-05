@@ -112,8 +112,9 @@ function expectOutputSet(derivedDir, outputs) {
   expect(fs.readdirSync(derivedDir).filter((name) => name.startsWith('.phase5c-transaction-'))).toEqual([]);
 }
 
-function makeFilesystemDouble({ failWrite = false, failInstallAt = 0 } = {}) {
+function makeFilesystemDouble({ failWrite = false, failInstallAt = 0, failRestoreFilename = null } = {}) {
   let installCount = 0;
+  const restoreAttempts = [];
 
   return {
     existsSync: fs.existsSync,
@@ -126,6 +127,13 @@ function makeFilesystemDouble({ failWrite = false, failInstallAt = 0 } = {}) {
       return fs.writeFileSync(filePath, content, encoding);
     },
     renameSync(sourcePath, targetPath) {
+      if (sourcePath.includes(`${path.sep}backup${path.sep}`)) {
+        const filename = path.basename(sourcePath);
+        restoreAttempts.push(filename);
+        if (filename === failRestoreFilename) {
+          throw new Error(`injected restore failure ${filename}`);
+        }
+      }
       const result = fs.renameSync(sourcePath, targetPath);
       if (sourcePath.includes(`${path.sep}staged${path.sep}`)) {
         installCount += 1;
@@ -137,6 +145,7 @@ function makeFilesystemDouble({ failWrite = false, failInstallAt = 0 } = {}) {
     },
     unlinkSync: fs.unlinkSync,
     rmSync: fs.rmSync,
+    restoreAttempts,
   };
 }
 
@@ -214,5 +223,71 @@ describe('Phase 5C output transaction', () => {
     )).toThrow(`injected install failure ${failInstallAt}`);
 
     expectOutputSet(fixture.derivedDir, oldOutputs);
+  });
+
+  it('retains unrecovered backups and both failures when restoration fails before rename', () => {
+    const fixture = createFixture();
+    writeOutputs(fixture.derivedDir, oldOutputs);
+    const filesystem = makeFilesystemDouble({
+      failInstallAt: 1,
+      failRestoreFilename: 'structural-by-depth.csv',
+    });
+
+    let thrown;
+    try {
+      commitDerivedOutputs(newOutputs, fixture.derivedDir, filesystem);
+    } catch (error) {
+      thrown = error;
+    }
+
+    expect(thrown).toBeInstanceOf(Error);
+    expect(thrown.cause).toBeInstanceOf(Error);
+    expect(thrown.errors[0]).toBe(thrown.cause);
+    expect(thrown.cause.message).toContain('injected install failure 1');
+    expect(thrown.message).toContain('injected install failure 1');
+    expect(thrown.message).toContain('injected restore failure structural-by-depth.csv');
+
+    const transactionDirs = fs.readdirSync(fixture.derivedDir)
+      .filter((name) => name.startsWith('.phase5c-transaction-'));
+    expect(transactionDirs).toHaveLength(1);
+    const transactionDir = path.join(fixture.derivedDir, transactionDirs[0]);
+    expect(thrown.message).toContain(transactionDir);
+    expect(thrown.errors[1].message).toContain('injected restore failure structural-by-depth.csv');
+    expect(fs.readFileSync(path.join(transactionDir, 'backup', 'structural-by-depth.csv')))
+      .toEqual(Buffer.from(oldOutputs.structuralCsvContent));
+    expect(fs.readFileSync(path.join(fixture.derivedDir, 'timing-by-depth.csv')))
+      .toEqual(Buffer.from(oldOutputs.timingCsvContent));
+    expect(fs.readFileSync(path.join(fixture.derivedDir, 'reproducibility-check.json')))
+      .toEqual(Buffer.from(oldOutputs.reproContent));
+  });
+
+  it('continues restoring independent backups after one restore failure', () => {
+    const fixture = createFixture();
+    writeOutputs(fixture.derivedDir, oldOutputs);
+    const filesystem = makeFilesystemDouble({
+      failInstallAt: 2,
+      failRestoreFilename: 'timing-by-depth.csv',
+    });
+
+    expect(() => commitDerivedOutputs(newOutputs, fixture.derivedDir, filesystem)).toThrow(
+      'injected restore failure timing-by-depth.csv',
+    );
+
+    expect(filesystem.restoreAttempts).toEqual([
+      'structural-by-depth.csv',
+      'timing-by-depth.csv',
+      'reproducibility-check.json',
+    ]);
+    expect(fs.readFileSync(path.join(fixture.derivedDir, 'structural-by-depth.csv')))
+      .toEqual(Buffer.from(oldOutputs.structuralCsvContent));
+    expect(fs.readFileSync(path.join(fixture.derivedDir, 'reproducibility-check.json')))
+      .toEqual(Buffer.from(oldOutputs.reproContent));
+
+    const transactionDirs = fs.readdirSync(fixture.derivedDir)
+      .filter((name) => name.startsWith('.phase5c-transaction-'));
+    expect(transactionDirs).toHaveLength(1);
+    const transactionDir = path.join(fixture.derivedDir, transactionDirs[0]);
+    expect(fs.readFileSync(path.join(transactionDir, 'backup', 'timing-by-depth.csv')))
+      .toEqual(Buffer.from(oldOutputs.timingCsvContent));
   });
 });

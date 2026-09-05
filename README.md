@@ -170,7 +170,7 @@ npx playwright install
 
 ### Maintained verification inventory
 
-The current repository test inventory is 36 Vitest files with 452 tests. The Playwright inventory is 50 logical tests across three browser projects, yielding 150 project-test cases: 148 applicable executions and 2 intentional Chromium-only touch skips. These are inventory counts; exact pass/fail qualification belongs to the Verify workflow run for the tested commit.
+The current repository test inventory is 36 Vitest files with 454 tests. The Playwright inventory is 50 logical tests across three browser projects, yielding 150 project-test cases: 148 applicable executions and 2 intentional Chromium-only touch skips. These are inventory counts; exact pass/fail qualification belongs to the Verify workflow run for the tested commit.
 
 ### CI Verification
 

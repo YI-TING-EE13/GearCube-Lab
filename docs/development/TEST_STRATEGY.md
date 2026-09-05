@@ -272,7 +272,7 @@
     - `MODE_SWITCH_CANCELLATION_GATE`: Switching to Play mode during an active benchmark terminates the background Worker and restores clean presentation.
     - `RESPONSIVE_RESEARCH_LAYOUT_GATE`: Verified layout bounds and non-overflow across Desktop (1280x800), Tablet (768x1024), and Mobile (375x667) viewports in `tests/e2e/research-mode.spec.ts`; the M1 mode-stability gate adds short-landscape Research coverage.
     - *Historical verification snapshot (Technical Head `8bc1d51`):* 52 boundary tests, 32 controller unit tests, 12 Research Mode E2E tests, 40 total Playwright E2E tests, and 444 workspace tests passing at that accepted head.
-  - **Maintained current Vitest inventory:** 36 test files / 452 tests, including the Phase 5C integrity and transaction regression suite. This is an inventory baseline; exact qualification evidence belongs to the run for the tested commit.
+  - **Maintained current Vitest inventory:** 36 test files / 454 tests, including the Phase 5C integrity and transaction regression suite. This is an inventory baseline; exact qualification evidence belongs to the run for the tested commit.
 
 ### Level 9: Browser End-to-End Tests (Playwright — Available / Implemented)
 - **Scope:** Whole Web Application (`playwright.config.ts`, `tests/e2e/play-mode.spec.ts`, `tests/e2e/solve-mode.spec.ts`, `tests/e2e/research-mode.spec.ts`, `tests/e2e/responsive-navigation.spec.ts`)
