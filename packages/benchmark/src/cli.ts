@@ -62,8 +62,16 @@ function getEnvironmentProvenance(): EnvironmentProvenance {
 }
 
 /**
- * Main execution entry for the Node CLI adapter.
- * Returns process exit code (0 = success, 1 = execution/export error, 2 = usage/config error).
+ * Runs one headless benchmark suite from CLI arguments.
+ *
+ * The adapter reads and validates the JSON configuration, executes the suite,
+ * and writes optional JSON/CSV files; without file output it writes the JSON
+ * report to stdout. Usage, file-read, JSON-parse, and configuration-validation
+ * failures are written to stderr and return exit code 2. Benchmark execution
+ * and export failures return 1; success returns 0.
+ *
+ * @param args Command-line arguments after the executable name
+ * @returns Process exit code (`0` success, `1` execution/export error, `2` usage/config error)
  */
 export async function runCli(args: readonly string[]): Promise<number> {
   const { parsed, error } = parseCliArgs(args);

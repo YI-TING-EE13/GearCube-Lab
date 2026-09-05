@@ -3,7 +3,7 @@
 Welcome to the canonical documentation tree for **GearCube Lab**.
 The live application is publicly hosted at [https://yi-ting-ee13.github.io/GearCube-Lab/](https://yi-ting-ee13.github.io/GearCube-Lab/).
 
-This directory contains the definitive specifications, architectural contracts, development protocols, and decision records for the project.
+This directory contains the current specifications, architectural contracts, development protocols, and decision records for the project, together with explicitly preserved historical plans and research evidence.
 
 ---
 
@@ -13,7 +13,7 @@ This directory contains the definitive specifications, architectural contracts, 
 docs/
 ├── README.md                           # This index and documentation navigation guide
 ├── project/
-│   └── PROJECT_BLUEPRINT.md            # Primary 30-section long-term project blueprint
+│   └── PROJECT_BLUEPRINT.md            # Primary current product blueprint and scope
 ├── reference/
 │   └── STANDARD_GEAR_CUBE_SPEC.md      # Canonical standard Gear Cube reference model specification
 ├── characterization/
@@ -44,8 +44,8 @@ docs/
 │   ├── ADR_0005_TRANSITION_REPAIR_PLAN.md # ADR-0005 Canonical transition repair plan
 │   └── POST_PHASE4_DOCUMENTATION_RECONCILIATION.md # Post-Phase 4 repo-wide documentation audit record
 ├── research/
-│   ├── PHASE_5C_EXPERIMENT_PLAN.md     # Phase 5C Experiment Plan — Accepted
-│   └── PHASE_5_CLASSICAL_SOLVER_BENCHMARK_REPORT.md # Phase 5C Classical Solver Benchmark Report — Accepted
+│   ├── PHASE_5C_EXPERIMENT_PLAN.md     # Accepted Phase 5C research plan (historical)
+│   └── PHASE_5_CLASSICAL_SOLVER_BENCHMARK_REPORT.md # Accepted Phase 5C empirical report
 ├── operations/
 │   ├── DEPLOYMENT.md                   # Static HTTPS hosting (GitHub Pages), Web Worker rules, & security posture
 │   └── REPOSITORY_GOVERNANCE.md        # Main branch protection, checks, qualification, & deployment contract
@@ -78,7 +78,24 @@ Throughout all documents in `docs/`, technical specifications and mechanical ass
 
 ---
 
-## 3. Quick Document Navigator
+## 3. Document Classes, Lifecycle & Authority
+
+Evidence status and document lifecycle answer different questions. An evidence status describes the support for a claim inside a document; a lifecycle describes whether the document is current guidance, a preserved decision, a historical record, or immutable evidence; a milestone status describes project delivery progress. A `VERIFIED` claim can therefore live in a historical acceptance record without making that record the current implementation authority.
+
+| Document lifecycle | Repository role | Current-reading rule |
+| :--- | :--- | :--- |
+| **`LIVING / NORMATIVE`** | Current architecture, state, product, development, and test contracts | Follow it for current implementation and contribution decisions. |
+| **`ADR / DECISION`** | Decision rationale, alternatives, and consequences | Preserve the original context; use explicit supersession metadata when later decisions refine it. |
+| **`HISTORICAL / AS-OF`** | Completed plans, acceptance records, and audit snapshots | Preserve facts and counts; do not treat old instructions or snapshots as current baselines. |
+| **`RESEARCH / EMPIRICAL`** | Accepted experiment plans and measured reports | Preserve measured results; current verifier and provenance statements must remain accurate. |
+| **`RAW / DERIVED EVIDENCE`** | Committed benchmark inputs and generated outputs | Treat bytes as evidence; do not edit them editorially. |
+| **`OPERATIONAL / CURRENT`** | Governance, deployment, and qualification contracts | Follow the current operational contract and verify live external state where required. |
+
+For current implementation questions, use this authority order: `AGENTS.md` and the active governance/operations contracts; current architecture and state contracts; the current roadmap and test strategy; then the accepted ADRs and research records for rationale and evidence. Historical documents remain valuable context, but their `As-of`, `Superseded by`, or `Normative authority` metadata controls how they are read.
+
+---
+
+## 4. Quick Document Navigator
 
 - **Product Vision & Requirements:** [`docs/project/PROJECT_BLUEPRINT.md`](project/PROJECT_BLUEPRINT.md)
 - **Standard Gear Cube Specification:** [`docs/reference/STANDARD_GEAR_CUBE_SPEC.md`](reference/STANDARD_GEAR_CUBE_SPEC.md)

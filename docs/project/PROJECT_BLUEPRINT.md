@@ -2,8 +2,9 @@
 
 > **Product Name:** GearCube Lab
 > **Repository Baseline:** Phase 0A Design Blueprint
-> **Document Status:** `DECIDED`
+> **Document Status:** `ACTIVE / CURRENT`
 > **Classification:** Authoritative Technical Blueprint
+> **Workspace Topology:** Two workspace modes, `PLAY` and `RESEARCH`; Solver is a Play capability.
 
 ---
 
@@ -60,7 +61,7 @@
 
 - [x] **Discrete State as Source of Truth:** Visual 3D scene graphs must never own or dictate puzzle state.
 - [x] **Coupled Kinematics Separation:** Continuous rotational angles and gear mesh interpolation are distinct from discrete state transitions.
-- [x] **Multi-Mode UI:** Three distinct operational modes: `Play`, `Solve`, and `Research`.
+- [x] **Workspace UI:** Two workspace modes: `Play` and `Research`. Solver is a capability inside the Play workspace, not a third workspace.
 - [x] **Worker-Thread Isolation:** All graph search and heuristic evaluations must run off the main UI rendering thread.
 - [x] **Local-First Privacy:** Web camera state capture and image processing must execute locally in the client browser without mandatory cloud storage.
 
@@ -75,13 +76,13 @@
 - Comprehensive move history timeline with interactive undo, redo, and jump-to-step capabilities.
 - Reset to canonical solved state.
 
-### Mode 2: Solve Mode
+### Solver Capability in the Play Workspace
 - Algorithm selection (implemented & accepted: BFS, Bidirectional BFS, IDA* with H2 PDB heuristic; optional classical candidates such as IDDFS, A*, Pattern Databases are deferred; Neural-Guided Search is FUTURE PHASE 6).
 - Real-time search progress indicators (nodes evaluated, current search depth/bounds, elapsed time).
 - Solution playback controls (implemented & accepted: Play, Pause, Step Forward, Step Backward; Auto-Step Speed slider is DEFERRED / FUTURE).
 - 3D visual move annotations (directional rotation arrows, highlighted face slices are DEFERRED / FUTURE presentation enhancements).
 
-### Mode 3: Research & Benchmarking Mode (Implemented & Accepted — Phase 5)
+### Workspace Mode 2: Research & Benchmarking (Implemented & Accepted — Phase 5)
 - Empirical research harness defined in [`docs/development/PHASE_5_IMPLEMENTATION_PLAN.md`](../development/PHASE_5_IMPLEMENTATION_PLAN.md):
   - **Implemented & Accepted (Phases 5A–5D):** Pure `@gearcube/benchmark` package, materialized v1 benchmark schemas, typed `BenchmarkConfigError` runtime validation, stable state-derived case identity (`d${exactDepth}:${stateKey}`), independent Core-only exact-distance corpus builder (discovering 41,472 canonical states and diameter 8), deterministic stratified sampling (`FNV1A_UTF16_CODE_UNITS_32` + `MULBERRY32_EXACT`), headless solver comparison runner (`runBenchmarkSuite` evaluating BFS, BiBFS, and IDA* across identical cases and resource limits), lossless JSON exporter, flat 14-column RFC-4180 CSV exporter, headless Node CLI (`npm run benchmark`), empirical comparative research dataset and classical solver benchmark report ([`docs/research/PHASE_5_CLASSICAL_SOLVER_BENCHMARK_REPORT.md`](../research/PHASE_5_CLASSICAL_SOLVER_BENCHMARK_REPORT.md)), and browser Research Mode with dedicated background Web Worker execution (`benchmark.worker.ts`), pure reactive controller, and client-side JSON/CSV export downloads.
 
@@ -127,7 +128,7 @@
 |                                                                                   |
 |  [ AI / Neural Search (Web Worker Inference) — Future (Phase 6) ]                                 |
 |                                                                                   |
-|  [ Vision State Ingestion (Webcam Stream & Face Recognition) — Phase 7 Not Started ]             |
+|  [ Vision State Ingestion (Webcam Stream & Face Recognition) — Deferred Optional Phase 7 ]       |
 +-----------------------------------------------------------------------------------+
 ```
 
@@ -153,7 +154,7 @@ $$\text{Presentation Layer (UI/3D)} \longrightarrow \text{Domain Core Contracts}
 | :--- | :--- | :--- | :--- |
 | `packages/core` | Discrete state models, move definitions, legality checks, canonical serialization, and materialized piece views | Zero external dependencies (no React, no Three.js, no DOM) | Implemented & Accepted |
 | `packages/kinematics` | Continuous trajectory generation, coupled gear angles, static piece placement projection | Depends only on `@gearcube/core` | Implemented & Accepted |
-| `apps/web` | Web application container hosting React UI components, R3F/Three.js 3D viewport, procedural piece geometries, MoveControls, single authoritative `GearCubeSessionState`, Play Mode history/undo/redo/scramble/keyboard (Phase 3), Solve Mode UI/playback/Worker adapter (Phase 4), and Browser Research Mode panel / benchmark Worker adapter (Phase 5D) | Internal: `@gearcube/core`, `@gearcube/kinematics`, `@gearcube/solvers`, `@gearcube/benchmark`; External: React, R3F, Three.js presentation stack (no Zustand requirement) | Implemented & Accepted through Phase 5D |
+| `apps/web` | Web application container hosting React UI components, R3F/Three.js 3D viewport, procedural piece geometries, MoveControls, single authoritative `GearCubeSessionState`, Play workspace history/undo/redo/scramble/keyboard (Phase 3), Solver panel/playback/Worker adapter (Phase 4), and Browser Research workspace panel / benchmark Worker adapter (Phase 5D) | Internal: `@gearcube/core`, `@gearcube/kinematics`, `@gearcube/solvers`, `@gearcube/benchmark`; External: React, R3F, Three.js presentation stack (no Zustand requirement) | Implemented & Accepted through Phase 5D |
 | `packages/solvers` | Classical graph search (primary: BFS, Bidirectional BFS, IDA* with H2 two-slice PDB heuristic; optional/deferred: IDDFS, A*, Pattern Databases), heuristic estimators | Depends only on `@gearcube/core` | Implemented & Accepted (Phase 4) |
 | `packages/benchmark` | Pure benchmark engine, independent Core-only exact-distance corpus builder, deterministic stratified sampling, comparative solver runner, JSON/CSV exports, and Node CLI adapter | Depends directly on `@gearcube/core` and `@gearcube/solvers`; zero UI/DOM runtime dependencies | Implemented & Accepted — Phase 5 |
 | `ml/` (Python) | PyTorch model architectures, offline self-play/dataset generation, heuristic export | Python (version selected based on ML dependency compatibility) managed exclusively via `uv` | Planned (Phase 6) |
@@ -168,7 +169,7 @@ $$\text{Presentation Layer (UI/3D)} \longrightarrow \text{Domain Core Contracts}
 3. **Kinematic Translation:** Kinematic Engine converts `(fromView, move, toView)` into continuous component trajectories parameterized by mechanical progress $p \in [0, 1]$.
 4. **Renderer Execution:** 3D Renderer animates procedural piece meshes smoothly along calculated kinematic keyframe trajectories.
 5. **State Synchronization:** Upon animation completion ($p = 1.0$), UI session store commits the canonical puzzle state.
-6. **Explicit Solver Request (Solve Mode):** When user explicitly requests a solve, a single search request with the current canonical state snapshot is dispatched to the background Solver Web Worker. The Worker executes the selected algorithm (BFS, Bidirectional BFS, or IDA*) and streams telemetry back to the UI.
+6. **Explicit Solver Request (Play workspace):** When user explicitly requests a solve, a single search request with the current canonical state snapshot is dispatched to the background Solver Web Worker. The Worker executes the selected algorithm (BFS, Bidirectional BFS, or IDA*) and streams telemetry back to the UI.
 7. **Playback & Stale-Result Guarding:** Solver results are accepted only if session/state guards match the current puzzle state. Playback controls (Play, Pause, Step Forward, Step Backward) advance solution moves sequentially through the canonical transition pipeline. External state mutations (manual moves, scrambles, undo/redo) cancel active search and reset playback state.
 8. **Browser Research Flow (Research Mode):** User configures benchmark suite in `ResearchPanel`. Form performs main-thread static validation (`validateBenchmarkSuiteConfig`). On submit, `GearCubeViewport` dispatches execution to `useBenchmarkWorker`, spawning a dedicated background `benchmark.worker.ts`. The Worker invokes `runBenchmarkSuite` via `@gearcube/benchmark` and serializes summary, JSON, and CSV strings entirely off-main-thread. Controlled UI displays summary tables and provides client-side Blob downloads. Cancellation terminates the background Worker host-side. Research execution is strictly decoupled from the 3D cube and history timeline.
 
@@ -312,7 +313,8 @@ The project roadmap is structured into dependency-ordered phases (detailed in [`
 - **Phase 3:** Interactive UI, History, Undo/Redo, Keyboard Controls, and Responsive Layout *(Accepted)*
 - **Phase 4:** Classical Solver Infrastructure (Web Worker, BFS / Bidirectional BFS / IDA*, Solve Mode UI & Playback) *(Implemented & Accepted)*
 - **Phase 5:** Research Benchmark Framework & Empirical Evaluation *(Completed & Accepted — Phases 5A–5D Accepted)*
-- **Phase 8:** Product Completion & Public-Test Readiness *(Active Product Mainline — Plan Accepted; Implementation Not Started)*
+- **Phase 8:** Product Completion & Public-Test Readiness *(Completed & Accepted)*
+- **Phase 9:** GitHub Pages Deployment & Public Hosting *(Completed & Accepted)*
 - **Phase 6:** Neural Heuristic & AI-Guided Search *(Deferred / Optional Research Track)*
 - **Phase 7:** Physical Model & Vision Expansion *(Deferred / Optional Future Expansion)*
 

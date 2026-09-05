@@ -1,3 +1,15 @@
+/**
+ * @file benchmark browser Worker entrypoint
+ * @description One-shot browser Worker adapter for empirical benchmark runs.
+ * @remarks
+ * The main thread supplies one configuration request and owns cancellation
+ * by terminating the Worker. This adapter gathers browser environment
+ * provenance, runs the benchmark suite, and serializes the lossless report;
+ * it does not persist benchmark state between requests. `requestId` is echoed
+ * on every response for stale-message rejection, while configuration failures
+ * and runtime failures remain distinct protocol outcomes.
+ */
+
 import {
   BenchmarkConfigError,
   runBenchmarkSuite,

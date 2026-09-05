@@ -4,6 +4,9 @@
 > **Date:** 2026-08-21
 > **Decision Owners:** Architecture & Core Domain Group
 > **Applicability:** Pure TypeScript Domain Core (`packages/core`), Transition Engine (`applyMove`), and Materialization Lifecycle
+> **Lifecycle:** `ADR / CURRENT DECISION`
+> **Current Authority:** This accepted ADR, the current state model, roadmap, test strategy, and the implementation on `main` govern reference-normalized transitions.
+> **Historical Evidence Note:** Sections describing the pre-repair mismatch retain their original measurements as an as-of record; they are not the current implementation status.
 
 ---
 
@@ -113,7 +116,7 @@ graph TD
         AM --> NS[nextCanonicalState: 41,472 States]
     end
 
-    subgraph Solver Layer [Phase 1E / Future Solvers]
+    subgraph Solver Layer [Accepted Solver Layer]
         SOLV[Solver / BFS Engine] -->|Operates Purely On| S
         SOLV -->|Generates Search Trees Via| AM
     end
@@ -145,15 +148,16 @@ For interactive applications, 3D renderers, and simulation environments, the pre
 
 SpatialFrame is presentation and rendering state, and is strictly excluded from canonical solver state.
 
-#### 4.2.2. Current Implementation Status vs. Future Verification Gate
-- **Current Production Status:** Current production does **NOT** yet satisfy this full lifecycle for negative faces ($D, B, L$), failing $995,328 / 1,990,656$ transitions ($50.0\%$) due to the un-harmonized Phase 1C transition data.
+#### 4.2.2. Historical Pre-Repair Characterization (Retained Evidence)
+- **Historical pre-repair snapshot:** Before the reference-normalized transition repair, the then-current implementation did **NOT** satisfy this full lifecycle for negative faces ($D, B, L$), failing $995,328 / 1,990,656$ transitions ($50.0\%$) due to the un-harmonized Phase 1C transition data. This measurement is preserved to explain the decision and is not a current status claim.
 - **Established Mathematical Characterization:** Exhaustive empirical characterization proves that:
   1. Canonical `nextState` is 100% frame-independent across all $497,664$ $(\text{state}, \text{move})$ pairs.
   2. `nextSpatialFrame` is 100% geometrically accurate ($1,990,656 / 1,990,656$, $0$ mismatches).
   3. The reference-normalized canonical transition relation closes deterministically on `GearCubeState`.
-- **Future Required Gate:** Following the cross-phase transition repair, production MUST satisfy the complete application lifecycle gate:
+- **Current accepted implementation:** The cross-phase repair in `packages/core/src/transition-data.ts` adopted the reference-normalized tables and was accepted with `59f0313c2ce1c513f80d967d3f78cd86f7870003` in the Phase 1 lineage. The current acceptance record reports $1,990,656 / 1,990,656$ lifecycle matches with $0$ mismatches.
+- **Accepted lifecycle gate:** The complete application lifecycle contract is:
   $$\text{materializeState}(\text{applyMove}(s, m), \text{nextSpatialFrame}(f, m.\text{face})) \equiv \text{simPhysical}(\text{materializeState}(s, f), m)$$
-  across all **$1,990,656 / 1,990,656$** transitions with **$0$ mismatches**. ADR-0005 adoption formalizes this requirement and does not itself imply that production is already green.
+  across all **$1,990,656 / 1,990,656$** transitions with **$0$ mismatches**. The gate is accepted; it is not a pending future qualification.
 
 ---
 
@@ -222,9 +226,9 @@ Prohibited repair methods:
 
 ---
 
-## 8. Mandatory Post-Repair Acceptance Gates
+## 8. Historical Gate Definition and Acceptance Result
 
-The subsequent cross-phase transition repair task must satisfy the following falsifiable gates before acceptance:
+The following falsifiable gates were defined for the subsequent cross-phase transition repair task. The table is retained as the acceptance contract and the current result is recorded immediately below it.
 
 | Gate ID | Scope & Target | Pass Condition |
 | :--- | :--- | :--- |
@@ -236,6 +240,8 @@ The subsequent cross-phase transition repair task must satisfy the following fal
 | **`GATE_0005_APPLICATION_LIFECYCLE`** | $1,990,656$ lifecycle transitions | $\text{materialize}(\text{applyMove}(s, m), \text{nextSpatialFrame}(f, m.\text{face})) \equiv \text{simPhysical}(\text{materialize}(s, f), m)$ ($0$ mismatches). |
 | **`GATE_0005_PHASE1C_REGRESSION`** | `packages/core/tests/transitions.test.ts` | All unit tests pass with updated $D, B, L$ golden vectors. |
 | **`GATE_0005_PHASE1D_PRESERVATION`** | Phase 1D Model A, center identity, materialization, serialization | All Level 3 tests pass ($100\%$ green). |
+
+**Current acceptance result:** All gates in this table passed for the accepted Phase 1D/1E implementation lineage. Current milestone state is maintained in [`ROADMAP.md`](../development/ROADMAP.md) and [`TEST_STRATEGY.md`](../development/TEST_STRATEGY.md).
 
 ---
 
@@ -255,6 +261,8 @@ The subsequent cross-phase transition repair task must satisfy the following fal
 
 ## 10. Historical Document Treatment & Phase 1D Plan Supersession
 
+This section is a historical task-boundary record. It preserves the pre-repair sequencing and does not override the accepted current state in Section 4.2.2 or the current roadmap.
+
 ### 10.1. Exact Document Classifications
 
 | Document Path | Lifecycle Classification | Normative Authority & Supersession Action |
@@ -271,12 +279,12 @@ The subsequent cross-phase transition repair task must satisfy the following fal
 ### 10.2. Phase 1D Plan Supersession & Task Boundary Governance
 1. **Preservation of Historical Record:** `docs/development/PHASE_1D_IMPLEMENTATION_PLAN.md` remains preserved as an immutable historical Accepted planning document. It must NOT be retroactively edited to pretend the prior direct lifecycle assumption was correct.
 2. **Empirical Disproof & Forward Supersession:** Exhaustive empirical characterization disproved the Phase 1D plan's direct lifecycle assumption (`applyMove(s, m)` + `nextSpatialFrame(f, m.face)`) when paired with the un-harmonized Phase 1C $D, B, L$ transition algebra. Upon acceptance of ADR-0005, the conflicting lifecycle sections of `PHASE_1D_IMPLEMENTATION_PLAN.md` cease to be normative authority and are forward-superseded by ADR-0005 and a subsequent bounded recovery / superseding implementation plan.
-3. **Preservation of Phase 1D Implementation Work:** The existing Phase 1D module implementation in `phase/1d-frame-materialization-implementation` (`spatial-frame.ts`, `materializer.ts`, `serialization.ts`, `index.ts`, `serialization.test.ts`, `materializer.test.ts`) is not implicated by the currently identified cross-phase transition defect. It remains preserved unchanged pending completion of the ADR-0005 transition repair and subsequent final independent Phase 1D acceptance (`PHASE1D_IMPLEMENTATION_STATUS: PRESERVED_PENDING_FINAL_INDEPENDENT_ACCEPTANCE`). It must NOT be discarded, reset, or prematurely claimed as already completed or accepted.
+3. **Historical preservation record:** At the time of this ADR, the Phase 1D module implementation in `phase/1d-frame-materialization-implementation` (`spatial-frame.ts`, `materializer.ts`, `serialization.ts`, `index.ts`, `serialization.test.ts`, `materializer.test.ts`) was preserved unchanged pending completion of the transition repair and final independent acceptance (`PHASE1D_IMPLEMENTATION_STATUS: PRESERVED_PENDING_FINAL_INDEPENDENT_ACCEPTANCE`). The later accepted Phase 1D/1E state supersedes that pending status; the implementation must still not be discarded, reset, or conflated with the transition repair.
 4. **Strict Scope Separation (No Silent Expansion):**
    - The original Phase 1D implementation task scope remains strictly bounded to Phase 1D modules.
    - Cross-phase repair files (`packages/core/src/transition-data.ts`, `packages/core/tests/transitions.test.ts`) must **NOT** be silently injected into the Phase 1D implementation task.
    - Cross-phase repair belongs to a separately authorized, dedicated ADR-0005 transition repair task.
-   - Only after that cross-phase repair is independently verified and accepted may the preserved Phase 1D implementation worktree be resumed for final acceptance verification. Phase 1E remains strictly blocked until these prerequisites are satisfied.
+   - Only after that cross-phase repair was independently verified and accepted could the preserved Phase 1D implementation worktree be resumed for final acceptance verification. This historical boundary is complete; current Phase 1D and Phase 1E acceptance is recorded in `ROADMAP.md`.
 
 ---
 

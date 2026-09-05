@@ -1,6 +1,6 @@
 # PUZZLE_CONTRACTS.md — Canonical Type Contracts & Interface Specifications
 
-> **Document Status:** `DECIDED` (Kinematics contracts updated pursuant to accepted [`ADR-0006`](../decisions/ADR-0006-VIEW-BASED-KINEMATICS-AND-RENDERER-QUOTIENTS.md))
+> **Document Status:** `ACTIVE / CURRENT` (Kinematics contracts updated pursuant to accepted [`ADR-0006`](../decisions/ADR-0006-VIEW-BASED-KINEMATICS-AND-RENDERER-QUOTIENTS.md))
 > **Applicability:** Pure TypeScript Type Definitions & Interface Specifications (Reference Only)
 
 ---
@@ -341,7 +341,7 @@ export type WorkerOutboundMessage =
 
 ---
 
-## 6. Research & Benchmark Harness Contracts (Phase 5 In Progress)
+## 6. Research & Benchmark Harness Contracts (Phase 5 Completed & Accepted)
 
 > [!NOTE]
 > **Phase 5 Accepted Contracts:** The interfaces below define the accepted contracts for `@gearcube/benchmark` pursuant to [`docs/development/PHASE_5_IMPLEMENTATION_PLAN.md`](../development/PHASE_5_IMPLEMENTATION_PLAN.md).

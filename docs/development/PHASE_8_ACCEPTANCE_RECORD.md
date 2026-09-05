@@ -6,6 +6,8 @@
 > **Pre-Promotion Main Reference:** `a310494d656f0728e4cf0f4a4fbfbbad6348b33a`<br/>
 > **Target Condition:** `PUBLIC_TEST_READY`<br/>
 > **Effectiveness Notice:** Final Phase 8 acceptance becomes authoritative when the commit containing this acceptance record is fast-forward promoted to `main`. Prior to that promotion, `PUBLIC_TEST_READY = NO`.
+> **Lifecycle:** `HISTORICAL MILESTONE ACCEPTANCE RECORD / AS-OF ACCEPTED BASELINE`
+> **Current Authority:** Current inventory and qualification boundaries are maintained in [`TEST_STRATEGY.md`](TEST_STRATEGY.md) and [`REPOSITORY_GOVERNANCE.md`](../operations/REPOSITORY_GOVERNANCE.md); the counts below are preserved evidence for this Phase 8 acceptance.
 
 ---
 
