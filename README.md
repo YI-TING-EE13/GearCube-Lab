@@ -84,9 +84,9 @@ The **Play** workspace is the default interactive puzzle environment.
   - Enter any string into the **Seed** field and click **Scramble** to apply a deterministic scramble sequence.
   - Use **Undo**, **Redo**, or **Reset Baseline** in the top bar to navigate history, or click directly on any step in the timeline scrubber.
 
-### Solve
+### Solve (within Play)
 
-The **Solver** panel allows you to find optimal solution paths from the current cube state.
+GearCube Lab has two workspace modes: **Play** and **Research**. The **Solver** panel is a Play-workspace capability, alongside puzzle interaction, history, scramble, and solution playback; it is not a third workspace.
 
 - **Available Algorithms:**
   - **IDA* (Recommended):** Iterative Deepening A* search informed by the precomputed $H_2$ two-slice pattern database heuristic.
@@ -168,6 +168,10 @@ npx playwright install
 | `npm run test:e2e` | Run Playwright E2E browser test suite across Chromium, Firefox, and WebKit (requires browser binaries installed via `npx playwright install`) |
 | `npm run benchmark -- --config <path>` | Execute headless CLI benchmark suite |
 
+### Maintained verification inventory
+
+The current repository test inventory is 36 Vitest files with 454 tests. The Playwright inventory is 50 logical tests across three browser projects, yielding 150 project-test cases: 148 applicable executions and 2 intentional Chromium-only touch skips. These are inventory counts; exact pass/fail qualification belongs to the Verify workflow run for the tested commit.
+
 ### CI Verification
 
 The project includes an automated GitHub Actions verification workflow running on hosted Ubuntu with Node.js 22.17.1. It performs workspace verification (`npm ci` and `npm run verify`) followed by a parallel browser matrix with 50 logical Playwright tests: 150 project-test cases, comprising 148 applicable executions and 2 intentional skips for the Chromium-only touch gate. On hosted Linux CI, Firefox executes headed under Xvfb with a CI-only WebGL2 enablement preference.
@@ -192,7 +196,7 @@ With `--json` and/or `--csv`, the CLI writes those report files. If no output-fi
 - **Chromium:** Configured for the full Playwright suite, including touch emulation.
 - **Firefox:** Configured for non-touch Playwright coverage; hosted Ubuntu CI uses headed Firefox under Xvfb with a CI-only WebGL2 enablement preference.
 - **WebKit:** Configured for non-touch Playwright coverage. Native Safari has not been separately verified.
-- **Android Chrome Emulator Qualification:** M4 separately qualified the live Pages application in actual Android Chrome runtimes on two phone-class Android emulators: `Pixel_7` (Android 15/API 35, Chrome `124.0.6367.219`) and `Small_Phone` (Android 16/API 36, Chrome `151.0.7922.139`), using serial-specific direct CDP through ADB. This is separate from the hosted desktop browser matrix and Chromium touch emulation; it is not physical-device or tablet qualification.
+- **Android Chrome Emulator Qualification:** M4 separately qualified the live Pages application in actual Android Chrome runtimes on two x86_64 phone-class Android emulators on the same Windows host: `Pixel_7` (Android 15/API 35, Chrome `124.0.6367.219`) and `Small_Phone` (Android 16/API 36, Chrome `151.0.7922.139`), using serial-specific direct CDP through ADB. This is separate from the hosted desktop browser matrix and Chromium touch emulation; it is not physical-device or tablet qualification.
 - **Qualification evidence:** Browser results apply to the exact tested commit. Inspect all four jobs in the PR's Verify run; configured coverage or a local pass is not formal acceptance.
 
 ---
@@ -202,6 +206,7 @@ With `--json` and/or `--csv`, the CLI writes those report files. If no output-fi
 - **No Drag-to-Turn Manipulation:** Direct pointer dragging on cube pieces to initiate face turns is not currently implemented; manipulation is handled through the on-screen buttons and keyboard shortcuts.
 - **Browser Automation Scope:** Chromium, Firefox, and WebKit are configured for automated E2E qualification. The touch-emulation gate is Chromium-only and does not represent Android runtime or physical-device verification.
 - **Android / Physical Device Scope:** M4 qualifies two Android phone-class emulator environments through actual Android Chrome and serial-specific direct CDP. Physical Android/mobile hardware and tablet qualification remain unverified; native Safari and iOS browser qualification remain unverified.
+- **Independent Host / Backend Scope:** No backend, database, or hosted solver service is provided; current simulation, solving, and research execution run locally in the browser. Independent server-side execution remains outside the current scope.
 - **AI / Neural Search Track (Phase 6):** Offline PyTorch-trained neural heuristics and learned value networks remain a deferred optional research track.
 - **Physical Model & Vision Track (Phase 7):** Camera capture, color/sticker extraction, state reconstruction, and physical guidance remain a deferred optional expansion track.
 - **Reference Puzzle Model:** The puzzle model implements the canonical combinatorial and mechanical rules of the Standard / Original Gear Cube designed by Oskar van Deventer, rather than a physical-replica scan of third-party retail variants.
@@ -282,6 +287,7 @@ Comprehensive architectural designs, mathematical models, testing strategies, an
 | [`PHASE_8_ACCEPTANCE_RECORD.md`](docs/development/PHASE_8_ACCEPTANCE_RECORD.md) | Formal Phase 8 public-test-readiness acceptance record and qualification evidence |
 | [`TEST_STRATEGY.md`](docs/development/TEST_STRATEGY.md) | 12-level testing pyramid, property invariants, and verification gates |
 | [`DEVELOPMENT_GUIDE.md`](docs/development/DEVELOPMENT_GUIDE.md) | Developer guidelines, toolchain conventions, and coding standards |
+| [`REPOSITORY_GOVERNANCE.md`](docs/operations/REPOSITORY_GOVERNANCE.md) | Current main-branch protection, required checks, and qualification boundaries |
 | [`DEPLOYMENT.md`](docs/operations/DEPLOYMENT.md) | Static hosting architecture, Web Worker requirements, and deployment strategy |
 | [`PHASE_5_CLASSICAL_SOLVER_BENCHMARK_REPORT.md`](docs/research/PHASE_5_CLASSICAL_SOLVER_BENCHMARK_REPORT.md) | Empirical classical solver benchmark report across exact depths 1..8 |
 

@@ -4,6 +4,7 @@
 > **Next Milestone:** `Post-Phase 9 Maintenance & Deferred Research Tracks`
 > **Previous Milestone:** `Phase 8 — Product Completion & Public-Test Readiness (Completed & Accepted)`
 > **Deferred Tracks:** `Phase 6 (Neural AI Search)` & `Phase 7 (Physical Model & Vision Expansion)` (Deferred / Optional Tracks)
+> **Current Verification Inventory:** 36 Vitest files / 454 tests; 50 logical Playwright tests, 150 project-test cases, 148 applicable executions, and 2 intentional skips. See [`TEST_STRATEGY.md`](TEST_STRATEGY.md) for the maintained inventory; milestone counts below are historical as-of snapshots.
 
 ---
 
@@ -172,7 +173,7 @@ Phase 0B is partitioned into four dependency-ordered subphases:
 
 #### Phase 1E: Group Invariants & Exhaustive Reachable State Closure (Completed & Accepted)
 - Exhaustive BFS traversal ($41,472 / 41,472$ states reachable from solved), reachable-set 12-move graph closure ($497,664 / 497,664$), per-directed-move domain bijections ($12 / 12$), derived strong connectedness, and canonical directed move metric distance characterization (diameter 8).
-- **Status:** `ACCEPTED & COMMITTED` (Commit `ac91e8cde3deae0ecbe18ed3b3accf384e3e3694`). Formalized in [`packages/core/tests/core-reachability.test.ts`](../../packages/core/tests/core-reachability.test.ts) (6 tests passing in 2.96s; full repository verify passing 10 test files and 123 tests).
+- **Status:** `ACCEPTED & COMMITTED` (Commit `ac91e8cde3deae0ecbe18ed3b3accf384e3e3694`). Formalized in [`packages/core/tests/core-reachability.test.ts`](../../packages/core/tests/core-reachability.test.ts) (historical snapshot: 6 tests passing in 2.96s; full repository verify passing 10 test files and 123 tests at that milestone).
 
 ---
 
@@ -197,7 +198,7 @@ Phase 0B is partitioned into four dependency-ordered subphases:
   - `CENTER_MAPPING_GATE`: `6 / 6 PASS` (all canonical center quaternions map local $+Y$ to outward face normal).
   - `SCRAMBLE_CORE_UNIQUENESS_GATE`: `10 / 10 PASS` (verified with `serializeLogicalState` and `SOLVED_GEAR_CUBE_STATE`).
   - `PHASE2A_PHYSICAL_TRANSITION_GATE`: `528 / 528 PASS` (48 solved + 480 scrambled transitions across all 4 SpatialFrames and 12 moves).
-  - Root verification (`npm run verify`): 12 test files, 136 tests passed, clean workspace typecheck and web build.
+  - Historical milestone verification snapshot: `npm run verify` passed with 12 test files and 136 tests; workspace typecheck and web build were clean at that milestone.
 
 #### Phase 2B: Modular 3D Geometry, Visual Meshes & R3F Viewport (Completed & Accepted)
 - **Objective:** Scaffolding React Three Fiber viewport in `apps/web`, procedural gear piece geometries, and static projection binding.
@@ -226,7 +227,7 @@ Phase 0B is partitioned into four dependency-ordered subphases:
   - `animation.test.ts`: Pure Node/Vitest test suite verifying 12-move planning, evaluation, completion commit, and sequential move chaining.
   - Viewport & CSS integration: Non-blocking UI overlay, disabled controls during animation, OrbitControls preserved.
 - **Verification Evidence:**
-  - Automated Acceptance: `PASS` (14 test files, 149 tests passed; typecheck and web build clean).
+  - Historical milestone verification snapshot: `PASS` (14 test files, 149 tests; typecheck and web build clean at that milestone).
   - Human Browser Acceptance: `PASS` (Interactive 12-move controls, continuous animation, OrbitControls preserved).
 
 #### Phase 2D: Physical Two-Step Turn Staging (Completed & Accepted)
@@ -238,7 +239,7 @@ Phase 0B is partitioned into four dependency-ordered subphases:
   - `animation.test.ts`: Automated test suite for half-turn holding, continuation, cancellation, and symmetry.
   - `MoveControls.tsx` & `App.css`: Visual half-turn lock status and selective button enablement.
 - **Verification Evidence:**
-  - Automated Acceptance: `PASS` (14 test files, 153 tests passed; typecheck and web build clean).
+  - Historical milestone verification snapshot: `PASS` (14 test files, 153 tests; typecheck and web build clean at that milestone).
   - Human Browser Acceptance: `PASS` (Two-step 90° staging, midpoint hold, continuation, and cancellation).
 
 #### Phase 2E: Turn Interaction Mode Toggle (Completed & Accepted)
@@ -250,7 +251,7 @@ Phase 0B is partitioned into four dependency-ordered subphases:
   - `animation.test.ts`: Automated test suite for mode switching, direct 180° execution, isolation, and regression.
   - `MoveControls.tsx` & `App.css`: Direct 180° toggle switch and mode status display.
 - **Verification Evidence:**
-  - Automated Acceptance: `PASS` (14 test files, 168 tests passed; 28 animation tests, 4 renderer tests, workspace typecheck and web build clean).
+  - Historical milestone verification snapshot: `PASS` (14 test files, 168 tests; 28 animation tests, 4 renderer tests, workspace typecheck and web build clean at that milestone).
   - Human Browser Acceptance: `PASS` (Direct 180° toggle visible, default TWO_STEP, one-click 180° mode, continuous midpoint traversal, mode-switch locking, mixed-mode sequences, OrbitControls and zoom functional across all states, zero console errors).
 
 ---
@@ -362,7 +363,7 @@ Phase 0B is partitioned into four dependency-ordered subphases:
   - **Phase 8A (Repository & Tooling Foundation):** Canonical `"preview"` scripts in root and `apps/web` package manifests; GitHub Actions continuous integration workflow (`.github/workflows/verify.yml`) — **Status:** `COMPLETED & ACCEPTED`.
   - **Phase 8B (First-Time User Onboarding):** Comprehensive `README.md` rewrite covering prerequisites, quickstart, build/preview/test commands, Play Mode guide (3D camera, face controls, two-step mode, scramble, history, keyboard shortcuts), Solve Mode guide, Research Mode guide, CLI benchmark instructions, limitations, and browser support — **Status:** `COMPLETED & ACCEPTED`.
   - **Phase 8C (UX, Accessibility & Console Hygiene):** Repository-owned favicon asset resolving 404 console errors; form input `id`/`name` attributes in `ResearchPanel.tsx`; zero unexpected app-owned console errors or page exceptions — **Status:** `COMPLETED & ACCEPTED`.
-  - **Phase 8D (Browser Compatibility Qualification):** Qualification across Chromium, Firefox, and WebKit (41 / 41 passing on all three engines; 123 project-test executions total; hosted Linux CI runs Firefox headed under Xvfb with CI WebGL2 preference; Safari not separately verified) — **Status:** `COMPLETED & ACCEPTED`.
+  - **Phase 8D (Browser Compatibility Qualification):** Historical qualification snapshot across Chromium, Firefox, and WebKit (41 / 41 passing on all three engines; 123 project-test executions total; hosted Linux CI runs Firefox headed under Xvfb with CI WebGL2 preference; Safari not separately verified). The maintained inventory later expanded; see [`TEST_STRATEGY.md`](TEST_STRATEGY.md) — **Status:** `COMPLETED & ACCEPTED`.
   - **Phase 8E (Public Repository Presentation & Docs Finalization):** Synchronization across canonical docs, Actions modernization to v7, and formal adoption of the MIT License (`LICENSE_POLICY: MIT / HUMAN APPROVED`) — **Status:** `COMPLETED & ACCEPTED`.
   - **Phase 8F (Clean-Clone Release-Style Acceptance):** Disposable fresh-clone verification (`npm ci`, `npm run verify`, `npm run test:e2e` against production preview, `npm run build`, `npm run preview`, `npm run dev`, security vulnerability audit, secret candidate scan, artifact scan, multi-viewport interactive browser smoke test, headless CLI verification) — **Status:** `COMPLETED & ACCEPTED`.
   - **Phase 8G (Public-Test-Ready Formal Acceptance):** Acceptance record review, independent ChatGPT review, and fast-forward promotion to `main` — **Status:** `COMPLETED & ACCEPTED`.
@@ -388,7 +389,7 @@ Phase 0B is partitioned into four dependency-ordered subphases:
   - Live public site at `https://yi-ting-ee13.github.io/GearCube-Lab/`.
   - Synchronized documentation in `README.md`, `docs/README.md`, `docs/operations/DEPLOYMENT.md`, and `docs/development/ROADMAP.md`.
 - **Verification:**
-  - 100% test pass on `main` Verify workflow (123 / 123 E2E across Chromium, Firefox, WebKit).
+  - Historical first-deployment qualification snapshot: 100% test pass on the `main` Verify workflow (123 / 123 E2E across Chromium, Firefox, WebKit). The current inventory is maintained in [`TEST_STRATEGY.md`](TEST_STRATEGY.md).
   - Successful `Deploy GitHub Pages` workflow run.
   - Live HTTPS reachability (HTTP 200) and live functional smoke testing across Play, Solve, and Research modes in Chromium, Firefox, and WebKit.
   - Zero asset 404s, zero worker 404s, zero third-party requests, and zero console errors on live site.

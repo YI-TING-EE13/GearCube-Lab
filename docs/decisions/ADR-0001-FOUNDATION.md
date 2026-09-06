@@ -3,6 +3,9 @@
 > **Status:** `DECIDED`
 > **Date:** Phase 0A Baseline
 > **Deciders:** Project Architect / Core Contributor
+> **Lifecycle:** `ADR / HISTORICAL FOUNDATION DECISION`
+> **Current Authority:** `AGENTS.md`, the active governance and operations contracts, current architecture documents, and the implementation on `main`.
+> **Supersession Note:** This record preserves its Phase 0A rationale. Later accepted ADRs and current architecture docs refine unresolved parameters and override any conflicting implementation-era assumptions.
 
 ---
 
@@ -49,7 +52,7 @@ The discrete puzzle state (`GearCubeState`) is the sole authoritative representa
 - **Visual Skin:** PBR materials, textures, and mesh geometry.
 
 ### 4.3. Technology Stack Selection
-- **Frontend / 3D:** TypeScript, React, Vite, Three.js, React Three Fiber (`@react-three/fiber`), `@react-three/drei`, and Zustand.
+- **Frontend / 3D:** TypeScript, React, Vite, Three.js, React Three Fiber (`@react-three/fiber`), and `@react-three/drei`; Zustand was considered in this Phase 0A foundation list but is not a current runtime dependency or requirement.
 - **Testing:** Vitest for rapid unit/integration tests; Playwright for browser E2E tests.
 - **Package Management:** `npm` as initial low-complexity default.
 - **Machine Learning:** Python (version to be selected based on ML dependency compatibility), PyTorch, managed exclusively via `uv`.
@@ -81,9 +84,13 @@ Before freezing move semantics or writing automated group theory test oracles, t
 
 ## 6. Unresolved Questions & Parameters (`OPEN`)
 
-The following decisions remain intentionally open pending Phase 0B empirical characterization:
+The following decisions were intentionally open pending Phase 0B empirical characterization at the time of this Phase 0A record. Later accepted reference, state, kinematics, and transition documents are the authority for their current interpretation:
 1. `[OPEN]` Exact gear teeth count and transmission ratio between face rotations and intermediate gears.
 2. `[OPEN]` Angular rotation formula of the center slice during $180^\circ$ face turns.
 3. `[OPEN]` Total discrete phase states per edge gear ($N_{\text{phases}}$).
 4. `[OPEN]` State-space symmetry groups and exact reachable state count.
 5. `[OPEN]` Neural model runtime format in browser (ONNX Web vs. custom lightweight JSON tensor evaluator).
+
+## 7. Historical Record Boundary
+
+This ADR is retained for its foundational decision context. It is not a current task plan. Read [`GEAR_CUBE_STATE_MODEL.md`](../architecture/GEAR_CUBE_STATE_MODEL.md), [`PUZZLE_CONTRACTS.md`](../architecture/PUZZLE_CONTRACTS.md), [`ROADMAP.md`](../development/ROADMAP.md), and the later accepted ADRs for current contracts and milestone state.

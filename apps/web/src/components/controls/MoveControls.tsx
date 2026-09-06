@@ -1,6 +1,10 @@
 /**
  * @file MoveControls.tsx
- * @description UI overlay providing 12 face move controls with Phase 2D physical half-turn lock guidance, Phase 2E Direct 180° toggle switch, and selective button enablement.
+ * @description Play-workspace overlay for canonical face moves and turn interaction controls.
+ * @remarks The overlay owns input affordances and accessibility text; session
+ * animation/history state remains in the parent controller. During a staged
+ * turn it selectively enables the controls required by the current interaction
+ * mode while preserving the canonical 12-move command shape.
  */
 
 import React from 'react';

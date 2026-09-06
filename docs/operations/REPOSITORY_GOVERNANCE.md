@@ -101,7 +101,7 @@ The maintained automated inventory is:
 
 | Suite | Current inventory |
 | --- | --- |
-| Vitest | 35 test files / 444 tests |
+| Vitest | 36 test files / 454 tests |
 | Playwright | 50 logical tests across Chromium, Firefox, and WebKit |
 | Playwright project cases | 150 total: 50 Chromium, 49 Firefox applicable plus 1 intentional skip, and 49 WebKit applicable plus 1 intentional skip |
 | Applicable Playwright executions | 148 |

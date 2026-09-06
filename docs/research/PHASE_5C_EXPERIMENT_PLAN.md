@@ -12,7 +12,10 @@
 > **Deterministic Analysis:** `COMPLETED / ACCEPTED`
 > **Final Report:** `COMPLETED / ACCEPTED`
 > **Phase 5C Overall:** `COMPLETED / ACCEPTED`
-> **Phase 5D Status:** `NOT STARTED`
+> **Phase 5D Status in this historical plan snapshot:** `NOT STARTED`
+> **Current Phase 5D Status:** `COMPLETED / ACCEPTED` (see [`PHASE_5D_IMPLEMENTATION_PLAN.md`](../development/PHASE_5D_IMPLEMENTATION_PLAN.md))
+> **Lifecycle:** `HISTORICAL RESEARCH PLAN / AS-OF PLAN ACCEPTANCE`
+> **Current Authority:** The accepted Phase 5 implementation records, current roadmap, test strategy, and repository implementation supersede planning-time lifecycle statements.
 
 ---
 
@@ -23,7 +26,7 @@ Phase 5C establishes the empirical comparative evaluation of classical search al
 2. **Bidirectional BFS (BiBFS)** — Meet-in-the-middle bidirectional shortest-path baseline with algebraic move inverse predecessor generation.
 3. **Iterative Deepening A\* (IDA\*)** — Memory-bounded heuristic search guided by the admissible, consistent H2 two-slice pattern database (PDB) heuristic ($10.37\text{ KB}$ footprint).
 
-This document formalizes the complete Phase 5C experiment design, statistical analysis units, deterministic matrices, timing interpretation constraints, pre-run execution baseline commit protocols, quartile algorithms, raw/derived artifact schemas, reproducibility gates, and pilot calibration evidence **prior to** executing any final research benchmark runs.
+This document formalizes the complete Phase 5C experiment design, statistical analysis units, deterministic matrices, timing interpretation constraints, pre-run execution baseline commit protocols, quartile algorithms, raw/derived artifact schemas, reproducibility gates, and pilot calibration evidence as designed **prior to** executing any final research benchmark runs. Final execution and acceptance are preserved in the report linked above; this plan is not a current execution instruction.
 
 ### 1.1. Formal Acceptance Record
 - **Authoritative Main Baseline:** `e0711761a0ffeeb5555c55e9ae92abc29000c21c`
@@ -305,13 +308,13 @@ scripts/
 
 ### 8.1. Raw Data Pre-Commit Validation & Immutability Lifecycle
 - Raw JSON and CSV files are generated into `docs/research/phase5c/raw/` from the fixed `PHASE5C_EXECUTION_BASELINE_COMMIT`.
-- **Validation Before Commit:** The analysis script consumes the five final raw JSON reports generated from the fixed execution baseline; these files are committed unchanged only after all research-data integrity gates pass.
+- **Validation Before Commit:** The analysis script consumes the five final raw JSON reports and their five committed CSV projections generated from the fixed execution baseline; all ten raw artifacts are committed unchanged only after the research-data integrity gates pass.
 - **Immutability:** Once accepted and committed, all raw files are immutable scientific evidence.
 - **Invalid Data Policy:** If any data quality gate fails, the invalid execution is discarded as a whole. Raw rows must never be hand-edited or selectively patched. Rerunning with altered configs or code requires authoring a new execution baseline commit.
 
 ### 8.2. Analysis Script Contract (`scripts/analyze-phase5c.mjs`)
-- Uses strictly Node.js standard library modules (`node:fs`, `node:path`, `node:crypto`). No external npm dependencies.
-- **Inputs:** Strictly the five raw JSON files in `docs/research/phase5c/raw/` (CSV files serve as tabular cross-checks).
+- Uses strictly Node.js standard library modules (`node:fs`, `node:path`, `node:crypto`, `node:url`). No external npm dependencies.
+- **Inputs:** Strictly five raw JSON files and five raw CSV files in `docs/research/phase5c/raw/`; JSON remains the semantic source while the CSV projections receive their own exact Git-byte SHA-256 gate. The three committed config JSON files are also hash-verified and semantically parsed before any derived output is changed.
 - **Behavior:** Deterministic, pure data extraction and statistical reduction. Performs zero solver calls, zero corpus rebuilds, zero resampling, zero configuration mutations, zero row mutations, zero network requests, and zero silent data filtering.
 - **Error Behavior:** Exits with non-zero exit code on missing inputs, schema errors, unexpected trial counts, `LIMIT_REACHED` presence, optimality mismatches, or deterministic timing replicate discrepancies.
 
@@ -377,7 +380,7 @@ For each `algorithm × exactDepth`, the derived timing table contains:
 
 ---
 
-## 10. Future Phase 5C Acceptance Criteria & Quality Stop Policy
+## 10. Historical Phase 5C Acceptance Criteria & Quality Stop Policy
 
 The final Phase 5C execution task must satisfy all ten explicit acceptance gates:
 
@@ -388,7 +391,7 @@ The final Phase 5C execution task must satisfy all ten explicit acceptance gates
 | **`ALL_SOLVED_GATE`** | Exactly 0 trials reach `LIMIT_REACHED`; 100% of trials finish with status `SOLVED`. |
 | **`OPTIMALITY_GATE`** | Every solved trial satisfies $\text{solutionDepth} \equiv \text{exactDepth}$ without exception. |
 | **`REPRODUCIBILITY_GATE`** | `reproducibility-check.json` confirms bit-for-bit identity of deterministic projections across `timing-r1`, `timing-r2`, `timing-r3`. |
-| **`RAW_ARTIFACT_INTEGRITY_GATE`** | Raw files are present, valid, conform to RFC-4180 / JSON v1 schemas, and are left unmutated by analysis. |
+| **`RAW_ARTIFACT_INTEGRITY_GATE`** | Five raw JSON and five raw CSV files are present, valid, conform to JSON v1 / RFC-4180 schemas, match their exact accepted Git-byte SHA-256 values, and are left unmutated by analysis; the three committed config JSON files have a separate exact-hash gate. |
 | **`STRUCTURAL_ANALYSIS_GATE`** | `structural-by-depth.csv` correctly aggregates all 222 structural cases across all 8 exact depths, including script-generated per-case paired reduction factors. |
 | **`TIMING_RESOLUTION_GATE`** | `timing-by-depth.csv` reports two-stage case medians, zero-ms counts/fractions, and `TIMER_RESOLUTION_LIMITED` classifications. |
 | **`METRIC_SEPARATION_GATE`** | Final research report uses deterministic node counters as primary evidence and labels `elapsedMs` as observational. |

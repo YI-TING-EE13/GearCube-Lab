@@ -1,8 +1,9 @@
 # GEAR_CUBE_STATE_MODEL.md — Canonical Discrete State & Transition Specification
 
-> **Document Status:** `DECIDED` (Harmonized with [`ADR-0005`](../decisions/ADR-0005-CANONICAL-MOVE-TRANSITION-ALGEBRA.md))
+> **Document Status:** `ACTIVE / CURRENT` (Harmonized with [`ADR-0005`](../decisions/ADR-0005-CANONICAL-MOVE-TRANSITION-ALGEBRA.md))
 > **Target Model:** Standard / Original Gear Cube (Oskar van Deventer / Meffert's Reference Model)
 > **Applicability:** Pure TypeScript Domain Core (`packages/core`)
+> **Acceptance State:** Phase 1D materialization and Phase 1E reachability are `COMPLETED & ACCEPTED`; historical pre-repair findings remain labeled as evidence rather than current status.
 
 ---
 
@@ -277,5 +278,5 @@ phase-aware full endpoint matches = 1990656 / 1990656
 | **D/B/L Reference-Normalized Correction** | Independent Reference Oracle | **$248,832 / 248,832$ matches ($0$ mismatches)** | `EXHAUSTIVELY_VERIFIED` |
 | **Direct vs Oracle Equivalence Gate** | Independent Reference Oracle | **$497,664 / 497,664$ matches ($0$ mismatches)** | `EXHAUSTIVELY_VERIFIED` |
 | **12-Repeat Identity Gate** | $M^{12}(s) = s$ on all states/moves | **$0$ failures across $41,472 \times 12$ runs** | `EXHAUSTIVELY_VERIFIED` |
-| **Application Lifecycle Characterization** | Phase-Aware Physical Oracle | **$1,990,656 / 1,990,656$ full endpoint matches** | `CHARACTERIZED_PENDING_PHASE1D_REACCEPTANCE` |
-| **Reachable State Count (BFS)** | $41,472$ | **$41,472$ reachable states from solved** | `DEFERRED_TO_PHASE_1E` |
+| **Application Lifecycle Characterization** | Phase-Aware Physical Oracle | **$1,990,656 / 1,990,656$ full endpoint matches** | `VERIFIED / ACCEPTED` |
+| **Reachable State Count (BFS)** | $41,472$ | **$41,472$ reachable states from solved** | `EXHAUSTIVELY_VERIFIED / ACCEPTED` |

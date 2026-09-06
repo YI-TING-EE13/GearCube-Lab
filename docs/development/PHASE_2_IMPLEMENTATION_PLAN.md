@@ -5,6 +5,8 @@
 > **Phase 2A Status:** `COMPLETED & ACCEPTED` (Commit `de0aa15ee3ab050ccb943b9b0efd9e98fdf03a85`)
 > **Phase 2B Status:** `PLANNED / CANONICAL SPECIFICATION FROZEN`
 > **Applicability:** Web Application (`apps/web`), Kinematics Package (`packages/kinematics`), & 3D Rendering Layer
+> **Lifecycle:** `HISTORICAL MILESTONE PLAN / AS-OF PLAN BASELINE`
+> **Current Authority:** The completed Phase 2 state is maintained in [`ROADMAP.md`](ROADMAP.md) and the current architecture contracts.
 
 ---
 

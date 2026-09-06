@@ -106,7 +106,9 @@ Jaap Scherphuis documents exhaustive search results for the standard 41,472-stat
 | **`Single turns`** | Single turns counted individually | **12** (row total: 6 states) | `SOURCE_SUPPORTED` `[REF-JAAP-01]` |
 | **`Multiple turns`** | Repeated turns of a single face grouped | **6** (column total: 2,889 states) | `SOURCE_SUPPORTED` `[REF-JAAP-01]` |
 
-*(Note on Project Metric Mapping: The exact mapping between Jaap's source metric definitions and future GearCube Lab solver cost metrics is classified as `OPEN / TO DEFINE` for Phase 4 benchmark and solver design. Unqualified references to "solution length" or "diameter" without specifying the metric are prohibited).*
+*(Note on Project Metric Mapping: The exact mapping between Jaap's source metric definitions and GearCube Lab solver cost metrics is classified as `OPEN / TO DEFINE` for Phase 4 benchmark and solver design. Unqualified references to "solution length" or "diameter" without specifying the metric are prohibited.)*
+
+The current project benchmark's `exactDepth` is a separate project-defined directed-move metric: shortest-path depth in the 12-operation (`CW` / `CCW`) canonical transition graph. It must not be presented as a reclassification of Jaap's `Single turns` or `Multiple turns` table axes. The distinction is retained so published source maxima and project benchmark depths remain comparable only after an explicit metric mapping is proven.
 
 ### 6.2. Single Turns Row Distribution Table
 From Scherphuis' exhaustive table of the 41,472 standard states `[REF-JAAP-01]`:

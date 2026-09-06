@@ -503,7 +503,7 @@ export const GearCubeViewport: React.FC = () => {
                 />
               </div>
 
-              {/* 12-Move Control Overlay with Phase 2E Turn Interaction Mode Support */}
+              {/* Play-workspace move overlay; solver and playback controls remain in this mode. */}
               <MoveControls
                 interactionMode={session.interactionMode}
                 isIdle={isIdle}

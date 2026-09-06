@@ -11,6 +11,8 @@
 > **Phase 5B Status:** `COMPLETED & ACCEPTED`
 > **Phase 5C Status:** `COMPLETED & ACCEPTED`
 > **Phase 5D Status:** `COMPLETED & ACCEPTED`
+> **Lifecycle:** `HISTORICAL MILESTONE ACCEPTANCE RECORD`
+> **Current Test Inventory:** 36 Vitest files / 452 tests (the acceptance counts below are as-of the accepted technical head).
 
 ---
 
@@ -446,7 +448,7 @@ graph TD
   - `ALL_SOLVED_GATE`: 100% of measured trials solved with 0 limit reached.
   - `OPTIMALITY_GATE`: Zero optimality violations (`solutionDepth === exactDepth`).
   - `REPRODUCIBILITY_GATE`: Zero deterministic projection mismatches across 3 independent CLI replicates.
-  - `RAW_ARTIFACT_INTEGRITY_GATE`: All 10 raw JSON/CSV artifact SHA-256 hashes immutable.
+  - `RAW_ARTIFACT_INTEGRITY_GATE`: Exact Git-byte SHA-256 verification covers 5 raw JSON files and 5 raw CSV files; the 3 committed config JSON files are verified by a separate config-hash gate before analysis output mutation.
   - `STRUCTURAL_ANALYSIS_GATE`: Traceable paired reduction statistics recomputed and validated.
   - `TIMING_RESOLUTION_GATE`: Two-stage median with integer-ms quantization labeling (`TIMER_RESOLUTION_LIMITED`).
   - `METRIC_SEPARATION_GATE`: Deterministic search metrics strictly separated from observational execution times.

@@ -3,6 +3,9 @@
 > **Baseline SHA:** `124ad0d0da025222fed0b4e21db82c7b5102b01e`
 > **Branch:** `docs/post-phase4-reconciliation`
 > **Date:** 2026-08-27
+> **Lifecycle:** `HISTORICAL AUDIT RECORD / AS-OF 2026-08-27`
+> **Normative Authority:** Current governance, architecture, roadmap, test-strategy, and operations documents on `main`.
+> **Superseded Current-State Sections:** Phase 5 preflight placeholders and any `NOT STARTED` milestone statements in this record are preserved historical findings, not current instructions.
 
 ---
 

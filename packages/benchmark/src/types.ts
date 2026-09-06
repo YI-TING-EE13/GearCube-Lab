@@ -2,7 +2,11 @@ import type { Move } from '@gearcube/core';
 import type { SolverAlgorithm } from '@gearcube/solvers';
 
 /**
- * Configuration schema for an empirical benchmark run.
+ * Immutable configuration schema for one empirical benchmark run.
+ *
+ * The seed, exact-depth corpus selection, algorithm order, warmups, measured
+ * repetitions, and optional solver limits together define the reproducible
+ * workload. Warmups are execution-only and never appear in the report trials.
  */
 export interface BenchmarkSuiteConfig {
   readonly schemaVersion: '1';
@@ -20,7 +24,11 @@ export interface BenchmarkSuiteConfig {
 }
 
 /**
- * Deterministically sampled benchmark case with state-derived stable identifier.
+ * Deterministically sampled benchmark case with a state-derived stable identifier.
+ *
+ * `exactDepth` is the independent corpus distance used for stratification and
+ * optimality checks; it is not the solver's measured elapsed time or returned
+ * solution depth.
  */
 export interface BenchmarkCase {
   readonly caseId: string;
@@ -29,7 +37,11 @@ export interface BenchmarkCase {
 }
 
 /**
- * Common base fields for measured solver trial execution results.
+ * Common fields for one measured solver trial.
+ *
+ * `repetitionIndex` identifies the measured repetition (warmups are excluded),
+ * counters describe search work, and `elapsedMs` records the runtime observed
+ * for this trial on its execution host.
  */
 export interface BenchmarkTrialBase {
   readonly caseId: string;
@@ -42,7 +54,7 @@ export interface BenchmarkTrialBase {
 }
 
 /**
- * Solved trial execution result.
+ * Solved measured trial, including the returned canonical move sequence.
  */
 export interface BenchmarkSolvedTrial extends BenchmarkTrialBase {
   readonly status: 'SOLVED';
@@ -51,7 +63,7 @@ export interface BenchmarkSolvedTrial extends BenchmarkTrialBase {
 }
 
 /**
- * Limit reached trial execution result.
+ * Measured trial stopped by one of the configured solver limits.
  */
 export interface BenchmarkLimitTrial extends BenchmarkTrialBase {
   readonly status: 'LIMIT_REACHED';
@@ -59,12 +71,15 @@ export interface BenchmarkLimitTrial extends BenchmarkTrialBase {
 }
 
 /**
- * Individual measured algorithm trial result (discriminated union).
+ * Individual measured algorithm trial result (discriminated by `status`).
  */
 export type BenchmarkTrialResult = BenchmarkSolvedTrial | BenchmarkLimitTrial;
 
 /**
- * Summary metrics aggregated by depth for an individual algorithm.
+ * Summary metrics aggregated by exact corpus depth for one algorithm.
+ *
+ * Means and medians are calculated over all measured trials at that depth;
+ * solved and limit counts retain the outcome mix instead of hiding limits.
  */
 export interface AlgorithmSummaryByDepth {
   readonly exactDepth: number;
@@ -80,7 +95,7 @@ export interface AlgorithmSummaryByDepth {
 }
 
 /**
- * Summary metrics aggregated across an entire suite for an algorithm.
+ * Summary metrics aggregated across an entire suite for one algorithm.
  */
 export interface AlgorithmSummary {
   readonly algorithm: SolverAlgorithm;
@@ -92,7 +107,7 @@ export interface AlgorithmSummary {
 }
 
 /**
- * Complete benchmark summary.
+ * Suite-level counts and per-algorithm aggregate summaries.
  */
 export interface BenchmarkSummary {
   readonly totalCases: number;
@@ -102,6 +117,10 @@ export interface BenchmarkSummary {
 
 /**
  * Non-normative host and runtime provenance metadata.
+ *
+ * `executionTimestamp` is an ISO-8601 timestamp captured at run time. The
+ * optional fields describe the host that performed the measurements; they are
+ * provenance context, not normalization inputs or performance guarantees.
  */
 export interface EnvironmentProvenance {
   readonly platform: 'node' | 'browser';
@@ -118,7 +137,10 @@ export interface EnvironmentProvenance {
 }
 
 /**
- * Complete, lossless exported benchmark report (contains measured trials only).
+ * Complete, lossless exported benchmark report containing measured trials only.
+ *
+ * Warmups and intermediate telemetry are intentionally absent; `trials` is the
+ * source record from which the summary is derived.
  */
 export interface BenchmarkReport {
   readonly schemaVersion: '1';

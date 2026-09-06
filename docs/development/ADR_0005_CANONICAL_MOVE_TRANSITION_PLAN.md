@@ -5,6 +5,8 @@
 > **Baseline Commit:** `cb19af5a6cdb929acee3e88b7a8f92696a56536a` (`Finalize Phase 1D frame materialization plan`)
 > **Branch:** `phase/adr0005-canonical-move-transition-plan`
 > **Applicability:** Pure TypeScript Domain Core (`packages/core`), Transition Engine (`applyMove`), and Materialization Lifecycle
+> **Lifecycle:** `HISTORICAL PLAN / SUPERSEDED BY ACCEPTED ADR-0005`
+> **Current Authority:** [`ADR-0005-CANONICAL-MOVE-TRANSITION-ALGEBRA.md`](../decisions/ADR-0005-CANONICAL-MOVE-TRANSITION-ALGEBRA.md) and the current roadmap govern the accepted transition semantics.
 
 ---
 

@@ -14,6 +14,8 @@
 > **Accepted Implementation Baseline:** `3e407caa4f02700422df33e1872a489d4a138ebf`
 > **Target Condition:** `PUBLIC_TEST_READY` (Effective upon final fast-forward promotion of the acceptance-record commit to `main`)
 > **Acceptance Record:** [`docs/development/PHASE_8_ACCEPTANCE_RECORD.md`](./PHASE_8_ACCEPTANCE_RECORD.md)
+> **Lifecycle:** `HISTORICAL MILESTONE PLAN / ACCEPTED`
+> **Current Authority:** Current Phase 8/9 lifecycle and verification inventory are maintained in [`ROADMAP.md`](ROADMAP.md), [`TEST_STRATEGY.md`](TEST_STRATEGY.md), and [`REPOSITORY_GOVERNANCE.md`](../operations/REPOSITORY_GOVERNANCE.md).
 
 ---
 
@@ -25,7 +27,7 @@ Phase 8 shifts GearCube Lab from progressive subsystem R&D into a self-contained
 - **Phases 0–5 (Completed & Accepted):** The discrete domain core, 3D kinematics and rendering, interactive Play Mode UI (history, undo/redo, seeded scramble), classical graph search solvers (BFS, BiBFS, IDA* with H2 two-slice PDB) with Solve Mode UI & solution playback, pure benchmark engine, 41,472-state exact-distance corpus, headless CLI, published comparative empirical research report, and browser Research Mode with background Web Worker execution are fully implemented, accepted, and merged into `main`.
 - **Phase 6 (Neural Heuristic & AI-Guided Search):** `DEFERRED / OPTIONAL RESEARCH TRACK`. Not required for public-test readiness; does not block Phase 8; no implementation may begin during Phase 8.
 - **Phase 7 (Physical Model & Vision Expansion):** `DEFERRED / OPTIONAL PHYSICAL MODEL & VISION EXPANSION`. Not required for public-test readiness; does not block Phase 8; no implementation may begin during Phase 8.
-- **Phase 8 (Product Completion & Public-Test Readiness):** `ACTIVE PRODUCT MAINLINE`. The immediate goal is to ensure an unrelated technically capable user can clone the public repository, install dependencies, launch GearCube Lab, understand the basic operating model, use Play / Solve / Research, and exercise the complete current system without developer-specific knowledge.
+- **Phase 8 (Product Completion & Public-Test Readiness):** This was the `ACTIVE PRODUCT MAINLINE` at plan time. The plan's goal was to ensure an unrelated technically capable user could clone the public repository, install dependencies, launch GearCube Lab, understand the basic operating model, use Play / Solve / Research, and exercise the complete current system without developer-specific knowledge; the milestone is now completed and accepted.
 
 ### 1.2. Public-Test Readiness Boundary
 - **Target Condition:** A stranger on a clean machine can clone, install, launch, understand, and test the software cleanly.

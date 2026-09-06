@@ -1,6 +1,18 @@
 /**
  * @file materializer.ts
  * @description Fixed-spatial PiecePlacementView materialization, Model A center identity derivation, and normalization.
+ * @remarks
+ * `PiecePlacementView` is a fixed-spatial projection of the canonical state,
+ * not a second mutable source of truth. The checked-in Model A dictionaries
+ * below are the accepted coordinate contracts from ADR-0003 and ADR-0004.
+ * Their dimensions and ordering are observable invariants: corner configuration
+ * indices are `[0..23]`, slice phases are `[0..3]`, and slot arrays remain in
+ * the declared U/D/F/B/R/L, corner, and edge orders. A materialized view always
+ * contains 8 corners, 12 edges, and 6 centers.
+ *
+ * `normalizePiecePlacement` exists as an independent round-trip and validation
+ * oracle. State updates should continue to use canonical transitions; they
+ * should not be routed through this display-oriented projection.
  */
 
 import {
@@ -81,8 +93,11 @@ export interface PiecePlacementView {
 }
 
 // ============================================================================
-// 2. Canonical Corner and Edge Permutation Tables (Pursuant to ADR-0003 / Model)
+// 2. Canonical Corner and Edge Permutation Tables (ADR-0003 Model A)
 // ============================================================================
+
+// These dictionaries are indexed by canonical corner configuration C. Keep
+// the row count and slot order aligned with the type-level vocabularies above.
 
 /** T_ref corner permutations for C in [0..23] */
 export const T_REF_TABLE: readonly (readonly [number, number, number, number])[] = Object.freeze([
@@ -233,8 +248,11 @@ const B_Z_TABLE: readonly (readonly [number, number, number, number])[] = Object
 ]);
 
 // ============================================================================
-// 3. Model A Center Identity Derivation Dictionaries (Pursuant to ADR-0004)
+// 3. Model A Center Identity Derivation Dictionaries (ADR-0004)
 // ============================================================================
+
+// Center identity is derived from C and the three slice phases; it is not an
+// independently stored field in GearCubeState.
 
 /**
  * 24-row dictionary mapping C in [0..23] to canonical center piece placement in
@@ -274,7 +292,10 @@ export const CENTER_PERM_OF_C: readonly (readonly [
   Object.freeze(['center-D', 'center-U', 'center-B', 'center-F', 'center-R', 'center-L'] as const), // C=23
 ]);
 
-/** Center slot index mapping: 0:U, 1:D, 2:F, 3:B, 4:R, 5:L */
+/**
+ * Center-slot permutations for the X slice, indexed by phase `k_X` in `[0..3]`.
+ * Every row uses the center slot order `['U', 'D', 'F', 'B', 'R', 'L']`.
+ */
 export const K_X: readonly (readonly [number, number, number, number, number, number])[] = Object.freeze([
   Object.freeze([0, 1, 2, 3, 4, 5] as const), // k=0: Identity
   Object.freeze([0, 1, 3, 2, 5, 4] as const), // k=1: (F B)(R L)
@@ -282,6 +303,7 @@ export const K_X: readonly (readonly [number, number, number, number, number, nu
   Object.freeze([1, 0, 2, 3, 5, 4] as const), // k=3: (U D)(R L)
 ]);
 
+/** Center-slot permutations for the Y slice, indexed by phase `k_Y` in `[0..3]`. */
 export const K_Y: readonly (readonly [number, number, number, number, number, number])[] = Object.freeze([
   Object.freeze([0, 1, 2, 3, 4, 5] as const), // k=0: Identity
   Object.freeze([1, 0, 2, 3, 5, 4] as const), // k=1: (U D)(R L)
@@ -289,6 +311,7 @@ export const K_Y: readonly (readonly [number, number, number, number, number, nu
   Object.freeze([1, 0, 3, 2, 4, 5] as const), // k=3: (U D)(F B)
 ]);
 
+/** Center-slot permutations for the Z slice, indexed by phase `k_Z` in `[0..3]`. */
 export const K_Z: readonly (readonly [number, number, number, number, number, number])[] = Object.freeze([
   Object.freeze([0, 1, 2, 3, 4, 5] as const), // k=0: Identity
   Object.freeze([0, 1, 3, 2, 5, 4] as const), // k=1: (F B)(R L)
@@ -318,6 +341,10 @@ const FRAME_CENTER_SLOT_PERMS: Readonly<
  * @param spatialFrame Physical SpatialFrame orientation (defaults to 3: Solved / Canonical)
  * @returns Fully derived fixed-spatial piece placement view
  * @throws TypeError if state or spatialFrame is invalid
+ * @remarks The canonical state supplies the piece identities and slice phases;
+ * the optional frame then maps those identities into fixed physical slots.
+ * The returned placement arrays are frozen to prevent structural mutation of
+ * the derived view.
  */
 export function materializeState(
   state: GearCubeState,
@@ -451,6 +478,9 @@ export function materializeState(
  *
  * @param view Physical piece placement view
  * @returns Reconstructed canonical state and SpatialFrame
+ * @remarks This is a verification/normalization helper for checking the
+ * materializer's invariants. It reconstructs the canonical state and frame
+ * from the complete physical view; it is not the production transition path.
  */
 export function normalizePiecePlacement(view: PiecePlacementView): {
   state: GearCubeState;

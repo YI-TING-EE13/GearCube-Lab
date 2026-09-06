@@ -3,6 +3,8 @@
 > **Document Status:** `PROPOSED` (Pending Independent Review)
 > **Phase Target:** Phase 1E — Group Invariants & Exhaustive Reachable State Closure
 > **Applicability:** Pure TypeScript Domain Core (`packages/core`)
+> **Lifecycle:** `HISTORICAL MILESTONE PLAN / AS-OF PROPOSAL`
+> **Current Authority:** The accepted Phase 1E result and current test inventory are maintained in [`ROADMAP.md`](ROADMAP.md) and [`TEST_STRATEGY.md`](TEST_STRATEGY.md).
 
 ---
 
@@ -24,9 +26,9 @@ Phase 1E serves as the final exhaustive validation gate of the Pure TypeScript D
 ### 2.1. Baseline Commit
 - **Authoritative Baseline Commit:** `e31cd87b0db153140d9c4780ac2b7f4953d294d0` (`Complete Phase 1D frame materialization`).
 
-### 2.2. Current Core Inventory
+### 2.2. Core Inventory at the Historical Plan Baseline
 - **`PUBLIC_EXPORT_COUNT`:** **53 symbols** (34 runtime values/guards/functions + 19 TypeScript types) exported from `packages/core/src/index.ts`.
-- **`CURRENT_TEST_FILE_COUNT`:** **9 test files** across the repository:
+- **`TEST_FILE_COUNT_AT_PLAN_BASELINE`:** **9 test files** across the repository:
   1. `packages/core/tests/domain.test.ts` (Phase 1B: Cartesian 41,472 state generation & 1 solved state)
   2. `packages/core/tests/materializer.test.ts` (Phase 1D: 1,536 Model A dict, 41,472 center identities, 13 goldens, 165,888 materializations, 165,888 normalization round-trips, 1,990,656 application lifecycle transitions)
   3. `packages/core/tests/serialization.test.ts` (Phase 1D: 41,472 canonical serialization round-trips & uniqueness, grammar parsing error handling)
