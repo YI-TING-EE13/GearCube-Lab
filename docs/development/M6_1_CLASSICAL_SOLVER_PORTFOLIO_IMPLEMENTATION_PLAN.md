@@ -106,4 +106,3 @@ Project classification: Product/project delivery with evidence gates.
 Time box and exit condition: Implement only the five phases above; stop on any listed M6.1 stop condition or failed required regression gate.
 Decision: Continue with the bounded solver portfolio candidate.
 ```
-
