@@ -39,6 +39,7 @@ docs/
 │   ├── PHASE_5_IMPLEMENTATION_PLAN.md  # Phase 5 Research & Benchmarking Harness plan (Preflight Accepted)
 │   ├── PHASE_5D_IMPLEMENTATION_PLAN.md # Phase 5D Browser Research Mode plan (Accepted)
 │   ├── M6_PLAY_ORIENTATION_CHALLENGE_IMPLEMENTATION_PLAN.md # M6 orientation and certified challenge implementation contract (Candidate)
+│   ├── M6_1_CLASSICAL_SOLVER_PORTFOLIO_IMPLEMENTATION_PLAN.md # M6.1 A* solver portfolio implementation contract (Candidate)
 │   ├── PHASE_8_ACCEPTANCE_RECORD.md    # Phase 8 Public-Test-Readiness Acceptance Record
 │   ├── ADR_0004_CENTER_ORIENTATION_PLAN.md # ADR-0004 Center orientation semantics plan
 │   ├── ADR_0005_CANONICAL_MOVE_TRANSITION_PLAN.md # ADR-0005 Canonical move transition plan
@@ -123,6 +124,7 @@ For current implementation questions, use this authority order: `AGENTS.md` and 
 - **Phase 5 Research & Benchmarking Harness Plan (Completed & Accepted):** [`docs/development/PHASE_5_IMPLEMENTATION_PLAN.md`](development/PHASE_5_IMPLEMENTATION_PLAN.md)
 - **Phase 5D Browser Research Mode Plan (Implementation Accepted):** [`docs/development/PHASE_5D_IMPLEMENTATION_PLAN.md`](development/PHASE_5D_IMPLEMENTATION_PLAN.md)
 - **M6 Play Orientation & Certified Challenge Plan (Implementation Candidate):** [`docs/development/M6_PLAY_ORIENTATION_CHALLENGE_IMPLEMENTATION_PLAN.md`](development/M6_PLAY_ORIENTATION_CHALLENGE_IMPLEMENTATION_PLAN.md)
+- **M6.1 Classical Solver Portfolio Plan (Implementation Candidate):** [`docs/development/M6_1_CLASSICAL_SOLVER_PORTFOLIO_IMPLEMENTATION_PLAN.md`](development/M6_1_CLASSICAL_SOLVER_PORTFOLIO_IMPLEMENTATION_PLAN.md)
 - **Phase 5C Experiment Plan — Accepted:** [`docs/research/PHASE_5C_EXPERIMENT_PLAN.md`](research/PHASE_5C_EXPERIMENT_PLAN.md)
 - **Phase 5C Classical Solver Benchmark Report — Accepted:** [`docs/research/PHASE_5_CLASSICAL_SOLVER_BENCHMARK_REPORT.md`](research/PHASE_5_CLASSICAL_SOLVER_BENCHMARK_REPORT.md)
 - **Post-Phase 4 Documentation Reconciliation Record:** [`docs/development/POST_PHASE4_DOCUMENTATION_RECONCILIATION.md`](development/POST_PHASE4_DOCUMENTATION_RECONCILIATION.md)
