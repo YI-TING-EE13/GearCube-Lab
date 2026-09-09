@@ -1,6 +1,6 @@
 # M6.1 Implementation Plan — Classical Solver Portfolio Expansion
 
-> **Milestone status:** `IMPLEMENTATION_CANDIDATE` (contract prepared before production implementation)
+> **Milestone status:** `COMPLETED & ACCEPTED` (plan prepared before production implementation)
 > **Baseline:** `feature/m6-play-orientation-certified-challenge` at `8e948167030abee7afdd717591358c5394e28806`
 > **Candidate worktree:** `.worktrees/m6-play-orientation-certified-challenge`
 > **Baseline tree:** `10a388602f392ab71d854e6a8f62ccada9c1d5cd`
@@ -19,7 +19,7 @@ Acceptance requires:
 - `A_STAR` is available through the existing public solver type/API, one-shot solver Worker, Play selector/result metrics, benchmark validation/dispatch, Research selector, and JSON/CSV reporting without a new Worker or workspace.
 - Exact-distance fixtures, a deterministic corpus of at least 100 states, cross-solver depth equality, and the existing exhaustive H2 admissibility/consistency gates pass.
 - M6 orientation guidance and Challenge behavior remain unchanged; Challenge certification continues to use `IDA_STAR` only and exposes no solution sequence.
-- Current living documentation describes the candidate capability and remains candidate-level. Accepted historical Phase 5C reports, raw artifacts, workflows, rulesets, Core semantics, Kinematics, transition data, dependencies, and lockfiles remain unchanged.
+- Current living documentation records the accepted capability. Accepted historical Phase 5C reports, raw artifacts, workflows, rulesets, Core semantics, Kinematics, transition data, dependencies, and lockfiles remain unchanged.
 
 ## Current system and source of truth
 

@@ -18,7 +18,7 @@
 
 1. **Physical & Kinematic Fidelity:** Deliver a WebGL/Three.js 3D simulation reflecting the real physical gear interactions of the Gear Cube, accurately capturing coupled face rotations and continuous gear mesh dynamics.
 2. **Pure Mathematical Source of Truth:** Formalize a discrete puzzle state engine completely decoupled from rendering logic, capable of validating state transitions, calculating move invariants, and computing deterministic state hashes.
-3. **Classical Search Benchmarking:** Implement classical heuristic search algorithms (accepted Phase 4 baselines: BFS, Bidirectional BFS, IDA*; M6.1 implementation candidate: optimal A* with H2) running in background Web Workers with high-throughput search node evaluation.
+3. **Classical Search Benchmarking:** Implement classical heuristic search algorithms (accepted Phase 4 baselines: BFS, Bidirectional BFS, IDA*; accepted M6.1 extension: optimal A* with H2) running in background Web Workers with high-throughput search node evaluation.
 4. **Comparative AI Research:** Provide a controlled testbed to compare classical graph search with offline-trained neural heuristics (PyTorch) for value prediction and policy guidance.
 5. **Physical Cube Digital Twin (Vision Ingestion):** Establish a local-first computer vision pipeline enabling users to capture webcam images of their physical Gear Cube, reconstruct and validate the discrete state, and receive interactive 3D step-by-step solving guidance.
 6. **Reproducible Empirical Lab:** Maintain a deterministic benchmarking harness recording nodes expanded, branch factors, time-to-solution, and memory usage across identical scrambled seeds.
@@ -72,14 +72,14 @@
 ### Mode 1: Play Mode
 - Full 3D camera orbital controls (rotate, pan, zoom).
 - Face rotation controls (button-based directional turns implemented & accepted; direct raycast drag interaction is DEFERRED / FUTURE).
-- M6 implementation candidate: persistent `R/L = +/-X`, `U/D = +/-Y`, and `F/B = +/-Z` orientation guidance; face-local CW/CCW semantics are stated as viewed from outside the selected face toward the cube center.
+- M6: persistent `R/L = +/-X`, `U/D = +/-Y`, and `F/B = +/-Z` orientation guidance; face-local CW/CCW semantics are stated as viewed from outside the selected face toward the cube center.
 - Scramble generator supporting configurable scramble depth ($N$ random legal moves) with deterministic pseudo-random seeds.
 - Comprehensive move history timeline with interactive undo, redo, and jump-to-step capabilities.
 - Reset to canonical solved state.
-- M6 implementation candidate: bounded deterministic Certified Challenge generation for `EASY = 2..4`, `NORMAL = 5..6`, and `CHALLENGE = 7..8`, accepted only from optimal `IDA_STAR` depth and installed as a new empty-history Play baseline without a solution sequence.
+- M6: bounded deterministic Certified Challenge generation for `EASY = 2..4`, `NORMAL = 5..6`, and `CHALLENGE = 7..8`, accepted only from optimal `IDA_STAR` depth and installed as a new empty-history Play baseline without a solution sequence.
 
 ### Solver Capability in the Play Workspace
-- Algorithm selection (implemented & accepted Phase 4 baseline: BFS, Bidirectional BFS, and IDA* with H2 PDB heuristic; M6.1 implementation candidate: optimal A* with H2; other classical candidates such as IDDFS and additional Pattern Database estimators remain deferred; Neural-Guided Search is FUTURE PHASE 6).
+- Algorithm selection (implemented & accepted portfolio: BFS, Bidirectional BFS, optimal A* with H2, and IDA*; other classical candidates such as IDDFS and additional Pattern Database estimators remain deferred; Neural-Guided Search is FUTURE PHASE 6).
 - Real-time search progress indicators (nodes evaluated, current search depth/bounds, elapsed time).
 - Solution playback controls (implemented & accepted: Play, Pause, Step Forward, Step Backward; Auto-Step Speed slider is DEFERRED / FUTURE).
 - 3D visual move annotations (directional rotation arrows, highlighted face slices are DEFERRED / FUTURE presentation enhancements).
@@ -87,7 +87,7 @@
 ### Workspace Mode 2: Research & Benchmarking (Implemented & Accepted — Phase 5)
 - Empirical research harness defined in [`docs/development/PHASE_5_IMPLEMENTATION_PLAN.md`](../development/PHASE_5_IMPLEMENTATION_PLAN.md):
   - **Implemented & Accepted (Phases 5A–5D):** Pure `@gearcube/benchmark` package, materialized v1 benchmark schemas, typed `BenchmarkConfigError` runtime validation, stable state-derived case identity (`d${exactDepth}:${stateKey}`), independent Core-only exact-distance corpus builder (discovering 41,472 canonical states and diameter 8), deterministic stratified sampling (`FNV1A_UTF16_CODE_UNITS_32` + `MULBERRY32_EXACT`), headless solver comparison runner (`runBenchmarkSuite` evaluating BFS, BiBFS, and IDA* across identical cases and resource limits), lossless JSON exporter, flat 14-column RFC-4180 CSV exporter, headless Node CLI (`npm run benchmark`), empirical comparative research dataset and classical solver benchmark report ([`docs/research/PHASE_5_CLASSICAL_SOLVER_BENCHMARK_REPORT.md`](../research/PHASE_5_CLASSICAL_SOLVER_BENCHMARK_REPORT.md)), and browser Research Mode with dedicated background Web Worker execution (`benchmark.worker.ts`), pure reactive controller, and client-side JSON/CSV export downloads.
-  - **M6.1 implementation candidate:** The shared benchmark runner and browser Research Mode add `A_STAR` to the selectable portfolio while retaining the version-1 JSON/CSV schema; accepted Phase 5C evidence remains historical and unchanged.
+  - **M6.1 accepted extension:** The shared benchmark runner and browser Research Mode add `A_STAR` to the selectable portfolio while retaining the version-1 JSON/CSV schema; accepted Phase 5C evidence remains historical and unchanged.
 
 ---
 
@@ -157,8 +157,8 @@ $$\text{Presentation Layer (UI/3D)} \longrightarrow \text{Domain Core Contracts}
 | :--- | :--- | :--- | :--- |
 | `packages/core` | Discrete state models, move definitions, legality checks, canonical serialization, and materialized piece views | Zero external dependencies (no React, no Three.js, no DOM) | Implemented & Accepted |
 | `packages/kinematics` | Continuous trajectory generation, coupled gear angles, static piece placement projection | Depends only on `@gearcube/core` | Implemented & Accepted |
-| `apps/web` | Web application container hosting React UI components, R3F/Three.js 3D viewport, procedural piece geometries, MoveControls, single authoritative `GearCubeSessionState`, Play workspace history/undo/redo/scramble/keyboard (Phase 3), Solver panel/playback/Worker adapter (Phase 4), Browser Research workspace panel / benchmark Worker adapter (Phase 5D), and M6 orientation/challenge plus M6.1 solver-portfolio candidate UI | Internal: `@gearcube/core`, `@gearcube/kinematics`, `@gearcube/solvers`, `@gearcube/benchmark`; External: React, R3F, Three.js presentation stack (no Zustand requirement) | Implemented & Accepted through Phase 5D; M6/M6.1 implementation candidates |
-| `packages/solvers` | Classical graph search (accepted baseline: BFS, Bidirectional BFS, IDA* with H2 two-slice PDB heuristic; M6.1 candidate: optimal A* with H2), heuristic estimators | Depends only on `@gearcube/core` | Phase 4 baseline accepted; M6.1 implementation candidate |
+| `apps/web` | Web application container hosting React UI components, R3F/Three.js 3D viewport, procedural piece geometries, MoveControls, single authoritative `GearCubeSessionState`, Play workspace history/undo/redo/scramble/keyboard (Phase 3), Solver panel/playback/Worker adapter (Phase 4), Browser Research workspace panel / benchmark Worker adapter (Phase 5D), and accepted M6 orientation/challenge plus M6.1 solver-portfolio UI | Internal: `@gearcube/core`, `@gearcube/kinematics`, `@gearcube/solvers`, `@gearcube/benchmark`; External: React, R3F, Three.js presentation stack (no Zustand requirement) | Implemented & Accepted through M6.1 |
+| `packages/solvers` | Classical graph search (accepted portfolio: BFS, Bidirectional BFS, IDA* with H2 two-slice PDB heuristic, and optimal A* with H2), heuristic estimators | Depends only on `@gearcube/core` | Implemented & Accepted through M6.1 |
 | `packages/benchmark` | Pure benchmark engine, independent Core-only exact-distance corpus builder, deterministic stratified sampling, comparative solver runner, JSON/CSV exports, and Node CLI adapter | Depends directly on `@gearcube/core` and `@gearcube/solvers`; zero UI/DOM runtime dependencies | Implemented & Accepted — Phase 5 |
 | `ml/` (Python) | PyTorch model architectures, offline self-play/dataset generation, heuristic export | Python (version selected based on ML dependency compatibility) managed exclusively via `uv` | Planned (Phase 6) |
 | `packages/vision` | Webcam video capture, color segmentation, state consistency validation, and correction | Browser WebRTC / Canvas APIs; depends on `@gearcube/core` | Planned (Phase 7) |
@@ -234,7 +234,7 @@ All inter-module communication is governed by immutable TypeScript interfaces de
 - **Deferred / Later Candidates:**
   - Iterative Deepening Depth-First Search (IDDFS).
   - Pattern Database (PDB) heuristics and other handcrafted estimators.
-- **M6.1 Implementation Candidate:**
+- **M6.1 Accepted Extension:**
   - Optimal graph-search A* with unit canonical move costs and the accepted H2 Two-Slice PDB Max heuristic.
   - Deterministic binary min-heap ordering, dense rank-indexed best-`g`/parent/closed bookkeeping, stale-entry rejection, lower-`g` reopening, and existing `maxNodes` / `maxDepth` result semantics.
 - **Web Worker Architecture:** Expensive solver workloads execute outside the browser main thread in dedicated background Web Workers (`apps/web/src/workers/solver.worker.ts`) so that graph search does not directly block UI rendering or user interaction. Workers report periodic algorithm-specific progress telemetry (expanded nodes, generated nodes, depth/bounds, and elapsed time) via serializable `postMessage`.
@@ -318,7 +318,8 @@ The project roadmap is structured into dependency-ordered phases (detailed in [`
 - **Phase 3:** Interactive UI, History, Undo/Redo, Keyboard Controls, and Responsive Layout *(Accepted)*
 - **Phase 4:** Classical Solver Infrastructure (Web Worker, BFS / Bidirectional BFS / IDA*, Solve Mode UI & Playback) *(Implemented & Accepted)*
 - **Phase 5:** Research Benchmark Framework & Empirical Evaluation *(Completed & Accepted — Phases 5A–5D Accepted)*
-- **M6.1:** Classical Solver Portfolio Expansion (optimal A* with H2, Play/Research integration) *(Implementation Candidate; not formally accepted)*
+- **M6:** Play Orientation & Certified Challenge UX *(Completed & Accepted)*
+- **M6.1:** Classical Solver Portfolio Expansion (optimal A* with H2, Play/Research integration) *(Completed & Accepted)*
 - **Phase 8:** Product Completion & Public-Test Readiness *(Completed & Accepted)*
 - **Phase 9:** GitHub Pages Deployment & Public Hosting *(Completed & Accepted)*
 - **Phase 6:** Neural Heuristic & AI-Guided Search *(Deferred / Optional Research Track)*

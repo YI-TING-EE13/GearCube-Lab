@@ -11,7 +11,7 @@ It combines a 3D playable puzzle with mechanically coupled gear kinematics, mult
 - **Play in 3D:** Rotate and inspect the puzzle in interactive 3D with coupled gear animations.
 - **Choose Interaction Modes:** Control moves via staged two-step half-turns (`TWO_STEP`) or direct full turns (`DIRECT_180`).
 - **Deterministic Scramble:** Generate reproducible scramble states from any text seed.
-- **Play Orientation & Certified Challenge (M6 candidate):** See the persistent face-axis legend and generate a bounded challenge certified by optimal solver depth.
+- **Play Orientation & Certified Challenge (M6):** See the persistent face-axis legend and generate a bounded challenge certified by optimal solver depth.
 - **Timeline & History:** Step through past moves, scrub the timeline, or undo/redo actions.
 - **Optimal Solving:** Solve any reachable state using Breadth-First Search (BFS), Bidirectional BFS, optimal A* with the precomputed $H_2$ pattern database heuristic, or IDA*.
 - **Solution Playback:** Play solutions automatically or step forward and backward move-by-move.
@@ -87,7 +87,7 @@ The **Play** workspace is the default interactive puzzle environment.
 - **Scramble & History:**
   - Enter any string into the **Seed** field and click **Scramble** to apply a deterministic scramble sequence.
   - Use **Undo**, **Redo**, or **Reset Baseline** in the top bar to navigate history, or click directly on any step in the timeline scrubber.
-- **Certified Challenge (M6 implementation candidate):**
+- **Certified Challenge (M6):**
   - Select **Easy**, **Normal**, or **Challenge** in the Certified Challenge panel and click **Generate Challenge**. Candidates always start from the solved Core baseline and are certified by the existing optimal `IDA_STAR` solver in a dedicated Worker.
   - The accepted depth bands are `EASY = 2..4`, `NORMAL = 5..6`, and `CHALLENGE = 7..8`. The selected label is derived only from `SolveSuccess.depth`; sampling length and retry count are not difficulty truth.
   - A certified result replaces the Play baseline and clears move history. Challenge generation disables Play mutations and visible Solve/playback actions; Cancel, workspace switching, unmount, and stale results cannot install an uncertified candidate. Challenge certification does not expose a solution sequence or create Solution Playback.
@@ -229,20 +229,20 @@ Phases 0–9: Completed & Accepted
   - Phase 9A (GitHub Pages Deployment Foundation & Subpath Qualification): Completed & Accepted
   - Phase 9B (First Live GitHub Pages Deployment): Completed & Accepted
   - Phase 9C (Public Hosting Documentation & Deployment Closeout): Completed & Accepted
-M6 Play Orientation & Certified Challenge UX: Implementation Candidate (not formally accepted)
-M6.1 Classical Solver Portfolio Expansion: Implementation Candidate (not formally accepted)
+M6 Play Orientation & Certified Challenge UX: COMPLETED & ACCEPTED
+M6.1 Classical Solver Portfolio Expansion: COMPLETED & ACCEPTED
 Deferred Tracks:
   - Phase 6 (AI-Guided Search): Deferred Optional Research
   - Phase 7 (Physical Model & Vision Expansion): Deferred Optional Expansion
 
-PUBLIC_TEST_READY: YES (main baseline; M6/M6.1 candidates pending independent acceptance)
+PUBLIC_TEST_READY: YES
 LIVE_GITHUB_PAGES: YES
 PUBLIC_HOSTING: ACTIVE
 ```
 
 *Note: The canonical public site is hosted at `https://yi-ting-ee13.github.io/GearCube-Lab/` via verification-gated GitHub Actions.*
 
-For complete phase history, specifications, and gating criteria, refer to [`ROADMAP.md`](docs/development/ROADMAP.md), [`M6_1_CLASSICAL_SOLVER_PORTFOLIO_IMPLEMENTATION_PLAN.md`](docs/development/M6_1_CLASSICAL_SOLVER_PORTFOLIO_IMPLEMENTATION_PLAN.md), [`PHASE_8_IMPLEMENTATION_PLAN.md`](docs/development/PHASE_8_IMPLEMENTATION_PLAN.md), and [`PHASE_8_ACCEPTANCE_RECORD.md`](docs/development/PHASE_8_ACCEPTANCE_RECORD.md).
+For complete phase history, specifications, and gating criteria, refer to [`ROADMAP.md`](docs/development/ROADMAP.md), [`M6_PLAY_ORIENTATION_CHALLENGE_IMPLEMENTATION_PLAN.md`](docs/development/M6_PLAY_ORIENTATION_CHALLENGE_IMPLEMENTATION_PLAN.md), [`M6_1_CLASSICAL_SOLVER_PORTFOLIO_IMPLEMENTATION_PLAN.md`](docs/development/M6_1_CLASSICAL_SOLVER_PORTFOLIO_IMPLEMENTATION_PLAN.md), [`M6_M6_1_ACCEPTANCE_RECORD.md`](docs/development/M6_M6_1_ACCEPTANCE_RECORD.md), [`PHASE_8_IMPLEMENTATION_PLAN.md`](docs/development/PHASE_8_IMPLEMENTATION_PLAN.md), and [`PHASE_8_ACCEPTANCE_RECORD.md`](docs/development/PHASE_8_ACCEPTANCE_RECORD.md).
 
 ---
 

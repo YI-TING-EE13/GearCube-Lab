@@ -1,6 +1,6 @@
 # M6 Implementation Plan — Play Orientation & Certified Challenge UX
 
-> **Milestone status:** `IMPLEMENTATION_CANDIDATE` (contract prepared before production implementation)
+> **Milestone status:** `COMPLETED & ACCEPTED` (plan prepared before production implementation)
 > **Baseline:** `origin/main` `659c18f3cf93d49eafdd5ea279054a4188332f7d`
 > **Candidate branch:** `feature/m6-play-orientation-certified-challenge`
 > **Candidate worktree:** `.worktrees/m6-play-orientation-certified-challenge`
@@ -24,7 +24,7 @@ Acceptance requires:
 - an accepted challenge installs a solved-rooted state as the new Play baseline with empty history while preserving interaction mode;
 - cancellation, workspace switching, unmount, stale results, and concurrent Play mutations cannot apply an uncertified or obsolete candidate;
 - Playwright coverage verifies visible orientation guidance, challenge selection/action/status, certified depth, no solution disclosure, baseline reset, deterministic Scramble regression, and representative responsive layouts;
-- the required repository verification commands run and their exact results are reported. M6 remains a candidate pending independent review.
+- the required repository verification commands run and their exact results are reported. Independent acceptance and hosted qualification are recorded in [`M6_M6_1_ACCEPTANCE_RECORD.md`](M6_M6_1_ACCEPTANCE_RECORD.md).
 
 ## Current system and source of truth
 
@@ -144,7 +144,7 @@ PLAY idle
    - Focused gate: component/static tests and Playwright state/DOM conditions without arbitrary timing sleeps.
 
 5. **Documentation synchronization and verification**
-   - Update living docs only where current behavior/roadmap/test inventory/contracts changed; keep status `IMPLEMENTATION_CANDIDATE`.
+   - Update living docs only where current behavior/roadmap/test inventory/contracts changed; record the accepted milestone status in [`M6_M6_1_ACCEPTANCE_RECORD.md`](M6_M6_1_ACCEPTANCE_RECORD.md) after review.
    - Run the focused tests, deterministic 20-seed-per-difficulty generation batch, `git diff --check`, `npm run verify`, `npm run test:e2e`, and production build evidence.
    - Inspect browser console/error collectors and representative `1440x900`, `768x1024`, `375x667`, `390x844`, `667x375` layouts.
    - Commit plan and implementation separately, then push only the feature branch after all local gates pass. Do not create a PR.
