@@ -48,7 +48,7 @@ All TypeScript configuration files must enforce maximum compiler strictness:
 - **Puzzle Domain Truth:** Discrete representation, state transitions, move legality, and canonical validation live strictly in `packages/core` with zero framework or runtime dependencies.
 - **Kinematic Mathematics:** Continuous trajectory planning, gear ratios, and rigid-body transform projection live in `packages/kinematics`, depending solely on `@gearcube/core`.
 - **Presentation & Framework Code:** Framework-specific presentation code (React components, Three.js shaders, R3F viewports, DOM listeners) lives in `apps/web`.
-- **Application-Level Pure Logic:** Pure TypeScript logic governing application interaction, session orchestration, and history state transitions (such as `apps/web/src/components/history/history.ts` and `scramble.ts`) lives in `apps/web`. These modules must consume Core contracts (`Move`, `GearCubeState`, `SpatialFrame`) without redefining puzzle mechanics or becoming a second canonical domain authority.
+- **Application-Level Pure Logic:** Pure TypeScript logic governing application interaction, session orchestration, history state transitions, and the M6 challenge policy (such as `apps/web/src/components/history/history.ts`, `scramble.ts`, and `components/challenge/challenge.ts`) lives in `apps/web`. These modules must consume Core contracts (`Move`, `GearCubeState`, `SpatialFrame`) without redefining puzzle mechanics or becoming a second canonical domain authority.
 - Within `apps/web`:
   - UI and interaction code must never become puzzle state truth.
   - 3D renderer and mesh components consume canonical state and materialized transforms from `@gearcube/kinematics`.
@@ -107,7 +107,7 @@ npm run check:core-deps  # Verify pure-core dependency boundary
 npm run verify           # Full CI validation: typecheck + core purity + tests + build
 
 # Browser E2E workflow (Available — implemented in Phase 3C, extended in Phase 4E)
-npm run test:e2e         # Run Playwright browser interaction tests (play-mode + solve-mode)
+npm run test:e2e         # Run Playwright browser interaction tests (play, M6 challenge, solve, and research modes)
 
 # Python ML workflows (Phase 6+)
 uv venv                  # Create isolated Python virtual environment

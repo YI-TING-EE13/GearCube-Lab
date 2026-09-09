@@ -2,6 +2,7 @@ import { deserializeLogicalState, type GearCubeState } from '@gearcube/core';
 import {
   solveBfs,
   solveBidirectionalBfs,
+  solveAStar,
   solveIdaStar,
   type SolverAlgorithm,
   type SolverOptions,
@@ -46,6 +47,8 @@ function dispatchSolver(
       return solveBfs(state, options);
     case 'BIDIRECTIONAL_BFS':
       return solveBidirectionalBfs(state, options);
+    case 'A_STAR':
+      return solveAStar(state, options);
     case 'IDA_STAR':
       return solveIdaStar(state, options);
   }

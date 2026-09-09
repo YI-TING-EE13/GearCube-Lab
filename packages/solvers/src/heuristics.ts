@@ -230,7 +230,7 @@ const PDB_CYZ: Int8Array = buildCyzTable();
  *
  * Package-internal only.
  */
-export function estimateIdaStarHeuristic(state: GearCubeState): number {
+export function estimateH2Heuristic(state: GearCubeState): number {
   const c = state.cornerConfiguration;
   const x = state.sliceX.permutationClass * 3 + state.sliceX.phase;
   const y = state.sliceY.permutationClass * 3 + state.sliceY.phase;
@@ -242,3 +242,9 @@ export function estimateIdaStarHeuristic(state: GearCubeState): number {
 
   return Math.max(dCXY, dCXZ, dCYZ);
 }
+
+/**
+ * Compatibility alias for existing package-internal IDA* tests and callers.
+ * The heuristic is the shared H2 estimate, not an IDA*-specific heuristic.
+ */
+export const estimateIdaStarHeuristic = estimateH2Heuristic;

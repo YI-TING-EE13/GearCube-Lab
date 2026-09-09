@@ -1,10 +1,10 @@
 # ROADMAP.md — Project Lifecycle & Dependency-Ordered Milestones
 
-> **Current Milestone:** `Phase 9 — GitHub Pages Deployment & Public Hosting (Completed & Accepted)`
-> **Next Milestone:** `Post-Phase 9 Maintenance & Deferred Research Tracks`
-> **Previous Milestone:** `Phase 8 — Product Completion & Public-Test Readiness (Completed & Accepted)`
+> **Current Milestone:** `M6.1 — Classical Solver Portfolio Expansion (Completed & Accepted)`
+> **Next Milestone:** `No active milestone; Phase 6 and Phase 7 remain deferred optional tracks`
+> **Previous Milestone:** `Phase 9 — GitHub Pages Deployment & Public Hosting (Completed & Accepted)`
 > **Deferred Tracks:** `Phase 6 (Neural AI Search)` & `Phase 7 (Physical Model & Vision Expansion)` (Deferred / Optional Tracks)
-> **Current Verification Inventory:** 36 Vitest files / 454 tests; 50 logical Playwright tests, 150 project-test cases, 148 applicable executions, and 2 intentional skips. See [`TEST_STRATEGY.md`](TEST_STRATEGY.md) for the maintained inventory; milestone counts below are historical as-of snapshots.
+> **Current Verification Inventory:** 40 Vitest files / 480 tests; 53 logical Playwright tests, 159 project-test cases, 157 applicable executions, and 2 intentional skips. See [`TEST_STRATEGY.md`](TEST_STRATEGY.md) for the maintained inventory; milestone counts below are historical as-of snapshots.
 
 ---
 
@@ -80,7 +80,20 @@
       ├─ 9A: Deployment Foundation & Subpath Qualification (Accepted)
       ├─ 9B: First Live GitHub Pages Deployment (Accepted)
       └─ 9C: Public Hosting Documentation & Deployment Closeout (Accepted)
-```
+      │
+      ▼
+[ M6: Play Orientation & Certified Challenge UX ]
+(COMPLETED & ACCEPTED)
+      ├─ Orientation legend and face-local CW/CCW guidance
+      ├─ Solved-rooted deterministic challenge generation
+      └─ Solver-depth certification, bounded retries, and fresh Play baseline
+
+[ M6.1: Classical Solver Portfolio Expansion ]
+(COMPLETED & ACCEPTED)
+      ├─ Optimal graph-search A* with the shared H2 heuristic
+      ├─ Existing Solver Worker, Play, and Research integration
+      └─ Cross-solver correctness and hosted browser qualification
+    ```
 
 ---
 
@@ -393,3 +406,45 @@ Phase 0B is partitioned into four dependency-ordered subphases:
   - Successful `Deploy GitHub Pages` workflow run.
   - Live HTTPS reachability (HTTP 200) and live functional smoke testing across Play, Solve, and Research modes in Chromium, Firefox, and WebKit.
   - Zero asset 404s, zero worker 404s, zero third-party requests, and zero console errors on live site.
+
+---
+
+### M6: Play Orientation & Certified Challenge UX (Completed & Accepted)
+- **Status:** `COMPLETED & ACCEPTED` (independent review, hosted cross-browser qualification, and merge are recorded in [`M6_M6_1_ACCEPTANCE_RECORD.md`](M6_M6_1_ACCEPTANCE_RECORD.md)).
+- **Objective:** Make Play face orientation explicit and add a bounded, deterministic challenge flow whose difficulty is certified only by the shortest depth returned by the existing `IDA_STAR` solver.
+- **Prerequisites:** Phase 9 baseline on `origin/main`; no changes to `packages/core`, `packages/kinematics`, solver algorithms, or dependency manifests.
+- **In-Scope:**
+  - Persistent `R/L = +/-X`, `U/D = +/-Y`, and `F/B = +/-Z` orientation guidance with face-local outside-looking-toward-center CW/CCW semantics.
+  - Semantic CW/CCW controls that describe direct 180-degree turns, the first physical two-step 90-degree action, and midpoint finish/reverse behavior.
+  - Deterministic solved-rooted candidates for `EASY = 2..4`, `NORMAL = 5..6`, and `CHALLENGE = 7..8`, certified by dedicated `IDA_STAR` Worker searches with a maximum of 64 attempts.
+  - Accepted challenges becoming empty-history Play baselines; regular current-relative scrambles remain unchanged.
+  - Cancellation, stale-result, unmount, workspace-switch, responsive, keyboard, and no-solution-exposure coverage.
+- **Out-of-Scope:** Core transition changes, kinematics changes, new solver algorithms, dependency upgrades, persistent accounts/storage, physical-device acceptance, merge/release, or main-branch promotion.
+- **Implementation Plan:** [`M6_PLAY_ORIENTATION_CHALLENGE_IMPLEMENTATION_PLAN.md`](M6_PLAY_ORIENTATION_CHALLENGE_IMPLEMENTATION_PLAN.md).
+- **Acceptance Record:** [`M6_M6_1_ACCEPTANCE_RECORD.md`](M6_M6_1_ACCEPTANCE_RECORD.md).
+- **Acceptance Gate Criteria (`M6_PLAY_ORIENTATION_CHALLENGE_PASS`):**
+  - [x] Exact baseline and clean candidate worktree recorded; protected checkout remains unchanged.
+  - [x] Orientation mapping and lifecycle unit gates pass; no Core/Kinematics dependency-boundary regression.
+  - [x] At least 20 deterministic seeds per difficulty certify in the bounded retry policy, with accepted depths inside the requested band.
+  - [x] `npm run verify`, `npm run test:e2e`, diff hygiene, and desktop/compact accessibility evidence pass on the candidate branch.
+  - [x] Independent review confirms no solution sequence is exposed or installed as challenge state.
+
+---
+
+### M6.1: Classical Solver Portfolio Expansion (Completed & Accepted)
+- **Status:** `COMPLETED & ACCEPTED` (independent review, hosted cross-browser qualification, and merge are recorded in [`M6_M6_1_ACCEPTANCE_RECORD.md`](M6_M6_1_ACCEPTANCE_RECORD.md)).
+- **Objective:** Extend the existing classical solver portfolio with a genuine optimal graph-search A* implementation using the accepted H2 Two-Slice PDB Max heuristic, while preserving BFS, Bidirectional BFS, IDA*, M6 orientation guidance, and certified Challenge behavior.
+- **Prerequisites:** The M6 implementation baseline recorded in [`M6_1_CLASSICAL_SOLVER_PORTFOLIO_IMPLEMENTATION_PLAN.md`](M6_1_CLASSICAL_SOLVER_PORTFOLIO_IMPLEMENTATION_PLAN.md); no Core, Kinematics, transition-data, historical Phase 5C artifact, workflow, dependency, or lockfile changes.
+- **In-Scope:**
+  - `A_STAR` solver API/type/telemetry support with unit-cost `f = g + h`, dense canonical rank arrays, binary min-heap ordering, best-`g` duplicate handling, stale-entry rejection, reopen support, deterministic parent reconstruction, and existing limit semantics.
+  - Existing one-shot Solver Worker dispatch, Play selector/result metrics, benchmark validation/dispatch, Research selection, and lossless JSON/CSV reporting.
+  - Exact fixtures, independent depth-spanning corpus checks, cross-solver optimality, H2 reuse/consistency gates, Worker/UI/benchmark regression coverage, and current living documentation.
+- **Boundary:** M6 Challenge remains fixed to dedicated `IDA_STAR` certification with difficulty bands `EASY = 2..4`, `NORMAL = 5..6`, and `CHALLENGE = 7..8`; no algorithm selector or solution sequence is exposed by Challenge.
+- **Out-of-Scope:** Dijkstra/UCS, Greedy/weighted/approximate search, IDDFS, neural search, new Workers, public heuristic APIs, Core or kinematics changes, historical Phase 5C rewrites, dependency/release changes, merge/PR creation, and main-branch promotion.
+- **Implementation Plan:** [`M6_1_CLASSICAL_SOLVER_PORTFOLIO_IMPLEMENTATION_PLAN.md`](M6_1_CLASSICAL_SOLVER_PORTFOLIO_IMPLEMENTATION_PLAN.md).
+- **Acceptance Record:** [`M6_M6_1_ACCEPTANCE_RECORD.md`](M6_M6_1_ACCEPTANCE_RECORD.md).
+- **Acceptance Gate Criteria (`M6_1_CLASSICAL_SOLVER_PORTFOLIO_PASS`):**
+  - [x] Exact baseline, branch, remote SHA, candidate tree, and protected-checkout state remain recorded and clean at the required gates.
+  - [x] Solver correctness, limits, deterministic metrics, H2 evidence, Worker lifecycle, Play selector/order, Research four-algorithm execution, and historical-artifact preservation pass.
+  - [x] `git diff --check`, `npm run verify`, focused solver/benchmark/Phase 5C analyzer suites, `npm run test:e2e`, and production build are recorded with exact per-project browser outcomes and any separately reproduced baseline failure.
+  - [x] Local gates passed before the normal feature-branch push; no direct main push, force push, tag, or release action was used.

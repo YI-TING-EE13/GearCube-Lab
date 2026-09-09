@@ -10,11 +10,14 @@
 import React from 'react';
 import { FACES, type Face, type Direction, type Move } from '@gearcube/core';
 import type { StagedMoveSession, TurnInteractionMode } from '../cube/animation';
+import { formatMoveGuidance, getFaceAxisMapping } from './move-guidance.js';
+import { OrientationLegend } from './OrientationLegend.js';
 
 export interface MoveControlsProps {
   readonly interactionMode: TurnInteractionMode;
   readonly isIdle: boolean;
   readonly isAnimating: boolean;
+  readonly isChallengeGenerating: boolean;
   readonly stagedMove: StagedMoveSession | null;
   readonly onTriggerMove: (move: Move) => void;
   readonly onChangeInteractionMode: (mode: TurnInteractionMode) => void;
@@ -24,19 +27,29 @@ interface FaceMoveGroupProps {
   readonly face: Face;
   readonly interactionMode: TurnInteractionMode;
   readonly isAnimating: boolean;
+  readonly isChallengeGenerating: boolean;
   readonly stagedMove: StagedMoveSession | null;
   readonly onTriggerMove: (move: Move) => void;
 }
 
 const FaceMoveGroup: React.FC<FaceMoveGroupProps> = React.memo(
-  ({ face, interactionMode, isAnimating, stagedMove, onTriggerMove }) => {
+  ({
+    face,
+    interactionMode,
+    isAnimating,
+    isChallengeGenerating,
+    stagedMove,
+    onTriggerMove,
+  }) => {
     const isLocked = stagedMove?.phase === 'HALF_TURN_LOCKED';
     const isStagedFace = stagedMove?.move.face === face;
+    const mapping = getFaceAxisMapping(face);
 
     // Disabled logic:
     // If animating: all disabled
     // If half-turn locked: only the staged face is enabled; other 5 faces disabled
-    const isGroupDisabled = isAnimating || (isLocked && !isStagedFace);
+    const isGroupDisabled =
+      isAnimating || isChallengeGenerating || (isLocked && !isStagedFace);
 
     const handleMove = (e: React.MouseEvent, direction: Direction) => {
       e.stopPropagation();
@@ -45,19 +58,19 @@ const FaceMoveGroup: React.FC<FaceMoveGroupProps> = React.memo(
       }
     };
 
-    // Tooltip and accessibility text tailored to interaction mode and half-turn staging state
+    // Tooltip and accessibility text use the same face-local orientation contract
+    // as the persistent legend and describe the staged midpoint action.
     const getButtonTitle = (direction: Direction): string => {
-      if (isLocked && isStagedFace) {
-        if (stagedMove.move.direction === direction) {
-          return `${face} ${direction} — Finish 180° turn`;
-        } else {
-          return `${face} ${direction} — Reverse to origin`;
-        }
+      const move: Move = { face, direction };
+      if (isLocked && isStagedFace && stagedMove) {
+        return formatMoveGuidance(
+          move,
+          interactionMode,
+          stagedMove.phase,
+          stagedMove.move.direction
+        );
       }
-      if (interactionMode === 'DIRECT_180') {
-        return `${face} ${direction === 'CW' ? 'Clockwise' : 'Counter-Clockwise'} (180° full turn)`;
-      }
-      return `${face} ${direction === 'CW' ? 'Clockwise' : 'Counter-Clockwise'} (90° physical step)`;
+      return formatMoveGuidance(move, interactionMode);
     };
 
     const isCwFinish = isLocked && isStagedFace && stagedMove.move.direction === 'CW';
@@ -65,7 +78,9 @@ const FaceMoveGroup: React.FC<FaceMoveGroupProps> = React.memo(
 
     return (
       <div className={`face-control-card ${isLocked && isStagedFace ? 'active-staged-card' : ''}`}>
-        <span className="face-label">{face}</span>
+        <span className="face-label" aria-label={`${face} face, ${mapping.faceName} (${mapping.axisLabel})`}>
+          {face} ({mapping.axisLabel})
+        </span>
         <div className="button-pair">
           <button
             type="button"
@@ -76,7 +91,8 @@ const FaceMoveGroup: React.FC<FaceMoveGroupProps> = React.memo(
             aria-label={getButtonTitle('CW')}
             title={getButtonTitle('CW')}
           >
-            ↻
+            <span aria-hidden="true">↻</span>
+            <span>CW</span>
           </button>
           <button
             type="button"
@@ -87,7 +103,8 @@ const FaceMoveGroup: React.FC<FaceMoveGroupProps> = React.memo(
             aria-label={getButtonTitle('CCW')}
             title={getButtonTitle('CCW')}
           >
-            ↺
+            <span aria-hidden="true">↺</span>
+            <span>CCW</span>
           </button>
         </div>
       </div>
@@ -102,6 +119,7 @@ export const MoveControls: React.FC<MoveControlsProps> = React.memo(
     interactionMode,
     isIdle,
     isAnimating,
+    isChallengeGenerating,
     stagedMove,
     onTriggerMove,
     onChangeInteractionMode,
@@ -111,7 +129,7 @@ export const MoveControls: React.FC<MoveControlsProps> = React.memo(
 
     const handleToggleMode = (e: React.MouseEvent) => {
       e.stopPropagation();
-      if (isIdle) {
+      if (isIdle && !isChallengeGenerating) {
         onChangeInteractionMode(isDirect180 ? 'TWO_STEP' : 'DIRECT_180');
       }
     };
@@ -122,13 +140,14 @@ export const MoveControls: React.FC<MoveControlsProps> = React.memo(
         onPointerDown={(e) => e.stopPropagation()}
       >
         <div className={`move-controls-panel ${isLocked ? 'panel-half-turn-locked' : ''}`}>
+          <OrientationLegend />
           <div className="move-controls-header">
             <div className="header-title-row">
               <span className="panel-title">Face Controls</span>
               <button
                 type="button"
                 className={`mode-toggle-btn ${isDirect180 ? 'mode-direct-active' : ''}`}
-                disabled={!isIdle}
+                disabled={!isIdle || isChallengeGenerating}
                 onClick={handleToggleMode}
                 onPointerDown={(e) => e.stopPropagation()}
                 aria-label={`Direct 180° turn mode: ${isDirect180 ? 'ON' : 'OFF'}`}
@@ -141,18 +160,29 @@ export const MoveControls: React.FC<MoveControlsProps> = React.memo(
               </button>
             </div>
 
-            {isLocked && stagedMove ? (
+            {isChallengeGenerating ? (
+              <span className="animating-indicator">Generating certified challenge…</span>
+            ) : isLocked && stagedMove ? (
               <div className="half-turn-guidance">
                 <span className="locked-badge">HALF-TURN: {stagedMove.move.face} {stagedMove.move.direction}</span>
                 <span className="locked-action-hint">
-                  Press {stagedMove.move.direction === 'CW' ? '↻' : '↺'} to Finish or {stagedMove.move.direction === 'CW' ? '↺' : '↻'} to Reverse
+                  {formatMoveGuidance(
+                    { face: stagedMove.move.face, direction: stagedMove.move.direction },
+                    interactionMode,
+                    stagedMove.phase,
+                    stagedMove.move.direction
+                  )}
                 </span>
               </div>
             ) : isAnimating ? (
               <span className="animating-indicator">
                 Turning ({isDirect180 ? '180°' : '90°'})...
               </span>
-            ) : null}
+            ) : (
+              <span className="move-controls-instructions">
+                CW / CCW: outside the selected face toward the cube center · Press a face key (Shift = CCW).
+              </span>
+            )}
           </div>
 
           <div className="faces-grid">
@@ -162,6 +192,7 @@ export const MoveControls: React.FC<MoveControlsProps> = React.memo(
                 face={face}
                 interactionMode={interactionMode}
                 isAnimating={isAnimating}
+                isChallengeGenerating={isChallengeGenerating}
                 stagedMove={stagedMove}
                 onTriggerMove={onTriggerMove}
               />

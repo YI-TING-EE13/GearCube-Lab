@@ -15,4 +15,5 @@ export type {
 
 export { solveBfs } from './bfs.js';
 export { solveBidirectionalBfs } from './bidirectional-bfs.js';
+export { solveAStar } from './a-star.js';
 export { solveIdaStar } from './ida-star.js';

@@ -20,6 +20,7 @@ export interface ResearchPanelProps {
 const CANONICAL_ALGORITHMS: readonly SolverAlgorithm[] = [
   'BFS',
   'BIDIRECTIONAL_BFS',
+  'A_STAR',
   'IDA_STAR',
 ];
 
@@ -28,6 +29,7 @@ const CANONICAL_DEPTHS: readonly number[] = [1, 2, 3, 4, 5, 6, 7, 8];
 const ALGORITHM_LABELS: Record<SolverAlgorithm, string> = {
   BFS: 'Breadth-First Search (BFS)',
   BIDIRECTIONAL_BFS: 'Bidirectional BFS',
+  A_STAR: 'A* (H2 heuristic)',
   IDA_STAR: 'IDA*',
 };
 
@@ -44,6 +46,7 @@ export const ResearchPanel: React.FC<ResearchPanelProps> = ({
   const [algorithms, setAlgorithms] = useState<SolverAlgorithm[]>([
     'BFS',
     'BIDIRECTIONAL_BFS',
+    'A_STAR',
     'IDA_STAR',
   ]);
   const [warmupRuns, setWarmupRuns] = useState<string>('0');

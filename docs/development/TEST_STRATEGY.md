@@ -272,15 +272,15 @@
     - `MODE_SWITCH_CANCELLATION_GATE`: Switching to Play mode during an active benchmark terminates the background Worker and restores clean presentation.
     - `RESPONSIVE_RESEARCH_LAYOUT_GATE`: Verified layout bounds and non-overflow across Desktop (1280x800), Tablet (768x1024), and Mobile (375x667) viewports in `tests/e2e/research-mode.spec.ts`; the M1 mode-stability gate adds short-landscape Research coverage.
     - *Historical verification snapshot (Technical Head `8bc1d51`):* 52 boundary tests, 32 controller unit tests, 12 Research Mode E2E tests, 40 total Playwright E2E tests, and 444 workspace tests passing at that accepted head.
-  - **Maintained current Vitest inventory:** 36 test files / 454 tests, including the Phase 5C integrity and transaction regression suite. This is an inventory baseline; exact qualification evidence belongs to the run for the tested commit.
+  - **Maintained current Vitest inventory:** 40 test files / 480 tests, including M6 orientation/challenge policy gates and the Phase 5C integrity and transaction regression suite. This is an inventory baseline; exact qualification evidence belongs to the run for the tested commit.
 
 ### Level 9: Browser End-to-End Tests (Playwright — Available / Implemented)
-- **Scope:** Whole Web Application (`playwright.config.ts`, `tests/e2e/play-mode.spec.ts`, `tests/e2e/solve-mode.spec.ts`, `tests/e2e/research-mode.spec.ts`, `tests/e2e/responsive-navigation.spec.ts`)
+- **Scope:** Whole Web Application (`playwright.config.ts`, `tests/e2e/play-mode.spec.ts`, `tests/e2e/m6-play-orientation-challenge.spec.ts`, `tests/e2e/solve-mode.spec.ts`, `tests/e2e/research-mode.spec.ts`, `tests/e2e/responsive-navigation.spec.ts`)
 - **Focus:** User interaction flows and state validation in real browser environments.
 - **Infrastructure Architecture:**
   - Pinned `@playwright/test@1.62.1` devDependency at repository root.
   - Permanent project matrix: `chromium`, `firefox`, and `webkit` (desktop, tablet portrait, mobile portrait, and compact landscape coverage; Chromium also runs the touch-emulation gate).
-  - Test inventory: 50 logical tests (26 Play, 9 Solve, 13 Research, 2 M1) × 3 browser projects = 150 project-test cases: 148 applicable executions and 2 intentional Chromium-only touch skips (Firefox/WebKit). This inventory is not a pass count.
+  - Test inventory: 53 logical tests (26 Play, 3 M6, 9 Solve, 13 Research, 2 M1) × 3 browser projects = 159 project-test cases: 157 applicable executions and 2 intentional Chromium-only touch skips (Firefox/WebKit). This inventory is not a pass count.
   - On GitHub-hosted Linux CI, Firefox E2E runs headed under Xvfb with a CI-only WebGL2 enablement preference. WebKit is verified via Playwright automation; Safari has not been separately verified.
   - Dedicated isolated webServer: `npm run build --workspace=@gearcube/web && npm run preview --workspace=@gearcube/web -- --port 4173 --strictPort --host 127.0.0.1` on `http://127.0.0.1:4173` with `reuseExistingServer: false`. Playwright qualifies the built preview, not the Vite development server.
   - Execution command: `npm run test:e2e` (`playwright test`).
@@ -294,6 +294,9 @@
   - Clicking any chip in timeline scrubber navigates to that exact step.
   - "Back to baseline" navigates to cursor -1 while preserving redo chips.
   - Seeded scramble input produces reproducible sequence, preserves Direct 180 mode, and resets baseline without creating individual move entries.
+  - M6 orientation: the persistent legend exposes `L/R = +/-X`, `D/U = +/-Y`, and `B/F = +/-Z`; face labels and accessible actions expose axis identity and the face-local outside-looking-toward-center convention.
+  - M6 certified challenge: deterministic solved-rooted candidates use the current Seed, exact `EASY = 2..4`, `NORMAL = 5..6`, and `CHALLENGE = 7..8` depth bands, and accept only the existing optimal `IDA_STAR` result depth.
+  - M6 challenge lifecycle: accepted challenges install a fresh empty-history Play baseline without a solution sequence; active generation blocks Play mutations and visible Solve/playback; cancellation and stale Worker results cannot install a candidate.
   - Keyboard shortcuts (`u/d/f/b/r/l`, Shift, Control+Z, Meta+Z, Control+Shift+Z, Meta+Shift+Z, Control+Y) trigger moves and undo/redo while rejecting unsupported modifiers (`Meta+Y`, `Ctrl+u`, `Alt+u`).
   - Input focus exclusion: typing in seed text input and pressing `Ctrl+Z`/`Meta+Z` while focused does not trigger puzzle moves or history navigation.
   - Busy-state blocking:
@@ -321,6 +324,22 @@ Repeated compact disclosure/hit checks in the old six-viewport loop are consolid
 - **Complementary Acceptance Roles:**
   - **Playwright E2E (`npm run test:e2e`):** Repeatable, repository-owned deterministic regression suite covering automated DOM interaction flows and error-free execution.
   - **Chrome DevTools MCP:** Interactive live browser acceptance covering 3D WebGL rendering, orbit controls, zoom gestures, pointer overlay isolation, and visual layout checks.
+
+### M6: Play Orientation & Certified Challenge (Completed & Accepted)
+- **Status:** `COMPLETED & ACCEPTED`; independent review and hosted qualification are recorded in [`M6_M6_1_ACCEPTANCE_RECORD.md`](M6_M6_1_ACCEPTANCE_RECORD.md).
+- **Pure policy gates:** `ORIENTATION_AXIS_MAP_GATE`, `FACE_LOCAL_DIRECTION_GATE`, `DIRECT_180_GUIDANCE_GATE`, `TWO_STEP_FIRST_STEP_GUIDANCE_GATE`, `HALF_TURN_LOCKED_GUIDANCE_GATE`, exact difficulty-band checks, deterministic candidate reproduction, independent attempt derivation, out-of-band rejection, bounded failure, stale/cancel rejection, accepted-result no-solution contract, and solved-root baseline checks.
+- **Challenge contract:** `EASY = 2..4`, `NORMAL = 5..6`, `CHALLENGE = 7..8`; certification uses only `SolveSuccess.depth` from a dedicated `IDA_STAR` Worker lifecycle, with `MAX_ATTEMPTS = 64`. Candidate sampling lengths are `4 / 6 / 9` for Easy/Normal/Challenge and are reportable heuristics, never difficulty truth.
+- **Browser gates:** `ORIENTATION_ACCESSIBILITY_GATE` checks the persistent legend, axis-bearing face labels, CW/CCW accessible names, and face-local convention. `CERTIFIED_CHALLENGE_PLAY_BASELINE_GATE` checks real Worker certification, accepted status, empty history, visible Solve idle state, no Solution Playback, and difficulty selection. `RESPONSIVE_ORIENTATION_CHALLENGE_GATE` checks reachability and no horizontal overflow at `375×667`.
+- **Empirical gate:** At least 20 deterministic base seeds per difficulty are solved and evaluated across attempts `0..63`; report accepted depths and min/median/max attempts. This is sampling evidence only and does not redefine the depth contract.
+
+### M6.1: Classical Solver Portfolio Expansion (Completed & Accepted)
+- **Status:** `COMPLETED & ACCEPTED`; independent review and hosted qualification are recorded in [`M6_M6_1_ACCEPTANCE_RECORD.md`](M6_M6_1_ACCEPTANCE_RECORD.md).
+- **A* unit gates:** `a-star.test.ts` covers solved input, exact fixture depths `1..8`, a deterministic independent-oracle corpus spanning all eight buckets with at least 100 states, path application, input immutability, invalid options, `maxDepth` zero/below/equal boundaries, expansion-budget `maxNodes`, and deterministic terminal metrics.
+- **A* contract gates:** The implementation must use unit-cost `f = g + h`, the existing H2 Two-Slice PDB Max estimate, canonical dense rank-indexed typed arrays, a deterministic binary min-heap, strict best-`g` updates, stale-entry rejection, closed-state reopening on lower `g`, and parent reconstruction. Heap operations do not increment `nodesGenerated`.
+- **Cross-solver gate:** BFS, Bidirectional BFS, A*, and IDA* must return solving paths with equal exact depth for the deterministic `1..8` fixtures; the independent Core-only oracle remains the depth authority.
+- **Telemetry/limits gate:** A* progress uses `algorithm: 'A_STAR'`, cumulative expanded/generated counters, `bestF`, `currentDepth`, and `openSize`; no fabricated percentage or ETA is asserted. `maxNodes` counts expansions only and `maxDepth` never permits a deeper solution.
+- **Integration gates:** The existing one-shot Solver Worker dispatches all four algorithms; Play exposes the exact ordered selector labels `IDA* (Recommended)`, `A* (H2 heuristic)`, `Bidirectional BFS`, and `Breadth-First Search (BFS)`; Research defaults and serializes all four while preserving the version-1 schema; M6 Challenge remains dedicated `IDA_STAR` with no selector or solution sequence.
+- **Historical boundary:** Accepted Phase 5C configurations, raw/derived evidence, reports, and the historical three-algorithm analyzer are not rewritten to add A*; M6.1 validation uses focused coverage.
 
 ### Android Emulator Runtime Qualification (M4 — Manual / On-Demand)
 

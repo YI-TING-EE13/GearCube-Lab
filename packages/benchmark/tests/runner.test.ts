@@ -48,7 +48,7 @@ describe('Phase 5B Classical Solver Benchmark Runner Gates', () => {
 
   describe('OPTIMALITY_GATE: Depths 1 to 8 Solver Optimality Verification', () => {
     it(
-      'proves solutionDepth === exactDepth for BFS, BiBFS, and IDA* across all 8 exact depths',
+      'proves solutionDepth === exactDepth for BFS, BiBFS, A*, and IDA* across all 8 exact depths',
       { timeout: 15000 },
       () => {
         const config: BenchmarkSuiteConfig = {
@@ -57,14 +57,14 @@ describe('Phase 5B Classical Solver Benchmark Runner Gates', () => {
           seed: 'optimality-seed-01',
           exactDepths: [1, 2, 3, 4, 5, 6, 7, 8],
           casesPerDepth: 1,
-          algorithms: ['BFS', 'BIDIRECTIONAL_BFS', 'IDA_STAR'],
+          algorithms: ['BFS', 'BIDIRECTIONAL_BFS', 'A_STAR', 'IDA_STAR'],
           warmupRuns: 0,
           measuredRuns: 1,
         };
 
         const report = runBenchmarkSuiteWithCorpusForTesting(config, mockEnv, corpus);
         expect(report.cases.length).toBe(8);
-        expect(report.trials.length).toBe(24);
+        expect(report.trials.length).toBe(32);
 
         for (const trial of report.trials) {
           expect(trial.status).toBe('SOLVED');
@@ -72,6 +72,50 @@ describe('Phase 5B Classical Solver Benchmark Runner Gates', () => {
             expect(trial.solutionDepth).toBe(trial.exactDepth);
             expect(trial.solutionMoves.length).toBe(trial.exactDepth);
           }
+        }
+      },
+    );
+  });
+
+  describe('CHARACTERIZATION_GATE: Multiple States Per Depth Across the Classical Portfolio', () => {
+    it(
+      'collects deterministic solution and search-work metrics for all four algorithms at depths 2 through 8',
+      { timeout: 30000 },
+      () => {
+        const config: BenchmarkSuiteConfig = {
+          schemaVersion: '1',
+          suiteId: 'portfolio-characterization-depths-2-to-8',
+          seed: 'characterization-seed-01',
+          exactDepths: [2, 3, 4, 5, 6, 7, 8],
+          casesPerDepth: 2,
+          algorithms: ['BFS', 'BIDIRECTIONAL_BFS', 'A_STAR', 'IDA_STAR'],
+          warmupRuns: 0,
+          measuredRuns: 1,
+        };
+
+        const report = runBenchmarkSuiteWithCorpusForTesting(config, mockEnv, corpus);
+        expect(report.cases.length).toBe(14);
+        expect(report.trials.length).toBe(56);
+        expect(report.summary.algorithms.map((summary) => summary.algorithm)).toEqual(
+          config.algorithms,
+        );
+
+        for (const trial of report.trials) {
+          expect(trial.status).toBe('SOLVED');
+          expect(trial.nodesExpanded).toBeGreaterThanOrEqual(0);
+          expect(trial.nodesGenerated).toBeGreaterThanOrEqual(0);
+          expect(trial.elapsedMs).toBeGreaterThanOrEqual(0);
+          if (trial.status === 'SOLVED') {
+            expect(trial.solutionDepth).toBe(trial.exactDepth);
+            expect(trial.solutionMoves).toHaveLength(trial.exactDepth);
+          }
+        }
+
+        for (const summary of report.summary.algorithms) {
+          expect(summary.totalSolved).toBe(14);
+          expect(summary.totalLimits).toBe(0);
+          expect(summary.byDepth).toHaveLength(7);
+          expect(summary.byDepth.every((depth) => depth.totalTrials === 2)).toBe(true);
         }
       },
     );
@@ -124,7 +168,7 @@ describe('Phase 5B Classical Solver Benchmark Runner Gates', () => {
         seed: 'deterministic-seed-alpha',
         exactDepths: [1, 2, 3],
         casesPerDepth: 2,
-        algorithms: ['BFS', 'BIDIRECTIONAL_BFS', 'IDA_STAR'],
+        algorithms: ['BFS', 'BIDIRECTIONAL_BFS', 'A_STAR', 'IDA_STAR'],
         warmupRuns: 1,
         measuredRuns: 2,
       };
@@ -175,14 +219,14 @@ describe('Phase 5B Classical Solver Benchmark Runner Gates', () => {
         seed: 'limit-seed',
         exactDepths: [2],
         casesPerDepth: 1,
-        algorithms: ['BFS', 'BIDIRECTIONAL_BFS', 'IDA_STAR'],
+        algorithms: ['BFS', 'BIDIRECTIONAL_BFS', 'A_STAR', 'IDA_STAR'],
         warmupRuns: 0,
         measuredRuns: 1,
         limits: { maxDepth: 0 },
       };
 
       const report = runBenchmarkSuiteWithCorpusForTesting(config, mockEnv, corpus);
-      expect(report.trials.length).toBe(3);
+      expect(report.trials.length).toBe(4);
 
       for (const trial of report.trials) {
         expect(trial.status).toBe('LIMIT_REACHED');
@@ -201,28 +245,32 @@ describe('Phase 5B Classical Solver Benchmark Runner Gates', () => {
         seed: 'rotation-seed',
         exactDepths: [1, 2],
         casesPerDepth: 1,
-        algorithms: ['BFS', 'BIDIRECTIONAL_BFS', 'IDA_STAR'],
+        algorithms: ['BFS', 'BIDIRECTIONAL_BFS', 'A_STAR', 'IDA_STAR'],
         warmupRuns: 0,
         measuredRuns: 2,
       };
 
       const report = runBenchmarkSuiteWithCorpusForTesting(config, mockEnv, corpus);
-      // Case 0, Rep 0: offset 0 -> BFS, BIDIRECTIONAL_BFS, IDA_STAR
-      // Case 0, Rep 1: offset 1 -> BIDIRECTIONAL_BFS, IDA_STAR, BFS
-      // Case 1, Rep 0: offset 1 -> BIDIRECTIONAL_BFS, IDA_STAR, BFS
-      // Case 1, Rep 1: offset 2 -> IDA_STAR, BFS, BIDIRECTIONAL_BFS
+      // Case 0, Rep 0: offset 0 -> BFS, BIDIRECTIONAL_BFS, A_STAR, IDA_STAR
+      // Case 0, Rep 1: offset 1 -> BIDIRECTIONAL_BFS, A_STAR, IDA_STAR, BFS
+      // Case 1, Rep 0: offset 1 -> BIDIRECTIONAL_BFS, A_STAR, IDA_STAR, BFS
+      // Case 1, Rep 1: offset 2 -> A_STAR, IDA_STAR, BFS, BIDIRECTIONAL_BFS
 
       const trialAlgs = report.trials.map((t) => t.algorithm);
       expect(trialAlgs).toEqual([
         'BFS',
         'BIDIRECTIONAL_BFS',
+        'A_STAR',
         'IDA_STAR',
         'BIDIRECTIONAL_BFS',
+        'A_STAR',
         'IDA_STAR',
         'BFS',
         'BIDIRECTIONAL_BFS',
+        'A_STAR',
         'IDA_STAR',
         'BFS',
+        'A_STAR',
         'IDA_STAR',
         'BFS',
         'BIDIRECTIONAL_BFS',

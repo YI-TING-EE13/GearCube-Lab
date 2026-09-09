@@ -2,6 +2,13 @@ import React from 'react';
 import type { SolverAlgorithm } from '@gearcube/solvers';
 import type { SolverWorkerState } from './solver-worker-controller.js';
 
+const SOLVER_ALGORITHM_LABELS: Record<SolverAlgorithm, string> = {
+  IDA_STAR: 'IDA* (Recommended)',
+  A_STAR: 'A* (H2 heuristic)',
+  BIDIRECTIONAL_BFS: 'Bidirectional BFS',
+  BFS: 'Breadth-First Search (BFS)',
+};
+
 export interface SolvePanelProps {
   readonly isSolved: boolean;
   readonly isSessionBusy: boolean;
@@ -52,6 +59,7 @@ export const SolvePanel: React.FC<SolvePanelProps> = ({
           aria-label="Solver Algorithm"
         >
           <option value="IDA_STAR">IDA* (Recommended)</option>
+          <option value="A_STAR">A* (H2 heuristic)</option>
           <option value="BIDIRECTIONAL_BFS">Bidirectional BFS</option>
           <option value="BFS">Breadth-First Search (BFS)</option>
         </select>
@@ -94,8 +102,16 @@ export const SolvePanel: React.FC<SolvePanelProps> = ({
 
         {solverState.status === 'ACTIVE' && solverState.latestTelemetry && (
           <div className="solver-telemetry-box" data-testid="solver-telemetry">
+            <div>Algorithm: {SOLVER_ALGORITHM_LABELS[solverState.latestTelemetry.algorithm]}</div>
             <div>Nodes: {solverState.latestTelemetry.nodesExpanded.toLocaleString()}</div>
+            <div>Generated: {solverState.latestTelemetry.nodesGenerated.toLocaleString()}</div>
             <div>Time: {(solverState.latestTelemetry.elapsedMs / 1000).toFixed(2)}s</div>
+            {'bestF' in solverState.latestTelemetry && (
+              <div>Best f: {solverState.latestTelemetry.bestF}</div>
+            )}
+            {'openSize' in solverState.latestTelemetry && (
+              <div>Open set: {solverState.latestTelemetry.openSize.toLocaleString()}</div>
+            )}
             {'threshold' in solverState.latestTelemetry && (
               <div>Depth Threshold: {solverState.latestTelemetry.threshold}</div>
             )}
@@ -104,15 +120,20 @@ export const SolvePanel: React.FC<SolvePanelProps> = ({
 
         {solverState.status === 'SOLVED' && (
           <div className="solver-result-box" data-testid="solver-solution-summary">
-            <div>Solution Depth: {solverState.result.depth} moves</div>
-            <div>Nodes Expanded: {solverState.result.counters.nodesExpanded.toLocaleString()}</div>
-            <div>Time: {(solverState.result.elapsedMs / 1000).toFixed(2)}s</div>
+            <div>Algorithm: {SOLVER_ALGORITHM_LABELS[solverState.result.algorithm]}</div>
+            <div className="solver-result-metrics">
+              <span>Solution Depth: {solverState.result.depth} moves</span>
+              <span>Nodes Expanded: {solverState.result.counters.nodesExpanded.toLocaleString()}</span>
+              <span>Nodes Generated: {solverState.result.counters.nodesGenerated.toLocaleString()}</span>
+              <span>Time: {(solverState.result.elapsedMs / 1000).toFixed(2)}s</span>
+            </div>
           </div>
         )}
 
         {solverState.status === 'LIMIT_REACHED' && (
           <div className="solver-limit-box">
-            Limit exceeded: {solverState.result.limit} ({solverState.result.counters.nodesExpanded.toLocaleString()} nodes)
+            Limit exceeded: {solverState.result.limit} ({solverState.result.counters.nodesExpanded.toLocaleString()} nodes); Algorithm:{' '}
+            {SOLVER_ALGORITHM_LABELS[solverState.result.algorithm]}
           </div>
         )}
 

@@ -11,6 +11,7 @@ export class BenchmarkConfigError extends Error {
 const ALLOWED_ALGORITHMS: ReadonlySet<SolverAlgorithm> = new Set([
   'BFS',
   'BIDIRECTIONAL_BFS',
+  'A_STAR',
   'IDA_STAR',
 ]);
 
