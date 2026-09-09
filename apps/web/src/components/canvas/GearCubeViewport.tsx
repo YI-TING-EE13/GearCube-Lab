@@ -1,13 +1,13 @@
 /**
  * @file GearCubeViewport.tsx
  * @description React Three Fiber canvas viewport hosting the interactive Gear Cube session,
- * workspace presentation modes ('PLAY' vs 'RESEARCH'), MoveControls, HistoryControls,
- * TimelineScrubber, ScramblePanel, SolvePanel, PlaybackControls, and ResearchPanel overlays.
+ * workspace presentation modes ('PLAY' vs 'RESEARCH'), orientation/challenge-aware
+ * Play controls, history/timeline/scramble/solve/playback overlays, and ResearchPanel.
  */
 
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { OrbitControls } from '@react-three/drei';
+import { GizmoHelper, GizmoViewport, OrbitControls } from '@react-three/drei';
 import { isSolved, serializeLogicalState, type Move } from '@gearcube/core';
 import type { SolverAlgorithm } from '@gearcube/solvers';
 import type { BenchmarkSuiteConfig } from '@gearcube/benchmark';
@@ -31,6 +31,7 @@ import {
   scrubPlay,
   backToBaselinePlay,
   applyScrambleToPlay,
+  applyCertifiedChallengeToPlay,
 } from '../history/play-session';
 import { canUndo, canRedo } from '../history/history';
 import { HistoryControls } from '../history/HistoryControls';
@@ -39,8 +40,12 @@ import { ScramblePanel } from '../history/ScramblePanel';
 import { SolvePanel } from '../solver/SolvePanel';
 import { PlaybackControls } from '../solver/PlaybackControls';
 import { ResearchPanel } from '../research/ResearchPanel';
+import { ChallengePanel } from '../challenge/ChallengePanel.js';
+import type { ChallengeDifficulty } from '../challenge/challenge.js';
+import type { CertifiedChallenge } from '../challenge/challenge-controller.js';
 import { useSolverWorker } from '../../hooks/useSolverWorker';
 import { useBenchmarkWorker } from '../../hooks/useBenchmarkWorker';
+import { useChallengeGenerator } from '../../hooks/useChallengeGenerator.js';
 import {
   createPlaybackMetadata,
   setPlayIntent,
@@ -58,6 +63,7 @@ export type WorkspaceMode = 'PLAY' | 'RESEARCH';
 interface AnimatedGearCubeSceneProps {
   readonly session: GearCubeSessionState;
   readonly onStepAnimation: (nowMs: number) => void;
+  readonly showOrientationGizmo: boolean;
 }
 
 /**
@@ -66,6 +72,7 @@ interface AnimatedGearCubeSceneProps {
 const AnimatedGearCubeScene: React.FC<AnimatedGearCubeSceneProps> = ({
   session,
   onStepAnimation,
+  showOrientationGizmo,
 }) => {
   useFrame(() => {
     if (isSessionAnimating(session)) {
@@ -73,7 +80,21 @@ const AnimatedGearCubeScene: React.FC<AnimatedGearCubeSceneProps> = ({
     }
   });
 
-  return <GearCubeModel transforms={session.displayTransforms} />;
+  return (
+    <>
+      <GearCubeModel transforms={session.displayTransforms} />
+      {showOrientationGizmo ? (
+        <GizmoHelper alignment="bottom-right" margin={[24, 120]} renderPriority={1}>
+          <GizmoViewport
+            disabled
+            axisColors={['#ef4444', '#22c55e', '#3b82f6']}
+            labels={['X', 'Y', 'Z']}
+            labelColor="#f0f0f2"
+          />
+        </GizmoHelper>
+      ) : null}
+    </>
+  );
 };
 
 export const GearCubeViewport: React.FC = () => {
@@ -81,6 +102,7 @@ export const GearCubeViewport: React.FC = () => {
   const [isPlayControlsOpen, setIsPlayControlsOpen] = useState(true);
   const [app, setApp] = useState<PlayApplicationState>(createInitialPlayApplicationState);
   const [seed, setSeed] = useState<string>('GearCube-Lab');
+  const [challengeDifficulty, setChallengeDifficulty] = useState<ChallengeDifficulty>('NORMAL');
   const [selectedAlgorithm, setSelectedAlgorithm] = useState<SolverAlgorithm>('IDA_STAR');
   const [playbackMetadata, setPlaybackMetadata] = useState<SolutionPlaybackMetadata | null>(null);
   const solverAcceptanceTokenRef = useRef<object | null>(null);
@@ -92,6 +114,27 @@ export const GearCubeViewport: React.FC = () => {
     startBenchmark,
     cancelBenchmark,
   } = useBenchmarkWorker();
+
+  const handleChallengeAccepted = useCallback(
+    (challenge: CertifiedChallenge) => {
+      if (workspaceMode !== 'PLAY') {
+        return;
+      }
+      solverAcceptanceTokenRef.current = null;
+      setPlaybackMetadata(null);
+      setApp((prev) =>
+        applyCertifiedChallengeToPlay(prev, challenge.state, challenge.frame)
+      );
+    },
+    [workspaceMode]
+  );
+
+  const {
+    state: challengeState,
+    startChallenge,
+    cancelChallenge,
+  } = useChallengeGenerator(handleChallengeAccepted);
+  const isChallengeGenerating = challengeState.status === 'ACTIVE';
 
   // Mode Transition Handlers
   const handleSwitchToPlay = useCallback(() => {
@@ -105,9 +148,10 @@ export const GearCubeViewport: React.FC = () => {
     }
     solverAcceptanceTokenRef.current = null;
     cancelSearch();
+    cancelChallenge();
     setPlaybackMetadata(null);
     setWorkspaceMode('RESEARCH');
-  }, [app.session, cancelSearch]);
+  }, [app.session, cancelChallenge, cancelSearch]);
 
   // Benchmark Execution Callbacks
   const handleStartBenchmark = useCallback(
@@ -127,13 +171,13 @@ export const GearCubeViewport: React.FC = () => {
   // External Action Handlers: Cancel search, clear playback, then mutate play application state
   const handleTriggerMove = useCallback(
     (move: Move) => {
-      if (workspaceMode !== 'PLAY') return;
+      if (workspaceMode !== 'PLAY' || isChallengeGenerating) return;
       solverAcceptanceTokenRef.current = null;
       cancelSearch();
       setPlaybackMetadata(null);
       setApp((prev) => startPlayMove(prev, move, performance.now()));
     },
-    [workspaceMode, cancelSearch]
+    [workspaceMode, isChallengeGenerating, cancelSearch]
   );
 
   const handleStepAnimation = useCallback((nowMs: number) => {
@@ -142,69 +186,94 @@ export const GearCubeViewport: React.FC = () => {
 
   const handleChangeInteractionMode = useCallback(
     (mode: TurnInteractionMode) => {
-      if (workspaceMode !== 'PLAY') return;
+      if (workspaceMode !== 'PLAY' || isChallengeGenerating) return;
       setApp((prev) => setPlayInteractionMode(prev, mode));
     },
-    [workspaceMode]
+    [workspaceMode, isChallengeGenerating]
   );
 
   const handleUndo = useCallback(() => {
-    if (workspaceMode !== 'PLAY') return;
+    if (workspaceMode !== 'PLAY' || isChallengeGenerating) return;
     solverAcceptanceTokenRef.current = null;
     cancelSearch();
     setPlaybackMetadata(null);
     setApp((prev) => undoPlay(prev));
-  }, [workspaceMode, cancelSearch]);
+  }, [workspaceMode, isChallengeGenerating, cancelSearch]);
 
   const handleRedo = useCallback(() => {
-    if (workspaceMode !== 'PLAY') return;
+    if (workspaceMode !== 'PLAY' || isChallengeGenerating) return;
     solverAcceptanceTokenRef.current = null;
     cancelSearch();
     setPlaybackMetadata(null);
     setApp((prev) => redoPlay(prev));
-  }, [workspaceMode, cancelSearch]);
+  }, [workspaceMode, isChallengeGenerating, cancelSearch]);
 
   const handleResetBaseline = useCallback(() => {
-    if (workspaceMode !== 'PLAY') return;
+    if (workspaceMode !== 'PLAY' || isChallengeGenerating) return;
     solverAcceptanceTokenRef.current = null;
     cancelSearch();
     setPlaybackMetadata(null);
     setApp((prev) => backToBaselinePlay(prev));
-  }, [workspaceMode, cancelSearch]);
+  }, [workspaceMode, isChallengeGenerating, cancelSearch]);
 
   const handleScrub = useCallback(
     (index: number) => {
-      if (workspaceMode !== 'PLAY') return;
+      if (workspaceMode !== 'PLAY' || isChallengeGenerating) return;
       solverAcceptanceTokenRef.current = null;
       cancelSearch();
       setPlaybackMetadata(null);
       setApp((prev) => scrubPlay(prev, index));
     },
-    [workspaceMode, cancelSearch]
+    [workspaceMode, isChallengeGenerating, cancelSearch]
   );
 
   const handleScramble = useCallback(() => {
-    if (workspaceMode !== 'PLAY') return;
+    if (workspaceMode !== 'PLAY' || isChallengeGenerating) return;
     solverAcceptanceTokenRef.current = null;
     cancelSearch();
     setPlaybackMetadata(null);
     setApp((prev) => applyScrambleToPlay(prev, seed));
-  }, [workspaceMode, cancelSearch, seed]);
+  }, [workspaceMode, isChallengeGenerating, cancelSearch, seed]);
+
+  const handleStartChallenge = useCallback(() => {
+    if (
+      workspaceMode !== 'PLAY' ||
+      isChallengeGenerating ||
+      !isSessionIdle(app.session) ||
+      solverWorkerState.status === 'ACTIVE'
+    ) {
+      return;
+    }
+    solverAcceptanceTokenRef.current = null;
+    cancelSearch();
+    setPlaybackMetadata(null);
+    startChallenge(challengeDifficulty, seed);
+  }, [
+    app.session,
+    cancelSearch,
+    challengeDifficulty,
+    isChallengeGenerating,
+    seed,
+    solverWorkerState.status,
+    startChallenge,
+    workspaceMode,
+  ]);
 
   // Solver Action Handlers
   const handleSolve = useCallback(() => {
-    if (workspaceMode !== 'PLAY') return;
+    if (workspaceMode !== 'PLAY' || isChallengeGenerating) return;
     if (!isSessionIdle(app.session)) return;
     const token = {};
     solverAcceptanceTokenRef.current = token;
     setPlaybackMetadata(null);
     startSearch(selectedAlgorithm, app.session.currentState);
-  }, [workspaceMode, app.session, selectedAlgorithm, startSearch]);
+  }, [workspaceMode, app.session, isChallengeGenerating, selectedAlgorithm, startSearch]);
 
   const handleCancelSearch = useCallback(() => {
+    if (isChallengeGenerating) return;
     solverAcceptanceTokenRef.current = null;
     cancelSearch();
-  }, [cancelSearch]);
+  }, [cancelSearch, isChallengeGenerating]);
 
   // Defensive Solution Acceptance Gate (active only in PLAY mode)
   useEffect(() => {
@@ -241,17 +310,17 @@ export const GearCubeViewport: React.FC = () => {
 
   // Playback Control Handlers
   const handlePlay = useCallback(() => {
-    if (workspaceMode !== 'PLAY') return;
+    if (workspaceMode !== 'PLAY' || isChallengeGenerating) return;
     setPlaybackMetadata((prev) => (prev ? setPlayIntent(prev, true) : null));
-  }, [workspaceMode]);
+  }, [isChallengeGenerating, workspaceMode]);
 
   const handlePause = useCallback(() => {
-    if (workspaceMode !== 'PLAY') return;
+    if (workspaceMode !== 'PLAY' || isChallengeGenerating) return;
     setPlaybackMetadata((prev) => (prev ? setPlayIntent(prev, false) : null));
-  }, [workspaceMode]);
+  }, [isChallengeGenerating, workspaceMode]);
 
   const handleStepForward = useCallback(() => {
-    if (workspaceMode !== 'PLAY') return;
+    if (workspaceMode !== 'PLAY' || isChallengeGenerating) return;
     if (!playbackMetadata || playbackMetadata.playing || playbackMetadata.canonicalMoveInFlight) {
       return;
     }
@@ -269,10 +338,10 @@ export const GearCubeViewport: React.FC = () => {
     } else {
       setPlaybackMetadata(null);
     }
-  }, [workspaceMode, playbackMetadata, app.session]);
+  }, [workspaceMode, isChallengeGenerating, playbackMetadata, app.session]);
 
   const handleStepBackward = useCallback(() => {
-    if (workspaceMode !== 'PLAY') return;
+    if (workspaceMode !== 'PLAY' || isChallengeGenerating) return;
     if (!playbackMetadata) return;
     if (!isSessionIdle(app.session)) return;
 
@@ -288,7 +357,7 @@ export const GearCubeViewport: React.FC = () => {
         setPlaybackMetadata(null);
       }
     }
-  }, [workspaceMode, playbackMetadata, app]);
+  }, [workspaceMode, isChallengeGenerating, playbackMetadata, app]);
 
   // Playback Animation & Settlement Orchestration Effect
   const stagedPhase = app.session.stagedMove?.phase;
@@ -296,6 +365,7 @@ export const GearCubeViewport: React.FC = () => {
 
   useEffect(() => {
     if (workspaceMode !== 'PLAY') return;
+    if (isChallengeGenerating) return;
     if (!playbackMetadata) return;
 
     // Case 1: A move is in flight
@@ -336,11 +406,19 @@ export const GearCubeViewport: React.FC = () => {
         setPlaybackMetadata(null);
       }
     }
-  }, [workspaceMode, stagedPhase, isIdle, app.session.currentState, playbackMetadata]);
+  }, [
+    workspaceMode,
+    isChallengeGenerating,
+    stagedPhase,
+    isIdle,
+    app.session.currentState,
+    playbackMetadata,
+  ]);
 
   const { session, history } = app;
   const isAnimating = isSessionAnimating(session);
   const isBusy = !isIdle;
+  const isPlayBusy = isBusy || isChallengeGenerating;
 
   const isCubeSolved = isSolved(session.currentState);
   const hasUndo = canUndo(history);
@@ -357,8 +435,8 @@ export const GearCubeViewport: React.FC = () => {
   );
 
   useKeyboardControls({
-    isIdle: workspaceMode === 'PLAY' && isIdle,
-    isAnimating: workspaceMode !== 'PLAY' || isAnimating,
+    isIdle: workspaceMode === 'PLAY' && isIdle && !isChallengeGenerating,
+    isAnimating: workspaceMode !== 'PLAY' || isAnimating || isChallengeGenerating,
     stagedMove: workspaceMode === 'PLAY' ? session.stagedMove : null,
     canUndo: workspaceMode === 'PLAY' && hasUndo,
     canRedo: workspaceMode === 'PLAY' && hasRedo,
@@ -394,6 +472,7 @@ export const GearCubeViewport: React.FC = () => {
         <AnimatedGearCubeScene
           session={session}
           onStepAnimation={handleStepAnimation}
+          showOrientationGizmo={workspaceMode === 'PLAY'}
         />
       </Canvas>
 
@@ -458,7 +537,7 @@ export const GearCubeViewport: React.FC = () => {
                   canUndo={hasUndo}
                   canRedo={hasRedo}
                   canResetBaseline={canReset}
-                  isBusy={isBusy}
+                  isBusy={isPlayBusy}
                   onUndo={handleUndo}
                   onRedo={handleRedo}
                   onResetBaseline={handleResetBaseline}
@@ -466,9 +545,18 @@ export const GearCubeViewport: React.FC = () => {
 
                 <ScramblePanel
                   seed={seed}
-                  isBusy={isBusy}
+                  isBusy={isPlayBusy}
                   onSeedChange={setSeed}
                   onScramble={handleScramble}
+                />
+
+                <ChallengePanel
+                  difficulty={challengeDifficulty}
+                  state={challengeState}
+                  isBusy={isPlayBusy || solverWorkerState.status === 'ACTIVE'}
+                  onSelectDifficulty={setChallengeDifficulty}
+                  onStart={handleStartChallenge}
+                  onCancel={cancelChallenge}
                 />
               </div>
 
@@ -476,7 +564,7 @@ export const GearCubeViewport: React.FC = () => {
               <TimelineScrubber
                 entries={history.entries}
                 cursorIndex={history.cursorIndex}
-                isBusy={isBusy}
+                isBusy={isPlayBusy}
                 onScrub={handleScrub}
               />
 
@@ -484,7 +572,7 @@ export const GearCubeViewport: React.FC = () => {
               <div className="right-overlay-cluster">
                 <SolvePanel
                   isSolved={isCubeSolved}
-                  isSessionBusy={isBusy}
+                  isSessionBusy={isPlayBusy}
                   solverState={solverWorkerState}
                   selectedAlgorithm={selectedAlgorithm}
                   onSelectAlgorithm={setSelectedAlgorithm}
@@ -494,7 +582,7 @@ export const GearCubeViewport: React.FC = () => {
 
                 <PlaybackControls
                   playbackMetadata={playbackMetadata}
-                  isSessionBusy={isBusy}
+                  isSessionBusy={isPlayBusy}
                   canStepBack={canStepBack}
                   onPlay={handlePlay}
                   onPause={handlePause}
@@ -508,6 +596,7 @@ export const GearCubeViewport: React.FC = () => {
                 interactionMode={session.interactionMode}
                 isIdle={isIdle}
                 isAnimating={isAnimating}
+                isChallengeGenerating={isChallengeGenerating}
                 stagedMove={session.stagedMove}
                 onTriggerMove={handleTriggerMove}
                 onChangeInteractionMode={handleChangeInteractionMode}

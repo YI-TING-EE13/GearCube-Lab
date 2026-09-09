@@ -295,6 +295,7 @@ describe('Phase 4D Web Worker Infrastructure & Package Boundary Gate', () => {
 
     expect(workerConstructionSites.sort()).toEqual([
       'apps/web/src/hooks/useBenchmarkWorker.ts',
+      'apps/web/src/hooks/useChallengeGenerator.ts',
       'apps/web/src/hooks/useSolverWorker.ts',
     ]);
   });

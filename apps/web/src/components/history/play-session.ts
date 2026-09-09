@@ -31,7 +31,9 @@ import {
 } from './scramble.js';
 import {
   materializeState,
+  type GearCubeState,
   type Move,
+  type SpatialFrame,
 } from '@gearcube/core';
 import { placementToTransforms } from '@gearcube/kinematics';
 
@@ -293,5 +295,35 @@ export function applyScrambleToPlay(
   return {
     session: nextSession,
     history: nextHistory,
+  };
+}
+
+/**
+ * Installs a solved-rooted, already-certified challenge as a new Play
+ * baseline. The accepted challenge never carries a solver solution sequence;
+ * Play history starts empty at the certified state.
+ */
+export function applyCertifiedChallengeToPlay(
+  app: PlayApplicationState,
+  challengeState: GearCubeState,
+  challengeFrame: SpatialFrame
+): PlayApplicationState {
+  if (!isSessionIdle(app.session)) {
+    return app;
+  }
+
+  const view = materializeState(challengeState, challengeFrame);
+  const displayTransforms = placementToTransforms(view);
+  const nextSession: GearCubeSessionState = {
+    currentState: challengeState,
+    currentFrame: challengeFrame,
+    stagedMove: null,
+    displayTransforms,
+    interactionMode: app.session.interactionMode,
+  };
+
+  return {
+    session: nextSession,
+    history: createPlayHistory(challengeState, challengeFrame),
   };
 }

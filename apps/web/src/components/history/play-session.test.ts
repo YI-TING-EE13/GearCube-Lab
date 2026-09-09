@@ -24,9 +24,11 @@ import {
   scrubPlay,
   backToBaselinePlay,
   applyScrambleToPlay,
+  applyCertifiedChallengeToPlay,
 } from './play-session.js';
 import { getCurrentSnapshot } from './history.js';
 import { generateScramble, applyScrambleSequence } from './scramble.js';
+import { createChallengeCandidate } from '../challenge/challenge.js';
 
 describe('Play Session Orchestration', () => {
   const moveU: Move = { face: 'U', direction: 'CW' };
@@ -350,6 +352,36 @@ describe('Play Session Orchestration', () => {
     expect(app.session.interactionMode).toBe('TWO_STEP');
     expect(app.history.entries).toHaveLength(1);
     expect(app.history.cursorIndex).toBe(0);
+  });
+
+  it('CERTIFIED_CHALLENGE_BASELINE_GATE: accepted solved-rooted challenge replaces baseline and clears history', () => {
+    let app = createInitialPlayApplicationState();
+    app = setPlayInteractionMode(app, 'DIRECT_180');
+    app = startPlayMove(app, moveU, 1000, 400);
+    app = stepPlayAnimation(app, 1400);
+    expect(app.history.entries).toHaveLength(1);
+
+    const candidate = createChallengeCandidate('m6-play', 'NORMAL', 1);
+    const installed = applyCertifiedChallengeToPlay(
+      app,
+      candidate.state,
+      candidate.frame
+    );
+
+    expect(installed).not.toBe(app);
+    expect(installed.session.currentState).toEqual(candidate.state);
+    expect(installed.session.currentFrame).toBe(candidate.frame);
+    expect(installed.session.stagedMove).toBeNull();
+    expect(installed.session.interactionMode).toBe('DIRECT_180');
+    expect(installed.history.initialBaselineState).toEqual(candidate.state);
+    expect(installed.history.initialBaselineFrame).toBe(candidate.frame);
+    expect(installed.history.entries).toHaveLength(0);
+    expect(installed.history.cursorIndex).toBe(-1);
+
+    const busy = startPlayMove(app, moveR, 2000, 400);
+    expect(
+      applyCertifiedChallengeToPlay(busy, candidate.state, candidate.frame)
+    ).toBe(busy);
   });
 
   it('BUSY_INPUT_BLOCK_GATE: navigation and scramble are rejected during active animation and half-turn lock', () => {
