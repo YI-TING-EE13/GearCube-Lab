@@ -1,6 +1,6 @@
 # SYSTEM_ARCHITECTURE.md — System Architecture & Component Contracts
 
-> **Document Status:** `ACTIVE / CURRENT (Accepted architecture through Phase 5; M6 implementation candidate recorded)`
+> **Document Status:** `ACTIVE / CURRENT (Accepted architecture through Phase 5; M6/M6.1 implementation candidates recorded)`
 > **Target System:** GearCube Lab Web Application & Research Framework
 
 ---
@@ -112,6 +112,7 @@ graph TD
   - Hosts implemented and accepted Phase 4 features: initiates background solver Worker tasks (`apps/web/src/workers/solver.worker.ts`), renders the Solver panel and playback controls inside the Play workspace, algorithm selection, search progress telemetry, and solution playback controller with expected-prefix state guarding.
   - Hosts implemented and accepted Phase 5D features: top-level WorkspaceMode orchestration (`PLAY` / `RESEARCH`) and `useBenchmarkWorker` hook owned by `GearCubeViewport.tsx`, controlled presentation panel (`ResearchPanel.tsx`), and dedicated background benchmark Worker adapter (`apps/web/src/workers/benchmark.worker.ts`).
   - Hosts the M6 implementation candidate: presentation-only `OrientationLegend` and disabled Drei `GizmoViewport` axis aid, semantic face-local move guidance, and a separate `useChallengeGenerator` lifecycle that creates solved-rooted candidates, certifies only `SolveSuccess.depth` with dedicated `IDA_STAR` Workers, and passes no solver move sequence to the accepted Play-baseline contract.
+  - Hosts the M6.1 implementation candidate: the existing Solver Worker and Play panel expose the four-algorithm portfolio, including optimal A* with H2 telemetry; M6 Challenge certification remains a separate `IDA_STAR`-only lifecycle.
 - **Topology Note:** Implemented directly within `apps/web` rather than as a separate `packages/ui` package; uses standard React presentation tools without external state-management libraries (no Zustand requirement). Project-internal workspace dependencies: `@gearcube/core`, `@gearcube/kinematics`, `@gearcube/solvers`, and `@gearcube/benchmark`.
 
 #### M6 Play Orientation & Certified Challenge lifecycle (Implementation Candidate)
@@ -121,19 +122,26 @@ graph TD
 - **Play installation:** `applyCertifiedChallengeToPlay` is an application-layer transition that requires an idle session, materializes the accepted state/frame, and creates empty history at that challenge baseline. Regular `applyScrambleToPlay` remains current-relative and is unchanged.
 - **Boundary:** M6 adds no Core, Kinematics, solver algorithm, protocol schema, dependency, or Research Mode changes; cancellation, workspace switching, unmount, generation identity, and Worker request identity prevent stale installation.
 
-### 3.5. Pure Solver Engine (`packages/solvers` — Implemented & Accepted — Phase 4)
+### 3.5. Pure Solver Engine (`packages/solvers` — Phase 4 Accepted Baseline; M6.1 Candidate Extension)
 - **Responsibilities:**
-  - Hosts pure classical graph search algorithms (primary baselines: BFS, Bidirectional BFS, IDA* with H2 two-slice PDB admissible heuristic; optional candidates: IDDFS, A*, Pattern Databases — deferred).
+  - Hosts the accepted Phase 4 classical graph-search baselines (BFS, Bidirectional BFS, and IDA* with the H2 two-slice PDB admissible heuristic) plus the M6.1 implementation candidate, optimal graph-search A* with H2.
   - Defines pure result contracts, search options, and serializable protocol schemas.
   - Encapsulated within a Web Worker adapter hosted in `apps/web/src/workers/solver.worker.ts` to run asynchronously off the main thread.
   - Reports periodic search telemetry (nodes expanded, nodes generated, algorithm-specific depth/bounds, elapsed time) via message passing.
   - User cancellation is handled by host-driven `worker.terminate()` (no in-band CANCEL_SOLVE protocol message required).
 - **Prohibited Dependencies:** Must not access DOM, window, Three.js, React, or browser Worker global objects directly. Depends only on `@gearcube/core`.
 
-### 3.6. Research & Benchmark Harness (`packages/benchmark` & Browser Research Mode — Implemented & Accepted — Phase 5)
+#### M6.1 A* solver extension (Implementation Candidate)
+- Uses unit cost per canonical move and evaluates `f = g + h` with the shared H2 Two-Slice PDB Max heuristic.
+- Uses a deterministic binary min-heap ordered by `f`, `h`, `g`, canonical rank, and insertion order; dense typed arrays store best `g`, parents, and closed/reopened state by canonical rank.
+- Rejects stale heap entries, updates only on strict lower `g`, reopens closed states after improvement, and terminates only when the valid best-`g` goal entry is popped; `maxNodes` counts expansions and `maxDepth` bounds solution depth.
+- Extends the existing result/telemetry and one-shot Worker contracts without adding a Worker, a public heuristic API, or a solver dependency.
+
+### 3.6. Research & Benchmark Harness (`packages/benchmark` & Browser Research Mode — Phase 5 Accepted Baseline; M6.1 Candidate Extension)
 - **Status & Scope:** `PHASE5_ACCEPTED` (Phases 5A, 5B, 5C, and 5D implemented & accepted; [`docs/development/PHASE_5_IMPLEMENTATION_PLAN.md`](../development/PHASE_5_IMPLEMENTATION_PLAN.md)).
 - **Core Responsibilities:**
-  - **Pure Benchmark Engine (Phases 5A & 5B):** Materialized v1 benchmark schemas, typed `BenchmarkConfigError` runtime validation, stable state-derived case identity (`d${exactDepth}:${stateKey}`), independent Core-only exact-distance corpus builder (discovering 41,472 canonical states and diameter 8 without calling production solvers), deterministic seed hashing (`FNV1A_UTF16_CODE_UNITS_32`), PRNG (`MULBERRY32_EXACT`), stratified sampling, headless batch runner evaluating solvers (`solveBfs`, `solveBidirectionalBfs`, `solveIdaStar`), warm-up/measured execution separation, cyclic algorithm rotation, lossless JSON export, flat 14-column RFC-4180 CSV export, and isolated Node CLI runner (`packages/benchmark/src/cli.ts`).
+  - **Pure Benchmark Engine (Phases 5A & 5B):** Materialized v1 benchmark schemas, typed `BenchmarkConfigError` runtime validation, stable state-derived case identity (`d${exactDepth}:${stateKey}`), independent Core-only exact-distance corpus builder (discovering 41,472 canonical states and diameter 8 without calling production solvers), deterministic seed hashing (`FNV1A_UTF16_CODE_UNITS_32`), PRNG (`MULBERRY32_EXACT`), stratified sampling, headless batch runner evaluating the accepted Phase 5 baseline solvers (`solveBfs`, `solveBidirectionalBfs`, `solveIdaStar`), warm-up/measured execution separation, cyclic algorithm rotation, lossless JSON export, flat 14-column RFC-4180 CSV export, and isolated Node CLI runner (`packages/benchmark/src/cli.ts`).
+  - **M6.1 benchmark candidate:** The same version-1 runner, JSON/CSV schema, and browser Research Worker accept `A_STAR` alongside the three Phase 5 baseline algorithms; no historical Phase 5C report or raw artifact is rewritten.
   - **Empirical Research Dataset & Analysis (Phase 5C):** Empirical comparative evaluation across exact distance strata 1..8 with 100% optimal solutions and reproducible deterministic projections ([`docs/research/PHASE_5_CLASSICAL_SOLVER_BENCHMARK_REPORT.md`](../research/PHASE_5_CLASSICAL_SOLVER_BENCHMARK_REPORT.md)).
   - **Browser Research Mode (Phase 5D):** Dedicated browser Web Worker (`apps/web/src/workers/benchmark.worker.ts`), pure reactive controller (`benchmark-worker-controller.ts`), hook (`useBenchmarkWorker.ts`), presentation panel (`ResearchPanel.tsx`), workspace mode orchestration (`GearCubeViewport.tsx`), and client-side JSON/CSV export downloads.
 - **Execution & Import Boundaries:**

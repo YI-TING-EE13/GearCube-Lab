@@ -1,10 +1,10 @@
 # ROADMAP.md — Project Lifecycle & Dependency-Ordered Milestones
 
-> **Current Milestone:** `M6 — Play Orientation & Certified Challenge UX (Implementation Candidate)`
-> **Next Milestone:** `Formal M6 independent acceptance and promotion decision`
+> **Current Milestone:** `M6.1 — Classical Solver Portfolio Expansion (Implementation Candidate)`
+> **Next Milestone:** `Formal M6/M6.1 independent acceptance and promotion decision`
 > **Previous Milestone:** `Phase 9 — GitHub Pages Deployment & Public Hosting (Completed & Accepted)`
 > **Deferred Tracks:** `Phase 6 (Neural AI Search)` & `Phase 7 (Physical Model & Vision Expansion)` (Deferred / Optional Tracks)
-> **Current Verification Inventory:** 39 Vitest files / 470 tests; 53 logical Playwright tests, 159 project-test cases, 157 applicable executions, and 2 intentional skips. See [`TEST_STRATEGY.md`](TEST_STRATEGY.md) for the maintained inventory; milestone counts below are historical as-of snapshots.
+> **Current Verification Inventory:** 40 Vitest files / 480 tests; 53 logical Playwright tests, 159 project-test cases, 157 applicable executions, and 2 intentional skips. See [`TEST_STRATEGY.md`](TEST_STRATEGY.md) for the maintained inventory; milestone counts below are historical as-of snapshots.
 
 ---
 
@@ -421,3 +421,22 @@ Phase 0B is partitioned into four dependency-ordered subphases:
   - [ ] At least 20 deterministic seeds per difficulty certify in the bounded retry policy, with accepted depths inside the requested band.
   - [ ] `npm run verify`, `npm run test:e2e`, diff hygiene, and desktop/compact accessibility evidence pass on the candidate branch.
   - [ ] Independent review confirms no solution sequence is exposed or installed as challenge state.
+
+---
+
+### M6.1: Classical Solver Portfolio Expansion (Implementation Candidate)
+- **Status:** `IMPLEMENTATION CANDIDATE` (not formally accepted, closed, merged, or released).
+- **Objective:** Extend the existing classical solver portfolio with a genuine optimal graph-search A* implementation using the accepted H2 Two-Slice PDB Max heuristic, while preserving BFS, Bidirectional BFS, IDA*, M6 orientation guidance, and certified Challenge behavior.
+- **Prerequisites:** The unmerged M6 candidate branch at the fixed baseline recorded in [`M6_1_CLASSICAL_SOLVER_PORTFOLIO_IMPLEMENTATION_PLAN.md`](M6_1_CLASSICAL_SOLVER_PORTFOLIO_IMPLEMENTATION_PLAN.md); no Core, Kinematics, transition-data, historical Phase 5C artifact, workflow, dependency, or lockfile changes.
+- **In-Scope:**
+  - `A_STAR` solver API/type/telemetry support with unit-cost `f = g + h`, dense canonical rank arrays, binary min-heap ordering, best-`g` duplicate handling, stale-entry rejection, reopen support, deterministic parent reconstruction, and existing limit semantics.
+  - Existing one-shot Solver Worker dispatch, Play selector/result metrics, benchmark validation/dispatch, Research selection, and lossless JSON/CSV reporting.
+  - Exact fixtures, independent depth-spanning corpus checks, cross-solver optimality, H2 reuse/consistency gates, Worker/UI/benchmark regression coverage, and current living documentation.
+- **Boundary:** M6 Challenge remains fixed to dedicated `IDA_STAR` certification with difficulty bands `EASY = 2..4`, `NORMAL = 5..6`, and `CHALLENGE = 7..8`; no algorithm selector or solution sequence is exposed by Challenge.
+- **Out-of-Scope:** Dijkstra/UCS, Greedy/weighted/approximate search, IDDFS, neural search, new Workers, public heuristic APIs, Core or kinematics changes, historical Phase 5C rewrites, dependency/release changes, merge/PR creation, and main-branch promotion.
+- **Implementation Plan:** [`M6_1_CLASSICAL_SOLVER_PORTFOLIO_IMPLEMENTATION_PLAN.md`](M6_1_CLASSICAL_SOLVER_PORTFOLIO_IMPLEMENTATION_PLAN.md).
+- **Acceptance Gate Criteria (`M6_1_CLASSICAL_SOLVER_PORTFOLIO_PASS`):**
+  - [ ] Exact baseline, branch, remote SHA, candidate tree, and protected-checkout state remain recorded and clean at the required gates.
+  - [ ] Solver correctness, limits, deterministic metrics, H2 evidence, Worker lifecycle, Play selector/order, Research four-algorithm execution, and historical-artifact preservation pass.
+  - [ ] `git diff --check`, `npm run verify`, focused solver/benchmark/Phase 5C analyzer suites, `npm run test:e2e`, and production build are recorded with exact per-project browser outcomes and any separately reproduced baseline failure.
+  - [ ] Only after local gates pass, normal push updates the existing feature branch; no merge, PR, tag, or release action is performed.

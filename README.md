@@ -13,7 +13,7 @@ It combines a 3D playable puzzle with mechanically coupled gear kinematics, mult
 - **Deterministic Scramble:** Generate reproducible scramble states from any text seed.
 - **Play Orientation & Certified Challenge (M6 candidate):** See the persistent face-axis legend and generate a bounded challenge certified by optimal solver depth.
 - **Timeline & History:** Step through past moves, scrub the timeline, or undo/redo actions.
-- **Optimal Solving:** Solve any reachable state using Breadth-First Search (BFS), Bidirectional BFS, or IDA* with the precomputed $H_2$ pattern database heuristic.
+- **Optimal Solving:** Solve any reachable state using Breadth-First Search (BFS), Bidirectional BFS, optimal A* with the precomputed $H_2$ pattern database heuristic, or IDA*.
 - **Solution Playback:** Play solutions automatically or step forward and backward move-by-move.
 - **Browser Research Mode:** Run multi-algorithm benchmark experiments across exact distance strata 1..8 in a background Web Worker without altering your play session.
 - **Export Benchmark Data:** Download research results as structured JSON reports or RFC-4180 CSV tables.
@@ -98,13 +98,14 @@ GearCube Lab has two workspace modes: **Play** and **Research**. The **Solver** 
 
 - **Available Algorithms:**
   - **IDA* (Recommended):** Iterative Deepening A* search informed by the precomputed $H_2$ two-slice pattern database heuristic.
+  - **A* (H2 heuristic):** Optimal graph-search A* using unit move costs and the accepted $H_2$ two-slice pattern database max heuristic.
   - **Bidirectional BFS:** Shortest-path graph search exploring simultaneously from the scrambled state and the solved goal state.
   - **Breadth-First Search (BFS):** Baseline exhaustive shortest-path graph search.
 - **Solving Workflow:**
   1. Manipulate or scramble the cube to an unsolved state.
   2. Select your desired algorithm from the dropdown.
   3. Click **Solve**. Search executes inside a dedicated background Web Worker, keeping the 3D viewport responsive.
-  4. During search, the Solver panel reports nodes expanded and elapsed time; IDA*-style telemetry also shows the current depth threshold when available.
+  4. During search, the Solver panel reports nodes expanded, generated, and elapsed time; A* telemetry also shows the best open-set $f$ value and open-set size, while IDA* telemetry shows the current depth threshold when available.
 - **Solution Playback:**
   - When solved, the **Playback** controls appear on the right overlay.
   - Click **▶ Play** for continuous animated execution, **⏸ Pause** to hold, or **⏮ Step Back** / **Step Fwd ⏭** to inspect moves individually.
@@ -120,7 +121,7 @@ The **Research** workspace provides an isolated environment for conducting repro
   - **Seed:** PRNG seed used for stratified sampling of puzzle states.
   - **Exact Depths:** Select any subset of exact distance strata from 1 to 8.
   - **Cases Per Depth:** Number of distinct states sampled per distance stratum.
-  - **Algorithms:** Select one or more algorithms (**BFS**, **Bidirectional BFS**, **IDA***).
+  - **Algorithms:** Select one or more algorithms (**BFS**, **Bidirectional BFS**, **A* (H2 heuristic)**, **IDA***).
   - **Warmup Runs:** Number of unmeasured warmup runs per trial.
   - **Measured Runs:** Number of timed measurement runs per trial.
   - **Limits (Optional):** Optional constraints on `Max Nodes` and `Max Depth`.
@@ -178,7 +179,7 @@ npx playwright install
 
 ### Maintained verification inventory
 
-The current repository test inventory is 39 Vitest files with 470 tests. The Playwright inventory is 53 logical tests across three browser projects, yielding 159 project-test cases: 157 applicable executions and 2 intentional Chromium-only touch skips. These are inventory counts; exact pass/fail qualification belongs to the Verify workflow run for the tested commit.
+The current repository test inventory is 40 Vitest files with 480 tests. The Playwright inventory is 53 logical tests across three browser projects, yielding 159 project-test cases: 157 applicable executions and 2 intentional Chromium-only touch skips. These are inventory counts; exact pass/fail qualification belongs to the Verify workflow run for the tested commit.
 
 ### CI Verification
 
@@ -229,18 +230,19 @@ Phases 0–9: Completed & Accepted
   - Phase 9B (First Live GitHub Pages Deployment): Completed & Accepted
   - Phase 9C (Public Hosting Documentation & Deployment Closeout): Completed & Accepted
 M6 Play Orientation & Certified Challenge UX: Implementation Candidate (not formally accepted)
+M6.1 Classical Solver Portfolio Expansion: Implementation Candidate (not formally accepted)
 Deferred Tracks:
   - Phase 6 (AI-Guided Search): Deferred Optional Research
   - Phase 7 (Physical Model & Vision Expansion): Deferred Optional Expansion
 
-PUBLIC_TEST_READY: YES (main baseline; M6 candidate pending independent acceptance)
+PUBLIC_TEST_READY: YES (main baseline; M6/M6.1 candidates pending independent acceptance)
 LIVE_GITHUB_PAGES: YES
 PUBLIC_HOSTING: ACTIVE
 ```
 
 *Note: The canonical public site is hosted at `https://yi-ting-ee13.github.io/GearCube-Lab/` via verification-gated GitHub Actions.*
 
-For complete phase history, specifications, and gating criteria, refer to [`ROADMAP.md`](docs/development/ROADMAP.md), [`PHASE_8_IMPLEMENTATION_PLAN.md`](docs/development/PHASE_8_IMPLEMENTATION_PLAN.md), and [`PHASE_8_ACCEPTANCE_RECORD.md`](docs/development/PHASE_8_ACCEPTANCE_RECORD.md).
+For complete phase history, specifications, and gating criteria, refer to [`ROADMAP.md`](docs/development/ROADMAP.md), [`M6_1_CLASSICAL_SOLVER_PORTFOLIO_IMPLEMENTATION_PLAN.md`](docs/development/M6_1_CLASSICAL_SOLVER_PORTFOLIO_IMPLEMENTATION_PLAN.md), [`PHASE_8_IMPLEMENTATION_PLAN.md`](docs/development/PHASE_8_IMPLEMENTATION_PLAN.md), and [`PHASE_8_ACCEPTANCE_RECORD.md`](docs/development/PHASE_8_ACCEPTANCE_RECORD.md).
 
 ---
 

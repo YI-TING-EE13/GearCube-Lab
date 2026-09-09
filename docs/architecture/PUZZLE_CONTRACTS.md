@@ -232,13 +232,13 @@ export interface VisualSkin {
 
 ---
 
-## 5. Solver Engine & Worker Contracts (Implemented & Accepted — Phase 4)
+## 5. Solver Engine & Worker Contracts (Phase 4 Accepted Baseline; M6.1 Candidate Extension)
 
-*(Pursuant to accepted production contracts in `packages/solvers/src/types.ts` and `packages/solvers/src/protocol.ts`. The solver engine operates off the main thread inside `apps/web/src/workers/solver.worker.ts`. User cancellation is executed via host-driven `worker.terminate()`; no in-band cancel protocol message exists.)*
+*(Pursuant to the accepted Phase 4 production contracts plus the M6.1 implementation candidate in `packages/solvers/src/types.ts` and `packages/solvers/src/protocol.ts`. The solver engine operates off the main thread inside `apps/web/src/workers/solver.worker.ts`. User cancellation is executed via host-driven `worker.terminate()`; no in-band cancel protocol message exists.)*
 
 ```typescript
-/** Accepted production solver algorithms */
-export type SolverAlgorithm = 'BFS' | 'BIDIRECTIONAL_BFS' | 'IDA_STAR';
+/** Phase 4 accepted algorithms plus the M6.1 implementation candidate */
+export type SolverAlgorithm = 'BFS' | 'BIDIRECTIONAL_BFS' | 'A_STAR' | 'IDA_STAR';
 
 export interface SearchCounters {
   readonly nodesExpanded: number;
@@ -262,6 +262,15 @@ export type SearchTelemetry =
       readonly forwardDepth: number;
       readonly backwardDepth: number;
       readonly bestSolutionDepth: number | null;
+    }
+  | {
+      readonly algorithm: 'A_STAR';
+      readonly nodesExpanded: number;
+      readonly nodesGenerated: number;
+      readonly elapsedMs: number;
+      readonly bestF: number;
+      readonly currentDepth: number;
+      readonly openSize: number;
     }
   | {
       readonly algorithm: 'IDA_STAR';
@@ -338,6 +347,12 @@ export type WorkerOutboundMessage =
       readonly error: string;
     };
 ```
+
+### M6.1 A* Candidate Contract
+
+`A_STAR` is an optimal graph-search candidate under the canonical unit-cost 12-move metric. It evaluates `f = g + h` with the shared H2 Two-Slice PDB Max heuristic, uses a deterministic binary min-heap ordered by `f`, `h`, `g`, canonical rank, and stable insertion order, and stores best-`g`, parent, and closed/reopened state in dense typed arrays indexed by the canonical rank domain. Lower-`g` discoveries update the parent and reopen a closed state; heap entries whose `g` is no longer the best known value are stale and are discarded. The goal is accepted only when its valid best-`g` entry is popped. Heap operations are not generated nodes, and existing `maxNodes` / `maxDepth` semantics remain expansion/depth limits.
+
+The M6.1 extension does not add a public heuristic API, a second solver Worker, a Challenge algorithm selector, or a solution sequence to the M6 Challenge contract. Challenge certification remains dedicated to `IDA_STAR` and accepts only the existing `EASY = 2..4`, `NORMAL = 5..6`, and `CHALLENGE = 7..8` depth bands.
 
 ---
 
