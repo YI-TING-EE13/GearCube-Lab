@@ -26,7 +26,7 @@ The normal path is:
 3. Qualify the exact pull-request head with the four required `Verify` checks.
 4. Obtain independent technical acceptance, then use the normal protected pull-request merge path.
 5. The resulting `main` push starts a new canonical `Verify` run. Pull-request qualification does not replace this post-merge qualification.
-6. A successful, first-attempt `main` push Verify run may be consumed by the `workflow_run`-based Pages deployment workflow.
+6. A successful `main` push Verify run may be consumed by the `workflow_run`-based Pages deployment workflow when its verified SHA is still the current remote `main` SHA. Successful reruns remain eligible under the same exact-SHA gate.
 
 Direct pushes, administrative bypasses, routine ruleset bypasses, and disabling protection are not normal contribution methods.
 
@@ -77,23 +77,23 @@ topic/maintenance branch
         ↓
 pull request → four required Verify checks → normal PR merge
         ↓
-main push → Verify (attempt 1)
+main push → Verify (successful run)
         ↓
 workflow_run Pages deployment
 ```
 
-The Pages workflow may proceed only when the source Verify run is successful, its source branch is `main`, its event is `push`, and its `run_attempt` is `1`. It checks out the exact verified SHA, confirms that `origin/main` has not advanced, configures the `/GearCube-Lab/` Pages base, builds the site, uploads the Pages artifact, and deploys it. The deployment workflow is downstream evidence; it is not a pre-merge required check.
+The Pages workflow may proceed only when the source Verify run is successful, its source branch is `main`, and its event is `push`. A successful rerun remains eligible when the verified SHA equals the current remote `main` SHA. The workflow checks out the exact verified SHA, confirms that `origin/main` has not advanced, configures the `/GearCube-Lab/` Pages base, builds the site, uploads the Pages artifact, and deploys it. The deployment workflow is downstream evidence; it is not a pre-merge required check.
 
 ## Post-merge qualification contract
 
-Pull-request checks qualify the proposed exact head. After a normal merge, the new merge commit must receive a separate canonical `Verify` run for `main` with event `push`, attempt `1`, and successful results for:
+Pull-request checks qualify the proposed exact head. After a normal merge, the new merge commit must receive a separate canonical `Verify` run for `main` with event `push` and successful results for:
 
 - `verify`
 - `e2e (chromium)`
 - `e2e (firefox)`
 - `e2e (webkit)`
 
-Only that canonical main-run evidence can satisfy the source gate for automatic Pages deployment. A rerun or a pull-request run is not interchangeable with the first-attempt main push run required by the deployment contract.
+Only successful main-run evidence can satisfy the source gate for automatic Pages deployment. A pull-request run is not interchangeable with a main push run. A successful rerun of the same main Verify run remains eligible when the exact verified SHA still matches current remote `main`.
 
 ## Current verification baseline
 
@@ -101,10 +101,10 @@ The maintained automated inventory is:
 
 | Suite | Current inventory |
 | --- | --- |
-| Vitest | 36 test files / 454 tests |
-| Playwright | 50 logical tests across Chromium, Firefox, and WebKit |
-| Playwright project cases | 150 total: 50 Chromium, 49 Firefox applicable plus 1 intentional skip, and 49 WebKit applicable plus 1 intentional skip |
-| Applicable Playwright executions | 148 |
+| Vitest | 40 test files / 481 tests |
+| Playwright | 53 logical tests across Chromium, Firefox, and WebKit |
+| Playwright project cases | 159 total: 53 Chromium, 52 Firefox applicable plus 1 intentional skip, and 52 WebKit applicable plus 1 intentional skip |
+| Applicable Playwright executions | 157 |
 | Intentional skips | 2 total, one in Firefox and one in WebKit, because the touch-emulation gate is Chromium-only |
 
 These are inventory counts, not a claim that every listed case passed in every run. Exact qualification evidence belongs to the corresponding `Verify` workflow run for the tested commit, including all four jobs.
