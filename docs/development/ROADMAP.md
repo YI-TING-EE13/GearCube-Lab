@@ -1,10 +1,10 @@
 # ROADMAP.md — Project Lifecycle & Dependency-Ordered Milestones
 
-> **Current Milestone:** `Phase 9 — GitHub Pages Deployment & Public Hosting (Completed & Accepted)`
-> **Next Milestone:** `Post-Phase 9 Maintenance & Deferred Research Tracks`
-> **Previous Milestone:** `Phase 8 — Product Completion & Public-Test Readiness (Completed & Accepted)`
+> **Current Milestone:** `M6 — Play Orientation & Certified Challenge UX (Implementation Candidate)`
+> **Next Milestone:** `Formal M6 independent acceptance and promotion decision`
+> **Previous Milestone:** `Phase 9 — GitHub Pages Deployment & Public Hosting (Completed & Accepted)`
 > **Deferred Tracks:** `Phase 6 (Neural AI Search)` & `Phase 7 (Physical Model & Vision Expansion)` (Deferred / Optional Tracks)
-> **Current Verification Inventory:** 36 Vitest files / 454 tests; 50 logical Playwright tests, 150 project-test cases, 148 applicable executions, and 2 intentional skips. See [`TEST_STRATEGY.md`](TEST_STRATEGY.md) for the maintained inventory; milestone counts below are historical as-of snapshots.
+> **Current Verification Inventory:** 39 Vitest files / 470 tests; 53 logical Playwright tests, 159 project-test cases, 157 applicable executions, and 2 intentional skips. See [`TEST_STRATEGY.md`](TEST_STRATEGY.md) for the maintained inventory; milestone counts below are historical as-of snapshots.
 
 ---
 
@@ -80,7 +80,14 @@
       ├─ 9A: Deployment Foundation & Subpath Qualification (Accepted)
       ├─ 9B: First Live GitHub Pages Deployment (Accepted)
       └─ 9C: Public Hosting Documentation & Deployment Closeout (Accepted)
-```
+      │
+      ▼
+[ M6: Play Orientation & Certified Challenge UX ]
+(IMPLEMENTATION CANDIDATE — independent acceptance pending)
+      ├─ Orientation legend and face-local CW/CCW guidance
+      ├─ Solved-rooted deterministic challenge generation
+      └─ Solver-depth certification, bounded retries, and fresh Play baseline
+    ```
 
 ---
 
@@ -393,3 +400,24 @@ Phase 0B is partitioned into four dependency-ordered subphases:
   - Successful `Deploy GitHub Pages` workflow run.
   - Live HTTPS reachability (HTTP 200) and live functional smoke testing across Play, Solve, and Research modes in Chromium, Firefox, and WebKit.
   - Zero asset 404s, zero worker 404s, zero third-party requests, and zero console errors on live site.
+
+---
+
+### M6: Play Orientation & Certified Challenge UX (Implementation Candidate)
+- **Status:** `IMPLEMENTATION CANDIDATE` (not formally accepted or promoted).
+- **Objective:** Make Play face orientation explicit and add a bounded, deterministic challenge flow whose difficulty is certified only by the shortest depth returned by the existing `IDA_STAR` solver.
+- **Prerequisites:** Phase 9 baseline on `origin/main`; no changes to `packages/core`, `packages/kinematics`, solver algorithms, or dependency manifests.
+- **In-Scope:**
+  - Persistent `R/L = +/-X`, `U/D = +/-Y`, and `F/B = +/-Z` orientation guidance with face-local outside-looking-toward-center CW/CCW semantics.
+  - Semantic CW/CCW controls that describe direct 180-degree turns, the first physical two-step 90-degree action, and midpoint finish/reverse behavior.
+  - Deterministic solved-rooted candidates for `EASY = 2..4`, `NORMAL = 5..6`, and `CHALLENGE = 7..8`, certified by dedicated `IDA_STAR` Worker searches with a maximum of 64 attempts.
+  - Accepted challenges becoming empty-history Play baselines; regular current-relative scrambles remain unchanged.
+  - Cancellation, stale-result, unmount, workspace-switch, responsive, keyboard, and no-solution-exposure coverage.
+- **Out-of-Scope:** Core transition changes, kinematics changes, new solver algorithms, dependency upgrades, persistent accounts/storage, physical-device acceptance, merge/release, or main-branch promotion.
+- **Implementation Plan:** [`M6_PLAY_ORIENTATION_CHALLENGE_IMPLEMENTATION_PLAN.md`](M6_PLAY_ORIENTATION_CHALLENGE_IMPLEMENTATION_PLAN.md).
+- **Acceptance Gate Criteria (`M6_PLAY_ORIENTATION_CHALLENGE_PASS`):**
+  - [ ] Exact baseline and clean candidate worktree recorded; protected checkout remains unchanged.
+  - [ ] Orientation mapping and lifecycle unit gates pass; no Core/Kinematics dependency-boundary regression.
+  - [ ] At least 20 deterministic seeds per difficulty certify in the bounded retry policy, with accepted depths inside the requested band.
+  - [ ] `npm run verify`, `npm run test:e2e`, diff hygiene, and desktop/compact accessibility evidence pass on the candidate branch.
+  - [ ] Independent review confirms no solution sequence is exposed or installed as challenge state.

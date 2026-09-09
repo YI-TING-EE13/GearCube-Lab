@@ -72,9 +72,11 @@
 ### Mode 1: Play Mode
 - Full 3D camera orbital controls (rotate, pan, zoom).
 - Face rotation controls (button-based directional turns implemented & accepted; direct raycast drag interaction is DEFERRED / FUTURE).
+- M6 implementation candidate: persistent `R/L = +/-X`, `U/D = +/-Y`, and `F/B = +/-Z` orientation guidance; face-local CW/CCW semantics are stated as viewed from outside the selected face toward the cube center.
 - Scramble generator supporting configurable scramble depth ($N$ random legal moves) with deterministic pseudo-random seeds.
 - Comprehensive move history timeline with interactive undo, redo, and jump-to-step capabilities.
 - Reset to canonical solved state.
+- M6 implementation candidate: bounded deterministic Certified Challenge generation for `EASY = 2..4`, `NORMAL = 5..6`, and `CHALLENGE = 7..8`, accepted only from optimal `IDA_STAR` depth and installed as a new empty-history Play baseline without a solution sequence.
 
 ### Solver Capability in the Play Workspace
 - Algorithm selection (implemented & accepted: BFS, Bidirectional BFS, IDA* with H2 PDB heuristic; optional classical candidates such as IDDFS, A*, Pattern Databases are deferred; Neural-Guided Search is FUTURE PHASE 6).
@@ -154,7 +156,7 @@ $$\text{Presentation Layer (UI/3D)} \longrightarrow \text{Domain Core Contracts}
 | :--- | :--- | :--- | :--- |
 | `packages/core` | Discrete state models, move definitions, legality checks, canonical serialization, and materialized piece views | Zero external dependencies (no React, no Three.js, no DOM) | Implemented & Accepted |
 | `packages/kinematics` | Continuous trajectory generation, coupled gear angles, static piece placement projection | Depends only on `@gearcube/core` | Implemented & Accepted |
-| `apps/web` | Web application container hosting React UI components, R3F/Three.js 3D viewport, procedural piece geometries, MoveControls, single authoritative `GearCubeSessionState`, Play workspace history/undo/redo/scramble/keyboard (Phase 3), Solver panel/playback/Worker adapter (Phase 4), and Browser Research workspace panel / benchmark Worker adapter (Phase 5D) | Internal: `@gearcube/core`, `@gearcube/kinematics`, `@gearcube/solvers`, `@gearcube/benchmark`; External: React, R3F, Three.js presentation stack (no Zustand requirement) | Implemented & Accepted through Phase 5D |
+| `apps/web` | Web application container hosting React UI components, R3F/Three.js 3D viewport, procedural piece geometries, MoveControls, single authoritative `GearCubeSessionState`, Play workspace history/undo/redo/scramble/keyboard (Phase 3), Solver panel/playback/Worker adapter (Phase 4), Browser Research workspace panel / benchmark Worker adapter (Phase 5D), and M6 orientation/challenge candidate UI | Internal: `@gearcube/core`, `@gearcube/kinematics`, `@gearcube/solvers`, `@gearcube/benchmark`; External: React, R3F, Three.js presentation stack (no Zustand requirement) | Implemented & Accepted through Phase 5D; M6 implementation candidate |
 | `packages/solvers` | Classical graph search (primary: BFS, Bidirectional BFS, IDA* with H2 two-slice PDB heuristic; optional/deferred: IDDFS, A*, Pattern Databases), heuristic estimators | Depends only on `@gearcube/core` | Implemented & Accepted (Phase 4) |
 | `packages/benchmark` | Pure benchmark engine, independent Core-only exact-distance corpus builder, deterministic stratified sampling, comparative solver runner, JSON/CSV exports, and Node CLI adapter | Depends directly on `@gearcube/core` and `@gearcube/solvers`; zero UI/DOM runtime dependencies | Implemented & Accepted — Phase 5 |
 | `ml/` (Python) | PyTorch model architectures, offline self-play/dataset generation, heuristic export | Python (version selected based on ML dependency compatibility) managed exclusively via `uv` | Planned (Phase 6) |

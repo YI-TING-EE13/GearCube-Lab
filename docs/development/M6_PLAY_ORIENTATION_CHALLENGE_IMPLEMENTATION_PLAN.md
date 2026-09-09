@@ -97,6 +97,7 @@ MAX_ATTEMPTS = 64
 - The final label is computed only by `SolveSuccess.depth`; scramble length and attempt count are sampling metadata, never difficulty truth.
 - Each candidate starts from `SOLVED_GEAR_CUBE_STATE` and `DEFAULT_SPATIAL_FRAME` and is evaluated with the existing pure Core transition pipeline.
 - Candidate sampling uses a deterministic derived seed containing the caller seed, difficulty, and zero-based attempt index. Candidate lengths are explicit sampling heuristics and are documented/reportable separately from the difficulty definition.
+- Sampling lengths are EASY 4, NORMAL 6, and CHALLENGE 9; the odd challenge sample is a measured heuristic for reaching the depth-7 band, not a replacement for solver-depth certification.
 - A candidate is accepted only when the returned `SolveSuccess.depth` falls inside the requested range. The returned challenge summary contains the certified depth and requested difficulty, but no solution `Move[]`.
 - After 64 failed/out-of-band attempts, the hook reports a bounded error and applies no candidate. Solver errors are terminal generation errors unless cancellation or a newer request supersedes them.
 
@@ -112,8 +113,8 @@ PLAY idle
 ```
 
 - The challenge hook owns a separate Worker reference, request counter, active generation token, and controller state from `useSolverWorker`. It reuses the existing `solver.worker.ts` entry and protocol.
-- Starting a challenge is allowed only from Play when the session is idle and neither solver search nor another challenge generation is active. The effective Play busy state disables move buttons, keyboard moves, history mutations, ordinary Scramble, mode switching, and Solve start while certification is pending.
-- Any external Play mutation first cancels challenge generation and invalidates its token. Switching to Research cancels challenge generation before changing workspace. Unmount terminates the Worker.
+- Starting a challenge is allowed only from Play when the session is idle and neither solver search nor another challenge generation is active. The effective Play busy state disables move buttons, keyboard moves, history mutations, ordinary Scramble, and Solve start while certification is pending; the Research switch remains available so it can cancel the generation.
+- Conflicting Play mutations are blocked while certification is pending and cannot race acceptance. Switching to Research cancels challenge generation before changing workspace. Unmount terminates the Worker.
 - A result is accepted only when its request/generation token still matches, the hook is mounted, and the generation is active. Termination and token invalidation happen before applying the candidate.
 - The visible SolvePanel lifecycle remains independent. A Challenge panel does not read or overwrite visible Solve search state, playback metadata, or solver selection.
 - Candidate certification never mutates `app.session` or `app.history`. The installation helper runs only after certification and creates a fresh baseline with `entries = []` and `cursorIndex = -1`, preserving `interactionMode`.

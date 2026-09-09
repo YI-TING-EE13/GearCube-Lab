@@ -1,6 +1,6 @@
 # SYSTEM_ARCHITECTURE.md — System Architecture & Component Contracts
 
-> **Document Status:** `ACTIVE / CURRENT (Accepted architecture through Phase 5)`
+> **Document Status:** `ACTIVE / CURRENT (Accepted architecture through Phase 5; M6 implementation candidate recorded)`
 > **Target System:** GearCube Lab Web Application & Research Framework
 
 ---
@@ -111,7 +111,15 @@ graph TD
   - Dispatches canonical move requests to the Domain Core.
   - Hosts implemented and accepted Phase 4 features: initiates background solver Worker tasks (`apps/web/src/workers/solver.worker.ts`), renders the Solver panel and playback controls inside the Play workspace, algorithm selection, search progress telemetry, and solution playback controller with expected-prefix state guarding.
   - Hosts implemented and accepted Phase 5D features: top-level WorkspaceMode orchestration (`PLAY` / `RESEARCH`) and `useBenchmarkWorker` hook owned by `GearCubeViewport.tsx`, controlled presentation panel (`ResearchPanel.tsx`), and dedicated background benchmark Worker adapter (`apps/web/src/workers/benchmark.worker.ts`).
+  - Hosts the M6 implementation candidate: presentation-only `OrientationLegend` and disabled Drei `GizmoViewport` axis aid, semantic face-local move guidance, and a separate `useChallengeGenerator` lifecycle that creates solved-rooted candidates, certifies only `SolveSuccess.depth` with dedicated `IDA_STAR` Workers, and passes no solver move sequence to the accepted Play-baseline contract.
 - **Topology Note:** Implemented directly within `apps/web` rather than as a separate `packages/ui` package; uses standard React presentation tools without external state-management libraries (no Zustand requirement). Project-internal workspace dependencies: `@gearcube/core`, `@gearcube/kinematics`, `@gearcube/solvers`, and `@gearcube/benchmark`.
+
+#### M6 Play Orientation & Certified Challenge lifecycle (Implementation Candidate)
+- **Orientation:** `FACE_AXIS_MAP` is a UI presentation mapping only: `R/L = +/-X`, `U/D = +/-Y`, and `F/B = +/-Z`. CW/CCW labels use the face-local convention viewed from outside the selected face toward the cube center. The optional `GizmoViewport` is disabled and cannot mutate the camera or Core state.
+- **Candidate construction:** `challenge.ts` derives a deterministic attempt seed from `(base seed, difficulty, attempt index)`, applies a bounded scramble to `SOLVED_GEAR_CUBE_STATE` and `DEFAULT_SPATIAL_FRAME`, and retains the candidate state/frame for certification.
+- **Certification:** `useChallengeGenerator.ts` owns one fresh `solver.worker.ts` per attempt and sends `IDA_STAR`. `challenge-controller.ts` accepts only an integer depth inside the requested `2..4 / 5..6 / 7..8` band, retries out-of-band results up to 64 attempts, and excludes `moves` from `CertifiedChallenge`.
+- **Play installation:** `applyCertifiedChallengeToPlay` is an application-layer transition that requires an idle session, materializes the accepted state/frame, and creates empty history at that challenge baseline. Regular `applyScrambleToPlay` remains current-relative and is unchanged.
+- **Boundary:** M6 adds no Core, Kinematics, solver algorithm, protocol schema, dependency, or Research Mode changes; cancellation, workspace switching, unmount, generation identity, and Worker request identity prevent stale installation.
 
 ### 3.5. Pure Solver Engine (`packages/solvers` — Implemented & Accepted — Phase 4)
 - **Responsibilities:**
@@ -162,6 +170,8 @@ Communication between the UI main thread and the Solver Web Worker occurs exclus
 [ UI Thread ]  <-- { type: 'SEARCH_PROGRESS', requestId: '1', telemetry: SearchTelemetry } <---------- [ Worker Adapter ]
 [ UI Thread ]  <-- { type: 'SEARCH_COMPLETE', requestId: '1', result: SolveSuccess } <----------------- [ Worker Adapter ]
 ```
+
+For the M6 candidate, the same existing `START_SEARCH` / `SEARCH_COMPLETE` protocol is used by a separate hook-owned one-shot Worker. The challenge host reads only `result.depth`, discards the returned solution sequence, and requires generation/request identity to match before installing the candidate.
 
 ### 4.2. Error Handling & Invariant Violations
 - Core operations throw strongly typed domain errors (e.g., `IllegalMoveError`, `InvalidStateError`).

@@ -11,6 +11,7 @@ It combines a 3D playable puzzle with mechanically coupled gear kinematics, mult
 - **Play in 3D:** Rotate and inspect the puzzle in interactive 3D with coupled gear animations.
 - **Choose Interaction Modes:** Control moves via staged two-step half-turns (`TWO_STEP`) or direct full turns (`DIRECT_180`).
 - **Deterministic Scramble:** Generate reproducible scramble states from any text seed.
+- **Play Orientation & Certified Challenge (M6 candidate):** See the persistent face-axis legend and generate a bounded challenge certified by optimal solver depth.
 - **Timeline & History:** Step through past moves, scrub the timeline, or undo/redo actions.
 - **Optimal Solving:** Solve any reachable state using Breadth-First Search (BFS), Bidirectional BFS, or IDA* with the precomputed $H_2$ pattern database heuristic.
 - **Solution Playback:** Play solutions automatically or step forward and backward move-by-move.
@@ -77,12 +78,19 @@ The **Play** workspace is the default interactive puzzle environment.
   - When the cube is idle, use the **Direct 180°** toggle in Face Controls to switch between `TWO_STEP` and `DIRECT_180`.
 - **Face Move Controls:**
   - 12 on-screen buttons trigger Clockwise (↻) and Counter-Clockwise (↺) moves for all six faces (**U, D, F, B, R, L**).
+- **Orientation Guidance:**
+  - The Face Controls legend maps `L (-X) ↔ R (+X)`, `D (-Y) ↔ U (+Y)`, and `B (-Z) ↔ F (+Z)`.
+  - Every move button exposes its face axis and uses the face-local convention “viewed from outside the selected face toward the cube center”; `CW` and `CCW` do not depend on the camera screen orientation.
 - **Responsive Controls:**
   - On tablet and phone-sized viewports, use the controls toggle in the upper-right corner to open or stow the Play controls.
   - When stowed, the HTML control layer is removed from the hit-test path so the canvas remains available for orbit and zoom gestures; when open, the controls are stacked in a scrollable drawer for short screens.
 - **Scramble & History:**
   - Enter any string into the **Seed** field and click **Scramble** to apply a deterministic scramble sequence.
   - Use **Undo**, **Redo**, or **Reset Baseline** in the top bar to navigate history, or click directly on any step in the timeline scrubber.
+- **Certified Challenge (M6 implementation candidate):**
+  - Select **Easy**, **Normal**, or **Challenge** in the Certified Challenge panel and click **Generate Challenge**. Candidates always start from the solved Core baseline and are certified by the existing optimal `IDA_STAR` solver in a dedicated Worker.
+  - The accepted depth bands are `EASY = 2..4`, `NORMAL = 5..6`, and `CHALLENGE = 7..8`. The selected label is derived only from `SolveSuccess.depth`; sampling length and retry count are not difficulty truth.
+  - A certified result replaces the Play baseline and clears move history. Challenge generation disables Play mutations and visible Solve/playback actions; Cancel, workspace switching, unmount, and stale results cannot install an uncertified candidate. Challenge certification does not expose a solution sequence or create Solution Playback.
 
 ### Solve (within Play)
 
@@ -137,7 +145,7 @@ GearCube Lab supports full keyboard interaction in the Play workspace:
 | `Ctrl` + `Shift` + `Z` / `Cmd` + `Shift` + `Z` | **Redo** | Redo previously undone move |
 | `Ctrl` + `Y` | **Redo (Win/Linux)** | Redo previously undone move (Windows and Linux only) |
 
-*Shortcuts are disabled while typing inside input fields and during active move animations.*
+*Shortcuts are disabled while typing inside input fields, during active move animations, and while a Certified Challenge is generating.*
 
 ---
 
@@ -170,11 +178,11 @@ npx playwright install
 
 ### Maintained verification inventory
 
-The current repository test inventory is 36 Vitest files with 454 tests. The Playwright inventory is 50 logical tests across three browser projects, yielding 150 project-test cases: 148 applicable executions and 2 intentional Chromium-only touch skips. These are inventory counts; exact pass/fail qualification belongs to the Verify workflow run for the tested commit.
+The current repository test inventory is 39 Vitest files with 470 tests. The Playwright inventory is 53 logical tests across three browser projects, yielding 159 project-test cases: 157 applicable executions and 2 intentional Chromium-only touch skips. These are inventory counts; exact pass/fail qualification belongs to the Verify workflow run for the tested commit.
 
 ### CI Verification
 
-The project includes an automated GitHub Actions verification workflow running on hosted Ubuntu with Node.js 22.17.1. It performs workspace verification (`npm ci` and `npm run verify`) followed by a parallel browser matrix with 50 logical Playwright tests: 150 project-test cases, comprising 148 applicable executions and 2 intentional skips for the Chromium-only touch gate. On hosted Linux CI, Firefox executes headed under Xvfb with a CI-only WebGL2 enablement preference.
+The project includes an automated GitHub Actions verification workflow running on hosted Ubuntu with Node.js 22.17.1. It performs workspace verification (`npm ci` and `npm run verify`) followed by a parallel browser matrix with 53 logical Playwright tests: 159 project-test cases, comprising 157 applicable executions and 2 intentional skips for the Chromium-only touch gate. On hosted Linux CI, Firefox executes headed under Xvfb with a CI-only WebGL2 enablement preference.
 
 ---
 
@@ -220,11 +228,12 @@ Phases 0–9: Completed & Accepted
   - Phase 9A (GitHub Pages Deployment Foundation & Subpath Qualification): Completed & Accepted
   - Phase 9B (First Live GitHub Pages Deployment): Completed & Accepted
   - Phase 9C (Public Hosting Documentation & Deployment Closeout): Completed & Accepted
+M6 Play Orientation & Certified Challenge UX: Implementation Candidate (not formally accepted)
 Deferred Tracks:
   - Phase 6 (AI-Guided Search): Deferred Optional Research
   - Phase 7 (Physical Model & Vision Expansion): Deferred Optional Expansion
 
-PUBLIC_TEST_READY: YES
+PUBLIC_TEST_READY: YES (main baseline; M6 candidate pending independent acceptance)
 LIVE_GITHUB_PAGES: YES
 PUBLIC_HOSTING: ACTIVE
 ```
