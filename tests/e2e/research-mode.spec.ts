@@ -228,8 +228,8 @@ async function configureFastSuite(page: Page): Promise<void> {
     }
   }
 
-  // Algorithms: Check BFS, BIDIRECTIONAL_BFS, IDA_STAR
-  for (const algo of ['BFS', 'BIDIRECTIONAL_BFS', 'IDA_STAR']) {
+  // Algorithms: Check BFS, BIDIRECTIONAL_BFS, A_STAR, IDA_STAR
+  for (const algo of ['BFS', 'BIDIRECTIONAL_BFS', 'A_STAR', 'IDA_STAR']) {
     const cb = page.getByTestId(`research-checkbox-algo-${algo}`);
     if (!(await cb.isChecked())) {
       await cb.check();
@@ -268,6 +268,10 @@ async function configureLongCancellationSuite(page: Page): Promise<void> {
   const bibfsCb = page.getByTestId('research-checkbox-algo-BIDIRECTIONAL_BFS');
   if (await bibfsCb.isChecked()) {
     await bibfsCb.uncheck();
+  }
+  const aStarCb = page.getByTestId('research-checkbox-algo-A_STAR');
+  if (await aStarCb.isChecked()) {
+    await aStarCb.uncheck();
   }
   const idaCb = page.getByTestId('research-checkbox-algo-IDA_STAR');
   if (await idaCb.isChecked()) {
@@ -519,24 +523,25 @@ test.describe('GearCube Browser Research Mode End-to-End Suite', () => {
     await expect(casesCard.locator('.meta-value')).toHaveText('2');
 
     const trialsCard = summary.locator('.meta-card', { hasText: 'Measured Trials' });
-    await expect(trialsCard.locator('.meta-value')).toHaveText('6');
+    await expect(trialsCard.locator('.meta-value')).toHaveText('8');
 
     const platformCard = summary.locator('.meta-card', { hasText: 'Platform' });
     await expect(platformCard.locator('.meta-value')).toHaveText('browser');
 
     // Check all algorithm representations exist in cards
     const algCards = summary.locator('.alg-summary-card');
-    await expect(algCards).toHaveCount(3);
+    await expect(algCards).toHaveCount(4);
     await expect(summary.locator('.alg-summary-title', { hasText: /Breadth-First Search/ })).toBeVisible();
     await expect(summary.locator('.alg-summary-title', { hasText: /Bidirectional BFS/ })).toBeVisible();
+    await expect(summary.locator('.alg-summary-title', { hasText: /A\* \(H2 heuristic\)/ })).toBeVisible();
     await expect(summary.locator('.alg-summary-title', { hasText: /IDA\*/ })).toBeVisible();
 
-    // Check by-depth summary table (3 rows for 3 algorithms at depth 1)
+    // Check by-depth summary table (4 rows for 4 algorithms at depth 1)
     const table = page.getByTestId('research-summary-table');
     await expect(table).toBeVisible();
 
     const rows = table.locator('tbody tr');
-    await expect(rows).toHaveCount(3);
+    await expect(rows).toHaveCount(4);
 
     // BFS row verification
     const bfsRow = rows.filter({ hasText: /Breadth-First Search/ });
@@ -553,6 +558,14 @@ test.describe('GearCube Browser Research Mode End-to-End Suite', () => {
     await expect(bibfsRow.locator('td').nth(2)).toHaveText('2'); // Trials
     await expect(bibfsRow.locator('td').nth(3)).toHaveText('2'); // Solved
     await expect(bibfsRow.locator('td').nth(4)).toHaveText('0'); // Limits
+
+    // A* row verification
+    const aStarRow = rows.filter({ hasText: /A\* \(H2 heuristic\)/ });
+    await expect(aStarRow).toHaveCount(1);
+    await expect(aStarRow.locator('td').nth(1)).toHaveText('1'); // Depth
+    await expect(aStarRow.locator('td').nth(2)).toHaveText('2'); // Trials
+    await expect(aStarRow.locator('td').nth(3)).toHaveText('2'); // Solved
+    await expect(aStarRow.locator('td').nth(4)).toHaveText('0'); // Limits
 
     // IDA* row verification
     const idaRow = rows.filter({ hasText: /IDA\*/ });
@@ -592,9 +605,9 @@ test.describe('GearCube Browser Research Mode End-to-End Suite', () => {
     expect(report.config.exactDepths).toEqual([1]);
     expect(report.config.casesPerDepth).toBe(2);
     expect(report.cases).toHaveLength(2);
-    expect(report.trials).toHaveLength(6);
+    expect(report.trials).toHaveLength(8);
     expect(report.summary.totalCases).toBe(2);
-    expect(report.summary.totalTrials).toBe(6);
+    expect(report.summary.totalTrials).toBe(8);
     expect(report.environment.platform).toBe('browser');
   });
 
@@ -626,10 +639,10 @@ test.describe('GearCube Browser Research Mode End-to-End Suite', () => {
       'schemaVersion,suiteId,seed,caseId,exactDepth,algorithm,repetitionIndex,status,solutionDepth,solutionMoves,nodesExpanded,nodesGenerated,limitReason,elapsedMs'
     );
 
-    // 1 header + 6 measured trials = 7 lines
-    expect(lines).toHaveLength(7);
+    // 1 header + 8 measured trials = 9 lines
+    expect(lines).toHaveLength(9);
 
-    for (let i = 1; i <= 6; i++) {
+    for (let i = 1; i <= 8; i++) {
       const cols = lines[i].split(',');
       expect(cols).toHaveLength(14);
       expect(cols[0]).toBe('1'); // schemaVersion
@@ -859,6 +872,7 @@ test.describe('GearCube Browser Research Mode End-to-End Suite', () => {
     const expectedAlgos = [
       { id: 'research-algorithm-BFS', val: 'BFS', label: 'Breadth-First Search (BFS)' },
       { id: 'research-algorithm-BIDIRECTIONAL_BFS', val: 'BIDIRECTIONAL_BFS', label: 'Bidirectional BFS' },
+      { id: 'research-algorithm-A_STAR', val: 'A_STAR', label: 'A* (H2 heuristic)' },
       { id: 'research-algorithm-IDA_STAR', val: 'IDA_STAR', label: 'IDA*' },
     ];
 

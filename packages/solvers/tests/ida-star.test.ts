@@ -9,6 +9,7 @@ import {
 } from '@gearcube/core';
 import { solveBfs } from '../src/bfs.js';
 import { solveBidirectionalBfs } from '../src/bidirectional-bfs.js';
+import { solveAStar } from '../src/a-star.js';
 import { solveIdaStar } from '../src/ida-star.js';
 import type { SearchTelemetry, SolverOptions } from '../src/types.js';
 import { EXACT_DISTANCE_FIXTURES } from './fixtures.js';
@@ -193,7 +194,7 @@ describe('Phase 4C — IDA* Solver Contracts & Optimality Suite', () => {
     }
   });
 
-  it('EXACT_DISTANCE_1_TO_8_IDA_STAR_GATE & CROSS_ALGORITHM_OPTIMALITY: finds exact optimal shortest solutions matching BFS and BiBFS for all 8 fixtures', () => {
+  it('EXACT_DISTANCE_1_TO_8_CLASSICAL_PORTFOLIO_GATE: finds exact optimal shortest solutions across BFS, BiBFS, A*, and IDA* for all 8 fixtures', () => {
     for (let i = 0; i < EXACT_DISTANCE_FIXTURES.length; i++) {
       const fixture = EXACT_DISTANCE_FIXTURES[i];
       const state = deserializeLogicalState(fixture.serializedState);
@@ -211,13 +212,23 @@ describe('Phase 4C — IDA* Solver Contracts & Optimality Suite', () => {
 
         const bfsResult = solveBfs(state);
         const biBfsResult = solveBidirectionalBfs(state);
+        const aStarResult = solveAStar(state);
 
         expect(bfsResult.status).toBe('SOLVED');
         expect(biBfsResult.status).toBe('SOLVED');
+        expect(aStarResult.status).toBe('SOLVED');
 
-        if (bfsResult.status === 'SOLVED' && biBfsResult.status === 'SOLVED') {
-          expect(idaResult.depth).toBe(bfsResult.depth);
-          expect(idaResult.depth).toBe(biBfsResult.depth);
+        if (
+          bfsResult.status === 'SOLVED' &&
+          biBfsResult.status === 'SOLVED' &&
+          aStarResult.status === 'SOLVED'
+        ) {
+          const portfolioResults = [idaResult, bfsResult, biBfsResult, aStarResult];
+          for (const result of portfolioResults) {
+            expect(result.depth).toBe(expectedDist);
+            expect(result.moves).toHaveLength(expectedDist);
+            expect(isSolved(applyMoveSequence(state, result.moves))).toBe(true);
+          }
         }
       }
     }

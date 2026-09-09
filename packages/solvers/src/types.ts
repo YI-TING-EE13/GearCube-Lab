@@ -1,7 +1,7 @@
 import type { Move } from '@gearcube/core';
 
 /** Canonical solver identity used by results, progress telemetry, and benchmarks. */
-export type SolverAlgorithm = 'BFS' | 'BIDIRECTIONAL_BFS' | 'IDA_STAR';
+export type SolverAlgorithm = 'BFS' | 'BIDIRECTIONAL_BFS' | 'A_STAR' | 'IDA_STAR';
 
 /**
  * Cumulative search counters reported by a solver run.
@@ -39,6 +39,15 @@ export type SearchTelemetry =
       readonly forwardDepth: number;
       readonly backwardDepth: number;
       readonly bestSolutionDepth: number | null;
+    }
+  | {
+      readonly algorithm: 'A_STAR';
+      readonly nodesExpanded: number;
+      readonly nodesGenerated: number;
+      readonly elapsedMs: number;
+      readonly bestF: number;
+      readonly currentDepth: number;
+      readonly openSize: number;
     }
   | {
       readonly algorithm: 'IDA_STAR';

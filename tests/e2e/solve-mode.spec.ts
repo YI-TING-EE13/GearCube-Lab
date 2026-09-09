@@ -46,6 +46,12 @@ test.describe('GearCube Solve Mode & Playback End-to-End Suite', () => {
     const algoSelect = page.getByLabel('Solver Algorithm');
     await expect(algoSelect).toBeVisible();
     await expect(algoSelect).toHaveValue('IDA_STAR');
+    await expect(algoSelect.locator('option')).toHaveText([
+      'IDA* (Recommended)',
+      'A* (H2 heuristic)',
+      'Bidirectional BFS',
+      'Breadth-First Search (BFS)',
+    ]);
 
     const solveBtn = page.getByRole('button', { name: 'Solve current state' });
     await expect(solveBtn).toBeVisible();
@@ -65,8 +71,8 @@ test.describe('GearCube Solve Mode & Playback End-to-End Suite', () => {
     await page.getByRole('button', { name: 'Generate scramble' }).click();
     await expect(page.getByTestId('cube-status')).toHaveText('Cube: Unsolved');
 
-    // Select BFS algorithm to ensure observable search lifecycle
-    await page.getByLabel('Solver Algorithm').selectOption('BFS');
+    // Select A* to exercise the new portfolio path through the real Worker
+    await page.getByLabel('Solver Algorithm').selectOption('A_STAR');
 
     // Click Solve
     await page.getByRole('button', { name: 'Solve current state' }).click();
@@ -78,6 +84,8 @@ test.describe('GearCube Solve Mode & Playback End-to-End Suite', () => {
     // Wait for solve completion
     await expect(page.getByTestId('solver-solution-summary')).toBeVisible({ timeout: 15000 });
     await expect(page.getByTestId('solver-status')).toContainText('Solved');
+    await expect(page.getByTestId('solver-solution-summary')).toContainText('Algorithm: A* (H2 heuristic)');
+    await expect(page.getByTestId('solver-solution-summary')).toContainText('Nodes Generated:');
 
     // Playback controls should appear
     await expect(page.getByTestId('playback-controls')).toBeVisible();

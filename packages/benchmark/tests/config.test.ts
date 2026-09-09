@@ -9,7 +9,7 @@ describe('Phase 5A BenchmarkSuiteConfig Validation Gate', () => {
     seed: 'seed-alpha',
     exactDepths: [1, 2, 3, 4, 5, 6, 7, 8],
     casesPerDepth: 5,
-    algorithms: ['BFS', 'BIDIRECTIONAL_BFS', 'IDA_STAR'],
+    algorithms: ['BFS', 'BIDIRECTIONAL_BFS', 'A_STAR', 'IDA_STAR'],
     warmupRuns: 1,
     measuredRuns: 3,
     limits: {
@@ -159,10 +159,15 @@ describe('Phase 5A BenchmarkSuiteConfig Validation Gate', () => {
       ).toThrow(/Duplicate solver algorithm: "BFS"/);
     });
 
+    it('accepts A_STAR as part of the classical solver portfolio', () => {
+      const validated = validateBenchmarkSuiteConfig({
+        ...validBaseConfig,
+        algorithms: ['A_STAR'],
+      });
+      expect(validated.algorithms).toEqual(['A_STAR']);
+    });
+
     it('rejects unsupported or unknown algorithms', () => {
-      expect(() =>
-        validateBenchmarkSuiteConfig({ ...validBaseConfig, algorithms: ['A_STAR' as any] }),
-      ).toThrow(/Unsupported solver algorithm: "A_STAR"/);
       expect(() =>
         validateBenchmarkSuiteConfig({ ...validBaseConfig, algorithms: ['RANDOM_WALK' as any] }),
       ).toThrow(/Unsupported solver algorithm: "RANDOM_WALK"/);

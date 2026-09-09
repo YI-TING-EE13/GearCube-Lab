@@ -839,6 +839,16 @@ body,
   font-size: 11px;
 }
 
+.solver-result-metrics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 8px;
+}
+
+.solver-result-metrics > span {
+  white-space: nowrap;
+}
+
 .playback-counter {
   font-size: 12px;
   font-weight: 700;

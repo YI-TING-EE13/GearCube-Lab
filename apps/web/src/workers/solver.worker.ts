@@ -11,6 +11,7 @@
 import {
   solveBfs,
   solveBidirectionalBfs,
+  solveAStar,
   solveIdaStar,
   type SolverOptions,
   type WorkerInboundMessage,
@@ -67,6 +68,9 @@ self.onmessage = (event: MessageEvent<WorkerInboundMessage>): void => {
         break;
       case 'BIDIRECTIONAL_BFS':
         result = solveBidirectionalBfs(state, solverOptions);
+        break;
+      case 'A_STAR':
+        result = solveAStar(state, solverOptions);
         break;
       case 'IDA_STAR':
         result = solveIdaStar(state, solverOptions);

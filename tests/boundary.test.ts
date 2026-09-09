@@ -300,10 +300,10 @@ describe('Phase 4D Web Worker Infrastructure & Package Boundary Gate', () => {
     ]);
   });
 
-  it('verifies solver runtime functions (solveBfs, solveBidirectionalBfs, solveIdaStar) are imported ONLY by solver.worker.ts', () => {
+  it('verifies solver runtime functions (solveBfs, solveBidirectionalBfs, solveAStar, solveIdaStar) are imported ONLY by solver.worker.ts', () => {
     const files = collectWebTsFiles(webSrc);
     const solverRuntimeImportSites: string[] = [];
-    const forbiddenSolverFunctions = ['solveBfs', 'solveBidirectionalBfs', 'solveIdaStar'];
+    const forbiddenSolverFunctions = ['solveBfs', 'solveBidirectionalBfs', 'solveAStar', 'solveIdaStar'];
 
     for (const filePath of files) {
       const relPath = path.relative(process.cwd(), filePath).replace(/\\/g, '/');

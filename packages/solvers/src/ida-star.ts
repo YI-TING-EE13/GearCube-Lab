@@ -6,7 +6,7 @@ import {
   type GearCubeState,
   type Move,
 } from '@gearcube/core';
-import { estimateIdaStarHeuristic } from './heuristics.js';
+import { estimateH2Heuristic } from './heuristics.js';
 import { rankState } from './state-index.js';
 import type { SolverOptions, SolveResult } from './types.js';
 
@@ -120,7 +120,7 @@ export function solveIdaStar(
     };
   }
 
-  const initialHeuristic = estimateIdaStarHeuristic(state);
+  const initialHeuristic = estimateH2Heuristic(state);
   if (initialHeuristic > maxDepth) {
     return {
       status: 'LIMIT_REACHED',
@@ -144,7 +144,7 @@ export function solveIdaStar(
     g: number,
     threshold: number
   ): number | 'FOUND' | 'MAX_NODES' {
-    const h = estimateIdaStarHeuristic(currState);
+    const h = estimateH2Heuristic(currState);
     const f = g + h;
 
     if (f > threshold) {

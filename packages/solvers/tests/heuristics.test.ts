@@ -8,7 +8,7 @@ import {
   type EdgeSliceState,
   type GearCubeState,
 } from '@gearcube/core';
-import { estimateIdaStarHeuristic } from '../src/heuristics.js';
+import { estimateH2Heuristic } from '../src/heuristics.js';
 import * as publicSolverApi from '../src/index.js';
 import { unrankState } from '../src/state-index.js';
 import { buildExactDistanceOracle } from './exact-distance-oracle.js';
@@ -227,7 +227,7 @@ describe('Phase 4C — H2 Pattern Database & Heuristic Contracts', () => {
 
     for (let rank = 0; rank < CANONICAL_DOMAIN_SIZE; rank++) {
       const state = unrankState(rank);
-      const actualH = estimateIdaStarHeuristic(state);
+      const actualH = estimateH2Heuristic(state);
 
       const c = state.cornerConfiguration;
       const x = refSliceIndex(state.sliceX);
@@ -256,7 +256,7 @@ describe('Phase 4C — H2 Pattern Database & Heuristic Contracts', () => {
 
     for (let rank = 0; rank < CANONICAL_DOMAIN_SIZE; rank++) {
       const state = unrankState(rank);
-      const h = estimateIdaStarHeuristic(state);
+      const h = estimateH2Heuristic(state);
       const dStar = oracle.distances.get(serializeLogicalState(state))!;
 
       if (h > maxH) maxH = h;
@@ -287,11 +287,11 @@ describe('Phase 4C — H2 Pattern Database & Heuristic Contracts', () => {
 
     for (let rank = 0; rank < CANONICAL_DOMAIN_SIZE; rank++) {
       const u = unrankState(rank);
-      const hu = estimateIdaStarHeuristic(u);
+      const hu = estimateH2Heuristic(u);
 
       for (let m = 0; m < ALL_MOVES.length; m++) {
         const v = applyMove(u, ALL_MOVES[m]);
-        const hv = estimateIdaStarHeuristic(v);
+        const hv = estimateH2Heuristic(v);
 
         if (hu <= 1 + hv) {
           consistentEdges++;
@@ -388,6 +388,7 @@ describe('Phase 4C — H2 Pattern Database & Heuristic Contracts', () => {
   it('NO_PUBLIC_HEURISTIC_API: verifies public package boundary contains solvers but hides internal heuristics and indexing', () => {
     expect(typeof publicSolverApi.solveBfs).toBe('function');
     expect(typeof publicSolverApi.solveBidirectionalBfs).toBe('function');
+    expect(typeof publicSolverApi.solveAStar).toBe('function');
     expect(typeof publicSolverApi.solveIdaStar).toBe('function');
 
     expect((publicSolverApi as Record<string, unknown>).estimateIdaStarHeuristic).toBeUndefined();
