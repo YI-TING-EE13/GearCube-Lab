@@ -842,3 +842,30 @@ describe('Phase 5D Browser Research Mode Boundary & Architectural Invariants', (
     expect(panelContent.includes('workspaceMode')).toBe(false);
   });
 });
+
+describe('Pages Promotion Governance Gate', () => {
+  const pagesWorkflowPath = path.resolve(process.cwd(), '.github/workflows/deploy-pages.yml');
+
+  it('PAGES_RERUN_SAFE_PROMOTION_GATE: requires successful main push Verify runs and preserves exact-SHA stale deployment protection', () => {
+    expect(fs.existsSync(pagesWorkflowPath)).toBe(true);
+
+    const content = fs.readFileSync(pagesWorkflowPath, 'utf8');
+
+    expect(content).toContain("github.event.workflow_run.conclusion == 'success'");
+    expect(content).toContain("github.event.workflow_run.head_branch == 'main'");
+    expect(content).toContain("github.event.workflow_run.event == 'push'");
+    expect(content).not.toMatch(/\brun_attempt\b/);
+
+    expect(content).toContain('ref: ${{ github.event.workflow_run.head_sha }}');
+    expect(content).toContain(
+      "EXPECTED_SHA=\"${{ github.event.workflow_run.head_sha }}\""
+    );
+    expect(content).toContain(
+      "CURRENT_REMOTE_MAIN=$(git ls-remote origin refs/heads/main | awk '{print $1}')"
+    );
+    expect(content).toMatch(
+      /if \[ "\$CURRENT_REMOTE_MAIN" != "\$EXPECTED_SHA" \]; then[\s\S]*?exit 1/
+    );
+    expect(content).toContain('Stale deployment prevented.');
+  });
+});

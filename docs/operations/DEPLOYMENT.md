@@ -35,9 +35,9 @@ The public GitHub Pages deployment is fully automated and strictly gated by the 
 main branch push
       ↓
 Verify Workflow (.github/workflows/verify.yml)
-      ├─ Workspace verify (typecheck, boundary checks, Vitest 454/454)
-      └─ Parallel Playwright E2E matrix (50 logical tests; 148 applicable executions, 2 intentional skips)
-      ↓ (attempt 1 == success)
+      ├─ Workspace verify (typecheck, boundary checks, Vitest 481/481)
+      └─ Parallel Playwright E2E matrix (53 logical tests; 157 applicable executions, 2 intentional skips)
+      ↓ (successful Verify run)
 Deploy GitHub Pages Workflow (.github/workflows/deploy-pages.yml via workflow_run)
       ├─ Checkout exact verified SHA (github.event.workflow_run.head_sha)
       ├─ Stale-main guard (verifies origin/main equals verified SHA)
@@ -49,16 +49,15 @@ Deploy GitHub Pages Workflow (.github/workflows/deploy-pages.yml via workflow_ru
 
 ### 3.2. Hard Qualification Gate
 
-The deployment workflow runs only when the triggering `Verify` workflow satisfies all four conditions:
+The deployment workflow runs only when the triggering `Verify` workflow satisfies all three source conditions:
 ```yaml
 if: >
   github.event.workflow_run.conclusion == 'success' &&
   github.event.workflow_run.head_branch == 'main' &&
-  github.event.workflow_run.event == 'push' &&
-  github.event.workflow_run.run_attempt == 1
+  github.event.workflow_run.event == 'push'
 ```
 
-- Non-main branches (`phase/**`), pull requests, manual workflow dispatches, failed Verify runs, cancelled runs, and rerun attempts ($>1$) **never** trigger deployment.
+- Non-main branches (`phase/**`), pull requests, manual workflow dispatches, failed Verify runs, and cancelled runs **never** trigger deployment. A successful rerun of a `main` push Verify run may trigger deployment when the exact-current-main gate passes.
 - **Exact Verified Checkout:** `actions/checkout` checks out `github.event.workflow_run.head_sha`.
 - **Stale-Main Protection:** A pre-build step queries `git ls-remote origin refs/heads/main` to ensure `main` has not advanced past the tested commit, preventing stale deployments.
 - **Zero-Secret Posture:** The deployment workflow relies only on GitHub-provided credentials:
@@ -97,13 +96,13 @@ All asset references in `index.html` and worker bundle instantiations resolve be
 
 ### 5.2. Browser Compatibility Baseline
 
-The current Playwright inventory contains 50 logical tests across Chromium, Firefox, and WebKit projects. The Chromium-only touch gate is intentionally skipped in Firefox and WebKit, yielding 150 project cases: 148 applicable executions and 2 intentional skips.
+The current Playwright inventory contains 53 logical tests across Chromium, Firefox, and WebKit projects. The Chromium-only touch gate is intentionally skipped in Firefox and WebKit, yielding 159 project cases: 157 applicable executions and 2 intentional skips.
 
 | Browser project | Applicable executions | Intentional touch skips |
 | :--- | ---: | ---: |
-| Chromium | 50 | 0 |
-| Firefox | 49 | 1 |
-| WebKit | 49 | 1 |
+| Chromium | 53 | 0 |
+| Firefox | 52 | 1 |
+| WebKit | 52 | 1 |
 
 These are inventory counts, not a claim that every run passes. Exact qualification evidence belongs to the corresponding `Verify` workflow run for the tested commit; inspect `verify` and all three browser jobs. See [TEST_STRATEGY.md](../development/TEST_STRATEGY.md) for maintained test coverage.
 

@@ -62,6 +62,17 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Isolate Playwright dependency install from Chrome APT source
+        shell: bash
+        run: |
+          for source in /etc/apt/sources.list.d/*; do
+            [ -f "$source" ] || continue
+            if grep -q 'dl.google.com/linux/chrome' "$source"; then
+              echo "Removing unrelated Google Chrome APT source: $source"
+              sudo rm -f "$source"
+            fi
+          done
+
       - name: Install Playwright browser and dependencies
         run: npx playwright install --with-deps ${{ matrix.browser }}
 
