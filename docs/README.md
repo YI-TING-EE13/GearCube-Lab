@@ -41,7 +41,8 @@ docs/
 │   ├── M6_PLAY_ORIENTATION_CHALLENGE_IMPLEMENTATION_PLAN.md # M6 orientation and certified challenge implementation plan (Accepted)
 │   ├── M6_1_CLASSICAL_SOLVER_PORTFOLIO_IMPLEMENTATION_PLAN.md # M6.1 A* solver portfolio implementation plan (Accepted)
 │   ├── M6_M6_1_ACCEPTANCE_RECORD.md   # Canonical independent acceptance and hosted qualification record
-│   ├── M6_2_PAGES_RERUN_SAFE_PROMOTION_IMPLEMENTATION_PLAN.md # M6.2 rerun-safe Pages promotion plan (Current)
+│   ├── M6_2_PAGES_RERUN_SAFE_PROMOTION_IMPLEMENTATION_PLAN.md # M6.2 rerun-safe Pages promotion plan (Historical / Accepted)
+│   ├── M6_2_ACCEPTANCE_RECORD.md        # M6.2 post-merge operational acceptance record (Historical / As-of)
 │   ├── PHASE_8_ACCEPTANCE_RECORD.md    # Phase 8 Public-Test-Readiness Acceptance Record
 │   ├── ADR_0004_CENTER_ORIENTATION_PLAN.md # ADR-0004 Center orientation semantics plan
 │   ├── ADR_0005_CANONICAL_MOVE_TRANSITION_PLAN.md # ADR-0005 Canonical move transition plan
@@ -128,7 +129,8 @@ For current implementation questions, use this authority order: `AGENTS.md` and 
 - **M6 Play Orientation & Certified Challenge Plan (Accepted):** [`docs/development/M6_PLAY_ORIENTATION_CHALLENGE_IMPLEMENTATION_PLAN.md`](development/M6_PLAY_ORIENTATION_CHALLENGE_IMPLEMENTATION_PLAN.md)
 - **M6.1 Classical Solver Portfolio Plan (Accepted):** [`docs/development/M6_1_CLASSICAL_SOLVER_PORTFOLIO_IMPLEMENTATION_PLAN.md`](development/M6_1_CLASSICAL_SOLVER_PORTFOLIO_IMPLEMENTATION_PLAN.md)
 - **M6 + M6.1 Acceptance Record (Historical / As-of):** [`docs/development/M6_M6_1_ACCEPTANCE_RECORD.md`](development/M6_M6_1_ACCEPTANCE_RECORD.md)
-- **M6.2 Pages Rerun-Safe Promotion Plan (Current):** [`docs/development/M6_2_PAGES_RERUN_SAFE_PROMOTION_IMPLEMENTATION_PLAN.md`](development/M6_2_PAGES_RERUN_SAFE_PROMOTION_IMPLEMENTATION_PLAN.md)
+- **M6.2 Pages Rerun-Safe Promotion Plan (Historical / Accepted):** [`docs/development/M6_2_PAGES_RERUN_SAFE_PROMOTION_IMPLEMENTATION_PLAN.md`](development/M6_2_PAGES_RERUN_SAFE_PROMOTION_IMPLEMENTATION_PLAN.md)
+- **M6.2 Pages Rerun-Safe Promotion Acceptance Record (Historical / As-of):** [`docs/development/M6_2_ACCEPTANCE_RECORD.md`](development/M6_2_ACCEPTANCE_RECORD.md)
 - **Phase 5C Experiment Plan — Accepted:** [`docs/research/PHASE_5C_EXPERIMENT_PLAN.md`](research/PHASE_5C_EXPERIMENT_PLAN.md)
 - **Phase 5C Classical Solver Benchmark Report — Accepted:** [`docs/research/PHASE_5_CLASSICAL_SOLVER_BENCHMARK_REPORT.md`](research/PHASE_5_CLASSICAL_SOLVER_BENCHMARK_REPORT.md)
 - **Post-Phase 4 Documentation Reconciliation Record:** [`docs/development/POST_PHASE4_DOCUMENTATION_RECONCILIATION.md`](development/POST_PHASE4_DOCUMENTATION_RECONCILIATION.md)

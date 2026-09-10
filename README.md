@@ -231,6 +231,7 @@ Phases 0–9: Completed & Accepted
   - Phase 9C (Public Hosting Documentation & Deployment Closeout): Completed & Accepted
 M6 Play Orientation & Certified Challenge UX: COMPLETED & ACCEPTED
 M6.1 Classical Solver Portfolio Expansion: COMPLETED & ACCEPTED
+M6.2 Rerun-Safe Pages Promotion: COMPLETED & ACCEPTED
 Deferred Tracks:
   - Phase 6 (AI-Guided Search): Deferred Optional Research
   - Phase 7 (Physical Model & Vision Expansion): Deferred Optional Expansion
@@ -242,7 +243,7 @@ PUBLIC_HOSTING: ACTIVE
 
 *Note: The canonical public site is hosted at `https://yi-ting-ee13.github.io/GearCube-Lab/` via verification-gated GitHub Actions.*
 
-For complete phase history, specifications, and gating criteria, refer to [`ROADMAP.md`](docs/development/ROADMAP.md), [`M6_PLAY_ORIENTATION_CHALLENGE_IMPLEMENTATION_PLAN.md`](docs/development/M6_PLAY_ORIENTATION_CHALLENGE_IMPLEMENTATION_PLAN.md), [`M6_1_CLASSICAL_SOLVER_PORTFOLIO_IMPLEMENTATION_PLAN.md`](docs/development/M6_1_CLASSICAL_SOLVER_PORTFOLIO_IMPLEMENTATION_PLAN.md), [`M6_M6_1_ACCEPTANCE_RECORD.md`](docs/development/M6_M6_1_ACCEPTANCE_RECORD.md), [`PHASE_8_IMPLEMENTATION_PLAN.md`](docs/development/PHASE_8_IMPLEMENTATION_PLAN.md), and [`PHASE_8_ACCEPTANCE_RECORD.md`](docs/development/PHASE_8_ACCEPTANCE_RECORD.md).
+For complete phase history, specifications, and gating criteria, refer to [`ROADMAP.md`](docs/development/ROADMAP.md), [`M6_PLAY_ORIENTATION_CHALLENGE_IMPLEMENTATION_PLAN.md`](docs/development/M6_PLAY_ORIENTATION_CHALLENGE_IMPLEMENTATION_PLAN.md), [`M6_1_CLASSICAL_SOLVER_PORTFOLIO_IMPLEMENTATION_PLAN.md`](docs/development/M6_1_CLASSICAL_SOLVER_PORTFOLIO_IMPLEMENTATION_PLAN.md), [`M6_M6_1_ACCEPTANCE_RECORD.md`](docs/development/M6_M6_1_ACCEPTANCE_RECORD.md), [`M6_2_PAGES_RERUN_SAFE_PROMOTION_IMPLEMENTATION_PLAN.md`](docs/development/M6_2_PAGES_RERUN_SAFE_PROMOTION_IMPLEMENTATION_PLAN.md), [`M6_2_ACCEPTANCE_RECORD.md`](docs/development/M6_2_ACCEPTANCE_RECORD.md), [`PHASE_8_IMPLEMENTATION_PLAN.md`](docs/development/PHASE_8_IMPLEMENTATION_PLAN.md), and [`PHASE_8_ACCEPTANCE_RECORD.md`](docs/development/PHASE_8_ACCEPTANCE_RECORD.md).
 
 ---
 
