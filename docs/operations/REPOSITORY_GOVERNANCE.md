@@ -102,9 +102,9 @@ The maintained automated inventory is:
 | Suite | Current inventory |
 | --- | --- |
 | Vitest | 40 test files / 481 tests |
-| Playwright | 53 logical tests across Chromium, Firefox, and WebKit |
-| Playwright project cases | 159 total: 53 Chromium, 52 Firefox applicable plus 1 intentional skip, and 52 WebKit applicable plus 1 intentional skip |
-| Applicable Playwright executions | 157 |
+| Playwright | 55 logical tests across Chromium, Firefox, and WebKit |
+| Playwright project cases | 165 total: 55 Chromium, 54 Firefox applicable plus 1 intentional skip, and 54 WebKit applicable plus 1 intentional skip |
+| Applicable Playwright executions | 163 |
 | Intentional skips | 2 total, one in Firefox and one in WebKit, because the touch-emulation gate is Chromium-only |
 
 These are inventory counts, not a claim that every listed case passed in every run. Exact qualification evidence belongs to the corresponding `Verify` workflow run for the tested commit, including all four jobs.

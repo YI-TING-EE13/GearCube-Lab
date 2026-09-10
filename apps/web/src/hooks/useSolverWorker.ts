@@ -90,67 +90,83 @@ export function useSolverWorker(): UseSolverWorkerResult {
         beginSearch(prev, requestId, algorithm, searchStartStateKey)
       );
 
-      // 5. Construct fresh Web Worker instance
-      const worker = new Worker(
-        new URL('../workers/solver.worker.ts', import.meta.url),
-        { type: 'module' }
-      );
-      workerRef.current = worker;
+      let worker: Worker | null = null;
 
-      // 6. Register outbound message listener
-      worker.onmessage = (event: MessageEvent<WorkerOutboundMessage>): void => {
-        if (!isMountedRef.current) return;
-        const msg = event.data;
+      try {
+        // 5. Construct fresh Web Worker instance
+        const workerInstance = new Worker(
+          new URL('../workers/solver.worker.ts', import.meta.url),
+          { type: 'module' }
+        );
+        worker = workerInstance;
+        workerRef.current = workerInstance;
 
-        // Verify message belongs to current active request
-        if (msg.requestId !== activeRequestIdRef.current) {
-          return;
-        }
+        // 6. Register outbound message listener
+        workerInstance.onmessage = (
+          event: MessageEvent<WorkerOutboundMessage>
+        ): void => {
+          if (!isMountedRef.current) return;
+          const msg = event.data;
 
-        // Reduce controller state
-        setState((prev) => reduceWorkerMessage(prev, msg));
+          // Verify message belongs to current active request
+          if (msg.requestId !== activeRequestIdRef.current) {
+            return;
+          }
 
-        // Terminal cleanup: terminate worker and clear reference
-        if (
-          msg.type === 'SEARCH_COMPLETE' ||
-          msg.type === 'SEARCH_LIMIT_REACHED' ||
-          msg.type === 'SEARCH_ERROR'
-        ) {
-          if (workerRef.current === worker) {
-            worker.terminate();
+          // Reduce controller state
+          setState((prev) => reduceWorkerMessage(prev, msg));
+
+          // Terminal cleanup: terminate worker and clear reference
+          if (
+            msg.type === 'SEARCH_COMPLETE' ||
+            msg.type === 'SEARCH_LIMIT_REACHED' ||
+            msg.type === 'SEARCH_ERROR'
+          ) {
+            if (workerRef.current === workerInstance) {
+              workerInstance.terminate();
+              workerRef.current = null;
+              activeRequestIdRef.current = null;
+            }
+          }
+        };
+
+        // 7. Register error listener
+        workerInstance.onerror = (errorEvent: ErrorEvent): void => {
+          if (!isMountedRef.current) return;
+          if (activeRequestIdRef.current !== requestId) return;
+
+          const errorMsg =
+            errorEvent.message ||
+            'Web Worker execution encountered an unhandled error';
+          setState((prev) => failActiveSearch(prev, requestId, errorMsg));
+
+          if (workerRef.current === workerInstance) {
+            workerInstance.terminate();
             workerRef.current = null;
             activeRequestIdRef.current = null;
           }
-        }
-      };
+        };
 
-      // 7. Register error listener
-      worker.onerror = (errorEvent: ErrorEvent): void => {
-        if (!isMountedRef.current) return;
-        if (activeRequestIdRef.current !== requestId) return;
+        // 8. Post START_SEARCH inbound message
+        const inboundMessage: WorkerInboundMessage = {
+          type: 'START_SEARCH',
+          requestId,
+          algorithm,
+          state: searchState,
+          ...(options !== undefined ? { options } : {}),
+        };
 
-        const errorMsg =
-          errorEvent.message ||
-          'Web Worker execution encountered an unhandled error';
-        setState((prev) => failActiveSearch(prev, requestId, errorMsg));
-
-        if (workerRef.current === worker) {
+        workerInstance.postMessage(inboundMessage);
+      } catch (error) {
+        if (worker !== null) {
           worker.terminate();
-          workerRef.current = null;
-          activeRequestIdRef.current = null;
         }
-      };
+        workerRef.current = null;
+        activeRequestIdRef.current = null;
 
-      // 8. Post START_SEARCH inbound message
-      const inboundMessage: WorkerInboundMessage = {
-        type: 'START_SEARCH',
-        requestId,
-        algorithm,
-        state: searchState,
-        ...(options !== undefined ? { options } : {}),
-      };
-
-      worker.postMessage(inboundMessage);
+        const errorMsg = error instanceof Error ? error.message : String(error);
+        setState((prev) => failActiveSearch(prev, requestId, errorMsg));
+      }
     },
     []
   );
