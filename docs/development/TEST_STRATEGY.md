@@ -280,7 +280,7 @@
 - **Infrastructure Architecture:**
   - Pinned `@playwright/test@1.62.1` devDependency at repository root.
   - Permanent project matrix: `chromium`, `firefox`, and `webkit` (desktop, tablet portrait, mobile portrait, and compact landscape coverage; Chromium also runs the touch-emulation gate).
-  - Test inventory: 53 logical tests (26 Play, 3 M6, 9 Solve, 13 Research, 2 M1) × 3 browser projects = 159 project-test cases: 157 applicable executions and 2 intentional Chromium-only touch skips (Firefox/WebKit). This inventory is not a pass count.
+  - Test inventory: 55 logical tests (26 Play, 3 M6, 11 Solve, 13 Research, 2 M1) × 3 browser projects = 165 project-test cases: 163 applicable executions and 2 intentional Chromium-only touch skips (Firefox/WebKit). This inventory is not a pass count.
   - On GitHub-hosted Linux CI, Firefox E2E runs headed under Xvfb with a CI-only WebGL2 enablement preference. WebKit is verified via Playwright automation; Safari has not been separately verified.
   - Dedicated isolated webServer: `npm run build --workspace=@gearcube/web && npm run preview --workspace=@gearcube/web -- --port 4173 --strictPort --host 127.0.0.1` on `http://127.0.0.1:4173` with `reuseExistingServer: false`. Playwright qualifies the built preview, not the Vite development server.
   - Execution command: `npm run test:e2e` (`playwright test`).

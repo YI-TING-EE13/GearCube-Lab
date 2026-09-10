@@ -484,4 +484,93 @@ test.describe('GearCube Solve Mode & Playback End-to-End Suite', () => {
       }
     }
   });
+
+  test('10. WORKER_CONSTRUCTOR_FAILURE_GATE: synchronous solver Worker construction failure becomes recoverable UI error', async ({ page }) => {
+    await page.addInitScript(() => {
+      class FailingWorker {
+        constructor() {
+          throw new Error('E2E_SOLVER_WORKER_CONSTRUCTOR_FAILURE');
+        }
+      }
+
+      Object.defineProperty(globalThis, 'Worker', {
+        configurable: true,
+        writable: true,
+        value: FailingWorker,
+      });
+    });
+
+    await page.reload();
+    await expect(page.locator('canvas')).toBeVisible();
+
+    await page.getByRole('button', { name: 'Generate scramble' }).click();
+    await expect(page.getByTestId('cube-status')).toHaveText('Cube: Unsolved');
+
+    await page.getByRole('button', { name: 'Solve current state' }).click();
+
+    await expect(page.getByTestId('solver-status')).toContainText('Error');
+    await expect(page.getByTestId('solver-status')).not.toContainText('Searching');
+    await expect(page.locator('.solver-error-box')).toHaveText(
+      'E2E_SOLVER_WORKER_CONSTRUCTOR_FAILURE'
+    );
+    await expect(page.getByRole('button', { name: /Cancel Search/i })).toHaveCount(0);
+    await expect(
+      page.getByRole('button', { name: 'Solve current state' })
+    ).toBeEnabled();
+  });
+
+  test('11. WORKER_POST_MESSAGE_FAILURE_GATE: synchronous solver postMessage failure terminates Worker and restores Solve', async ({ page }) => {
+    await page.addInitScript(() => {
+      Object.defineProperty(globalThis, '__e2eSolverWorkerTerminated', {
+        configurable: true,
+        writable: true,
+        value: false,
+      });
+
+      class FailingPostWorker {
+        postMessage() {
+          throw new Error('E2E_SOLVER_WORKER_POST_MESSAGE_FAILURE');
+        }
+
+        terminate() {
+          (globalThis as typeof globalThis & {
+            __e2eSolverWorkerTerminated?: boolean;
+          }).__e2eSolverWorkerTerminated = true;
+        }
+      }
+
+      Object.defineProperty(globalThis, 'Worker', {
+        configurable: true,
+        writable: true,
+        value: FailingPostWorker,
+      });
+    });
+
+    await page.reload();
+    await expect(page.locator('canvas')).toBeVisible();
+
+    await page.getByRole('button', { name: 'Generate scramble' }).click();
+    await expect(page.getByTestId('cube-status')).toHaveText('Cube: Unsolved');
+
+    await page.getByRole('button', { name: 'Solve current state' }).click();
+
+    await expect(page.getByTestId('solver-status')).toContainText('Error');
+    await expect(page.getByTestId('solver-status')).not.toContainText('Searching');
+    await expect(page.locator('.solver-error-box')).toHaveText(
+      'E2E_SOLVER_WORKER_POST_MESSAGE_FAILURE'
+    );
+    await expect.poll(async () =>
+      page.evaluate(() =>
+        Boolean(
+          (globalThis as typeof globalThis & {
+            __e2eSolverWorkerTerminated?: boolean;
+          }).__e2eSolverWorkerTerminated
+        )
+      )
+    ).toBe(true);
+    await expect(page.getByRole('button', { name: /Cancel Search/i })).toHaveCount(0);
+    await expect(
+      page.getByRole('button', { name: 'Solve current state' })
+    ).toBeEnabled();
+  });
 });

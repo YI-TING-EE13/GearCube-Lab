@@ -36,7 +36,7 @@ main branch push
       ↓
 Verify Workflow (.github/workflows/verify.yml)
       ├─ Workspace verify (typecheck, boundary checks, Vitest 481/481)
-      └─ Parallel Playwright E2E matrix (53 logical tests; 157 applicable executions, 2 intentional skips)
+      └─ Parallel Playwright E2E matrix (55 logical tests; 163 applicable executions, 2 intentional skips)
       ↓ (successful Verify run)
 Deploy GitHub Pages Workflow (.github/workflows/deploy-pages.yml via workflow_run)
       ├─ Checkout exact verified SHA (github.event.workflow_run.head_sha)
@@ -96,13 +96,13 @@ All asset references in `index.html` and worker bundle instantiations resolve be
 
 ### 5.2. Browser Compatibility Baseline
 
-The current Playwright inventory contains 53 logical tests across Chromium, Firefox, and WebKit projects. The Chromium-only touch gate is intentionally skipped in Firefox and WebKit, yielding 159 project cases: 157 applicable executions and 2 intentional skips.
+The current Playwright inventory contains 55 logical tests across Chromium, Firefox, and WebKit projects. The Chromium-only touch gate is intentionally skipped in Firefox and WebKit, yielding 165 project cases: 163 applicable executions and 2 intentional skips.
 
 | Browser project | Applicable executions | Intentional touch skips |
 | :--- | ---: | ---: |
-| Chromium | 53 | 0 |
-| Firefox | 52 | 1 |
-| WebKit | 52 | 1 |
+| Chromium | 55 | 0 |
+| Firefox | 54 | 1 |
+| WebKit | 54 | 1 |
 
 These are inventory counts, not a claim that every run passes. Exact qualification evidence belongs to the corresponding `Verify` workflow run for the tested commit; inspect `verify` and all three browser jobs. See [TEST_STRATEGY.md](../development/TEST_STRATEGY.md) for maintained test coverage.
 
