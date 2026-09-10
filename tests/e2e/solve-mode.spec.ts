@@ -432,9 +432,12 @@ test.describe('GearCube Solve Mode & Playback End-to-End Suite', () => {
     await expect(page.getByTestId('playback-controls')).toBeVisible();
 
     const viewports = [
-      { name: 'desktop', width: 1280, height: 800 },
-      { name: 'tablet', width: 768, height: 1024 },
-      { name: 'mobile', width: 375, height: 667 },
+      { name: 'desktop-wide', width: 1440, height: 900 },
+      { name: 'laptop', width: 1100, height: 800 },
+      { name: 'tablet-landscape', width: 1024, height: 768 },
+      { name: 'tablet-portrait', width: 768, height: 1024 },
+      { name: 'mobile-portrait', width: 375, height: 667 },
+      { name: 'mobile-landscape', width: 667, height: 375 },
     ];
 
     for (const vp of viewports) {
@@ -502,7 +505,7 @@ test.describe('GearCube Solve Mode & Playback End-to-End Suite', () => {
         expect(rectsOverlap(playbackBox, moveBox), `Playback overlaps MoveControls at ${vp.name}`).toBe(false);
       }
 
-      if (vp.name === 'mobile') {
+      if (vp.name === 'mobile-portrait') {
         const challengeToggle = challengeRegion.locator('.challenge-collapse-toggle');
         await expect(challengeToggle).toBeVisible();
         await expect(challengeToggle).toHaveAttribute('aria-expanded', 'true');
@@ -517,12 +520,15 @@ test.describe('GearCube Solve Mode & Playback End-to-End Suite', () => {
         await expect(challengeRegion.getByRole('button', { name: 'Generate Normal challenge' })).toBeVisible();
 
         const orientationDisclosure = page.locator('.orientation-disclosure');
-        const orientationSummary = orientationDisclosure.locator('summary');
-        await expect(orientationDisclosure).toHaveAttribute('open', '');
-        await orientationSummary.click();
-        await expect(orientationDisclosure).not.toHaveAttribute('open');
+        const orientationToggle = orientationDisclosure.getByRole('button', { name: /orientation guidance/i });
+        await expect(orientationToggle).toHaveAttribute('aria-expanded', 'true');
+        await expect(orientationToggle).toHaveAttribute('aria-controls', 'orientation-guidance-content');
+        await orientationToggle.focus();
+        await page.keyboard.press('Enter');
+        await expect(orientationToggle).toHaveAttribute('aria-expanded', 'false');
         await expect(page.getByTestId('orientation-legend')).toBeHidden();
-        await orientationSummary.click();
+        await orientationToggle.press('Space');
+        await expect(orientationToggle).toHaveAttribute('aria-expanded', 'true');
         await expect(page.getByTestId('orientation-legend')).toBeVisible();
       }
     }

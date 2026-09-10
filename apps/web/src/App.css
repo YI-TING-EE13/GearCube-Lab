@@ -785,6 +785,15 @@ body,
 
 .orientation-disclosure-summary {
   display: none;
+  width: 100%;
+  box-sizing: border-box;
+  font: inherit;
+  text-align: left;
+  background: transparent;
+}
+
+.orientation-disclosure-content[hidden] {
+  display: none;
 }
 
 /* Right Overlay Cluster (Solve Panel & Playback Controls) Base */
@@ -1999,22 +2008,17 @@ body,
     letter-spacing: 0.6px;
     text-transform: uppercase;
     cursor: pointer;
-    list-style: none;
+    background: rgba(255, 255, 255, 0.04);
   }
 
-  .orientation-disclosure-summary::-webkit-details-marker {
-    display: none;
+  .orientation-disclosure-summary:hover {
+    background: rgba(255, 255, 255, 0.1);
   }
 
-  .orientation-disclosure-summary::after {
-    content: '+';
+  .orientation-disclosure-indicator {
     color: #d4d4d8;
     font-size: 16px;
     line-height: 1;
-  }
-
-  .orientation-disclosure[open] > .orientation-disclosure-summary::after {
-    content: '−';
   }
 
   .orientation-disclosure-summary:focus-visible {

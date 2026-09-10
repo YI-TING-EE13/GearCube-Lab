@@ -88,6 +88,20 @@ test.describe('M6 Play orientation and certified challenge UX', () => {
       await expect(page.getByRole('region', { name: 'Orientation legend' })).toBeVisible();
       await expect(page.getByRole('button', { name: /^R Clockwise/ })).toBeVisible();
 
+      const orientationDisclosure = page.locator('.orientation-disclosure');
+      const orientationToggle = orientationDisclosure.getByRole('button', { name: /orientation guidance/i });
+      await expect(orientationToggle).toHaveAttribute('aria-expanded', 'true');
+      await expect(orientationToggle).toHaveAttribute('aria-controls', 'orientation-guidance-content');
+      await orientationToggle.focus();
+      await page.keyboard.press('Enter');
+      await expect(orientationToggle).toHaveAttribute('aria-expanded', 'false');
+      await expect(page.getByTestId('orientation-legend')).toBeHidden();
+      await page.getByRole('button', { name: /^R Clockwise/ }).click();
+      await page.waitForTimeout(450);
+      await expect(orientationToggle).toHaveAttribute('aria-expanded', 'false');
+      await orientationToggle.press('Space');
+      await expect(orientationToggle).toHaveAttribute('aria-expanded', 'true');
+
       const widths = await page.evaluate(() => ({
         viewport: window.innerWidth,
         document: document.documentElement.scrollWidth,
