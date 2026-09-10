@@ -72,7 +72,19 @@ test.describe('M6 Play orientation and certified challenge UX', () => {
 
     test('keeps challenge controls, legend, and face actions reachable without horizontal overflow', async ({ page }) => {
       await expect(page.getByTestId('play-controls-toggle')).toHaveAttribute('aria-expanded', 'true');
-      await expect(page.getByRole('region', { name: 'Certified Challenge Controls' })).toBeVisible();
+      const challenge = page.getByRole('region', { name: 'Certified Challenge Controls' });
+      await expect(challenge).toBeVisible();
+      const challengeExpand = challenge.getByRole('button', { name: 'Expand certified challenge controls' });
+      await expect(challengeExpand).toBeVisible();
+      await expect(challenge.getByTestId('challenge-status')).toBeHidden();
+      await challengeExpand.click();
+      await expect(challenge.getByTestId('challenge-status')).toBeVisible();
+      await expect(challenge.getByRole('button', { name: 'Generate Normal challenge' })).toBeEnabled();
+      const challengeCollapse = challenge.getByRole('button', { name: 'Collapse certified challenge controls' });
+      await challengeCollapse.click();
+      await expect(challenge.getByTestId('challenge-status')).toBeHidden();
+      await challenge.getByRole('button', { name: 'Expand certified challenge controls' }).click();
+
       await expect(page.getByRole('region', { name: 'Orientation legend' })).toBeVisible();
       await expect(page.getByRole('button', { name: /^R Clockwise/ })).toBeVisible();
 

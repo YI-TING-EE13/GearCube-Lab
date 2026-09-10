@@ -491,6 +491,7 @@ body,
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
   color: #f0f0f2;
   user-select: none;
+  box-sizing: border-box;
 }
 
 .challenge-header,
@@ -506,6 +507,13 @@ body,
   margin-bottom: 8px;
 }
 
+.challenge-heading {
+  display: flex;
+  align-items: baseline;
+  min-width: 0;
+  gap: 8px;
+}
+
 .challenge-title {
   margin: 0;
   color: #a0a0aa;
@@ -513,6 +521,39 @@ body,
   font-weight: 700;
   letter-spacing: 0.6px;
   text-transform: uppercase;
+}
+
+.challenge-collapse-toggle {
+  flex: 0 0 auto;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.06);
+  color: #e4e4e7;
+  font-size: 17px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.challenge-collapse-toggle:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.16);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.challenge-collapse-toggle:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.challenge-collapse-toggle:focus-visible {
+  outline: 2px solid #60a5fa;
+  outline-offset: 2px;
+}
+
+.challenge-panel-content[hidden] {
+  display: none;
 }
 
 .challenge-seed-note,
@@ -604,6 +645,60 @@ body,
   text-overflow: ellipsis;
 }
 
+/* Reserve the right-side solver column before positioning the desktop overlays. */
+@media (min-width: 1025px) {
+  .top-overlay-bar {
+    right: 292px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(300px, 330px);
+    align-items: start;
+    gap: 16px;
+  }
+
+  .top-overlay-bar > .history-controls-panel {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .top-overlay-bar > .scramble-panel {
+    grid-column: 1;
+    grid-row: 2;
+    width: 100%;
+    max-width: none;
+    box-sizing: border-box;
+  }
+
+  .top-overlay-bar > .challenge-panel {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    width: 100%;
+    min-width: 0;
+    max-width: none;
+  }
+}
+
+@media (min-width: 1280px) {
+  .top-overlay-bar {
+    grid-template-columns: auto minmax(300px, 1fr) minmax(300px, 330px);
+  }
+
+  .top-overlay-bar > .history-controls-panel {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .top-overlay-bar > .scramble-panel {
+    grid-column: 2;
+    grid-row: 1;
+    max-width: 320px;
+  }
+
+  .top-overlay-bar > .challenge-panel {
+    grid-column: 3;
+    grid-row: 1;
+  }
+}
+
 /* Timeline Scrubber Panel */
 .timeline-scrubber-panel {
   position: absolute;
@@ -684,6 +779,14 @@ body,
   cursor: not-allowed;
 }
 
+.orientation-disclosure {
+  width: 100%;
+}
+
+.orientation-disclosure-summary {
+  display: none;
+}
+
 /* Right Overlay Cluster (Solve Panel & Playback Controls) Base */
 .right-overlay-cluster {
   position: absolute;
@@ -756,6 +859,7 @@ body,
   display: flex;
   flex-direction: column;
   gap: 4px;
+  min-width: 0;
 }
 
 .solver-label {
@@ -765,6 +869,8 @@ body,
 }
 
 .solver-select {
+  width: 100%;
+  box-sizing: border-box;
   background: rgba(255, 255, 255, 0.08);
   border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 6px;
@@ -772,6 +878,13 @@ body,
   padding: 5px 8px;
   font-size: 12px;
   outline: none;
+  color-scheme: dark;
+}
+
+.solver-select option {
+  padding: 6px 8px;
+  background: #202024;
+  color: #ffffff;
 }
 
 .solver-select:focus {
@@ -1820,6 +1933,19 @@ body,
     align-items: stretch;
     gap: 8px;
     pointer-events: auto;
+    order: 2;
+  }
+
+  .play-controls-drawer-content > .right-overlay-cluster {
+    order: 1;
+  }
+
+  .play-controls-drawer-content > .timeline-scrubber-panel {
+    order: 3;
+  }
+
+  .play-controls-drawer-content > .move-controls-overlay {
+    order: 4;
   }
 
   .play-controls-drawer-content .challenge-panel {
@@ -1857,6 +1983,43 @@ body,
   .play-controls-drawer-content .move-controls-panel {
     width: 100%;
     box-sizing: border-box;
+  }
+
+  .orientation-disclosure-summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 28px;
+    padding: 4px 6px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    color: #a5b4fc;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .orientation-disclosure-summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .orientation-disclosure-summary::after {
+    content: '+';
+    color: #d4d4d8;
+    font-size: 16px;
+    line-height: 1;
+  }
+
+  .orientation-disclosure[open] > .orientation-disclosure-summary::after {
+    content: '−';
+  }
+
+  .orientation-disclosure-summary:focus-visible {
+    outline: 2px solid #60a5fa;
+    outline-offset: 2px;
   }
 
   .play-controls-drawer-content .faces-grid {

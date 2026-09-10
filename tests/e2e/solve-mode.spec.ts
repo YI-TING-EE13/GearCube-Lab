@@ -39,19 +39,30 @@ test.describe('GearCube Solve Mode & Playback End-to-End Suite', () => {
     expect(errors, `Expected 0 unhandled errors, got:\n${errors.join('\n')}`).toEqual([]);
   });
 
-  test('1. E2E_SOLVE_UI_FLOW: solver controls render with default algorithm IDA* and clean initial state', async ({ page }) => {
+  test('1. E2E_SOLVE_UI_FLOW: solver controls render with visible algorithm choices and clean initial state', async ({ page }) => {
     const solverRegion = page.getByRole('region', { name: 'Solver Controls' });
     await expect(solverRegion).toBeVisible();
 
     const algoSelect = page.getByLabel('Solver Algorithm');
     await expect(algoSelect).toBeVisible();
     await expect(algoSelect).toHaveValue('IDA_STAR');
-    await expect(algoSelect.locator('option')).toHaveText([
-      'IDA* (Recommended)',
-      'A* (H2 heuristic)',
-      'Bidirectional BFS',
-      'Breadth-First Search (BFS)',
-    ]);
+    await expect(algoSelect).toHaveAttribute('size', '4');
+
+    const algorithmOptions = [
+      { value: 'IDA_STAR', label: 'IDA* (Recommended)' },
+      { value: 'A_STAR', label: 'A* (H2 heuristic)' },
+      { value: 'BIDIRECTIONAL_BFS', label: 'Bidirectional BFS' },
+      { value: 'BFS', label: 'Breadth-First Search (BFS)' },
+    ] as const;
+
+    await expect(algoSelect.locator('option')).toHaveCount(algorithmOptions.length);
+    for (const option of algorithmOptions) {
+      const optionLocator = algoSelect.locator(`option[value="${option.value}"]`);
+      await expect(optionLocator).toBeVisible();
+      await expect(optionLocator).toHaveText(option.label);
+      await algoSelect.selectOption(option.value);
+      await expect(algoSelect).toHaveValue(option.value);
+    }
 
     const solveBtn = page.getByRole('button', { name: 'Solve current state' });
     await expect(solveBtn).toBeVisible();
@@ -433,6 +444,7 @@ test.describe('GearCube Solve Mode & Playback End-to-End Suite', () => {
       // Verify all 6 regions are visible
       const solverRegion = page.getByRole('region', { name: 'Solver Controls' });
       const playbackRegion = page.getByRole('region', { name: 'Solution Playback' });
+      const challengeRegion = page.getByRole('region', { name: 'Certified Challenge Controls' });
       const historyGroup = page.getByRole('group', { name: 'History Controls' });
       const scrambleRegion = page.getByRole('region', { name: 'Scramble Controls' });
       const timelineRegion = page.getByRole('region', { name: 'Move History Timeline' });
@@ -440,6 +452,7 @@ test.describe('GearCube Solve Mode & Playback End-to-End Suite', () => {
 
       await expect(solverRegion).toBeVisible();
       await expect(playbackRegion).toBeVisible();
+      await expect(challengeRegion).toBeVisible();
       await expect(historyGroup).toBeVisible();
       await expect(scrambleRegion).toBeVisible();
       await expect(timelineRegion).toBeVisible();
@@ -454,6 +467,7 @@ test.describe('GearCube Solve Mode & Playback End-to-End Suite', () => {
       // Check bounding box overlaps
       const solverBox = await solverRegion.boundingBox();
       const playbackBox = await playbackRegion.boundingBox();
+      const challengeBox = await challengeRegion.boundingBox();
       const historyBox = await historyGroup.boundingBox();
       const scrambleBox = await scrambleRegion.boundingBox();
       const timelineBox = await timelineRegion.boundingBox();
@@ -461,12 +475,17 @@ test.describe('GearCube Solve Mode & Playback End-to-End Suite', () => {
 
       expect(solverBox, `solverBox missing at ${vp.name}`).not.toBeNull();
       expect(playbackBox, `playbackBox missing at ${vp.name}`).not.toBeNull();
+      expect(challengeBox, `challengeBox missing at ${vp.name}`).not.toBeNull();
       expect(historyBox, `historyBox missing at ${vp.name}`).not.toBeNull();
       expect(scrambleBox, `scrambleBox missing at ${vp.name}`).not.toBeNull();
       expect(timelineBox, `timelineBox missing at ${vp.name}`).not.toBeNull();
       expect(moveBox, `moveBox missing at ${vp.name}`).not.toBeNull();
 
-      if (solverBox && playbackBox && historyBox && scrambleBox && timelineBox && moveBox) {
+      if (solverBox && playbackBox && challengeBox && historyBox && scrambleBox && timelineBox && moveBox) {
+        // Challenge and Solver occupy separate desktop columns and stack in the drawer.
+        expect(rectsOverlap(solverBox, challengeBox), `Solver overlaps Challenge at ${vp.name}`).toBe(false);
+        expect(rectsOverlap(playbackBox, challengeBox), `Playback overlaps Challenge at ${vp.name}`).toBe(false);
+
         // Solver and Playback do not overlap each other
         expect(rectsOverlap(solverBox, playbackBox), `Solver overlaps Playback at ${vp.name}`).toBe(false);
 
@@ -481,6 +500,30 @@ test.describe('GearCube Solve Mode & Playback End-to-End Suite', () => {
         expect(rectsOverlap(playbackBox, scrambleBox), `Playback overlaps Scramble at ${vp.name}`).toBe(false);
         expect(rectsOverlap(playbackBox, timelineBox), `Playback overlaps Timeline at ${vp.name}`).toBe(false);
         expect(rectsOverlap(playbackBox, moveBox), `Playback overlaps MoveControls at ${vp.name}`).toBe(false);
+      }
+
+      if (vp.name === 'mobile') {
+        const challengeToggle = challengeRegion.locator('.challenge-collapse-toggle');
+        await expect(challengeToggle).toBeVisible();
+        await expect(challengeToggle).toHaveAttribute('aria-expanded', 'true');
+        await challengeToggle.click();
+        await expect(challengeToggle).toHaveAttribute('aria-expanded', 'false');
+        await expect(challengeRegion.getByRole('button', { name: 'Generate Normal challenge' })).toBeHidden();
+
+        const challengeExpand = challengeRegion.locator('.challenge-collapse-toggle');
+        await expect(challengeExpand).toHaveAttribute('aria-label', 'Expand certified challenge controls');
+        await challengeExpand.click();
+        await expect(challengeExpand).toHaveAttribute('aria-expanded', 'true');
+        await expect(challengeRegion.getByRole('button', { name: 'Generate Normal challenge' })).toBeVisible();
+
+        const orientationDisclosure = page.locator('.orientation-disclosure');
+        const orientationSummary = orientationDisclosure.locator('summary');
+        await expect(orientationDisclosure).toHaveAttribute('open', '');
+        await orientationSummary.click();
+        await expect(orientationDisclosure).not.toHaveAttribute('open');
+        await expect(page.getByTestId('orientation-legend')).toBeHidden();
+        await orientationSummary.click();
+        await expect(page.getByTestId('orientation-legend')).toBeVisible();
       }
     }
   });

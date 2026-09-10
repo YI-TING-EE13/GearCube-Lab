@@ -140,7 +140,10 @@ export const MoveControls: React.FC<MoveControlsProps> = React.memo(
         onPointerDown={(e) => e.stopPropagation()}
       >
         <div className={`move-controls-panel ${isLocked ? 'panel-half-turn-locked' : ''}`}>
-          <OrientationLegend />
+          <details className="orientation-disclosure" open>
+            <summary className="orientation-disclosure-summary">Orientation guidance</summary>
+            <OrientationLegend />
+          </details>
           <div className="move-controls-header">
             <div className="header-title-row">
               <span className="panel-title">Face Controls</span>
