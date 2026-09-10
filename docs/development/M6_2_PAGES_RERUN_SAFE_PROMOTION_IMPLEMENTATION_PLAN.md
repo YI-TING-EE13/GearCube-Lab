@@ -1,7 +1,8 @@
 # M6.2 — Rerun-Safe GitHub Pages Promotion
 
-> **Document Status:** `IMPLEMENTATION PLAN / CURRENT`
+> **Document Status:** `HISTORICAL / ACCEPTED`
 > **Scope:** CI and GitHub Pages deployment governance only; no product behavior.
+> **Acceptance Record:** [`M6_2_ACCEPTANCE_RECORD.md`](M6_2_ACCEPTANCE_RECORD.md)
 
 ## Incident
 
@@ -31,7 +32,7 @@ The workflow continues to check out `github.event.workflow_run.head_sha` and com
 1. Run the focused `Pages Promotion Governance Gate` in `tests/boundary.test.ts` to verify the structural contract.
 2. Run `git diff --check` and `npm run verify` in the supported Node.js 22 environment.
 3. Qualify the exact pull-request head with `verify`, `e2e (chromium)`, `e2e (firefox)`, and `e2e (webkit)`.
-4. Record static contract evidence as `STATIC_CONTRACT_VERIFIED`. Hosted rerun promotion remains `HOSTED_OPERATIONAL_BEHAVIOR_PENDING` until an independently authorized post-merge sequence observes it.
+4. Record static contract evidence as `STATIC_CONTRACT_VERIFIED`. At implementation-plan time, hosted operational behavior remained pending. It was subsequently verified post-merge; see [`M6_2_ACCEPTANCE_RECORD.md`](M6_2_ACCEPTANCE_RECORD.md).
 
 ## Operational post-merge acceptance
 

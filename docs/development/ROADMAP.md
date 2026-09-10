@@ -1,8 +1,8 @@
 # ROADMAP.md — Project Lifecycle & Dependency-Ordered Milestones
 
-> **Current Milestone:** `M6.1 — Classical Solver Portfolio Expansion (Completed & Accepted)`
+> **Current Milestone:** `None — M6.2 completed and accepted`
+> **Previous Milestone:** `M6.2 — Rerun-Safe GitHub Pages Promotion (Completed & Accepted)`
 > **Next Milestone:** `No active milestone; Phase 6 and Phase 7 remain deferred optional tracks`
-> **Previous Milestone:** `Phase 9 — GitHub Pages Deployment & Public Hosting (Completed & Accepted)`
 > **Deferred Tracks:** `Phase 6 (Neural AI Search)` & `Phase 7 (Physical Model & Vision Expansion)` (Deferred / Optional Tracks)
 > **Current Verification Inventory:** 40 Vitest files / 481 tests; 53 logical Playwright tests, 159 project-test cases, 157 applicable executions, and 2 intentional skips. See [`TEST_STRATEGY.md`](TEST_STRATEGY.md) for the maintained inventory; milestone counts below are historical as-of snapshots.
 
@@ -93,6 +93,12 @@
       ├─ Optimal graph-search A* with the shared H2 heuristic
       ├─ Existing Solver Worker, Play, and Research integration
       └─ Cross-solver correctness and hosted browser qualification
+
+[ M6.2: Rerun-Safe GitHub Pages Promotion ]
+(COMPLETED & ACCEPTED)
+      ├─ Successful main-push Verify reruns remain Pages-eligible
+      ├─ Exact-current-main stale deployment protection retained
+      └─ Hosted dependency-install isolation qualified without weakening E2E
     ```
 
 ---
