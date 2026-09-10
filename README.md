@@ -84,6 +84,7 @@ The **Play** workspace is the default interactive puzzle environment.
 - **Responsive Controls:**
   - On tablet and phone-sized viewports, use the controls toggle in the upper-right corner to open or stow the Play controls.
   - When stowed, the HTML control layer is removed from the hit-test path so the canvas remains available for orbit and zoom gestures; when open, the controls are stacked in a scrollable drawer for short screens.
+  - On compact screens, the Certified Challenge and Orientation guidance sections provide keyboard-accessible collapse toggles; the Solver algorithm list, status, and Solve/Cancel controls remain available in the drawer.
 - **Scramble & History:**
   - Enter any string into the **Seed** field and click **Scramble** to apply a deterministic scramble sequence.
   - Use **Undo**, **Redo**, or **Reset Baseline** in the top bar to navigate history, or click directly on any step in the timeline scrubber.
@@ -103,7 +104,7 @@ GearCube Lab has two workspace modes: **Play** and **Research**. The **Solver** 
   - **Breadth-First Search (BFS):** Baseline exhaustive shortest-path graph search.
 - **Solving Workflow:**
   1. Manipulate or scramble the cube to an unsolved state.
-  2. Select your desired algorithm from the dropdown.
+  2. Select your desired algorithm from the visible algorithm list.
   3. Click **Solve**. Search executes inside a dedicated background Web Worker, keeping the 3D viewport responsive.
   4. During search, the Solver panel reports nodes expanded, generated, and elapsed time; A* telemetry also shows the best open-set $f$ value and open-set size, while IDA* telemetry shows the current depth threshold when available.
 - **Solution Playback:**

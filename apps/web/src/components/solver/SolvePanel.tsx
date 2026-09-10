@@ -54,6 +54,7 @@ export const SolvePanel: React.FC<SolvePanelProps> = ({
           id="solver-algorithm-select"
           className="solver-select"
           value={selectedAlgorithm}
+          size={4}
           onChange={(e) => onSelectAlgorithm(e.target.value as SolverAlgorithm)}
           disabled={isSearching}
           aria-label="Solver Algorithm"

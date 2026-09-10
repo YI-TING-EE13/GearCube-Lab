@@ -126,6 +126,7 @@ export const MoveControls: React.FC<MoveControlsProps> = React.memo(
   }) => {
     const isLocked = stagedMove?.phase === 'HALF_TURN_LOCKED';
     const isDirect180 = interactionMode === 'DIRECT_180';
+    const [isOrientationExpanded, setIsOrientationExpanded] = React.useState(true);
 
     const handleToggleMode = (e: React.MouseEvent) => {
       e.stopPropagation();
@@ -140,7 +141,29 @@ export const MoveControls: React.FC<MoveControlsProps> = React.memo(
         onPointerDown={(e) => e.stopPropagation()}
       >
         <div className={`move-controls-panel ${isLocked ? 'panel-half-turn-locked' : ''}`}>
-          <OrientationLegend />
+          <div className="orientation-disclosure">
+            <button
+              type="button"
+              className="orientation-disclosure-summary"
+              aria-expanded={isOrientationExpanded}
+              aria-controls="orientation-guidance-content"
+              aria-label={`${isOrientationExpanded ? 'Collapse' : 'Expand'} orientation guidance`}
+              title={`${isOrientationExpanded ? 'Collapse' : 'Expand'} orientation guidance`}
+              onClick={() => setIsOrientationExpanded((expanded) => !expanded)}
+            >
+              <span>Orientation guidance</span>
+              <span className="orientation-disclosure-indicator" aria-hidden="true">
+                {isOrientationExpanded ? '−' : '+'}
+              </span>
+            </button>
+            <div
+              id="orientation-guidance-content"
+              className="orientation-disclosure-content"
+              hidden={!isOrientationExpanded}
+            >
+              <OrientationLegend />
+            </div>
+          </div>
           <div className="move-controls-header">
             <div className="header-title-row">
               <span className="panel-title">Face Controls</span>

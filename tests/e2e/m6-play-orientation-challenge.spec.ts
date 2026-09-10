@@ -72,9 +72,35 @@ test.describe('M6 Play orientation and certified challenge UX', () => {
 
     test('keeps challenge controls, legend, and face actions reachable without horizontal overflow', async ({ page }) => {
       await expect(page.getByTestId('play-controls-toggle')).toHaveAttribute('aria-expanded', 'true');
-      await expect(page.getByRole('region', { name: 'Certified Challenge Controls' })).toBeVisible();
+      const challenge = page.getByRole('region', { name: 'Certified Challenge Controls' });
+      await expect(challenge).toBeVisible();
+      const challengeExpand = challenge.getByRole('button', { name: 'Expand certified challenge controls' });
+      await expect(challengeExpand).toBeVisible();
+      await expect(challenge.getByTestId('challenge-status')).toBeHidden();
+      await challengeExpand.click();
+      await expect(challenge.getByTestId('challenge-status')).toBeVisible();
+      await expect(challenge.getByRole('button', { name: 'Generate Normal challenge' })).toBeEnabled();
+      const challengeCollapse = challenge.getByRole('button', { name: 'Collapse certified challenge controls' });
+      await challengeCollapse.click();
+      await expect(challenge.getByTestId('challenge-status')).toBeHidden();
+      await challenge.getByRole('button', { name: 'Expand certified challenge controls' }).click();
+
       await expect(page.getByRole('region', { name: 'Orientation legend' })).toBeVisible();
       await expect(page.getByRole('button', { name: /^R Clockwise/ })).toBeVisible();
+
+      const orientationDisclosure = page.locator('.orientation-disclosure');
+      const orientationToggle = orientationDisclosure.getByRole('button', { name: /orientation guidance/i });
+      await expect(orientationToggle).toHaveAttribute('aria-expanded', 'true');
+      await expect(orientationToggle).toHaveAttribute('aria-controls', 'orientation-guidance-content');
+      await orientationToggle.focus();
+      await page.keyboard.press('Enter');
+      await expect(orientationToggle).toHaveAttribute('aria-expanded', 'false');
+      await expect(page.getByTestId('orientation-legend')).toBeHidden();
+      await page.getByRole('button', { name: /^R Clockwise/ }).click();
+      await page.waitForTimeout(450);
+      await expect(orientationToggle).toHaveAttribute('aria-expanded', 'false');
+      await orientationToggle.press('Space');
+      await expect(orientationToggle).toHaveAttribute('aria-expanded', 'true');
 
       const widths = await page.evaluate(() => ({
         viewport: window.innerWidth,
