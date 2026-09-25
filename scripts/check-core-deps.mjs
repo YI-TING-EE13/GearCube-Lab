@@ -107,9 +107,13 @@ export function tokenize(source) {
           i += 2;
           let braceDepth = 1;
           while (i < len && braceDepth > 0) {
-            if (source[i] === '{') braceDepth++;
-            else if (source[i] === '}') braceDepth--;
-            else if (source[i] === "'" || source[i] === '"' || source[i] === '`') {
+            if (source[i] === '{') {
+              braceDepth++;
+              i++;
+            } else if (source[i] === '}') {
+              braceDepth--;
+              i++;
+            } else if (source[i] === "'" || source[i] === '"' || source[i] === '`') {
               const quote = source[i];
               i++;
               while (i < len && source[i] !== quote) {

@@ -133,6 +133,7 @@ export const GearCubeViewport: React.FC = () => {
     state: challengeState,
     startChallenge,
     cancelChallenge,
+    resetChallenge,
   } = useChallengeGenerator(handleChallengeAccepted);
   const isChallengeGenerating = challengeState.status === 'ACTIVE';
 
@@ -228,12 +229,13 @@ export const GearCubeViewport: React.FC = () => {
   );
 
   const handleScramble = useCallback(() => {
-    if (workspaceMode !== 'PLAY' || isChallengeGenerating) return;
+    if (workspaceMode !== 'PLAY' || isChallengeGenerating || !isSessionIdle(app.session)) return;
     solverAcceptanceTokenRef.current = null;
     cancelSearch();
     setPlaybackMetadata(null);
+    resetChallenge();
     setApp((prev) => applyScrambleToPlay(prev, seed));
-  }, [workspaceMode, isChallengeGenerating, cancelSearch, seed]);
+  }, [workspaceMode, isChallengeGenerating, app.session, cancelSearch, resetChallenge, seed]);
 
   const handleStartChallenge = useCallback(() => {
     if (

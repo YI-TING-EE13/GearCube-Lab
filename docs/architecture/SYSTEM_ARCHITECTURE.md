@@ -120,6 +120,7 @@ graph TD
 - **Candidate construction:** `challenge.ts` derives a deterministic attempt seed from `(base seed, difficulty, attempt index)`, applies a bounded scramble to `SOLVED_GEAR_CUBE_STATE` and `DEFAULT_SPATIAL_FRAME`, and retains the candidate state/frame for certification.
 - **Certification:** `useChallengeGenerator.ts` owns one fresh `solver.worker.ts` per attempt and sends `IDA_STAR`. `challenge-controller.ts` accepts only an integer depth inside the requested `2..4 / 5..6 / 7..8` band, retries out-of-band results up to 64 attempts, and excludes `moves` from `CertifiedChallenge`.
 - **Play installation:** `applyCertifiedChallengeToPlay` is an application-layer transition that requires an idle session, materializes the accepted state/frame, and creates empty history at that challenge baseline. Regular `applyScrambleToPlay` remains current-relative and is unchanged.
+- **Certification ownership:** The accepted challenge status describes the current Play baseline. An ordinary Scramble that installs a new baseline resets the challenge state; switching workspaces or manually progressing within the same baseline preserves it.
 - **Boundary:** M6 adds no Core, Kinematics, solver algorithm, protocol schema, dependency, or Research Mode changes; cancellation, workspace switching, unmount, generation identity, and Worker request identity prevent stale installation.
 
 ### 3.5. Pure Solver Engine (`packages/solvers` — Phase 4 Accepted Baseline; M6.1 Accepted Extension)

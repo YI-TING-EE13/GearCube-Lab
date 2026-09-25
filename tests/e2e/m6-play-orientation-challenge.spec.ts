@@ -67,6 +67,84 @@ test.describe('M6 Play orientation and certified challenge UX', () => {
     );
   });
 
+  test('CERTIFICATION_RESET_GATE: ordinary scramble clears stale challenge certification and leaves Solve usable', async ({ page }) => {
+    const challenge = page.getByRole('region', { name: 'Certified Challenge Controls' });
+    const status = challenge.getByTestId('challenge-status');
+    const easy = challenge.getByRole('button', { name: 'Challenge difficulty Easy' });
+    await easy.click();
+    await challenge.getByRole('button', { name: 'Generate Easy challenge' }).click();
+    await expect(status).toHaveText(/Easy challenge · Optimal distance: \d+ moves/, {
+      timeout: 10_000,
+    });
+
+    await page.getByLabel('Scramble seed').fill('review_f2_reset');
+    await page.getByRole('button', { name: 'Generate scramble' }).click();
+
+    await expect(status).toHaveText('No certified challenge selected.');
+    await expect(status).not.toContainText(/Easy challenge|Optimal distance/);
+    await expect(page.getByRole('button', { name: 'Timeline start baseline' })).toHaveAttribute(
+      'aria-current',
+      'step'
+    );
+    await expect(page.getByRole('region', { name: 'Move History Timeline' })).toContainText('0 / 0');
+    await expect(page.getByRole('button', { name: /Step 1:/ })).toHaveCount(0);
+    await expect(page.getByRole('button', { name: 'Solve current state' })).toBeEnabled();
+
+    await page.getByRole('button', { name: 'Solve current state' }).click();
+    await expect(page.getByTestId('solver-status')).toContainText('Solved', { timeout: 15_000 });
+
+    await challenge.getByRole('button', { name: 'Generate Easy challenge' }).click();
+    await expect(status).toHaveText(/Easy challenge · Optimal distance: \d+ moves/, {
+      timeout: 10_000,
+    });
+  });
+
+  test('ORIENTATION_RESIZE_RECOVERY_GATE: desktop entry restores a disclosure collapsed in compact layout', async ({ page }) => {
+    const compact = { width: 768, height: 1024 };
+    const desktop = { width: 1280, height: 800 };
+    await page.setViewportSize(compact);
+    await page.reload();
+
+    const orientationToggle = page.locator('.orientation-disclosure-summary');
+    const legend = page.getByRole('region', { name: 'Orientation legend' });
+    await expect(page.getByTestId('play-controls-drawer')).toHaveAttribute('data-open', 'true');
+    await expect(orientationToggle).toHaveAttribute('aria-expanded', 'true');
+    await orientationToggle.focus();
+    await page.keyboard.press('Enter');
+    await expect(orientationToggle).toHaveAttribute('aria-expanded', 'false');
+    await expect(legend).toBeHidden();
+
+    await page.setViewportSize(desktop);
+    await expect(legend).toBeVisible();
+    await expect(orientationToggle).toHaveAttribute('aria-controls', 'orientation-guidance-content');
+    const desktopWidths = await page.evaluate(() => ({
+      viewport: window.innerWidth,
+      document: document.documentElement.scrollWidth,
+      body: document.body.scrollWidth,
+    }));
+    expect(desktopWidths.document).toBeLessThanOrEqual(desktopWidths.viewport);
+    expect(desktopWidths.body).toBeLessThanOrEqual(desktopWidths.viewport);
+
+    await page.setViewportSize(compact);
+    await expect(orientationToggle).toBeVisible();
+    await expect(orientationToggle).toHaveAttribute('aria-expanded', 'true');
+    await orientationToggle.focus();
+    await page.keyboard.press('Enter');
+    await expect(legend).toBeHidden();
+    await orientationToggle.press('Space');
+    await expect(orientationToggle).toHaveAttribute('aria-expanded', 'true');
+    await expect(legend).toBeVisible();
+    await expect(page.getByRole('button', { name: /^R Clockwise/ })).toBeVisible();
+
+    const compactWidths = await page.evaluate(() => ({
+      viewport: window.innerWidth,
+      document: document.documentElement.scrollWidth,
+      body: document.body.scrollWidth,
+    }));
+    expect(compactWidths.document).toBeLessThanOrEqual(compactWidths.viewport);
+    expect(compactWidths.body).toBeLessThanOrEqual(compactWidths.viewport);
+  });
+
   test.describe('RESPONSIVE_ORIENTATION_CHALLENGE_GATE', () => {
     test.use({ viewport: { width: 375, height: 667 } });
 

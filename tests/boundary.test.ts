@@ -1,13 +1,22 @@
 import { describe, it, expect } from 'vitest';
+import { spawnSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 import { builtinModules } from 'node:module';
+import { pathToFileURL } from 'node:url';
 import * as coreBootstrap from '@gearcube/core';
 import { extractModuleSpecifiers, checkCorePurity, PROHIBITED_MODULE_PATTERNS } from '../scripts/check-core-deps.mjs';
 
 void coreBootstrap;
 
 describe('Phase 1A Infrastructure & Package Boundary Gate', () => {
+  it('includes repository-owned TSX component tests in normal Vitest discovery', () => {
+    const configPath = path.resolve(process.cwd(), 'vitest.config.ts');
+    const content = fs.readFileSync(configPath, 'utf8');
+
+    expect(content).toContain("'apps/*/src/**/*.test.tsx'");
+  });
+
   it('resolves @gearcube/core via package-name import without alias', async () => {
     const core = await import('@gearcube/core');
     expect(core).toBeDefined();
@@ -109,6 +118,33 @@ describe('Phase 1A Infrastructure & Package Boundary Gate', () => {
     it('ignores import/export-like text inside template literals', () => {
       expect(extractModuleSpecifiers('const text = `import React from "react"`;')).toEqual([]);
       expect(extractModuleSpecifiers('const text = `export * from "three"`;')).toEqual([]);
+    });
+
+    it('terminates on nested template interpolation and still extracts following imports and exports', () => {
+      const scannerUrl = pathToFileURL(
+        path.resolve(process.cwd(), 'scripts/check-core-deps.mjs')
+      ).href;
+      const source = [
+        'const object = `${JSON.stringify({ value: 1 })}`;',
+        'const nested = `${(() => { const inner = { brace: "}" }; return inner; })()}`;',
+        'const plain = `ignore { import "not-a-module" }`;',
+        "import 'react';",
+        "export * from 'three';",
+      ].join('\n');
+      const childScript = [
+        `import { extractModuleSpecifiers } from ${JSON.stringify(scannerUrl)};`,
+        `const source = ${JSON.stringify(source)};`,
+        'process.stdout.write(JSON.stringify(extractModuleSpecifiers(source)));',
+      ].join('\n');
+      const result = spawnSync(
+        process.execPath,
+        ['--input-type=module', '--eval', childScript],
+        { encoding: 'utf8', timeout: 1_500 }
+      );
+
+      expect(result.error?.code).not.toBe('ETIMEDOUT');
+      expect(result.status).toBe(0);
+      expect(result.stdout).toBe('["react","three"]');
     });
 
     it('ignores line comments and block comments', () => {
@@ -855,6 +891,10 @@ describe('Pages Promotion Governance Gate', () => {
     expect(content).toContain("github.event.workflow_run.head_branch == 'main'");
     expect(content).toContain("github.event.workflow_run.event == 'push'");
     expect(content).not.toMatch(/\brun_attempt\b/);
+    expect(content).toMatch(
+      /^  group: \$\{\{ github\.event\.workflow_run\.conclusion == 'success' && github\.event\.workflow_run\.head_branch == 'main' && github\.event\.workflow_run\.event == 'push' && 'pages' \|\| format\('pages-ineligible-\{0\}', github\.run_id\) \}\}$/m
+    );
+    expect(content).toContain('cancel-in-progress: true');
 
     expect(content).toContain('ref: ${{ github.event.workflow_run.head_sha }}');
     expect(content).toContain(

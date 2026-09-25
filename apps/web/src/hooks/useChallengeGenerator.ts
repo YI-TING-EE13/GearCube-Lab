@@ -23,6 +23,7 @@ export interface UseChallengeGeneratorResult {
   readonly state: ChallengeGenerationState;
   readonly startChallenge: (difficulty: ChallengeDifficulty, seed: string) => void;
   readonly cancelChallenge: () => void;
+  readonly resetChallenge: () => void;
 }
 
 interface ActiveChallengeGeneration {
@@ -212,6 +213,15 @@ export function useChallengeGenerator(
     commitState(cancelActiveChallenge(stateRef.current));
   }, [commitState, terminateWorker]);
 
+  const resetChallenge = useCallback((): void => {
+    const active = activeRef.current;
+    if (active !== null) {
+      terminateWorker(active);
+    }
+    activeRef.current = null;
+    commitState(INITIAL_CHALLENGE_GENERATION_STATE);
+  }, [commitState, terminateWorker]);
+
   const startChallenge = useCallback(
     (difficulty: ChallengeDifficulty, seed: string): void => {
       const previous = activeRef.current;
@@ -267,5 +277,6 @@ export function useChallengeGenerator(
     state,
     startChallenge,
     cancelChallenge,
+    resetChallenge,
   };
 }
