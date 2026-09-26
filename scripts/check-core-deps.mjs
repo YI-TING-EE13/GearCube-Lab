@@ -28,6 +28,71 @@ export function tokenize(source) {
   const len = source.length;
   let i = 0;
 
+  const skipQuotedText = (start, quote) => {
+    let cursor = start + 1;
+    while (cursor < len) {
+      if (source[cursor] === '\\') {
+        cursor += cursor + 1 < len ? 2 : 1;
+      } else if (source[cursor] === quote) {
+        return cursor + 1;
+      } else {
+        cursor++;
+      }
+    }
+    return cursor;
+  };
+
+  function findInterpolationEnd(start) {
+    let cursor = start;
+    let braceDepth = 0;
+    while (cursor < len) {
+      const ch = source[cursor];
+      const nextCh = cursor + 1 < len ? source[cursor + 1] : '';
+
+      if (ch === "'" || ch === '"') {
+        cursor = skipQuotedText(cursor, ch);
+      } else if (ch === '/' && nextCh === '/') {
+        cursor += 2;
+        while (cursor < len && source[cursor] !== '\n') cursor++;
+      } else if (ch === '/' && nextCh === '*') {
+        cursor += 2;
+        while (cursor < len && !(source[cursor] === '*' && cursor + 1 < len && source[cursor + 1] === '/')) {
+          cursor++;
+        }
+        cursor = cursor < len ? cursor + 2 : cursor;
+      } else if (ch === '`') {
+        cursor = findTemplateEnd(cursor);
+      } else if (ch === '{') {
+        braceDepth++;
+        cursor++;
+      } else if (ch === '}') {
+        if (braceDepth === 0) return cursor;
+        braceDepth--;
+        cursor++;
+      } else {
+        cursor++;
+      }
+    }
+    return cursor;
+  }
+
+  function findTemplateEnd(start) {
+    let cursor = start + 1;
+    while (cursor < len) {
+      if (source[cursor] === '\\') {
+        cursor += cursor + 1 < len ? 2 : 1;
+      } else if (source[cursor] === '`') {
+        return cursor + 1;
+      } else if (source[cursor] === '$' && cursor + 1 < len && source[cursor + 1] === '{') {
+        const expressionEnd = findInterpolationEnd(cursor + 2);
+        cursor = expressionEnd < len ? expressionEnd + 1 : expressionEnd;
+      } else {
+        cursor++;
+      }
+    }
+    return cursor;
+  }
+
   while (i < len) {
     const ch = source[i];
     const nextCh = i + 1 < len ? source[i + 1] : '';
@@ -104,27 +169,10 @@ export function tokenize(source) {
           i += 2;
         } else if (source[i] === '$' && i + 1 < len && source[i + 1] === '{') {
           isPlainString = false;
-          i += 2;
-          let braceDepth = 1;
-          while (i < len && braceDepth > 0) {
-            if (source[i] === '{') {
-              braceDepth++;
-              i++;
-            } else if (source[i] === '}') {
-              braceDepth--;
-              i++;
-            } else if (source[i] === "'" || source[i] === '"' || source[i] === '`') {
-              const quote = source[i];
-              i++;
-              while (i < len && source[i] !== quote) {
-                if (source[i] === '\\') i += 2;
-                else i++;
-              }
-              if (i < len) i++;
-            } else {
-              i++;
-            }
-          }
+          const expressionStart = i + 2;
+          const expressionEnd = findInterpolationEnd(expressionStart);
+          tokens.push(...tokenize(source.slice(expressionStart, expressionEnd)));
+          i = expressionEnd < len ? expressionEnd + 1 : expressionEnd;
         } else {
           val += source[i];
           i++;

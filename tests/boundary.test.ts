@@ -104,6 +104,29 @@ describe('Phase 1A Infrastructure & Package Boundary Gate', () => {
       expect(extractModuleSpecifiers("import('zustand')")).toEqual(['zustand']);
     });
 
+    it('detects dynamic imports inside template interpolation', () => {
+      expect(extractModuleSpecifiers('const x = `${import(\'react\')}`;')).toEqual(['react']);
+    });
+
+    it('detects dynamic imports in nested template interpolation expressions', () => {
+      expect(extractModuleSpecifiers('const x = `${(() => import(\'zustand\'))()}`;')).toEqual(['zustand']);
+    });
+
+    it('ignores braces in interpolation comments and continues scanning executable code', () => {
+      expect(extractModuleSpecifiers('const block = `${/* } */ import(\'three\')}`;')).toEqual(['three']);
+      expect(extractModuleSpecifiers('const line = `${// }\nimport(\'zustand\')}`;')).toEqual(['zustand']);
+    });
+
+    it('detects executable imports in nested template interpolation', () => {
+      expect(extractModuleSpecifiers('const x = `${`inner ${import(\'@react-three/fiber\')}`}`;')).toEqual([
+        '@react-three/fiber',
+      ]);
+    });
+
+    it('ignores import-like text in ordinary template literal text', () => {
+      expect(extractModuleSpecifiers('const x = `literal import(\'react\') text`;')).toEqual([]);
+    });
+
     it('ignores import/export-like text inside ordinary single-quoted strings', () => {
       expect(extractModuleSpecifiers("const text = 'import React from \"react\"';")).toEqual([]);
       expect(extractModuleSpecifiers("const text = 'https://example.com';")).toEqual([]);
