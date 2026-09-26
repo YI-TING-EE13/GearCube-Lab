@@ -837,6 +837,16 @@ body,
     grid-row: 1 / span 2;
     width: 100%;
     max-width: none;
+    max-height: max(180px, calc(100dvh - 540px));
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  /* Keep one scroll container around the complete Challenge stack on desktop. */
+  .top-overlay-bar > .challenge-stack > .challenge-performance {
+    max-height: none;
+    overflow-y: visible;
   }
 }
 

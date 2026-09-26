@@ -137,6 +137,55 @@ async function completeAssistedEasyChallenge(
   return { challenge, performance };
 }
 
+async function assertDesktopChallengeStackClearsFaceControls(
+  page: Page,
+  action: Locator
+): Promise<void> {
+  for (const viewport of [
+    { width: 1025, height: 720 },
+    { width: 1280, height: 720 },
+  ]) {
+    await page.setViewportSize(viewport);
+    const rectangles = await page.evaluate(() => {
+      const challengeStack = document.querySelector<HTMLElement>('.challenge-stack');
+      const moveControls = document.querySelector<HTMLElement>(
+        '.move-controls-panel'
+      );
+      if (!challengeStack || !moveControls) {
+        throw new Error('Desktop Challenge or Face Controls region is not mounted.');
+      }
+
+      const readRect = (element: HTMLElement) => {
+        const { top, right, bottom, left, width, height } =
+          element.getBoundingClientRect();
+        return { top, right, bottom, left, width, height };
+      };
+
+      return {
+        challengeStack: readRect(challengeStack),
+        moveControls: readRect(moveControls),
+      };
+    });
+    const intersectionWidth =
+      Math.min(rectangles.challengeStack.right, rectangles.moveControls.right) -
+      Math.max(rectangles.challengeStack.left, rectangles.moveControls.left);
+    const intersectionHeight =
+      Math.min(rectangles.challengeStack.bottom, rectangles.moveControls.bottom) -
+      Math.max(rectangles.challengeStack.top, rectangles.moveControls.top);
+
+    expect(rectangles.challengeStack.width).toBeGreaterThan(0);
+    expect(rectangles.challengeStack.height).toBeGreaterThan(0);
+    expect(rectangles.moveControls.width).toBeGreaterThan(0);
+    expect(rectangles.moveControls.height).toBeGreaterThan(0);
+    const noIntersection = intersectionWidth <= 0 || intersectionHeight <= 0;
+    expect(
+      noIntersection,
+      `Challenge stack intersects Face Controls at ${viewport.width}x${viewport.height}: ${JSON.stringify(rectangles)}`
+    ).toBe(true);
+    await action.click({ trial: true });
+  }
+}
+
 test.describe('M7 Challenge Performance lifecycle acceptance', () => {
   test.beforeEach(async ({ page }) => {
     const browserErrors: string[] = [];
@@ -217,9 +266,11 @@ test.describe('M7 Challenge Performance lifecycle acceptance', () => {
       optimalMoves: await readPerformanceMetric(performance, 'Optimal moves'),
     };
 
-    await performance
-      .getByRole('button', { name: 'Retry same challenge' })
-      .click();
+    const retry = performance.getByRole('button', {
+      name: 'Retry same challenge',
+    });
+    await assertDesktopChallengeStackClearsFaceControls(page, retry);
+    await retry.click();
 
     await expect(performance).toContainText('Challenge in progress');
     await expect(performanceMetric(performance, 'Your moves')).toHaveText('0');
@@ -258,6 +309,10 @@ test.describe('M7 Challenge Performance lifecycle acceptance', () => {
     await expect(
       performance.getByRole('button', { name: 'Generate new challenge' })
     ).toBeVisible();
+    const newChallenge = performance.getByRole('button', {
+      name: 'Generate new challenge',
+    });
+    await assertDesktopChallengeStackClearsFaceControls(page, newChallenge);
 
     await page.evaluate(() => {
       const challengeUi = document.querySelector<HTMLElement>('.challenge-stack');
