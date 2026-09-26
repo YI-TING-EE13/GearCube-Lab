@@ -30,8 +30,6 @@ import {
   redoPlay,
   scrubPlay,
   backToBaselinePlay,
-  applyScrambleToPlay,
-  applyCertifiedChallengeToPlay,
 } from '../history/play-session';
 import { canUndo, canRedo } from '../history/history';
 import { HistoryControls } from '../history/HistoryControls';
@@ -41,8 +39,25 @@ import { SolvePanel } from '../solver/SolvePanel';
 import { PlaybackControls } from '../solver/PlaybackControls';
 import { ResearchPanel } from '../research/ResearchPanel';
 import { ChallengePanel } from '../challenge/ChallengePanel.js';
+import {
+  ChallengePerformance,
+  type ChallengePerformanceSnapshot,
+} from '../challenge/ChallengePerformance.js';
 import type { ChallengeDifficulty } from '../challenge/challenge.js';
 import type { CertifiedChallenge } from '../challenge/challenge-controller.js';
+import {
+  getChallengeRunMoveCount,
+  INITIAL_CHALLENGE_RUN_STATE,
+  markChallengeRunAssisted,
+  resetChallengeRun,
+  tryCompleteChallengeRun,
+  type ChallengeRunState,
+} from '../challenge/challenge-run-controller.js';
+import {
+  applyScrambleAndResetChallengeRun,
+  installCertifiedChallengeRun,
+  retryCertifiedChallengeRun,
+} from '../challenge/challenge-run-integration.js';
 import { useSolverWorker } from '../../hooks/useSolverWorker';
 import { useBenchmarkWorker } from '../../hooks/useBenchmarkWorker';
 import { useChallengeGenerator } from '../../hooks/useChallengeGenerator.js';
@@ -101,6 +116,8 @@ export const GearCubeViewport: React.FC = () => {
   const [workspaceMode, setWorkspaceMode] = useState<WorkspaceMode>('PLAY');
   const [isPlayControlsOpen, setIsPlayControlsOpen] = useState(true);
   const [app, setApp] = useState<PlayApplicationState>(createInitialPlayApplicationState);
+  const [challengeRun, setChallengeRun] =
+    useState<ChallengeRunState>(INITIAL_CHALLENGE_RUN_STATE);
   const [seed, setSeed] = useState<string>('GearCube-Lab');
   const [challengeDifficulty, setChallengeDifficulty] = useState<ChallengeDifficulty>('NORMAL');
   const [selectedAlgorithm, setSelectedAlgorithm] = useState<SolverAlgorithm>('IDA_STAR');
@@ -120,13 +137,22 @@ export const GearCubeViewport: React.FC = () => {
       if (workspaceMode !== 'PLAY') {
         return;
       }
+      const nowMs = performance.now();
+      const result = installCertifiedChallengeRun(
+        app,
+        challengeRun,
+        challenge,
+        nowMs
+      );
+      if (result.status === 'BLOCKED') {
+        return;
+      }
       solverAcceptanceTokenRef.current = null;
       setPlaybackMetadata(null);
-      setApp((prev) =>
-        applyCertifiedChallengeToPlay(prev, challenge.state, challenge.frame)
-      );
+      setApp(result.nextApp);
+      setChallengeRun(result.nextChallengeRun);
     },
-    [workspaceMode]
+    [app, challengeRun, workspaceMode]
   );
 
   const {
@@ -136,6 +162,26 @@ export const GearCubeViewport: React.FC = () => {
     resetChallenge,
   } = useChallengeGenerator(handleChallengeAccepted);
   const isChallengeGenerating = challengeState.status === 'ACTIVE';
+
+  useEffect(() => {
+    if (
+      workspaceMode !== 'PLAY' ||
+      challengeRun.status !== 'ACTIVE' ||
+      !isSessionIdle(app.session)
+    ) {
+      return;
+    }
+
+    const nowMs = performance.now();
+    setChallengeRun((prev) =>
+      tryCompleteChallengeRun(prev, {
+        currentState: app.session.currentState,
+        isPlayIdle: isSessionIdle(app.session),
+        canonicalCommitSequence: app.canonicalCommitSequence,
+        nowMs,
+      })
+    );
+  }, [app, challengeRun.status, workspaceMode]);
 
   // Mode Transition Handlers
   const handleSwitchToPlay = useCallback(() => {
@@ -176,7 +222,8 @@ export const GearCubeViewport: React.FC = () => {
       solverAcceptanceTokenRef.current = null;
       cancelSearch();
       setPlaybackMetadata(null);
-      setApp((prev) => startPlayMove(prev, move, performance.now()));
+      const nowMs = performance.now();
+      setApp((prev) => startPlayMove(prev, move, nowMs));
     },
     [workspaceMode, isChallengeGenerating, cancelSearch]
   );
@@ -230,12 +277,25 @@ export const GearCubeViewport: React.FC = () => {
 
   const handleScramble = useCallback(() => {
     if (workspaceMode !== 'PLAY' || isChallengeGenerating || !isSessionIdle(app.session)) return;
+    const result = applyScrambleAndResetChallengeRun(app, challengeRun, seed);
+    if (result.status === 'BLOCKED') {
+      return;
+    }
     solverAcceptanceTokenRef.current = null;
     cancelSearch();
     setPlaybackMetadata(null);
     resetChallenge();
-    setApp((prev) => applyScrambleToPlay(prev, seed));
-  }, [workspaceMode, isChallengeGenerating, app.session, cancelSearch, resetChallenge, seed]);
+    setApp(result.nextApp);
+    setChallengeRun(result.nextChallengeRun);
+  }, [
+    workspaceMode,
+    isChallengeGenerating,
+    app,
+    challengeRun,
+    cancelSearch,
+    resetChallenge,
+    seed,
+  ]);
 
   const handleStartChallenge = useCallback(() => {
     if (
@@ -249,9 +309,11 @@ export const GearCubeViewport: React.FC = () => {
     solverAcceptanceTokenRef.current = null;
     cancelSearch();
     setPlaybackMetadata(null);
+    setChallengeRun(resetChallengeRun(challengeRun));
     startChallenge(challengeDifficulty, seed);
   }, [
     app.session,
+    challengeRun,
     cancelSearch,
     challengeDifficulty,
     isChallengeGenerating,
@@ -268,8 +330,47 @@ export const GearCubeViewport: React.FC = () => {
     const token = {};
     solverAcceptanceTokenRef.current = token;
     setPlaybackMetadata(null);
+    if (challengeRun.status === 'ACTIVE') {
+      setChallengeRun((prev) => markChallengeRunAssisted(prev));
+    }
     startSearch(selectedAlgorithm, app.session.currentState);
-  }, [workspaceMode, app.session, isChallengeGenerating, selectedAlgorithm, startSearch]);
+  }, [
+    workspaceMode,
+    app.session,
+    challengeRun.status,
+    isChallengeGenerating,
+    selectedAlgorithm,
+    startSearch,
+  ]);
+
+  const handleRetryChallenge = useCallback(() => {
+    if (
+      workspaceMode !== 'PLAY' ||
+      !isSessionIdle(app.session) ||
+      isChallengeGenerating ||
+      challengeRun.status !== 'COMPLETED'
+    ) {
+      return;
+    }
+
+    const nowMs = performance.now();
+    const result = retryCertifiedChallengeRun(app, challengeRun, nowMs);
+    if (result.status === 'BLOCKED') {
+      return;
+    }
+
+    solverAcceptanceTokenRef.current = null;
+    cancelSearch();
+    setPlaybackMetadata(null);
+    setApp(result.nextApp);
+    setChallengeRun(result.nextChallengeRun);
+  }, [
+    workspaceMode,
+    app,
+    isChallengeGenerating,
+    challengeRun,
+    cancelSearch,
+  ]);
 
   const handleCancelSearch = useCallback(() => {
     if (isChallengeGenerating) return;
@@ -335,7 +436,8 @@ export const GearCubeViewport: React.FC = () => {
       const move = getNextMoveToDispatch(playbackMetadata);
       if (move) {
         setPlaybackMetadata((prev) => (prev ? recordMoveDispatch(prev) : null));
-        setApp((prev) => startPlayMove(prev, move, performance.now()));
+        const nowMs = performance.now();
+        setApp((prev) => startPlayMove(prev, move, nowMs));
       }
     } else {
       setPlaybackMetadata(null);
@@ -376,7 +478,8 @@ export const GearCubeViewport: React.FC = () => {
       if (stagedPhase === 'HALF_TURN_LOCKED') {
         const move = getNextMoveToDispatch(playbackMetadata);
         if (move) {
-          setApp((prev) => startPlayMove(prev, move, performance.now()));
+          const nowMs = performance.now();
+          setApp((prev) => startPlayMove(prev, move, nowMs));
         }
         return;
       }
@@ -402,7 +505,8 @@ export const GearCubeViewport: React.FC = () => {
         const move = getNextMoveToDispatch(playbackMetadata);
         if (move) {
           setPlaybackMetadata((prev) => (prev ? recordMoveDispatch(prev) : null));
-          setApp((prev) => startPlayMove(prev, move, performance.now()));
+          const nowMs = performance.now();
+          setApp((prev) => startPlayMove(prev, move, nowMs));
         }
       } else {
         setPlaybackMetadata(null);
@@ -421,6 +525,36 @@ export const GearCubeViewport: React.FC = () => {
   const isAnimating = isSessionAnimating(session);
   const isBusy = !isIdle;
   const isPlayBusy = isBusy || isChallengeGenerating;
+
+  let challengePerformance: ChallengePerformanceSnapshot;
+  if (challengeRun.status === 'ACTIVE') {
+    challengePerformance = {
+      status: 'ACTIVE',
+      difficulty: challengeRun.challenge.difficulty,
+      baseSeed: challengeRun.challenge.baseSeed,
+      playerMoves: getChallengeRunMoveCount(
+        challengeRun,
+        app.canonicalCommitSequence
+      ),
+      optimalMoves: challengeRun.challenge.depth,
+      assisted: challengeRun.assisted,
+    };
+  } else if (challengeRun.status === 'COMPLETED') {
+    challengePerformance = {
+      status: 'COMPLETED',
+      difficulty: challengeRun.result.difficulty,
+      baseSeed: challengeRun.result.baseSeed,
+      playerMoves: challengeRun.result.playerMoves,
+      optimalMoves: challengeRun.result.optimalMoves,
+      movesOverOptimal: challengeRun.result.movesOverOptimal,
+      efficiencyPercent: challengeRun.result.efficiencyPercent,
+      elapsedMs: challengeRun.result.elapsedMs,
+      solvedOptimally: challengeRun.result.solvedOptimally,
+      assisted: challengeRun.result.assisted,
+    };
+  } else {
+    challengePerformance = { status: 'INACTIVE' };
+  }
 
   const isCubeSolved = isSolved(session.currentState);
   const hasUndo = canUndo(history);
@@ -552,14 +686,21 @@ export const GearCubeViewport: React.FC = () => {
                   onScramble={handleScramble}
                 />
 
-                <ChallengePanel
-                  difficulty={challengeDifficulty}
-                  state={challengeState}
-                  isBusy={isPlayBusy || solverWorkerState.status === 'ACTIVE'}
-                  onSelectDifficulty={setChallengeDifficulty}
-                  onStart={handleStartChallenge}
-                  onCancel={cancelChallenge}
-                />
+                <div className="challenge-stack">
+                  <ChallengePanel
+                    difficulty={challengeDifficulty}
+                    state={challengeState}
+                    isBusy={isPlayBusy || solverWorkerState.status === 'ACTIVE'}
+                    onSelectDifficulty={setChallengeDifficulty}
+                    onStart={handleStartChallenge}
+                    onCancel={cancelChallenge}
+                  />
+                  <ChallengePerformance
+                    performance={challengePerformance}
+                    onRetry={handleRetryChallenge}
+                    onNewChallenge={handleStartChallenge}
+                  />
+                </div>
               </div>
 
               {/* Left/Bottom-Left: Timeline Scrubber */}
