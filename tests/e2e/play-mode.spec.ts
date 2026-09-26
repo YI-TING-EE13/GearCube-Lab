@@ -413,26 +413,112 @@ test.describe('GearCube Play Mode End-to-End Suite', () => {
     await page.getByRole('button', { name: /Direct 180° turn mode/ }).click();
     await expect(page.getByRole('button', { name: 'Direct 180° turn mode: ON' })).toBeVisible();
 
+    await page.evaluate(() => {
+      const root = document.documentElement;
+      delete root.dataset.e2eBusyStateSnapshot;
+
+      let observer: MutationObserver | null = null;
+
+      const capture = () => {
+        if (root.dataset.e2eBusyStateSnapshot) {
+          return;
+        }
+
+        const indicator = Array.from(
+          document.querySelectorAll<HTMLElement>('.animating-indicator')
+        ).find((element) => element.textContent?.includes('Turning (180°)...'));
+
+        if (!indicator) {
+          return;
+        }
+
+        const modeToggle =
+          document.querySelector<HTMLButtonElement>('.mode-toggle-btn');
+        const undo = document.querySelector<HTMLButtonElement>(
+          'button[aria-label="Undo move"]'
+        );
+        const redo = document.querySelector<HTMLButtonElement>(
+          'button[aria-label="Redo move"]'
+        );
+        const baseline = document.querySelector<HTMLButtonElement>(
+          'button[aria-label="Back to baseline"]'
+        );
+        const scramble = document.querySelector<HTMLButtonElement>(
+          'button[aria-label="Generate scramble"]'
+        );
+        const moveButtons = Array.from(
+          document.querySelectorAll<HTMLButtonElement>('.move-btn')
+        );
+
+        if (
+          !modeToggle ||
+          !undo ||
+          !redo ||
+          !baseline ||
+          !scramble ||
+          moveButtons.length !== 12
+        ) {
+          return;
+        }
+
+        root.dataset.e2eBusyStateSnapshot = JSON.stringify({
+          indicatorVisible: true,
+          modeDisabled: modeToggle.disabled,
+          undoDisabled: undo.disabled,
+          redoDisabled: redo.disabled,
+          baselineDisabled: baseline.disabled,
+          scrambleDisabled: scramble.disabled,
+          moveButtonCount: moveButtons.length,
+          allMovesDisabled: moveButtons.every((button) => button.disabled),
+        });
+
+        observer?.disconnect();
+      };
+
+      observer = new MutationObserver(capture);
+      observer.observe(document.body, {
+        subtree: true,
+        childList: true,
+        attributes: true,
+        attributeFilter: ['disabled'],
+      });
+      capture();
+    });
+
     const rCwBtn = page.getByRole('button', { name: 'R Clockwise (180° full turn)' });
     await rCwBtn.click();
 
-    // Verify observable active animation indicator
-    const turningIndicator = page.getByText('Turning (180°)...');
-    await expect(turningIndicator).toBeVisible();
+    await page.waitForFunction(
+      () => Boolean(document.documentElement.dataset.e2eBusyStateSnapshot),
+      undefined,
+      { timeout: 5_000 }
+    );
 
-    // While turning indicator is visible, verify all controls are disabled concurrently
-    const allMoveButtons = page.locator('.move-btn');
-    await Promise.all([
-      expect(page.getByRole('button', { name: /Direct 180° turn mode/ })).toBeDisabled(),
-      expect(page.getByRole('button', { name: 'Undo move' })).toBeDisabled(),
-      expect(page.getByRole('button', { name: 'Redo move' })).toBeDisabled(),
-      expect(page.getByRole('button', { name: 'Back to baseline' })).toBeDisabled(),
-      expect(page.getByRole('button', { name: 'Generate scramble' })).toBeDisabled(),
-      ...Array.from({ length: 12 }, (_, i) => expect(allMoveButtons.nth(i)).toBeDisabled()),
-    ]);
+    const busyStateSnapshot = await page.evaluate(() => {
+      const serialized = document.documentElement.dataset.e2eBusyStateSnapshot;
+      return serialized ? JSON.parse(serialized) : null;
+    });
+    const expectedBusyStateSnapshot = {
+      indicatorVisible: true,
+      modeDisabled: true,
+      undoDisabled: true,
+      redoDisabled: true,
+      baselineDisabled: true,
+      scrambleDisabled: true,
+      moveButtonCount: 12,
+      allMovesDisabled: true,
+    };
+    expect(busyStateSnapshot).toEqual(expectedBusyStateSnapshot);
+
+    // Verify eventual normal settlement after capturing the transient UI state.
+    const turningIndicator = page.getByText('Turning (180°)...');
 
     // Settle to IDLE
     await expect(page.getByRole('button', { name: 'Step 1: R+' })).toBeVisible();
+    await expect(page.locator('html')).toHaveAttribute(
+      'data-e2e-busy-state-snapshot',
+      JSON.stringify(expectedBusyStateSnapshot)
+    );
     await expect(turningIndicator).toHaveCount(0);
     await expect(page.getByRole('button', { name: /Direct 180° turn mode/ })).toBeEnabled();
 
@@ -476,6 +562,8 @@ test.describe('GearCube Play Mode End-to-End Suite', () => {
     const finishBtn = page.getByRole('button', { name: /U CW — Finish 180° turn/ });
     await finishBtn.click();
     await expect(page.getByRole('button', { name: 'Step 2: U+' })).toBeVisible();
+    await expect(page.getByText('HALF-TURN: U CW')).toHaveCount(0);
+    await expect(page.getByRole('button', { name: /Direct 180° turn mode/ })).toBeEnabled();
   });
 
   // Geometry cases get fresh pages and independent budgets. Resize/mode transitions
