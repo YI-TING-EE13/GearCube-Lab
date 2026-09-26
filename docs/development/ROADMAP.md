@@ -1,8 +1,8 @@
 # ROADMAP.md — Project Lifecycle & Dependency-Ordered Milestones
 
-> **Current Milestone:** `None — M6.2 completed and accepted`
+> **Current Milestone:** `M7 — Challenge Performance & Completion UX (Planned; preflight plan ready)`
 > **Previous Milestone:** `M6.2 — Rerun-Safe GitHub Pages Promotion (Completed & Accepted)`
-> **Next Milestone:** `No active milestone; Phase 6 and Phase 7 remain deferred optional tracks`
+> **Next Milestone:** `M7A — Challenge Run Domain & Metrics (Planned)`
 > **Deferred Tracks:** `Phase 6 (Neural AI Search)` & `Phase 7 (Physical Model & Vision Expansion)` (Deferred / Optional Tracks)
 > **Current Verification Inventory:** 41 Vitest files / 499 tests; 58 logical Playwright tests, 174 project-test cases, 172 applicable executions, and 2 intentional skips. See [`TEST_STRATEGY.md`](TEST_STRATEGY.md) for the maintained inventory; milestone counts below are historical as-of snapshots.
 
@@ -99,6 +99,12 @@
       ├─ Successful main-push Verify reruns remain Pages-eligible
       ├─ Exact-current-main stale deployment protection retained
       └─ Hosted dependency-install isolation qualified without weakening E2E
+
+[ M7: Challenge Performance & Completion UX ]
+(PLANNED — PREFLIGHT PLAN READY; NOT IMPLEMENTED)
+      ├─ M7A: Challenge Run Domain & Metrics
+      ├─ M7B: Completion UX & Retry
+      └─ M7C: Cross-Browser Acceptance & Documentation Sync
     ```
 
 ---
@@ -454,3 +460,17 @@ Phase 0B is partitioned into four dependency-ordered subphases:
   - [x] Solver correctness, limits, deterministic metrics, H2 evidence, Worker lifecycle, Play selector/order, Research four-algorithm execution, and historical-artifact preservation pass.
   - [x] `git diff --check`, `npm run verify`, focused solver/benchmark/Phase 5C analyzer suites, `npm run test:e2e`, and production build are recorded with exact per-project browser outcomes and any separately reproduced baseline failure.
   - [x] Local gates passed before the normal feature-branch push; no direct main push, force push, tag, or release action was used.
+
+---
+
+### M7: Challenge Performance & Completion UX (Planned)
+- **Status:** `PLANNED — PREFLIGHT PLAN READY; NOT IMPLEMENTED OR ACCEPTED`.
+- **Objective:** Track committed moves and elapsed time for an existing certified Challenge run, disclose solver assistance, evaluate a settled solved state, and allow a same-certificate Retry or a new Challenge.
+- **Prerequisites:** M6 certified Challenge baseline and the contract freeze in [`M7_CHALLENGE_PERFORMANCE_IMPLEMENTATION_PLAN.md`](./M7_CHALLENGE_PERFORMANCE_IMPLEMENTATION_PLAN.md).
+- **Planned Submilestones:**
+  - **M7A — Challenge Run Domain & Metrics:** Pure app-layer run state, canonical commit-event accounting, assistance, completion snapshot, and controller/integration gates.
+  - **M7B — Completion UX & Retry:** Accessible active/completed presentation, assisted result wording, same-certificate Retry, New Challenge, and Scramble reset integration.
+  - **M7C — Cross-Browser Acceptance & Documentation Sync:** Full lifecycle production-preview E2E in Chromium, Firefox, and WebKit; synchronized docs and test inventory based only on tests that exist.
+- **Boundary:** Core/Kinematics, puzzle mechanics, M6 certification algorithm and difficulty bands remain unchanged. No persistence, accounts, leaderboards, cloud, share links, multiplayer, new algorithms, AI, merge, deployment, or release work is included.
+- **Implementation Plan:** [`M7_CHALLENGE_PERFORMANCE_IMPLEMENTATION_PLAN.md`](./M7_CHALLENGE_PERFORMANCE_IMPLEMENTATION_PLAN.md).
+- **Acceptance State:** No M7 implementation or acceptance criteria have passed yet; do not mark M7 or a submilestone complete until its implementation and required evidence exist.
