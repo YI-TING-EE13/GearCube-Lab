@@ -260,7 +260,7 @@
   - **Phase 5D Browser Research Mode Gates (Implemented & Accepted):**
     - `BENCHMARK_WORKER_ISOLATION_GATE`: Benchmark compute executes off the UI thread in dedicated Web Worker (`benchmark.worker.ts`) with zero DOM leakage (`typeof document === 'undefined'`).
     - `PURE_BENCHMARK_CONTROLLER_GATE`: Deterministic state transitions, monotonic `requestId` tracking, and stale-message rejection verified across 32 focused unit tests in `tests/unit/benchmark-worker-controller.test.ts`.
-    - `BOUNDARY_ISOLATION_GATE`: Verification of browser-safe imports, Worker path isolation, and main-thread execution prohibition across 52 boundary tests in `tests/boundary.test.ts`.
+    - `BOUNDARY_ISOLATION_GATE`: Verification of browser-safe imports, Worker path isolation, and main-thread execution prohibition across 65 boundary tests in `tests/boundary.test.ts`.
     - `MAIN_THREAD_ACTIONABILITY_GATE`: Verified responsive UI interactions while benchmark search is active in `tests/e2e/research-mode.spec.ts`.
     - `BENCHMARK_CANCELLATION_GATE`: Host-side `worker.terminate()` closes Worker, produces terminal `CANCELLED` state, and spawns zero replacement workers (`totalBenchmarkWorkersCreated === 1`).
     - `STATIC_CONFIG_VALIDATION_GATE`: Main-thread static validation triggers UI errors and spawns zero workers on invalid inputs.
@@ -273,7 +273,7 @@
     - `RESPONSIVE_RESEARCH_LAYOUT_GATE`: Verified layout bounds and non-overflow across Desktop (1280x800), Tablet (768x1024), and Mobile (375x667) viewports in `tests/e2e/research-mode.spec.ts`; the M1 mode-stability gate adds short-landscape Research coverage.
     - *Historical verification snapshot (Technical Head `8bc1d51`):* 52 boundary tests, 32 controller unit tests, 12 Research Mode E2E tests, 40 total Playwright E2E tests, and 444 workspace tests passing at that accepted head.
   - **Vitest discovery:** Normal `npm test` includes repository-owned `apps/*/src/**/*.test.ts` and `apps/*/src/**/*.test.tsx` component suites.
-  - **Maintained current Vitest inventory:** 41 test files / 489 tests, including the discovered TSX component suite, M6 orientation/challenge policy gates, the Pages promotion governance gate, and the Phase 5C integrity and transaction regression suite. This is an inventory baseline; exact qualification evidence belongs to the run for the tested commit.
+  - **Maintained current Vitest inventory:** 41 test files / 499 tests, including the discovered TSX component suite, M6 orientation/challenge policy gates, the Pages promotion governance gate, and the Phase 5C integrity and transaction regression suite. This is an inventory baseline; exact qualification evidence belongs to the run for the tested commit.
 
 ### Level 9: Browser End-to-End Tests (Playwright — Available / Implemented)
 - **Scope:** Whole Web Application (`playwright.config.ts`, `tests/e2e/play-mode.spec.ts`, `tests/e2e/m6-play-orientation-challenge.spec.ts`, `tests/e2e/solve-mode.spec.ts`, `tests/e2e/research-mode.spec.ts`, `tests/e2e/responsive-navigation.spec.ts`)

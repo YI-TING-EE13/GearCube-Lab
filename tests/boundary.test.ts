@@ -75,7 +75,7 @@ describe('Phase 1A Infrastructure & Package Boundary Gate', () => {
     expect(errors).toEqual([]);
   });
 
-  describe('Core Purity Scanner Lexical Safety & Specifier Extraction Coverage', () => {
+  describe('Core Purity Scanner AST Safety & Specifier Extraction Coverage', () => {
     it('detects static value imports (default and named)', () => {
       expect(extractModuleSpecifiers("import React from 'react';")).toEqual(['react']);
       expect(extractModuleSpecifiers("import { useState, useEffect } from 'react';")).toEqual(['react']);
@@ -85,6 +85,7 @@ describe('Phase 1A Infrastructure & Package Boundary Gate', () => {
     it('detects static type imports', () => {
       expect(extractModuleSpecifiers("import type { ReactNode } from 'react';")).toEqual(['react']);
       expect(extractModuleSpecifiers("import type React from 'react';")).toEqual(['react']);
+      expect(extractModuleSpecifiers("type ReactNode = import('react').ReactNode;")).toEqual(['react']);
     });
 
     it('detects side-effect imports', () => {
@@ -102,6 +103,12 @@ describe('Phase 1A Infrastructure & Package Boundary Gate', () => {
     it('detects dynamic imports', () => {
       expect(extractModuleSpecifiers("const r = await import('react');")).toEqual(['react']);
       expect(extractModuleSpecifiers("import('zustand')")).toEqual(['zustand']);
+      expect(extractModuleSpecifiers('const meta = import.meta;')).toEqual([]);
+      expect(extractModuleSpecifiers("import('react'); import('react'); export * from 'three';")).toEqual([
+        'react',
+        'react',
+        'three',
+      ]);
     });
 
     it('detects dynamic imports inside template interpolation', () => {
@@ -125,6 +132,38 @@ describe('Phase 1A Infrastructure & Package Boundary Gate', () => {
 
     it('ignores import-like text in ordinary template literal text', () => {
       expect(extractModuleSpecifiers('const x = `literal import(\'react\') text`;')).toEqual([]);
+    });
+
+    it('extracts imports after regex literals containing a closing brace in interpolation', () => {
+      expect(extractModuleSpecifiers("const x = `${/}/.test('}') ? import('react') : null}`;")).toEqual(['react']);
+    });
+
+    it('extracts imports after regex literals containing slash and comment-like text', () => {
+      expect(extractModuleSpecifiers("const x = `${/\\/\\//.test('//') ? import('zustand') : null}`;")).toEqual([
+        'zustand',
+      ]);
+    });
+
+    it('extracts imports after regex character classes and quantifier braces in interpolation', () => {
+      expect(extractModuleSpecifiers("const x = `${/[{}\\/]{1,3}/.test('{/') ? import('three') : null}`;")).toEqual([
+        'three',
+      ]);
+    });
+
+    it('accepts literal dynamic import arguments without guessing runtime expressions', () => {
+      expect(extractModuleSpecifiers('import(`react`)')).toEqual(['react']);
+      expect(extractModuleSpecifiers('import(moduleName)')).toEqual([]);
+      expect(extractModuleSpecifiers('import(`react${moduleName}`)')).toEqual([]);
+    });
+
+    it('applies the prohibited-module policy to an import discovered in interpolation', () => {
+      const extracted = extractModuleSpecifiers("const value = `${import('react')}`;");
+      const prohibited = extracted.filter((specifier) =>
+        PROHIBITED_MODULE_PATTERNS.some((pattern) => pattern.test(specifier)),
+      );
+
+      expect(extracted).toEqual(['react']);
+      expect(prohibited).toEqual(['react']);
     });
 
     it('ignores import/export-like text inside ordinary single-quoted strings', () => {
@@ -199,6 +238,9 @@ describe('Phase 1A Infrastructure & Package Boundary Gate', () => {
       expect(isProhibited('three')).toBe(true);
       expect(isProhibited('@react-three/fiber')).toBe(true);
       expect(isProhibited('zustand')).toBe(true);
+      expect(
+        extractModuleSpecifiers("const value = `${import('react')}`;").some(isProhibited),
+      ).toBe(true);
       expect(isProhibited('../../apps/web')).toBe(true);
       expect(isProhibited('../../packages/renderer')).toBe(true);
       expect(isProhibited('../../packages/ui')).toBe(true);

@@ -35,7 +35,7 @@ The public GitHub Pages deployment is fully automated and strictly gated by the 
 main branch push
       ↓
 Verify Workflow (.github/workflows/verify.yml)
-      ├─ Workspace verify (typecheck, boundary checks, Vitest 489/489)
+      ├─ Workspace verify (typecheck, boundary checks, Vitest 499/499)
       └─ Parallel Playwright E2E matrix (58 logical tests; 172 applicable executions, 2 intentional skips)
       ↓ (successful Verify run)
 Deploy GitHub Pages Workflow (.github/workflows/deploy-pages.yml via workflow_run)
