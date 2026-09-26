@@ -36,6 +36,12 @@ describe('Play Session Orchestration', () => {
   const moveF: Move = { face: 'F', direction: 'CCW' };
   const moveL: Move = { face: 'L', direction: 'CW' };
 
+  const completeDirectMove = (app: ReturnType<typeof createInitialPlayApplicationState>, move: Move, startMs: number) => {
+    const direct = setPlayInteractionMode(app, 'DIRECT_180');
+    const started = startPlayMove(direct, move, startMs, 400);
+    return stepPlayAnimation(started, startMs + 400);
+  };
+
   it('INITIAL_SESSION_HISTORY_ALIGNMENT_GATE: initializes clean session and history alignment', () => {
     const app = createInitialPlayApplicationState();
     expect(app.session.currentState).toEqual(SOLVED_GEAR_CUBE_STATE);
@@ -47,6 +53,117 @@ describe('Play Session Orchestration', () => {
     expect(app.history.initialBaselineFrame).toBe(DEFAULT_SPATIAL_FRAME);
     expect(app.history.entries).toHaveLength(0);
     expect(app.history.cursorIndex).toBe(-1);
+  });
+
+  it('CANONICAL_COMMIT_SEQUENCE_INITIAL_GATE: initializes the application event serial at zero', () => {
+    const app = createInitialPlayApplicationState();
+
+    expect(app.canonicalCommitSequence).toBe(0);
+  });
+
+  it('TWO_STEP_COMMIT_SEQUENCE_GATE: increments once only when the second half settles', () => {
+    let app = createInitialPlayApplicationState();
+    app = startPlayMove(app, moveU, 1000, 200);
+    app = stepPlayAnimation(app, 1200);
+    expect(app.session.stagedMove?.phase).toBe('HALF_TURN_LOCKED');
+    expect(app.canonicalCommitSequence).toBe(0);
+
+    app = startPlayMove(app, moveU, 1300, 200);
+    app = stepPlayAnimation(app, 1400);
+    expect(app.session.stagedMove?.phase).toBe('SECOND_HALF_ANIMATING');
+    expect(app.canonicalCommitSequence).toBe(0);
+
+    app = stepPlayAnimation(app, 1500);
+    expect(app.session.stagedMove).toBeNull();
+    expect(app.history.entries).toHaveLength(1);
+    expect(app.canonicalCommitSequence).toBe(1);
+  });
+
+  it('DIRECT_COMMIT_SEQUENCE_GATE: increments once when a direct 180 move settles', () => {
+    let app = createInitialPlayApplicationState();
+    app = setPlayInteractionMode(app, 'DIRECT_180');
+    app = startPlayMove(app, moveR, 1000, 400);
+    app = stepPlayAnimation(app, 1200);
+    expect(app.canonicalCommitSequence).toBe(0);
+
+    app = stepPlayAnimation(app, 1400);
+    expect(app.history.entries).toHaveLength(1);
+    expect(app.canonicalCommitSequence).toBe(1);
+  });
+
+  it('HALF_TURN_NO_COMMIT_GATE: first half and midpoint lock preserve the sequence', () => {
+    let app = createInitialPlayApplicationState();
+    app = startPlayMove(app, moveU, 1000, 200);
+    app = stepPlayAnimation(app, 1100);
+    expect(app.canonicalCommitSequence).toBe(0);
+    app = stepPlayAnimation(app, 1200);
+    expect(app.session.stagedMove?.phase).toBe('HALF_TURN_LOCKED');
+    expect(app.canonicalCommitSequence).toBe(0);
+  });
+
+  it('CANCEL_NO_COMMIT_GATE: cancelling a staged half-turn preserves the sequence', () => {
+    let app = createInitialPlayApplicationState();
+    app = startPlayMove(app, moveU, 1000, 200);
+    app = stepPlayAnimation(app, 1200);
+    app = startPlayMove(app, { face: 'U', direction: 'CCW' }, 1300, 200);
+    app = stepPlayAnimation(app, 1500);
+
+    expect(app.session.stagedMove).toBeNull();
+    expect(app.history.entries).toHaveLength(0);
+    expect(app.canonicalCommitSequence).toBe(0);
+  });
+
+  it('NAVIGATION_SEQUENCE_STABILITY_GATE: history navigation preserves the global serial', () => {
+    let app = createInitialPlayApplicationState();
+    app = completeDirectMove(app, moveU, 1000);
+    app = completeDirectMove(app, moveR, 2000);
+    expect(app.canonicalCommitSequence).toBe(2);
+
+    app = undoPlay(app);
+    expect(app.canonicalCommitSequence).toBe(2);
+    app = redoPlay(app);
+    expect(app.canonicalCommitSequence).toBe(2);
+    app = scrubPlay(app, -1);
+    expect(app.canonicalCommitSequence).toBe(2);
+    app = backToBaselinePlay(app);
+    expect(app.canonicalCommitSequence).toBe(2);
+  });
+
+  it('REDO_BRANCH_MONOTONIC_SEQUENCE_GATE: branch truncation cannot lower the global serial', () => {
+    let app = createInitialPlayApplicationState();
+    app = completeDirectMove(app, moveU, 1000);
+    app = completeDirectMove(app, moveR, 2000);
+    app = undoPlay(app);
+    expect(app.canonicalCommitSequence).toBe(2);
+
+    app = completeDirectMove(app, moveF, 3000);
+    expect(app.canonicalCommitSequence).toBe(3);
+    expect(app.history.entries).toHaveLength(2);
+    expect(app.history.cursorIndex).toBe(1);
+  });
+
+  it('SCRAMBLE_SEQUENCE_PRESERVATION_GATE: scramble baseline keeps the global serial', () => {
+    let app = completeDirectMove(createInitialPlayApplicationState(), moveL, 1000);
+    const beforeScramble = app.canonicalCommitSequence;
+    app = applyScrambleToPlay(app, 'sequence-preservation', 5);
+
+    expect(app.canonicalCommitSequence).toBe(beforeScramble);
+  });
+
+  it('CHALLENGE_BASELINE_SEQUENCE_PRESERVATION_GATE: certified baseline keeps the global serial', () => {
+    let app = completeDirectMove(createInitialPlayApplicationState(), moveU, 1000);
+    const beforeInstall = app.canonicalCommitSequence;
+    const candidate = createChallengeCandidate('sequence-preservation', 'NORMAL', 0);
+    app = applyCertifiedChallengeToPlay(app, candidate.state, candidate.frame);
+
+    expect(app.canonicalCommitSequence).toBe(beforeInstall);
+  });
+
+  it('MODE_CHANGE_SEQUENCE_PRESERVATION_GATE: interaction mode changes keep the global serial', () => {
+    const app = completeDirectMove(createInitialPlayApplicationState(), moveU, 1000);
+    const next = setPlayInteractionMode(app, 'TWO_STEP');
+
+    expect(next.canonicalCommitSequence).toBe(app.canonicalCommitSequence);
   });
 
   it('NO_HISTORY_AT_HALF_GATE: first half-turn locks at midpoint with zero history entries', () => {

@@ -1,10 +1,10 @@
 # ROADMAP.md — Project Lifecycle & Dependency-Ordered Milestones
 
-> **Current Milestone:** `None — M6.2 completed and accepted`
+> **Current Milestone:** `M7 — Challenge Performance & Completion UX (Completed & Accepted)`
 > **Previous Milestone:** `M6.2 — Rerun-Safe GitHub Pages Promotion (Completed & Accepted)`
-> **Next Milestone:** `No active milestone; Phase 6 and Phase 7 remain deferred optional tracks`
+> **Next Milestone:** `Post-M7 roadmap selection — no successor product milestone activated`
 > **Deferred Tracks:** `Phase 6 (Neural AI Search)` & `Phase 7 (Physical Model & Vision Expansion)` (Deferred / Optional Tracks)
-> **Current Verification Inventory:** 41 Vitest files / 499 tests; 58 logical Playwright tests, 174 project-test cases, 172 applicable executions, and 2 intentional skips. See [`TEST_STRATEGY.md`](TEST_STRATEGY.md) for the maintained inventory; milestone counts below are historical as-of snapshots.
+> **Current Verification Inventory:** 44 Vitest files / 540 tests; 65 logical Playwright tests, 195 project-test cases, 193 applicable executions, and 2 existing Firefox/WebKit skips for the Chromium-only touch gate. See [`TEST_STRATEGY.md`](TEST_STRATEGY.md) for the maintained inventory; milestone counts below are historical as-of snapshots.
 
 ---
 
@@ -99,6 +99,12 @@
       ├─ Successful main-push Verify reruns remain Pages-eligible
       ├─ Exact-current-main stale deployment protection retained
       └─ Hosted dependency-install isolation qualified without weakening E2E
+
+[ M7: Challenge Performance & Completion UX ]
+(COMPLETED & ACCEPTED)
+      ├─ M7A: Challenge Run Domain & Metrics
+      ├─ M7B: Completion UX & Retry
+      └─ M7C: Cross-Browser Acceptance & Documentation Sync
     ```
 
 ---
@@ -454,3 +460,20 @@ Phase 0B is partitioned into four dependency-ordered subphases:
   - [x] Solver correctness, limits, deterministic metrics, H2 evidence, Worker lifecycle, Play selector/order, Research four-algorithm execution, and historical-artifact preservation pass.
   - [x] `git diff --check`, `npm run verify`, focused solver/benchmark/Phase 5C analyzer suites, `npm run test:e2e`, and production build are recorded with exact per-project browser outcomes and any separately reproduced baseline failure.
   - [x] Local gates passed before the normal feature-branch push; no direct main push, force push, tag, or release action was used.
+
+---
+
+### M7: Challenge Performance & Completion UX (Completed & Accepted)
+- **Status:** `COMPLETED & ACCEPTED`; the technical/product milestone is accepted. See [`M7_ACCEPTANCE_RECORD.md`](./M7_ACCEPTANCE_RECORD.md) for the evidence snapshot.
+- **Objective:** Track committed moves and elapsed time for an existing certified Challenge run, disclose solver assistance, evaluate a settled solved state, and allow a same-certificate Retry or a new Challenge.
+- **Prerequisites:** M6 certified Challenge baseline and the contract freeze in [`M7_CHALLENGE_PERFORMANCE_IMPLEMENTATION_PLAN.md`](./M7_CHALLENGE_PERFORMANCE_IMPLEMENTATION_PLAN.md).
+- **Submilestones:**
+  - **M7A — Challenge Run Domain & Metrics:** Implementation complete and accepted. The run controller and Play integration keep move accounting and completion metadata in the application layer.
+  - **M7B — Completion UX & Retry:** Implementation complete and accepted. Hosted Verify run [#74](https://github.com/YI-TING-EE13/GearCube-Lab/actions/runs/36238720590) passed on `2d2b1e165e7271536020ebd741bbfecde9ae7dea`, including Chromium, Firefox, and WebKit.
+  - **M7C — Cross-Browser Acceptance & Documentation Sync:** All seven lifecycle gates passed in Chromium, Firefox, and WebKit on hosted Verify [#76](https://github.com/YI-TING-EE13/GearCube-Lab/actions/runs/36252841676), event `workflow_dispatch`, attempt 1, exact head `c7960f60b375e9807624f29b6102e5d9a3868844`.
+  - **Collision repair:** The Retry and New Challenge hit-target repair passed the same hosted browser matrix on the accepted candidate.
+- **Acceptance Record:** [`M7_ACCEPTANCE_RECORD.md`](./M7_ACCEPTANCE_RECORD.md).
+- **Qualification:** Technical exact-head qualification is Verify #76; PR merge-ref qualification is Verify #77. The record identifies both tested commits and the synthetic PR merge ref.
+- **Boundary:** Core/Kinematics, puzzle mechanics, and M6 certification algorithm and difficulty bands remain unchanged. M7 adds no persistence, accounts, leaderboards, cloud, share links, multiplayer, new algorithms, neural search, or vision. Normal repository integration and deployment remain operational follow-through; they do not invalidate the completed product milestone and are not claimed by the acceptance record.
+- **Implementation Plan:** [`M7_CHALLENGE_PERFORMANCE_IMPLEMENTATION_PLAN.md`](./M7_CHALLENGE_PERFORMANCE_IMPLEMENTATION_PLAN.md).
+- **Acceptance State:** M7 technical and functional acceptance is complete. Repository merge, post-merge `main` verification, and Pages promotion are separate evidence; this milestone status does not assert those operations.
