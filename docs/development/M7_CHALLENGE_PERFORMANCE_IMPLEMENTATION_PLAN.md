@@ -87,6 +87,19 @@ COMPLETED -- SCRAMBLE_BASELINE_INSTALLED -> INACTIVE
 
 For an ordinary solve, the canonical move commit and solved-state evaluation occur in the same Play transition: `canonicalCommitSequence` advances, then completion freezes from the resulting state. `playerMoves` is derived from the current sequence and run start sequence; the run state does not maintain a second incremented counter.
 
+Pure operations should cover:
+
+```ts
+startChallengeRun(challenge, nowMs, canonicalCommitSequence)
+getChallengeRunMoveCount(activeRun, currentCanonicalCommitSequence)
+markChallengeRunAssisted(state)
+tryCompleteChallengeRun(state, { currentState, isPlayIdle, canonicalCommitSequence, nowMs })
+retryChallengeRun(activeOrCompletedRun, nowMs, canonicalCommitSequence)
+resetChallengeRun(state)
+```
+
+Start validates a finite timestamp and non-negative integer serial. Count and completion reject sequence regression. Completion uses Core `isSolved()` and requires an idle Play session. Retry preserves the exact stored certificate reference while taking a new time/serial baseline. Reset returns to INACTIVE and releases the certificate from run state.
+
 Generation failure/cancellation after an accepted New Challenge request leaves the prior run abandoned and no active M7 run. PLAY→RESEARCH→PLAY preserves the same state and does not introduce a PAUSED state. The controller is pure: callers supply typed events and time values; it performs no I/O, clock reads, React updates, or browser-global access.
 
 ## 7. Move-accounting semantics
@@ -233,6 +246,10 @@ Add at least one no-React integration test using real `PlayApplicationState` and
 - `NAVIGATION_SEQUENCE_STABILITY_GATE`: Undo, Redo, Scrub, and Back to baseline preserve the serial.
 - `REDO_BRANCH_MONOTONIC_SEQUENCE_GATE`: a new move after Undo increments globally despite history branch truncation.
 - `SCRAMBLE_SEQUENCE_PRESERVATION_GATE`, `CHALLENGE_BASELINE_SEQUENCE_PRESERVATION_GATE`, and `MODE_CHANGE_SEQUENCE_PRESERVATION_GATE`: baseline installs and mode changes preserve it.
+
+### Required combined gate names
+
+Play tests must include `CANONICAL_COMMIT_SEQUENCE_INITIAL_GATE`, `TWO_STEP_COMMIT_SEQUENCE_GATE`, `DIRECT_COMMIT_SEQUENCE_GATE`, `HALF_TURN_NO_COMMIT_GATE`, `CANCEL_NO_COMMIT_GATE`, `NAVIGATION_SEQUENCE_STABILITY_GATE`, `REDO_BRANCH_MONOTONIC_SEQUENCE_GATE`, `SCRAMBLE_SEQUENCE_PRESERVATION_GATE`, `CHALLENGE_BASELINE_SEQUENCE_PRESERVATION_GATE`, and `MODE_CHANGE_SEQUENCE_PRESERVATION_GATE`. Controller tests must include `RUN_START_GATE`, `COMMITTED_MOVE_COUNT_GATE`, `UNDO_DOES_NOT_ERASE_MOVE_COUNT_GATE`, `ASSISTANCE_MARKING_GATE`, `OPTIMAL_COMPLETION_GATE`, `SUBOPTIMAL_COMPLETION_GATE`, `EFFICIENCY_GATE`, `COMPLETION_IDEMPOTENCE_GATE`, `RETRY_RESET_GATE`, and `SCRAMBLE_RESET_GATE`, plus defensive sequence/time/solve-state validation cases.
 
 ### Browser E2E gates
 
