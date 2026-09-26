@@ -140,6 +140,19 @@ describe('Phase 4B Breadth-First Search (BFS) Solver Suite', () => {
     }
   });
 
+  it('solves every canonical one-move state at the combined depth and expansion boundary', () => {
+    for (const move of ALL_MOVES) {
+      const state = applyMove(SOLVED_GEAR_CUBE_STATE, move);
+      const result = solveBfs(state, { maxDepth: 1, maxNodes: 1 });
+
+      expect(result.status, `move ${move.face} ${move.direction}`).toBe('SOLVED');
+      if (result.status === 'SOLVED') {
+        expect(result.depth).toBe(1);
+        expect(result.counters.nodesExpanded).toBe(1);
+      }
+    }
+  });
+
   it('emits onProgress telemetry at specified interval multiples', () => {
     const telemetryEvents: SearchTelemetry[] = [];
     const state = deserializeLogicalState(EXACT_DISTANCE_FIXTURES[2]!.serializedState);

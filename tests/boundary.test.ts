@@ -1,13 +1,22 @@
 import { describe, it, expect } from 'vitest';
+import { spawnSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 import { builtinModules } from 'node:module';
+import { pathToFileURL } from 'node:url';
 import * as coreBootstrap from '@gearcube/core';
 import { extractModuleSpecifiers, checkCorePurity, PROHIBITED_MODULE_PATTERNS } from '../scripts/check-core-deps.mjs';
 
 void coreBootstrap;
 
 describe('Phase 1A Infrastructure & Package Boundary Gate', () => {
+  it('includes repository-owned TSX component tests in normal Vitest discovery', () => {
+    const configPath = path.resolve(process.cwd(), 'vitest.config.ts');
+    const content = fs.readFileSync(configPath, 'utf8');
+
+    expect(content).toContain("'apps/*/src/**/*.test.tsx'");
+  });
+
   it('resolves @gearcube/core via package-name import without alias', async () => {
     const core = await import('@gearcube/core');
     expect(core).toBeDefined();
@@ -66,7 +75,7 @@ describe('Phase 1A Infrastructure & Package Boundary Gate', () => {
     expect(errors).toEqual([]);
   });
 
-  describe('Core Purity Scanner Lexical Safety & Specifier Extraction Coverage', () => {
+  describe('Core Purity Scanner AST Safety & Specifier Extraction Coverage', () => {
     it('detects static value imports (default and named)', () => {
       expect(extractModuleSpecifiers("import React from 'react';")).toEqual(['react']);
       expect(extractModuleSpecifiers("import { useState, useEffect } from 'react';")).toEqual(['react']);
@@ -76,6 +85,7 @@ describe('Phase 1A Infrastructure & Package Boundary Gate', () => {
     it('detects static type imports', () => {
       expect(extractModuleSpecifiers("import type { ReactNode } from 'react';")).toEqual(['react']);
       expect(extractModuleSpecifiers("import type React from 'react';")).toEqual(['react']);
+      expect(extractModuleSpecifiers("type ReactNode = import('react').ReactNode;")).toEqual(['react']);
     });
 
     it('detects side-effect imports', () => {
@@ -93,6 +103,67 @@ describe('Phase 1A Infrastructure & Package Boundary Gate', () => {
     it('detects dynamic imports', () => {
       expect(extractModuleSpecifiers("const r = await import('react');")).toEqual(['react']);
       expect(extractModuleSpecifiers("import('zustand')")).toEqual(['zustand']);
+      expect(extractModuleSpecifiers('const meta = import.meta;')).toEqual([]);
+      expect(extractModuleSpecifiers("import('react'); import('react'); export * from 'three';")).toEqual([
+        'react',
+        'react',
+        'three',
+      ]);
+    });
+
+    it('detects dynamic imports inside template interpolation', () => {
+      expect(extractModuleSpecifiers('const x = `${import(\'react\')}`;')).toEqual(['react']);
+    });
+
+    it('detects dynamic imports in nested template interpolation expressions', () => {
+      expect(extractModuleSpecifiers('const x = `${(() => import(\'zustand\'))()}`;')).toEqual(['zustand']);
+    });
+
+    it('ignores braces in interpolation comments and continues scanning executable code', () => {
+      expect(extractModuleSpecifiers('const block = `${/* } */ import(\'three\')}`;')).toEqual(['three']);
+      expect(extractModuleSpecifiers('const line = `${// }\nimport(\'zustand\')}`;')).toEqual(['zustand']);
+    });
+
+    it('detects executable imports in nested template interpolation', () => {
+      expect(extractModuleSpecifiers('const x = `${`inner ${import(\'@react-three/fiber\')}`}`;')).toEqual([
+        '@react-three/fiber',
+      ]);
+    });
+
+    it('ignores import-like text in ordinary template literal text', () => {
+      expect(extractModuleSpecifiers('const x = `literal import(\'react\') text`;')).toEqual([]);
+    });
+
+    it('extracts imports after regex literals containing a closing brace in interpolation', () => {
+      expect(extractModuleSpecifiers("const x = `${/}/.test('}') ? import('react') : null}`;")).toEqual(['react']);
+    });
+
+    it('extracts imports after regex literals containing slash and comment-like text', () => {
+      expect(extractModuleSpecifiers("const x = `${/\\/\\//.test('//') ? import('zustand') : null}`;")).toEqual([
+        'zustand',
+      ]);
+    });
+
+    it('extracts imports after regex character classes and quantifier braces in interpolation', () => {
+      expect(extractModuleSpecifiers("const x = `${/[{}\\/]{1,3}/.test('{/') ? import('three') : null}`;")).toEqual([
+        'three',
+      ]);
+    });
+
+    it('accepts literal dynamic import arguments without guessing runtime expressions', () => {
+      expect(extractModuleSpecifiers('import(`react`)')).toEqual(['react']);
+      expect(extractModuleSpecifiers('import(moduleName)')).toEqual([]);
+      expect(extractModuleSpecifiers('import(`react${moduleName}`)')).toEqual([]);
+    });
+
+    it('applies the prohibited-module policy to an import discovered in interpolation', () => {
+      const extracted = extractModuleSpecifiers("const value = `${import('react')}`;");
+      const prohibited = extracted.filter((specifier) =>
+        PROHIBITED_MODULE_PATTERNS.some((pattern) => pattern.test(specifier)),
+      );
+
+      expect(extracted).toEqual(['react']);
+      expect(prohibited).toEqual(['react']);
     });
 
     it('ignores import/export-like text inside ordinary single-quoted strings', () => {
@@ -109,6 +180,33 @@ describe('Phase 1A Infrastructure & Package Boundary Gate', () => {
     it('ignores import/export-like text inside template literals', () => {
       expect(extractModuleSpecifiers('const text = `import React from "react"`;')).toEqual([]);
       expect(extractModuleSpecifiers('const text = `export * from "three"`;')).toEqual([]);
+    });
+
+    it('terminates on nested template interpolation and still extracts following imports and exports', () => {
+      const scannerUrl = pathToFileURL(
+        path.resolve(process.cwd(), 'scripts/check-core-deps.mjs')
+      ).href;
+      const source = [
+        'const object = `${JSON.stringify({ value: 1 })}`;',
+        'const nested = `${(() => { const inner = { brace: "}" }; return inner; })()}`;',
+        'const plain = `ignore { import "not-a-module" }`;',
+        "import 'react';",
+        "export * from 'three';",
+      ].join('\n');
+      const childScript = [
+        `import { extractModuleSpecifiers } from ${JSON.stringify(scannerUrl)};`,
+        `const source = ${JSON.stringify(source)};`,
+        'process.stdout.write(JSON.stringify(extractModuleSpecifiers(source)));',
+      ].join('\n');
+      const result = spawnSync(
+        process.execPath,
+        ['--input-type=module', '--eval', childScript],
+        { encoding: 'utf8', timeout: 1_500 }
+      );
+
+      expect(result.error?.code).not.toBe('ETIMEDOUT');
+      expect(result.status).toBe(0);
+      expect(result.stdout).toBe('["react","three"]');
     });
 
     it('ignores line comments and block comments', () => {
@@ -140,6 +238,9 @@ describe('Phase 1A Infrastructure & Package Boundary Gate', () => {
       expect(isProhibited('three')).toBe(true);
       expect(isProhibited('@react-three/fiber')).toBe(true);
       expect(isProhibited('zustand')).toBe(true);
+      expect(
+        extractModuleSpecifiers("const value = `${import('react')}`;").some(isProhibited),
+      ).toBe(true);
       expect(isProhibited('../../apps/web')).toBe(true);
       expect(isProhibited('../../packages/renderer')).toBe(true);
       expect(isProhibited('../../packages/ui')).toBe(true);
@@ -855,6 +956,10 @@ describe('Pages Promotion Governance Gate', () => {
     expect(content).toContain("github.event.workflow_run.head_branch == 'main'");
     expect(content).toContain("github.event.workflow_run.event == 'push'");
     expect(content).not.toMatch(/\brun_attempt\b/);
+    expect(content).toMatch(
+      /^  group: \$\{\{ github\.event\.workflow_run\.conclusion == 'success' && github\.event\.workflow_run\.head_branch == 'main' && github\.event\.workflow_run\.event == 'push' && 'pages' \|\| format\('pages-ineligible-\{0\}', github\.run_id\) \}\}$/m
+    );
+    expect(content).toContain('cancel-in-progress: true');
 
     expect(content).toContain('ref: ${{ github.event.workflow_run.head_sha }}');
     expect(content).toContain(

@@ -648,6 +648,7 @@ body,
 /* Reserve the right-side solver column before positioning the desktop overlays. */
 @media (min-width: 1025px) {
   .top-overlay-bar {
+    top: 58px;
     right: 292px;
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(300px, 330px);

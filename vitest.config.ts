@@ -8,6 +8,7 @@ export default defineConfig({
       'tests/**/*.test.mjs',
       'packages/*/tests/**/*.test.ts',
       'apps/*/src/**/*.test.ts',
+      'apps/*/src/**/*.test.tsx',
     ],
   }
 });

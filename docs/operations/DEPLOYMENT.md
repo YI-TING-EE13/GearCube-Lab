@@ -35,8 +35,8 @@ The public GitHub Pages deployment is fully automated and strictly gated by the 
 main branch push
       ↓
 Verify Workflow (.github/workflows/verify.yml)
-      ├─ Workspace verify (typecheck, boundary checks, Vitest 481/481)
-      └─ Parallel Playwright E2E matrix (55 logical tests; 163 applicable executions, 2 intentional skips)
+      ├─ Workspace verify (typecheck, boundary checks, Vitest 499/499)
+      └─ Parallel Playwright E2E matrix (58 logical tests; 172 applicable executions, 2 intentional skips)
       ↓ (successful Verify run)
 Deploy GitHub Pages Workflow (.github/workflows/deploy-pages.yml via workflow_run)
       ├─ Checkout exact verified SHA (github.event.workflow_run.head_sha)
@@ -58,6 +58,7 @@ if: >
 ```
 
 - Non-main branches (`phase/**`), pull requests, manual workflow dispatches, failed Verify runs, and cancelled runs **never** trigger deployment. A successful rerun of a `main` push Verify run may trigger deployment when the exact-current-main gate passes.
+- **Eligibility-safe concurrency:** Only successful `main` push Verify runs share the `pages` concurrency group. Other `workflow_run` events receive a run-specific `pages-ineligible-{run_id}` group, so they cannot occupy or cancel deployment work in the shared group even though eligibility is rejected at the build job as well.
 - **Exact Verified Checkout:** `actions/checkout` checks out `github.event.workflow_run.head_sha`.
 - **Stale-Main Protection:** A pre-build step queries `git ls-remote origin refs/heads/main` to ensure `main` has not advanced past the tested commit, preventing stale deployments.
 - **Zero-Secret Posture:** The deployment workflow relies only on GitHub-provided credentials:
@@ -96,7 +97,7 @@ All asset references in `index.html` and worker bundle instantiations resolve be
 
 ### 5.2. Browser Compatibility Baseline
 
-The current Playwright inventory contains 55 logical tests across Chromium, Firefox, and WebKit projects. The Chromium-only touch gate is intentionally skipped in Firefox and WebKit, yielding 165 project cases: 163 applicable executions and 2 intentional skips.
+The current Playwright inventory contains 58 logical tests across Chromium, Firefox, and WebKit projects. The Chromium-only touch gate is intentionally skipped in Firefox and WebKit, yielding 174 project cases: 172 applicable executions and 2 intentional skips.
 
 | Browser project | Applicable executions | Intentional touch skips |
 | :--- | ---: | ---: |

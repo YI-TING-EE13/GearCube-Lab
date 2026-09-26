@@ -84,6 +84,8 @@ workflow_run Pages deployment
 
 The Pages workflow may proceed only when the source Verify run is successful, its source branch is `main`, and its event is `push`. A successful rerun remains eligible when the verified SHA equals the current remote `main` SHA. The workflow checks out the exact verified SHA, confirms that `origin/main` has not advanced, configures the `/GearCube-Lab/` Pages base, builds the site, uploads the Pages artifact, and deploys it. The deployment workflow is downstream evidence; it is not a pre-merge required check.
 
+Eligible successful `main` push runs share the `pages` concurrency group. Ineligible `workflow_run` events use a run-specific `pages-ineligible-{run_id}` group, so failed, pull-request, and other non-deployable runs cannot occupy or cancel the deployment group.
+
 ## Post-merge qualification contract
 
 Pull-request checks qualify the proposed exact head. After a normal merge, the new merge commit must receive a separate canonical `Verify` run for `main` with event `push` and successful results for:
@@ -101,10 +103,10 @@ The maintained automated inventory is:
 
 | Suite | Current inventory |
 | --- | --- |
-| Vitest | 40 test files / 481 tests |
-| Playwright | 55 logical tests across Chromium, Firefox, and WebKit |
-| Playwright project cases | 165 total: 55 Chromium, 54 Firefox applicable plus 1 intentional skip, and 54 WebKit applicable plus 1 intentional skip |
-| Applicable Playwright executions | 163 |
+| Vitest | 41 test files / 499 tests |
+| Playwright | 58 logical tests across Chromium, Firefox, and WebKit |
+| Playwright project cases | 174 total: 58 Chromium, 57 Firefox applicable plus 1 intentional skip, and 57 WebKit applicable plus 1 intentional skip |
+| Applicable Playwright executions | 172 |
 | Intentional skips | 2 total, one in Firefox and one in WebKit, because the touch-emulation gate is Chromium-only |
 
 These are inventory counts, not a claim that every listed case passed in every run. Exact qualification evidence belongs to the corresponding `Verify` workflow run for the tested commit, including all four jobs.

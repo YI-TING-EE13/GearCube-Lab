@@ -218,6 +218,71 @@ test.describe('GearCube Responsive Navigation M1 Qualification', () => {
     await expect(page.getByTestId('playback-controls')).toBeVisible();
   });
 
+  test('RESPONSIVE_BOUNDARY_COLLISION_GATE: challenge controls remain clear of workspace navigation at 1024px, 1025px, and 1280px', async ({ page }) => {
+    const viewports = [
+      { width: 1024, height: 768 },
+      { width: 1025, height: 768 },
+      { width: 1280, height: 800 },
+    ];
+
+    for (const viewport of viewports) {
+      await page.setViewportSize(viewport);
+
+      const compactToggle = page.getByTestId('play-controls-toggle');
+      if (await compactToggle.isVisible()) {
+        const drawer = page.getByTestId('play-controls-drawer');
+        if (await drawer.getAttribute('data-open') !== 'true') {
+          await compactToggle.click();
+        }
+      }
+
+      const challenge = page.getByRole('region', { name: 'Certified Challenge Controls' });
+      const challengeHeading = challenge.getByRole('heading', { name: 'Certified Challenge' });
+      const challengeAction = challenge.getByRole('button', { name: 'Generate Normal challenge' });
+      await expect(page.locator('canvas')).toBeVisible();
+      await expect(challengeHeading).toBeVisible();
+      await expect(challengeAction).toBeVisible();
+      await challengeAction.click({ trial: true });
+
+      const geometry = await page.evaluate(() => {
+        const navigation = document.querySelector('.workspace-mode-switch');
+        const challengePanel = document.querySelector('.challenge-panel');
+        if (!navigation || !challengePanel) {
+          return null;
+        }
+        const nav = navigation.getBoundingClientRect();
+        const panel = challengePanel.getBoundingClientRect();
+        return {
+          navigation: { left: nav.left, right: nav.right, top: nav.top, bottom: nav.bottom },
+          challenge: { left: panel.left, right: panel.right, top: panel.top, bottom: panel.bottom },
+          overlaps: nav.left < panel.right && nav.right > panel.left
+            && nav.top < panel.bottom && nav.bottom > panel.top,
+        };
+      });
+      expect(geometry, `missing responsive control geometry at ${viewport.width}px`).not.toBeNull();
+      expect(geometry?.overlaps, `workspace navigation overlaps Challenge at ${viewport.width}px`).toBe(false);
+      await assertNoHorizontalOverflow(page, viewport);
+
+      if (await compactToggle.isVisible()) {
+        const drawer = page.getByTestId('play-controls-drawer');
+        if (await drawer.getAttribute('data-open') === 'true') {
+          await compactToggle.click();
+        }
+      }
+      const reachableCanvasPoint = await page.evaluate(() => {
+        const canvas = document.querySelector('canvas');
+        if (!canvas) {
+          return false;
+        }
+        const rect = canvas.getBoundingClientRect();
+        const x = Math.round(rect.left + rect.width * 0.2);
+        const y = Math.round(rect.top + rect.height * 0.5);
+        return document.elementFromPoint(x, y) === canvas;
+      });
+      expect(reachableCanvasPoint, `canvas input remains reachable at ${viewport.width}px`).toBe(true);
+    }
+  });
+
   test.describe('Chromium touch emulation', () => {
     test.use({ viewport: { width: 667, height: 375 }, hasTouch: true });
 

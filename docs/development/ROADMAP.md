@@ -4,7 +4,7 @@
 > **Previous Milestone:** `M6.2 — Rerun-Safe GitHub Pages Promotion (Completed & Accepted)`
 > **Next Milestone:** `No active milestone; Phase 6 and Phase 7 remain deferred optional tracks`
 > **Deferred Tracks:** `Phase 6 (Neural AI Search)` & `Phase 7 (Physical Model & Vision Expansion)` (Deferred / Optional Tracks)
-> **Current Verification Inventory:** 40 Vitest files / 481 tests; 55 logical Playwright tests, 165 project-test cases, 163 applicable executions, and 2 intentional skips. See [`TEST_STRATEGY.md`](TEST_STRATEGY.md) for the maintained inventory; milestone counts below are historical as-of snapshots.
+> **Current Verification Inventory:** 41 Vitest files / 499 tests; 58 logical Playwright tests, 174 project-test cases, 172 applicable executions, and 2 intentional skips. See [`TEST_STRATEGY.md`](TEST_STRATEGY.md) for the maintained inventory; milestone counts below are historical as-of snapshots.
 
 ---
 

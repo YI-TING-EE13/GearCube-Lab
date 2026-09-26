@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import process from 'node:process';
+import ts from 'typescript';
 import { fileURLToPath } from 'node:url';
 
 export const PROHIBITED_MODULE_PATTERNS = [
@@ -15,229 +16,41 @@ export const PROHIBITED_MODULE_PATTERNS = [
 ];
 
 /**
- * Deterministic lexical tokenizer distinguishing:
- * - normal code (WORD, PUNCT, OTHER)
- * - single-quoted strings ('...')
- * - double-quoted strings ("...")
- * - template literals (`...`)
- * - line comments (// ...)
- * - block comments (/* ... *\/)
- */
-export function tokenize(source) {
-  const tokens = [];
-  const len = source.length;
-  let i = 0;
-
-  while (i < len) {
-    const ch = source[i];
-    const nextCh = i + 1 < len ? source[i + 1] : '';
-
-    // 1. Whitespace
-    if (/\s/.test(ch)) {
-      i++;
-      continue;
-    }
-
-    // 2. Line comment: // ...
-    if (ch === '/' && nextCh === '/') {
-      i += 2;
-      while (i < len && source[i] !== '\n') {
-        i++;
-      }
-      continue;
-    }
-
-    // 3. Block comment: /* ... */
-    if (ch === '/' && nextCh === '*') {
-      i += 2;
-      while (i < len && !(source[i] === '*' && i + 1 < len && source[i + 1] === '/')) {
-        i++;
-      }
-      if (i < len) i += 2;
-      continue;
-    }
-
-    // 4. Single-quoted string: '...'
-    if (ch === "'") {
-      i++;
-      let val = '';
-      while (i < len && source[i] !== "'") {
-        if (source[i] === '\\' && i + 1 < len) {
-          val += source[i + 1];
-          i += 2;
-        } else {
-          val += source[i];
-          i++;
-        }
-      }
-      if (i < len) i++; // consume closing '
-      tokens.push({ type: 'STRING', value: val });
-      continue;
-    }
-
-    // 5. Double-quoted string: "..."
-    if (ch === '"') {
-      i++;
-      let val = '';
-      while (i < len && source[i] !== '"') {
-        if (source[i] === '\\' && i + 1 < len) {
-          val += source[i + 1];
-          i += 2;
-        } else {
-          val += source[i];
-          i++;
-        }
-      }
-      if (i < len) i++; // consume closing "
-      tokens.push({ type: 'STRING', value: val });
-      continue;
-    }
-
-    // 6. Template literal: `...`
-    if (ch === '`') {
-      i++;
-      let val = '';
-      let isPlainString = true;
-      while (i < len && source[i] !== '`') {
-        if (source[i] === '\\' && i + 1 < len) {
-          val += source[i + 1];
-          i += 2;
-        } else if (source[i] === '$' && i + 1 < len && source[i + 1] === '{') {
-          isPlainString = false;
-          i += 2;
-          let braceDepth = 1;
-          while (i < len && braceDepth > 0) {
-            if (source[i] === '{') braceDepth++;
-            else if (source[i] === '}') braceDepth--;
-            else if (source[i] === "'" || source[i] === '"' || source[i] === '`') {
-              const quote = source[i];
-              i++;
-              while (i < len && source[i] !== quote) {
-                if (source[i] === '\\') i += 2;
-                else i++;
-              }
-              if (i < len) i++;
-            } else {
-              i++;
-            }
-          }
-        } else {
-          val += source[i];
-          i++;
-        }
-      }
-      if (i < len) i++; // consume closing `
-      if (isPlainString) {
-        tokens.push({ type: 'STRING', value: val });
-      } else {
-        tokens.push({ type: 'TEMPLATE', value: val });
-      }
-      continue;
-    }
-
-    // 7. Punctuation
-    if (/[(){}[\];,.*]/.test(ch)) {
-      tokens.push({ type: 'PUNCT', value: ch });
-      i++;
-      continue;
-    }
-
-    // 8. Word / Identifier / Keyword
-    if (/[\w$]/.test(ch)) {
-      let word = '';
-      while (i < len && /[\w$]/.test(source[i])) {
-        word += source[i];
-        i++;
-      }
-      tokens.push({ type: 'WORD', value: word });
-      continue;
-    }
-
-    // 9. Other characters
-    tokens.push({ type: 'OTHER', value: ch });
-    i++;
-  }
-
-  return tokens;
-}
-
-/**
- * Extracts ESM module specifiers from token stream in normal code context.
- * Recognizes:
- * - import x from 'pkg'
- * - import { x } from 'pkg'
- * - import type { x } from 'pkg'
- * - import * as x from 'pkg'
- * - import 'pkg'
- * - export * from 'pkg'
- * - export { x } from 'pkg'
- * - export type { x } from 'pkg'
- * - export * as x from 'pkg'
- * - import('pkg')
+ * Extracts ESM module specifiers using the TypeScript AST.
+ * Static imports, re-exports, type imports, and literal dynamic imports are collected.
  */
 export function extractModuleSpecifiers(source) {
-  const tokens = tokenize(source);
+  const sourceFile = ts.createSourceFile(
+    'core-dependency-scan.ts',
+    source,
+    ts.ScriptTarget.Latest,
+    true,
+    ts.ScriptKind.TS,
+  );
   const specifiers = [];
-  const len = tokens.length;
 
-  for (let i = 0; i < len; i++) {
-    const t = tokens[i];
-
-    // 1. Dynamic import: import ( 'pkg' )
-    if (t.type === 'WORD' && t.value === 'import') {
-      if (i + 1 < len && tokens[i + 1].type === 'PUNCT' && tokens[i + 1].value === '(') {
-        if (i + 2 < len && tokens[i + 2].type === 'STRING') {
-          specifiers.push(tokens[i + 2].value);
-          i += 2;
-          continue;
-        }
+  function visit(node) {
+    if (ts.isImportDeclaration(node) || ts.isExportDeclaration(node)) {
+      if (node.moduleSpecifier && ts.isStringLiteral(node.moduleSpecifier)) {
+        specifiers.push(node.moduleSpecifier.text);
       }
-
-      // 2. Side-effect import: import 'pkg'
-      if (i + 1 < len && tokens[i + 1].type === 'STRING') {
-        specifiers.push(tokens[i + 1].value);
-        i += 1;
-        continue;
+    } else if (ts.isCallExpression(node) && node.expression.kind === ts.SyntaxKind.ImportKeyword) {
+      const argument = node.arguments[0];
+      if (argument && ts.isStringLiteralLike(argument)) {
+        specifiers.push(argument.text);
       }
-
-      // 3. Static import with from: import ... from 'pkg'
-      let j = i + 1;
-      while (j < len && !(tokens[j].type === 'PUNCT' && tokens[j].value === ';')) {
-        if (tokens[j].type === 'WORD' && tokens[j].value === 'from') {
-          if (j + 1 < len && tokens[j + 1].type === 'STRING') {
-            specifiers.push(tokens[j + 1].value);
-            i = j + 1;
-            break;
-          }
-        }
-        if (tokens[j].type === 'WORD' && (tokens[j].value === 'import' || tokens[j].value === 'export')) {
-          break;
-        }
-        j++;
-      }
-      continue;
+    } else if (
+      ts.isImportTypeNode(node) &&
+      ts.isLiteralTypeNode(node.argument) &&
+      ts.isStringLiteral(node.argument.literal)
+    ) {
+      specifiers.push(node.argument.literal.text);
     }
 
-    // 4. Re-export with from: export ... from 'pkg'
-    if (t.type === 'WORD' && t.value === 'export') {
-      let j = i + 1;
-      while (j < len && !(tokens[j].type === 'PUNCT' && tokens[j].value === ';')) {
-        if (tokens[j].type === 'WORD' && tokens[j].value === 'from') {
-          if (j + 1 < len && tokens[j + 1].type === 'STRING') {
-            specifiers.push(tokens[j + 1].value);
-            i = j + 1;
-            break;
-          }
-        }
-        if (tokens[j].type === 'WORD' && (tokens[j].value === 'import' || tokens[j].value === 'export')) {
-          break;
-        }
-        j++;
-      }
-      continue;
-    }
+    ts.forEachChild(node, visit);
   }
 
+  visit(sourceFile);
   return specifiers;
 }
 

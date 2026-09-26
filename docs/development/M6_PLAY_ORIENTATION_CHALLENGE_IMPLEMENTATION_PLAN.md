@@ -118,6 +118,7 @@ PLAY idle
 - A result is accepted only when its request/generation token still matches, the hook is mounted, and the generation is active. Termination and token invalidation happen before applying the candidate.
 - The visible SolvePanel lifecycle remains independent. A Challenge panel does not read or overwrite visible Solve search state, playback metadata, or solver selection.
 - Candidate certification never mutates `app.session` or `app.history`. The installation helper runs only after certification and creates a fresh baseline with `entries = []` and `cursorIndex = -1`, preserving `interactionMode`.
+- Accepted certification describes the active Play baseline. An ordinary Scramble that installs a new baseline resets the visible challenge state to `IDLE`; workspace switching and manual progress within the same challenge baseline do not clear it.
 
 ## Phased implementation
 

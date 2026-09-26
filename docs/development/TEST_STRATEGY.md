@@ -260,7 +260,7 @@
   - **Phase 5D Browser Research Mode Gates (Implemented & Accepted):**
     - `BENCHMARK_WORKER_ISOLATION_GATE`: Benchmark compute executes off the UI thread in dedicated Web Worker (`benchmark.worker.ts`) with zero DOM leakage (`typeof document === 'undefined'`).
     - `PURE_BENCHMARK_CONTROLLER_GATE`: Deterministic state transitions, monotonic `requestId` tracking, and stale-message rejection verified across 32 focused unit tests in `tests/unit/benchmark-worker-controller.test.ts`.
-    - `BOUNDARY_ISOLATION_GATE`: Verification of browser-safe imports, Worker path isolation, and main-thread execution prohibition across 52 boundary tests in `tests/boundary.test.ts`.
+    - `BOUNDARY_ISOLATION_GATE`: Verification of browser-safe imports, Worker path isolation, and main-thread execution prohibition across 65 boundary tests in `tests/boundary.test.ts`.
     - `MAIN_THREAD_ACTIONABILITY_GATE`: Verified responsive UI interactions while benchmark search is active in `tests/e2e/research-mode.spec.ts`.
     - `BENCHMARK_CANCELLATION_GATE`: Host-side `worker.terminate()` closes Worker, produces terminal `CANCELLED` state, and spawns zero replacement workers (`totalBenchmarkWorkersCreated === 1`).
     - `STATIC_CONFIG_VALIDATION_GATE`: Main-thread static validation triggers UI errors and spawns zero workers on invalid inputs.
@@ -272,7 +272,8 @@
     - `MODE_SWITCH_CANCELLATION_GATE`: Switching to Play mode during an active benchmark terminates the background Worker and restores clean presentation.
     - `RESPONSIVE_RESEARCH_LAYOUT_GATE`: Verified layout bounds and non-overflow across Desktop (1280x800), Tablet (768x1024), and Mobile (375x667) viewports in `tests/e2e/research-mode.spec.ts`; the M1 mode-stability gate adds short-landscape Research coverage.
     - *Historical verification snapshot (Technical Head `8bc1d51`):* 52 boundary tests, 32 controller unit tests, 12 Research Mode E2E tests, 40 total Playwright E2E tests, and 444 workspace tests passing at that accepted head.
-  - **Maintained current Vitest inventory:** 40 test files / 481 tests, including M6 orientation/challenge policy gates, the Pages promotion governance gate, and the Phase 5C integrity and transaction regression suite. This is an inventory baseline; exact qualification evidence belongs to the run for the tested commit.
+  - **Vitest discovery:** Normal `npm test` includes repository-owned `apps/*/src/**/*.test.ts` and `apps/*/src/**/*.test.tsx` component suites.
+  - **Maintained current Vitest inventory:** 41 test files / 499 tests, including the discovered TSX component suite, M6 orientation/challenge policy gates, the Pages promotion governance gate, and the Phase 5C integrity and transaction regression suite. This is an inventory baseline; exact qualification evidence belongs to the run for the tested commit.
 
 ### Level 9: Browser End-to-End Tests (Playwright — Available / Implemented)
 - **Scope:** Whole Web Application (`playwright.config.ts`, `tests/e2e/play-mode.spec.ts`, `tests/e2e/m6-play-orientation-challenge.spec.ts`, `tests/e2e/solve-mode.spec.ts`, `tests/e2e/research-mode.spec.ts`, `tests/e2e/responsive-navigation.spec.ts`)
@@ -280,7 +281,7 @@
 - **Infrastructure Architecture:**
   - Pinned `@playwright/test@1.62.1` devDependency at repository root.
   - Permanent project matrix: `chromium`, `firefox`, and `webkit` (desktop, tablet portrait, mobile portrait, and compact landscape coverage; Chromium also runs the touch-emulation gate).
-  - Test inventory: 55 logical tests (26 Play, 3 M6, 11 Solve, 13 Research, 2 M1) × 3 browser projects = 165 project-test cases: 163 applicable executions and 2 intentional Chromium-only touch skips (Firefox/WebKit). This inventory is not a pass count.
+  - Test inventory: 58 logical tests (26 Play, 5 M6, 11 Solve, 13 Research, 3 M1) × 3 browser projects = 174 project-test cases: 172 applicable executions and 2 intentional Chromium-only touch skips (Firefox/WebKit). This inventory is not a pass count.
   - On GitHub-hosted Linux CI, Firefox E2E runs headed under Xvfb with a CI-only WebGL2 enablement preference. WebKit is verified via Playwright automation; Safari has not been separately verified.
   - Dedicated isolated webServer: `npm run build --workspace=@gearcube/web && npm run preview --workspace=@gearcube/web -- --port 4173 --strictPort --host 127.0.0.1` on `http://127.0.0.1:4173` with `reuseExistingServer: false`. Playwright qualifies the built preview, not the Vite development server.
   - Execution command: `npm run test:e2e` (`playwright test`).
@@ -297,6 +298,9 @@
   - M6 orientation: the persistent legend exposes `L/R = +/-X`, `D/U = +/-Y`, and `B/F = +/-Z`; face labels and accessible actions expose axis identity and the face-local outside-looking-toward-center convention.
   - M6 certified challenge: deterministic solved-rooted candidates use the current Seed, exact `EASY = 2..4`, `NORMAL = 5..6`, and `CHALLENGE = 7..8` depth bands, and accept only the existing optimal `IDA_STAR` result depth.
   - M6 challenge lifecycle: accepted challenges install a fresh empty-history Play baseline without a solution sequence; active generation blocks Play mutations and visible Solve/playback; cancellation and stale Worker results cannot install a candidate.
+  - `CERTIFICATION_RESET_GATE`: an ordinary deterministic Scramble clears the accepted difficulty/depth status, starts empty history at its new baseline, keeps Solve usable, and allows a later challenge to be certified.
+  - `ORIENTATION_RESIZE_RECOVERY_GATE`: entering desktop after collapsing the compact Orientation disclosure restores visible guidance while preserving compact Enter/Space semantics and disclosure ARIA state.
+  - `RESPONSIVE_BOUNDARY_COLLISION_GATE`: at 1024px, 1025px, and 1280px, Challenge controls remain reachable, do not overlap Workspace Mode navigation, preserve a reachable canvas area, and do not cause horizontal overflow.
   - Keyboard shortcuts (`u/d/f/b/r/l`, Shift, Control+Z, Meta+Z, Control+Shift+Z, Meta+Shift+Z, Control+Y) trigger moves and undo/redo while rejecting unsupported modifiers (`Meta+Y`, `Ctrl+u`, `Alt+u`).
   - Input focus exclusion: typing in seed text input and pressing `Ctrl+Z`/`Meta+Z` while focused does not trigger puzzle moves or history navigation.
   - Busy-state blocking:

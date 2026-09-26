@@ -180,11 +180,11 @@ npx playwright install
 
 ### Maintained verification inventory
 
-The current repository test inventory is 40 Vitest files with 481 tests. The Playwright inventory is 55 logical tests across three browser projects, yielding 165 project-test cases: 163 applicable executions and 2 intentional Chromium-only touch skips. These are inventory counts; exact pass/fail qualification belongs to the Verify workflow run for the tested commit.
+The current repository test inventory is 41 Vitest files with 499 tests; normal Vitest discovery includes both `.test.ts` and `.test.tsx` component suites. The Playwright inventory is 58 logical tests across three browser projects, yielding 174 project-test cases: 172 applicable executions and 2 intentional Chromium-only touch skips. These are inventory counts; exact pass/fail qualification belongs to the Verify workflow run for the tested commit.
 
 ### CI Verification
 
-The project includes an automated GitHub Actions verification workflow running on hosted Ubuntu with Node.js 22.17.1. It performs workspace verification (`npm ci` and `npm run verify`) followed by a parallel browser matrix with 55 logical Playwright tests: 165 project-test cases, comprising 163 applicable executions and 2 intentional skips for the Chromium-only touch gate. On hosted Linux CI, Firefox executes headed under Xvfb with a CI-only WebGL2 enablement preference.
+The project includes an automated GitHub Actions verification workflow running on hosted Ubuntu with Node.js 22.17.1. It performs workspace verification (`npm ci` and `npm run verify`) followed by a parallel browser matrix with 58 logical Playwright tests: 174 project-test cases, comprising 172 applicable executions and 2 intentional skips for the Chromium-only touch gate. On hosted Linux CI, Firefox executes headed under Xvfb with a CI-only WebGL2 enablement preference.
 
 ---
 

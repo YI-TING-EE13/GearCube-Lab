@@ -128,6 +128,19 @@ export const MoveControls: React.FC<MoveControlsProps> = React.memo(
     const isDirect180 = interactionMode === 'DIRECT_180';
     const [isOrientationExpanded, setIsOrientationExpanded] = React.useState(true);
 
+    React.useEffect(() => {
+      const desktopQuery = window.matchMedia('(min-width: 1025px)');
+      const restoreDesktopGuidance = (): void => {
+        if (desktopQuery.matches) {
+          setIsOrientationExpanded(true);
+        }
+      };
+
+      restoreDesktopGuidance();
+      desktopQuery.addEventListener('change', restoreDesktopGuidance);
+      return () => desktopQuery.removeEventListener('change', restoreDesktopGuidance);
+    }, []);
+
     const handleToggleMode = (e: React.MouseEvent) => {
       e.stopPropagation();
       if (isIdle && !isChallengeGenerating) {

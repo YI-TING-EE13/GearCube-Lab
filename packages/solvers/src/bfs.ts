@@ -160,7 +160,12 @@ export function solveBfs(
       };
     }
 
-    // Check non-goal expansion budget
+    // Nodes at the depth boundary still receive a goal test but are not expanded.
+    if (maxDepth !== undefined && currentDist === maxDepth) {
+      continue;
+    }
+
+    // Check the non-goal expansion budget only when this node would expand.
     if (maxNodes !== undefined && nodesExpanded === maxNodes) {
       return {
         status: 'LIMIT_REACHED',
@@ -172,11 +177,6 @@ export function solveBfs(
         },
         elapsedMs: Date.now() - startTime,
       };
-    }
-
-    // Check max depth threshold
-    if (maxDepth !== undefined && currentDist === maxDepth) {
-      continue;
     }
 
     // Enumerate successors
