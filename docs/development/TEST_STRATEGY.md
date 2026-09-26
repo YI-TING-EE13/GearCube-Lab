@@ -320,7 +320,7 @@
   - M1 mode stability: Play/Solve/Research presentation remains usable through 390x844 ↔ 844x390 and 768x1024 ↔ 1024x768 transitions; closed controls remain hidden and non-focusable, Research remains internally scrollable, and Solve playback remains reachable.
   - Touch emulation: Chromium with `hasTouch: true` exercises touch disclosure, canvas pointer input, and short-height drawer scrolling without treating emulation as real-device evidence.
   - Zero unhandled console/runtime errors (`pageerror` and error-level console messages).
-  - **M7C qualification status:** `npx playwright test tests/e2e/m7-challenge-performance.spec.ts --list` lists all 7 logical tests in each browser project; `npx playwright test --list` lists 65 logical tests / 195 project-test cases. M7 browser pass evidence is pending exact-head hosted qualification; local inventory discovery is not a hosted pass.
+  - **M7C hosted qualification:** Verify [#76](https://github.com/YI-TING-EE13/GearCube-Lab/actions/runs/36252841676) passed on exact head `c7960f60b375e9807624f29b6102e5d9a3868844` (event `workflow_dispatch`, attempt 1). All seven M7 lifecycle gates passed in Chromium, Firefox, and WebKit. The Firefox and WebKit intentional skips are the existing Chromium-only touch-emulation gate, not M7 skips.
 
 #### Responsive contract ownership
 

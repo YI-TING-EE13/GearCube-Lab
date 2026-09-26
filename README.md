@@ -93,7 +93,8 @@ The **Play** workspace is the default interactive puzzle environment.
   - The accepted depth bands are `EASY = 2..4`, `NORMAL = 5..6`, and `CHALLENGE = 7..8`. The selected label is derived only from `SolveSuccess.depth`; sampling length and retry count are not difficulty truth.
   - A certified result replaces the Play baseline and clears move history. Challenge generation disables Play mutations and visible Solve/playback actions; Cancel, workspace switching, unmount, and stale results cannot install an uncertified candidate. Challenge certification does not expose a solution sequence or create Solution Playback.
 
-- **Challenge Performance (M7 implementation candidate; hosted cross-browser acceptance pending):**
+- **Challenge Performance & Completion UX (M7 — technically accepted; PR closeout pending):**
+  - The accepted candidate is `c7960f60b375e9807624f29b6102e5d9a3868844`, qualified by [hosted Verify #76](https://github.com/YI-TING-EE13/GearCube-Lab/actions/runs/36252841676). The candidate has not merged into `main`; Verify #76 is candidate evidence, not evidence of a merge or Pages deployment. The current public Pages deployment has not been qualified to include M7.
   - The panel shows committed Challenge moves, the certificate's optimal move count, and—after completion—move delta, efficiency, and completion time. Starting Solve marks the run assisted, and an assisted result says **“Assisted run — solution help was used.”**
   - **Undo/Redo/Scrub do not erase already committed Challenge moves.** The count follows committed moves rather than the visible history cursor.
   - **Retry same challenge** reuses the accepted certificate and starts a fresh, unassisted run. **New Challenge** abandons the previous run and uses the existing certification flow. An ordinary **Scramble** clears the certificate and performance panel.
@@ -186,11 +187,11 @@ npx playwright install
 
 ### Maintained verification inventory
 
-The current repository test inventory is 44 Vitest files with 540 tests; normal Vitest discovery includes both `.test.ts` and `.test.tsx` component suites. Playwright discovery lists 65 logical tests across three browser projects, yielding 195 project-test cases: 193 applicable executions and 2 intentional skips of the existing Chromium-only touch gate in Firefox and WebKit. The seven M7 lifecycle tests are discovered in Chromium, Firefox, and WebKit. These are inventory counts, not M7C pass evidence; hosted exact-head qualification is pending.
+The current repository test inventory is 44 Vitest files with 540 tests; normal Vitest discovery includes both `.test.ts` and `.test.tsx` component suites. Playwright discovery lists 65 logical tests across three browser projects, yielding 195 project-test cases: 193 applicable executions and 2 intentional skips of the existing Chromium-only touch gate in Firefox and WebKit. The seven M7 lifecycle tests are discovered in Chromium, Firefox, and WebKit. These inventory counts are separate from pass evidence; the exact-head hosted results are recorded below.
 
 ### CI Verification
 
-The Verify workflow runs workspace verification (`npm ci` and `npm run verify`) followed by a parallel hosted browser matrix. The current discovered matrix contains 65 logical Playwright tests: 195 project-test cases, comprising 193 applicable executions and 2 existing Firefox/WebKit skips for the Chromium-only touch gate. On hosted Linux CI, Firefox executes headed under Xvfb with a CI-only WebGL2 enablement preference. Discovery does not qualify M7C; hosted exact-head browser results remain pending.
+The Verify workflow runs workspace verification (`npm ci` and `npm run verify`) followed by a parallel hosted browser matrix. The current matrix contains 65 logical Playwright tests: 195 project-test cases, comprising 193 applicable executions and 2 existing Firefox/WebKit skips for the Chromium-only touch gate. On hosted Linux CI, Firefox executes headed under Xvfb with a CI-only WebGL2 enablement preference. Hosted Verify [#76](https://github.com/YI-TING-EE13/GearCube-Lab/actions/runs/36252841676) completed successfully for branch `fix/m7c-challenge-action-hit-target`, exact head `c7960f60b375e9807624f29b6102e5d9a3868844`, event `workflow_dispatch`, attempt 1: `verify` passed with TypeScript, Core purity, 44 Vitest files / 540 tests, and production build; Chromium passed 65 tests; Firefox and WebKit each passed 64 tests with one existing intentional skip. All seven M7 lifecycle gates passed in each browser project. This candidate qualification does not establish a merge, post-merge Verify, or Pages deployment.
 
 ---
 
@@ -239,7 +240,7 @@ Phases 0–9: Completed & Accepted
 M6 Play Orientation & Certified Challenge UX: COMPLETED & ACCEPTED
 M6.1 Classical Solver Portfolio Expansion: COMPLETED & ACCEPTED
 M6.2 Rerun-Safe Pages Promotion: COMPLETED & ACCEPTED
-M7 Challenge Performance & Completion UX: M7A/M7B accepted; M7C implementation candidate prepared; hosted cross-browser acceptance and independent review pending
+M7 Challenge Performance & Completion UX: TECHNICALLY ACCEPTED; PR CLOSEOUT PENDING (candidate not merged; Pages deployment not qualified)
 Deferred Tracks:
   - Phase 6 (AI-Guided Search): Deferred Optional Research
   - Phase 7 (Physical Model & Vision Expansion): Deferred Optional Expansion
@@ -251,7 +252,7 @@ PUBLIC_HOSTING: ACTIVE
 
 *Note: The canonical public site is hosted at `https://yi-ting-ee13.github.io/GearCube-Lab/` via verification-gated GitHub Actions.*
 
-For complete phase history, specifications, and gating criteria, refer to [`ROADMAP.md`](docs/development/ROADMAP.md), [`M6_PLAY_ORIENTATION_CHALLENGE_IMPLEMENTATION_PLAN.md`](docs/development/M6_PLAY_ORIENTATION_CHALLENGE_IMPLEMENTATION_PLAN.md), [`M6_1_CLASSICAL_SOLVER_PORTFOLIO_IMPLEMENTATION_PLAN.md`](docs/development/M6_1_CLASSICAL_SOLVER_PORTFOLIO_IMPLEMENTATION_PLAN.md), [`M6_M6_1_ACCEPTANCE_RECORD.md`](docs/development/M6_M6_1_ACCEPTANCE_RECORD.md), [`M6_2_PAGES_RERUN_SAFE_PROMOTION_IMPLEMENTATION_PLAN.md`](docs/development/M6_2_PAGES_RERUN_SAFE_PROMOTION_IMPLEMENTATION_PLAN.md), [`M6_2_ACCEPTANCE_RECORD.md`](docs/development/M6_2_ACCEPTANCE_RECORD.md), [`PHASE_8_IMPLEMENTATION_PLAN.md`](docs/development/PHASE_8_IMPLEMENTATION_PLAN.md), and [`PHASE_8_ACCEPTANCE_RECORD.md`](docs/development/PHASE_8_ACCEPTANCE_RECORD.md).
+For complete phase history, specifications, and gating criteria, refer to [`ROADMAP.md`](docs/development/ROADMAP.md), [`M6_PLAY_ORIENTATION_CHALLENGE_IMPLEMENTATION_PLAN.md`](docs/development/M6_PLAY_ORIENTATION_CHALLENGE_IMPLEMENTATION_PLAN.md), [`M6_1_CLASSICAL_SOLVER_PORTFOLIO_IMPLEMENTATION_PLAN.md`](docs/development/M6_1_CLASSICAL_SOLVER_PORTFOLIO_IMPLEMENTATION_PLAN.md), [`M6_M6_1_ACCEPTANCE_RECORD.md`](docs/development/M6_M6_1_ACCEPTANCE_RECORD.md), [`M6_2_PAGES_RERUN_SAFE_PROMOTION_IMPLEMENTATION_PLAN.md`](docs/development/M6_2_PAGES_RERUN_SAFE_PROMOTION_IMPLEMENTATION_PLAN.md), [`M6_2_ACCEPTANCE_RECORD.md`](docs/development/M6_2_ACCEPTANCE_RECORD.md), [`PHASE_8_IMPLEMENTATION_PLAN.md`](docs/development/PHASE_8_IMPLEMENTATION_PLAN.md), [`PHASE_8_ACCEPTANCE_RECORD.md`](docs/development/PHASE_8_ACCEPTANCE_RECORD.md), and [`M7_CHALLENGE_PERFORMANCE_IMPLEMENTATION_PLAN.md`](docs/development/M7_CHALLENGE_PERFORMANCE_IMPLEMENTATION_PLAN.md).
 
 ---
 

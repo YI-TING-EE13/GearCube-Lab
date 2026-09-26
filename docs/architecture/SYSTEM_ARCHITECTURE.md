@@ -1,6 +1,6 @@
 # SYSTEM_ARCHITECTURE.md — System Architecture & Component Contracts
 
-> **Document Status:** `ACTIVE / CURRENT (Accepted architecture through M7B; M7C hosted cross-browser acceptance pending)`
+> **Document Status:** `ACTIVE / CURRENT (Accepted architecture through M7 technical acceptance; PR closeout pending)`
 > **Target System:** GearCube Lab Web Application & Research Framework
 
 ---
@@ -123,7 +123,7 @@ graph TD
 - **Certification ownership:** The accepted challenge status describes the current Play baseline. An ordinary Scramble that installs a new baseline resets the challenge state; switching workspaces or manually progressing within the same baseline preserves it.
 - **Boundary:** M6 adds no Core, Kinematics, solver algorithm, protocol schema, dependency, or Research Mode changes; cancellation, workspace switching, unmount, generation identity, and Worker request identity prevent stale installation.
 
-#### M7 Challenge Performance & Completion lifecycle (M7A/M7B accepted; M7C hosted qualification pending)
+#### M7 Challenge Performance & Completion lifecycle (Technically Accepted; PR Closeout Pending)
 
 The accepted certificate and Play application state flow through the application-layer integration into the performance presentation:
 
@@ -143,7 +143,7 @@ ChallengePerformance
 - **Assisted Solve:** the existing Solve action marks an ACTIVE run assisted when search starts. Playback uses the existing Solver Worker and canonical Play move path; settled Core state and IDLE session status determine completion.
 - **Retry and abandonment:** Retry reinstalls the same accepted certificate as a fresh Play history baseline and starts an unassisted run with a new serial/time origin. New Challenge abandons the current run before using the existing certification flow; accepted ordinary Scramble clears both certificate status and performance. Workspace switching preserves an active run in the parent application state.
 - **Presentation boundary:** `ChallengePerformance` renders the composed run snapshot and sends Retry/New Challenge actions to the viewport. It formats metrics and accessible wording; it does not derive optimal depth or decide whether Core is solved.
-- **Acceptance state:** M7A/M7B behavior is implemented and accepted. M7C has local test discovery and documentation synchronization; hosted cross-browser qualification remains pending.
+- **Acceptance state:** M7A and M7B are accepted; M7C cross-browser qualification and the desktop collision repair passed hosted Verify [#76](https://github.com/YI-TING-EE13/GearCube-Lab/actions/runs/36252841676) on exact candidate `c7960f60b375e9807624f29b6102e5d9a3868844` (`workflow_dispatch`, attempt 1). Independent technical review passed. This candidate is not merged into `main`; Verify #76 does not establish post-merge verification or Pages deployment.
 
 ### 3.5. Pure Solver Engine (`packages/solvers` — Phase 4 Accepted Baseline; M6.1 Accepted Extension)
 - **Responsibilities:**
