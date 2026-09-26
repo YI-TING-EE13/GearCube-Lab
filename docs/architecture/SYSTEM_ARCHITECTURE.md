@@ -1,6 +1,6 @@
 # SYSTEM_ARCHITECTURE.md — System Architecture & Component Contracts
 
-> **Document Status:** `ACTIVE / CURRENT (Accepted architecture through M6.1)`
+> **Document Status:** `ACTIVE / CURRENT (Accepted architecture through M7B; M7C hosted cross-browser acceptance pending)`
 > **Target System:** GearCube Lab Web Application & Research Framework
 
 ---
@@ -122,6 +122,28 @@ graph TD
 - **Play installation:** `applyCertifiedChallengeToPlay` is an application-layer transition that requires an idle session, materializes the accepted state/frame, and creates empty history at that challenge baseline. Regular `applyScrambleToPlay` remains current-relative and is unchanged.
 - **Certification ownership:** The accepted challenge status describes the current Play baseline. An ordinary Scramble that installs a new baseline resets the challenge state; switching workspaces or manually progressing within the same baseline preserves it.
 - **Boundary:** M6 adds no Core, Kinematics, solver algorithm, protocol schema, dependency, or Research Mode changes; cancellation, workspace switching, unmount, generation identity, and Worker request identity prevent stale installation.
+
+#### M7 Challenge Performance & Completion lifecycle (M7A/M7B accepted; M7C hosted qualification pending)
+
+The accepted certificate and Play application state flow through the application-layer integration into the performance presentation:
+
+```text
+CertifiedChallenge
+      ↓
+challenge-run-integration
+      ↓
+PlayApplicationState.canonicalCommitSequence + ChallengeRunState
+      ↓
+ChallengePerformance
+```
+
+- **Canonical truth:** `packages/core` remains the source of puzzle state, legal transitions, and solved-state semantics. The application observes Core-derived state; React presentation does not calculate puzzle correctness.
+- **Move accounting:** `PlayApplicationState.canonicalCommitSequence` is monotonic application-event metadata advanced when a canonical move is committed. History remains navigation state; Undo, Redo, Scrub, and baseline navigation do not rewrite Challenge performance counts.
+- **Run ownership:** `ChallengeRunState` retains the accepted certificate and session metadata—start serial/time, assistance, and at most one frozen completion result. It does not own mutable puzzle state or replace the Core.
+- **Assisted Solve:** the existing Solve action marks an ACTIVE run assisted when search starts. Playback uses the existing Solver Worker and canonical Play move path; settled Core state and IDLE session status determine completion.
+- **Retry and abandonment:** Retry reinstalls the same accepted certificate as a fresh Play history baseline and starts an unassisted run with a new serial/time origin. New Challenge abandons the current run before using the existing certification flow; accepted ordinary Scramble clears both certificate status and performance. Workspace switching preserves an active run in the parent application state.
+- **Presentation boundary:** `ChallengePerformance` renders the composed run snapshot and sends Retry/New Challenge actions to the viewport. It formats metrics and accessible wording; it does not derive optimal depth or decide whether Core is solved.
+- **Acceptance state:** M7A/M7B behavior is implemented and accepted. M7C has local test discovery and documentation synchronization; hosted cross-browser qualification remains pending.
 
 ### 3.5. Pure Solver Engine (`packages/solvers` — Phase 4 Accepted Baseline; M6.1 Accepted Extension)
 - **Responsibilities:**

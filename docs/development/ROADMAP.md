@@ -1,10 +1,10 @@
 # ROADMAP.md — Project Lifecycle & Dependency-Ordered Milestones
 
-> **Current Milestone:** `M7 — Challenge Performance & Completion UX (Planned; preflight plan ready)`
+> **Current Milestone:** `M7C — Cross-Browser Acceptance & Documentation Sync (Implementation candidate prepared; hosted acceptance pending)`
 > **Previous Milestone:** `M6.2 — Rerun-Safe GitHub Pages Promotion (Completed & Accepted)`
-> **Next Milestone:** `M7A — Challenge Run Domain & Metrics (Planned)`
+> **Next Milestone:** `M7C hosted exact-head cross-browser qualification and independent review`
 > **Deferred Tracks:** `Phase 6 (Neural AI Search)` & `Phase 7 (Physical Model & Vision Expansion)` (Deferred / Optional Tracks)
-> **Current Verification Inventory:** 41 Vitest files / 499 tests; 58 logical Playwright tests, 174 project-test cases, 172 applicable executions, and 2 intentional skips. See [`TEST_STRATEGY.md`](TEST_STRATEGY.md) for the maintained inventory; milestone counts below are historical as-of snapshots.
+> **Current Verification Inventory:** 44 Vitest files / 540 tests; 65 logical Playwright tests, 195 project-test cases, 193 applicable executions, and 2 existing Firefox/WebKit skips for the Chromium-only touch gate. See [`TEST_STRATEGY.md`](TEST_STRATEGY.md) for the maintained inventory; milestone counts below are historical as-of snapshots.
 
 ---
 
@@ -463,14 +463,14 @@ Phase 0B is partitioned into four dependency-ordered subphases:
 
 ---
 
-### M7: Challenge Performance & Completion UX (Planned)
-- **Status:** `PLANNED — PREFLIGHT PLAN READY; NOT IMPLEMENTED OR ACCEPTED`.
+### M7: Challenge Performance & Completion UX (In Progress)
+- **Status:** `M7A AND M7B IMPLEMENTED & ACCEPTED; M7C IMPLEMENTATION CANDIDATE PREPARED — HOSTED CROSS-BROWSER ACCEPTANCE PENDING`.
 - **Objective:** Track committed moves and elapsed time for an existing certified Challenge run, disclose solver assistance, evaluate a settled solved state, and allow a same-certificate Retry or a new Challenge.
 - **Prerequisites:** M6 certified Challenge baseline and the contract freeze in [`M7_CHALLENGE_PERFORMANCE_IMPLEMENTATION_PLAN.md`](./M7_CHALLENGE_PERFORMANCE_IMPLEMENTATION_PLAN.md).
-- **Planned Submilestones:**
-  - **M7A — Challenge Run Domain & Metrics:** Pure app-layer run state, canonical commit-event accounting, assistance, completion snapshot, and controller/integration gates.
-  - **M7B — Completion UX & Retry:** Accessible active/completed presentation, assisted result wording, same-certificate Retry, New Challenge, and Scramble reset integration.
-  - **M7C — Cross-Browser Acceptance & Documentation Sync:** Full lifecycle production-preview E2E in Chromium, Firefox, and WebKit; synchronized docs and test inventory based only on tests that exist.
+- **Submilestones:**
+  - **M7A — Challenge Run Domain & Metrics:** Implementation complete and accepted. The run controller and Play integration keep move accounting and completion metadata in the application layer.
+  - **M7B — Completion UX & Retry:** Implementation complete and accepted. Hosted Verify run [#74](https://github.com/YI-TING-EE13/GearCube-Lab/actions/runs/36238720590) passed on `2d2b1e165e7271536020ebd741bbfecde9ae7dea`, including Chromium, Firefox, and WebKit.
+  - **M7C — Cross-Browser Acceptance & Documentation Sync:** The implementation candidate adds seven lifecycle tests and synchronizes the living documentation. Local Playwright discovery includes all seven tests in Chromium, Firefox, and WebKit; hosted exact-head browser qualification and independent review are pending.
 - **Boundary:** Core/Kinematics, puzzle mechanics, M6 certification algorithm and difficulty bands remain unchanged. No persistence, accounts, leaderboards, cloud, share links, multiplayer, new algorithms, AI, merge, deployment, or release work is included.
 - **Implementation Plan:** [`M7_CHALLENGE_PERFORMANCE_IMPLEMENTATION_PLAN.md`](./M7_CHALLENGE_PERFORMANCE_IMPLEMENTATION_PLAN.md).
-- **Acceptance State:** No M7 implementation or acceptance criteria have passed yet; do not mark M7 or a submilestone complete until its implementation and required evidence exist.
+- **Acceptance State:** M7A and M7B are accepted. M7C remains an implementation candidate until independent review and exact-head hosted cross-browser qualification pass. Do not mark M7 as completed and accepted in this task.

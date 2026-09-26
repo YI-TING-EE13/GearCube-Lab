@@ -93,6 +93,12 @@ The **Play** workspace is the default interactive puzzle environment.
   - The accepted depth bands are `EASY = 2..4`, `NORMAL = 5..6`, and `CHALLENGE = 7..8`. The selected label is derived only from `SolveSuccess.depth`; sampling length and retry count are not difficulty truth.
   - A certified result replaces the Play baseline and clears move history. Challenge generation disables Play mutations and visible Solve/playback actions; Cancel, workspace switching, unmount, and stale results cannot install an uncertified candidate. Challenge certification does not expose a solution sequence or create Solution Playback.
 
+- **Challenge Performance (M7 implementation candidate; hosted cross-browser acceptance pending):**
+  - The panel shows committed Challenge moves, the certificate's optimal move count, and—after completion—move delta, efficiency, and completion time. Starting Solve marks the run assisted, and an assisted result says **“Assisted run — solution help was used.”**
+  - **Undo/Redo/Scrub do not erase already committed Challenge moves.** The count follows committed moves rather than the visible history cursor.
+  - **Retry same challenge** reuses the accepted certificate and starts a fresh, unassisted run. **New Challenge** abandons the previous run and uses the existing certification flow. An ordinary **Scramble** clears the certificate and performance panel.
+  - Switching **Play → Research → Play** preserves an active run. Performance belongs to the current in-memory session; it is not a saved history or personal record.
+
 ### Solve (within Play)
 
 GearCube Lab has two workspace modes: **Play** and **Research**. The **Solver** panel is a Play-workspace capability, alongside puzzle interaction, history, scramble, and solution playback; it is not a third workspace.
@@ -180,11 +186,11 @@ npx playwright install
 
 ### Maintained verification inventory
 
-The current repository test inventory is 41 Vitest files with 499 tests; normal Vitest discovery includes both `.test.ts` and `.test.tsx` component suites. The Playwright inventory is 58 logical tests across three browser projects, yielding 174 project-test cases: 172 applicable executions and 2 intentional Chromium-only touch skips. These are inventory counts; exact pass/fail qualification belongs to the Verify workflow run for the tested commit.
+The current repository test inventory is 44 Vitest files with 540 tests; normal Vitest discovery includes both `.test.ts` and `.test.tsx` component suites. Playwright discovery lists 65 logical tests across three browser projects, yielding 195 project-test cases: 193 applicable executions and 2 intentional skips of the existing Chromium-only touch gate in Firefox and WebKit. The seven M7 lifecycle tests are discovered in Chromium, Firefox, and WebKit. These are inventory counts, not M7C pass evidence; hosted exact-head qualification is pending.
 
 ### CI Verification
 
-The project includes an automated GitHub Actions verification workflow running on hosted Ubuntu with Node.js 22.17.1. It performs workspace verification (`npm ci` and `npm run verify`) followed by a parallel browser matrix with 58 logical Playwright tests: 174 project-test cases, comprising 172 applicable executions and 2 intentional skips for the Chromium-only touch gate. On hosted Linux CI, Firefox executes headed under Xvfb with a CI-only WebGL2 enablement preference.
+The Verify workflow runs workspace verification (`npm ci` and `npm run verify`) followed by a parallel hosted browser matrix. The current discovered matrix contains 65 logical Playwright tests: 195 project-test cases, comprising 193 applicable executions and 2 existing Firefox/WebKit skips for the Chromium-only touch gate. On hosted Linux CI, Firefox executes headed under Xvfb with a CI-only WebGL2 enablement preference. Discovery does not qualify M7C; hosted exact-head browser results remain pending.
 
 ---
 
@@ -233,6 +239,7 @@ Phases 0–9: Completed & Accepted
 M6 Play Orientation & Certified Challenge UX: COMPLETED & ACCEPTED
 M6.1 Classical Solver Portfolio Expansion: COMPLETED & ACCEPTED
 M6.2 Rerun-Safe Pages Promotion: COMPLETED & ACCEPTED
+M7 Challenge Performance & Completion UX: M7A/M7B accepted; M7C implementation candidate prepared; hosted cross-browser acceptance and independent review pending
 Deferred Tracks:
   - Phase 6 (AI-Guided Search): Deferred Optional Research
   - Phase 7 (Physical Model & Vision Expansion): Deferred Optional Expansion
