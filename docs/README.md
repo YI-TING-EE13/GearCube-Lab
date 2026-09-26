@@ -26,7 +26,7 @@ docs/
 │   └── KINEMATIC_CONTRACT.md           # Continuous 3D physical kinematics & animation contract
 ├── development/
 │   ├── DEVELOPMENT_GUIDE.md            # Environment policies, coding standards, & workflows
-│   ├── ROADMAP.md                      # Dependency-ordered lifecycle through M7 technical acceptance; PR closeout pending
+│   ├── ROADMAP.md                      # Dependency-ordered lifecycle through M7 Completed & Accepted
 │   ├── TEST_STRATEGY.md                # 12-level testing pyramid, property invariants, & validation
 │   ├── PHASE_1A_IMPLEMENTATION_PLAN.md # Phase 1A project bootstrap & package boundary plan
 │   ├── PHASE_1B_IMPLEMENTATION_PLAN.md # Phase 1B canonical state / value types & validation plan
@@ -41,6 +41,7 @@ docs/
 │   ├── M6_PLAY_ORIENTATION_CHALLENGE_IMPLEMENTATION_PLAN.md # M6 orientation and certified challenge implementation plan (Accepted)
 │   ├── M6_1_CLASSICAL_SOLVER_PORTFOLIO_IMPLEMENTATION_PLAN.md # M6.1 A* solver portfolio implementation plan (Accepted)
 │   ├── M7_CHALLENGE_PERFORMANCE_IMPLEMENTATION_PLAN.md # M7 performance/completion contract (Historical / Accepted Contract)
+│   ├── M7_ACCEPTANCE_RECORD.md         # M7 technical acceptance and PR qualification evidence (Historical / As-of)
 │   ├── M6_M6_1_ACCEPTANCE_RECORD.md   # Canonical independent acceptance and hosted qualification record
 │   ├── M6_2_PAGES_RERUN_SAFE_PROMOTION_IMPLEMENTATION_PLAN.md # M6.2 rerun-safe Pages promotion plan (Historical / Accepted)
 │   ├── M6_2_ACCEPTANCE_RECORD.md        # M6.2 post-merge operational acceptance record (Historical / As-of)
@@ -130,6 +131,7 @@ For current implementation questions, use this authority order: `AGENTS.md` and 
 - **M6 Play Orientation & Certified Challenge Plan (Accepted):** [`docs/development/M6_PLAY_ORIENTATION_CHALLENGE_IMPLEMENTATION_PLAN.md`](development/M6_PLAY_ORIENTATION_CHALLENGE_IMPLEMENTATION_PLAN.md)
 - **M6.1 Classical Solver Portfolio Plan (Accepted):** [`docs/development/M6_1_CLASSICAL_SOLVER_PORTFOLIO_IMPLEMENTATION_PLAN.md`](development/M6_1_CLASSICAL_SOLVER_PORTFOLIO_IMPLEMENTATION_PLAN.md)
 - **M7 Challenge Performance & Completion UX Contract (Historical / Accepted Contract):** [`docs/development/M7_CHALLENGE_PERFORMANCE_IMPLEMENTATION_PLAN.md`](development/M7_CHALLENGE_PERFORMANCE_IMPLEMENTATION_PLAN.md)
+- **M7 Technical Acceptance Record (Historical / As-of):** [`docs/development/M7_ACCEPTANCE_RECORD.md`](development/M7_ACCEPTANCE_RECORD.md)
 - **M6 + M6.1 Acceptance Record (Historical / As-of):** [`docs/development/M6_M6_1_ACCEPTANCE_RECORD.md`](development/M6_M6_1_ACCEPTANCE_RECORD.md)
 - **M6.2 Pages Rerun-Safe Promotion Plan (Historical / Accepted):** [`docs/development/M6_2_PAGES_RERUN_SAFE_PROMOTION_IMPLEMENTATION_PLAN.md`](development/M6_2_PAGES_RERUN_SAFE_PROMOTION_IMPLEMENTATION_PLAN.md)
 - **M6.2 Pages Rerun-Safe Promotion Acceptance Record (Historical / As-of):** [`docs/development/M6_2_ACCEPTANCE_RECORD.md`](development/M6_2_ACCEPTANCE_RECORD.md)
