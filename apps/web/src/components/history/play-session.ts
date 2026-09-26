@@ -43,6 +43,7 @@ import { placementToTransforms } from '@gearcube/kinematics';
 export interface PlayApplicationState {
   readonly session: GearCubeSessionState;
   readonly history: PlayHistoryState;
+  readonly canonicalCommitSequence: number;
 }
 
 /**
@@ -51,7 +52,7 @@ export interface PlayApplicationState {
 export function createInitialPlayApplicationState(): PlayApplicationState {
   const session = createInitialSessionState();
   const history = createPlayHistory(session.currentState, session.currentFrame);
-  return { session, history };
+  return { session, history, canonicalCommitSequence: 0 };
 }
 
 /**
@@ -70,6 +71,7 @@ export function startPlayMove(
   return {
     session: nextSession,
     history: app.history,
+    canonicalCommitSequence: app.canonicalCommitSequence,
   };
 }
 
@@ -106,12 +108,14 @@ export function stepPlayAnimation(
     return {
       session: nextSession,
       history: nextHistory,
+      canonicalCommitSequence: app.canonicalCommitSequence + 1,
     };
   }
 
   return {
     session: nextSession,
     history: app.history,
+    canonicalCommitSequence: app.canonicalCommitSequence,
   };
 }
 
@@ -129,6 +133,7 @@ export function setPlayInteractionMode(
   return {
     session: nextSession,
     history: app.history,
+    canonicalCommitSequence: app.canonicalCommitSequence,
   };
 }
 
@@ -174,6 +179,7 @@ export function undoPlay(app: PlayApplicationState): PlayApplicationState {
   return {
     session: nextSession,
     history: nextHistory,
+    canonicalCommitSequence: app.canonicalCommitSequence,
   };
 }
 
@@ -199,6 +205,7 @@ export function redoPlay(app: PlayApplicationState): PlayApplicationState {
   return {
     session: nextSession,
     history: nextHistory,
+    canonicalCommitSequence: app.canonicalCommitSequence,
   };
 }
 
@@ -227,6 +234,7 @@ export function scrubPlay(
   return {
     session: nextSession,
     history: nextHistory,
+    canonicalCommitSequence: app.canonicalCommitSequence,
   };
 }
 
@@ -252,6 +260,7 @@ export function backToBaselinePlay(app: PlayApplicationState): PlayApplicationSt
   return {
     session: nextSession,
     history: nextHistory,
+    canonicalCommitSequence: app.canonicalCommitSequence,
   };
 }
 
@@ -295,6 +304,7 @@ export function applyScrambleToPlay(
   return {
     session: nextSession,
     history: nextHistory,
+    canonicalCommitSequence: app.canonicalCommitSequence,
   };
 }
 
@@ -325,5 +335,6 @@ export function applyCertifiedChallengeToPlay(
   return {
     session: nextSession,
     history: createPlayHistory(challengeState, challengeFrame),
+    canonicalCommitSequence: app.canonicalCommitSequence,
   };
 }
