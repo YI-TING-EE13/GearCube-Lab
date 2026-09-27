@@ -145,3 +145,23 @@ The run IDs and 123-test count in this subsection document the initial Phase 9 d
 - **Research Mode:** Stratified benchmark suite execution in real Benchmark Worker, result summary table rendering, and structured JSON / CSV report downloads verified.
 - **Responsive Viewports:** Clean layout and zero document horizontal overflow verified across desktop ($1280 \times 800$), tablet ($768 \times 1024$), and mobile ($375 \times 667$).
 - **Network & Console Hygiene:** 0 asset 404s, 0 worker 404s, 0 MIME errors, 0 CORS errors, 0 third-party requests, and 0 console/page errors.
+
+
+---
+
+## 7. Current M7 Deployment Qualification
+
+M7's production integration is qualified separately from the historical initial Phase 9 deployment snapshot above.
+
+- **Merged PR:** [#14](https://github.com/YI-TING-EE13/GearCube-Lab/pull/14)
+- **Production merge SHA:** `dc881d624844623f9f5f990cddd5fbedb9b79e68`
+- **Canonical main Verify:** [#79](https://github.com/YI-TING-EE13/GearCube-Lab/actions/runs/36259254472), event `push`, attempt 1, exact head `dc881d624844623f9f5f990cddd5fbedb9b79e68`
+- **Verify result:** 44 / 44 Vitest files, 540 / 540 tests, production build PASS; Chromium 65 PASS; Firefox 64 PASS + 1 existing intentional touch skip; WebKit 64 PASS + 1 existing intentional touch skip; M7-specific skips = 0.
+- **Pages promotion:** [Deploy GitHub Pages #52](https://github.com/YI-TING-EE13/GearCube-Lab/actions/runs/36259850820), automatically triggered by Verify #79.
+- **Exact-SHA deployment gate:** verified SHA and current remote `main` both equaled `dc881d624844623f9f5f990cddd5fbedb9b79e68`.
+- **Effective Pages base:** `/GearCube-Lab/`
+- **Pages build version:** `dc881d624844623f9f5f990cddd5fbedb9b79e68`
+- **Live smoke:** canonical HTML, generated JS/CSS assets, Certified Challenge generation, Challenge Performance zero-move baseline, and compact 390×844 reachability all passed; no page errors or console errors were observed.
+- **Non-blocking observations:** the existing Vite >500 kB main-bundle advisory and upstream `THREE.Clock` deprecation warning remain maintenance observations. No deployment-concurrency stress test is claimed by this M7 qualification.
+
+See [`M7_POST_MERGE_OPERATIONAL_RECORD.md`](../development/M7_POST_MERGE_OPERATIONAL_RECORD.md) for the preserved M7 operational closeout evidence.

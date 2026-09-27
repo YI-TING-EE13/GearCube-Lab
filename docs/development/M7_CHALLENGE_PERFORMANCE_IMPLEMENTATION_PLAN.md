@@ -1,10 +1,10 @@
 # M7 — Challenge Performance & Completion UX Implementation Plan
 
 > **Document lifecycle:** Historical / Accepted Contract.
-> **Implementation status:** M7A, M7B, and M7C, including the collision repair, are technically accepted; PR closeout is pending.
+> **Implementation status:** M7A, M7B, and M7C, including the collision repair, are completed and accepted.
 > **Accepted candidate:** `fix/m7c-challenge-action-hit-target` at `c7960f60b375e9807624f29b6102e5d9a3868844`, based on `origin/main` `1784e2b65c061f3dedac2b9c76857a44bb3ed1cc`.
-> **Hosted qualification:** [Verify #76](https://github.com/YI-TING-EE13/GearCube-Lab/actions/runs/36252841676) passed on the exact candidate head (event `workflow_dispatch`, attempt 1); independent technical review passed.
-> **Closeout boundary:** The sections below preserve the pre-implementation contract and design intent as historical context. This lifecycle note does not claim a PR, merge, post-merge Verify, or Pages deployment.
+> **Hosted qualification:** [Verify #76](https://github.com/YI-TING-EE13/GearCube-Lab/actions/runs/36252841676) passed on the exact candidate head; PR #14 later merged normally as `dc881d624844623f9f5f990cddd5fbedb9b79e68`, canonical [Verify #79](https://github.com/YI-TING-EE13/GearCube-Lab/actions/runs/36259254472) passed on that exact `main` SHA, and [Pages #52](https://github.com/YI-TING-EE13/GearCube-Lab/actions/runs/36259850820) deployed the same SHA.
+> **Closeout boundary:** The sections below preserve the pre-implementation contract and design intent as historical context. Final repository-integration and deployment evidence is preserved in [`M7_POST_MERGE_OPERATIONAL_RECORD.md`](M7_POST_MERGE_OPERATIONAL_RECORD.md).
 
 This plan specifies an ephemeral performance record for the existing certified Challenge lifecycle. It preserves Core as the only source of puzzle truth, the M6 certification contract, and Play's canonical transition/history behavior.
 
