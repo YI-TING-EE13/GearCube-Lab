@@ -107,6 +107,14 @@ The current Playwright inventory contains 65 logical tests across Chromium, Fire
 
 These are inventory counts, not a claim that every run passes. Exact qualification evidence belongs to the corresponding `Verify` workflow run for the tested commit; inspect `verify` and all three browser jobs. See [TEST_STRATEGY.md](../development/TEST_STRATEGY.md) for maintained test coverage.
 
+### 5.2.1. Current M7 Production Promotion Evidence
+
+The current public deployment includes the accepted M7 Challenge Performance & Completion UX from PR [#14](https://github.com/YI-TING-EE13/GearCube-Lab/pull/14). The PR was merged normally as `dc881d624844623f9f5f990cddd5fbedb9b79e68`. Canonical `main` Verify [#79](https://github.com/YI-TING-EE13/GearCube-Lab/actions/runs/36259254472) passed on that exact SHA with 44/44 Vitest files, 540/540 tests, production build, and the Chromium/Firefox/WebKit browser matrix. Deploy GitHub Pages [#52](https://github.com/YI-TING-EE13/GearCube-Lab/actions/runs/36259850820) was then triggered naturally by `workflow_run`; its exact-current-main gate matched the verified SHA to current remote `main`, built with base `/GearCube-Lab/`, uploaded the Pages artifact, and deployed with `pages_build_version` set to the same merge SHA.
+
+A read-only live smoke of the canonical Pages URL confirmed HTTP 200 for HTML and current JS/CSS assets, zero page errors and zero console errors, successful Easy Challenge certification, visible M7 Challenge Performance with zero committed moves and certified optimum, and reachable compact controls at 390×844 without horizontal document overflow. A non-fatal `THREE.Clock` deprecation warning and the existing Vite >500 kB bundle advisory remain maintenance observations, not deployment failures. Concurrency-race stress qualification was not repeated for M7; the accepted M6.2 exact-SHA/concurrency governance remains the deployment contract.
+
+See [`M7_POST_MERGE_OPERATIONAL_RECORD.md`](../development/M7_POST_MERGE_OPERATIONAL_RECORD.md) for the immutable as-of evidence record.
+
 - **Hosted Firefox:** On hosted Linux CI, Firefox executes headed under Xvfb with a CI WebGL2 preference.
 - **Safari Qualification Notice:** Native Safari has not been separately verified.
 - **Android Emulator Qualification Notice:** Two Android phone-class emulator environments have been separately qualified against the live Pages site through actual Android Chrome using serial-specific direct CDP: `Pixel_7` on Android 15/API 35 with Chrome `124.0.6367.219`, and `Small_Phone` on Android 16/API 36 with Chrome `151.0.7922.139`. This evidence is distinct from desktop viewport and touch emulation and does not guarantee compatibility across all Android environments.
